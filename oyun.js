@@ -61,6 +61,9 @@ class AdaSahnesi extends Phaser.Scene {
     this.load.svg("kaya", "gorseller/kaya.svg");
     this.load.svg("sandik-kapali", "gorseller/sandik-kapali.svg");
     this.load.svg("sandik-acik", "gorseller/sandik-acik.svg");
+    for (const ad of ["cicek-kirmizi", "cicek-mor", "cicek-beyaz", "ot", "kelebek", "kus"]) {
+      this.load.svg(ad, `gorseller/${ad}.svg`);
+    }
   }
 
   create() {
@@ -88,6 +91,11 @@ class AdaSahnesi extends Phaser.Scene {
     }
 
     this.sandigiSakla(susler);
+    this.cicekleriEk();
+    this.kelebekleriKur();
+    this.kuslar = [];
+    this.time.addEvent({ delay: 7000, loop: true, callback: () => this.kusSurusuGonder() });
+    this.bulutGolgeleriKur();
     this.adimSayaci = 0;
     this.tekAdim = false;
     this.donuk = false; // sandık açılırken karakter kısa bir süre durur
@@ -366,6 +374,134 @@ class AdaSahnesi extends Phaser.Scene {
     });
   }
 
+  // Rüzgârda sallanan çiçekler ve ot öbekleri
+  cicekleriEk() {
+    const rastgele = new Phaser.Math.RandomDataGenerator(["cicekler"]);
+    const cimen = new Phaser.Geom.Polygon(adaNoktalari(0.9));
+    const turler = ["ot", "ot", "ot", "cicek-kirmizi", "cicek-mor", "cicek-beyaz"];
+    let eklenen = 0;
+    for (let deneme = 0; deneme < 4000 && eklenen < 500; deneme++) {
+      const x = rastgele.between(0, DUNYA_GENISLIK);
+      const y = rastgele.between(0, DUNYA_YUKSEKLIK);
+      if (!cimen.contains(x, y)) continue;
+      const nesne = this.add.image(x, y, rastgele.pick(turler)).setOrigin(0.5, 1).setDepth(y);
+      this.sallananlar.push({ nesne, tur: "cicek", faz: rastgele.frac() * Math.PI * 2 });
+      eklenen++;
+    }
+  }
+
+  // Adada gezinen kelebekler
+  kelebekleriKur() {
+    const ada = new Phaser.Geom.Polygon(adaNoktalari(0.85));
+    const renkler = [0xffd23f, 0xff8fb1, 0x8fd3ff, 0xffa94d, 0xc8a2ff];
+    this.kelebekAlani = ada;
+    this.kelebekler = [];
+    while (this.kelebekler.length < 40) {
+      const x = Phaser.Math.Between(0, DUNYA_GENISLIK);
+      const y = Phaser.Math.Between(0, DUNYA_YUKSEKLIK);
+      if (!ada.contains(x, y)) continue;
+      const nesne = this.add.image(x, y, "kelebek").setTint(Phaser.Utils.Array.GetRandom(renkler));
+      this.kelebekler.push({ nesne, x, y, hedefX: x, hedefY: y,
+        faz: Math.random() * Math.PI * 2, hiz: Phaser.Math.Between(35, 60) });
+    }
+  }
+
+  kelebekleriUcur(zaman, fark) {
+    for (const k of this.kelebekler) {
+      const dx = k.hedefX - k.x;
+      const dy = k.hedefY - k.y;
+      const uzaklik = Math.hypot(dx, dy);
+      if (uzaklik < 10) {
+        // Yakında yeni bir çiçek seç
+        const yeniX = k.x + Phaser.Math.Between(-300, 300);
+        const yeniY = k.y + Phaser.Math.Between(-200, 200);
+        if (this.kelebekAlani.contains(yeniX, yeniY)) {
+          k.hedefX = yeniX;
+          k.hedefY = yeniY;
+        }
+      } else {
+        const adim = (k.hiz * fark) / 1000;
+        k.x += (dx / uzaklik) * adim;
+        k.y += (dy / uzaklik) * adim;
+      }
+      // Kanat çırpma ve hafif inip kalkma
+      const kanat = Math.abs(Math.sin(zaman * 0.018 + k.faz));
+      k.nesne.setScale(0.25 + kanat * 0.75, 1);
+      k.nesne.setPosition(k.x, k.y - 40 + Math.sin(zaman * 0.004 + k.faz) * 8);
+      k.nesne.setDepth(k.y + 120);
+    }
+  }
+
+  // Ekranın bir kenarından öbürüne uçan küçük bir martı sürüsü
+  kusSurusuGonder() {
+    const gorunen = this.cameras.main.worldView;
+    const soldan = Math.random() < 0.5;
+    const hizX = (soldan ? 1 : -1) * Phaser.Math.Between(150, 200);
+    const hizY = Phaser.Math.Between(-40, 40);
+    const baslaX = soldan ? gorunen.x - 100 : gorunen.right + 100;
+    const baslaY = Phaser.Math.Between(gorunen.y + 80, gorunen.bottom - 80);
+    const aci = Phaser.Math.RadToDeg(Math.atan2(hizY, hizX)) + 90;
+    const sayi = Phaser.Math.Between(2, 4);
+    for (let i = 0; i < sayi; i++) {
+      // V düzeni: lider önde, diğerleri arkada yanlarda
+      const geri = i * 60;
+      const yan = (i % 2 === 0 ? 1 : -1) * Math.ceil(i / 2) * 50;
+      const x = baslaX - Math.sign(hizX) * geri;
+      const y = baslaY + yan;
+      const kus = this.add.image(x, y, "kus").setDepth(4700).setAngle(aci).setScale(0.8);
+      const golge = this.add.ellipse(x + 60, y + 90, 40, 14, 0x000000, 0.12).setDepth(4600);
+      this.kuslar.push({ kus, golge, hizX, hizY, faz: Math.random() * Math.PI * 2 });
+    }
+  }
+
+  kuslariUcur(zaman, fark) {
+    const merkez = this.cameras.main.midPoint;
+    this.kuslar = this.kuslar.filter((k) => {
+      const sn = fark / 1000;
+      k.kus.x += k.hizX * sn;
+      k.kus.y += k.hizY * sn;
+      k.golge.setPosition(k.kus.x + 60, k.kus.y + 90);
+      k.kus.setScale(0.8 * (0.45 + 0.55 * Math.abs(Math.sin(zaman * 0.012 + k.faz))), 0.8);
+      if (Math.abs(k.kus.x - merkez.x) > 1600) {
+        k.kus.destroy();
+        k.golge.destroy();
+        return false;
+      }
+      return true;
+    });
+  }
+
+  // Görünmeyen bulutların adanın üstünde yavaşça kayan gölgeleri
+  bulutGolgeleriKur() {
+    const tuval = this.textures.createCanvas("bulut-golge", 512, 256);
+    const ctx = tuval.getContext();
+    for (const [x, y, r] of [[150, 140, 110], [260, 110, 120], [370, 145, 100], [250, 170, 90]]) {
+      const renk = ctx.createRadialGradient(x, y, 0, x, y, r);
+      renk.addColorStop(0, "rgba(30, 40, 60, 0.5)");
+      renk.addColorStop(1, "rgba(30, 40, 60, 0)");
+      ctx.fillStyle = renk;
+      ctx.fillRect(0, 0, 512, 256);
+    }
+    tuval.refresh();
+    this.bulutGolgeleri = [];
+    for (let i = 0; i < 12; i++) {
+      const g = this.add.image(
+        Phaser.Math.Between(0, DUNYA_GENISLIK), Phaser.Math.Between(0, DUNYA_YUKSEKLIK),
+        "bulut-golge").setDepth(4500).setScale(Phaser.Math.FloatBetween(1.8, 3)).setAlpha(0.45);
+      this.bulutGolgeleri.push(g);
+    }
+  }
+
+  bulutlariKaydir(fark) {
+    const sn = fark / 1000;
+    for (const g of this.bulutGolgeleri) {
+      g.x += 22 * sn;
+      g.y += 7 * sn;
+      if (g.x > DUNYA_GENISLIK + 800) g.x = -800;
+      if (g.y > DUNYA_YUKSEKLIK + 400) g.y = -400;
+    }
+  }
+
   // Her karede: köpük kıyıya vurur, dalgalar kayar, ağaçlar ve çalılar sallanır
   canlandir(zaman, fark) {
     const merkezX = DUNYA_GENISLIK / 2;
@@ -393,6 +529,8 @@ class AdaSahnesi extends Phaser.Scene {
       const salinim = Math.sin(ruzgar + s.faz) + 0.3 * Math.sin(ruzgar * 2.7 + s.faz * 2);
       if (s.tur === "agac") {
         s.nesne.setAngle(salinim * 2.2);
+      } else if (s.tur === "cicek") {
+        s.nesne.setAngle(salinim * 7);
       } else {
         s.nesne.setScale(1 + salinim * 0.025, 1 - salinim * 0.02);
       }
@@ -430,6 +568,9 @@ class AdaSahnesi extends Phaser.Scene {
 
   update(zaman, fark) {
     this.canlandir(zaman, fark);
+    this.kelebekleriUcur(zaman, fark);
+    this.kuslariUcur(zaman, fark);
+    this.bulutlariKaydir(fark);
     let dx = 0;
     let dy = 0;
 
