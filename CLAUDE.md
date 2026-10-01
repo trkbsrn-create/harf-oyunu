@@ -100,3 +100,6 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Kullanıcıya görünen her şey Türkçe olsun: iş arasındaki kısa notlar, komut
   açıklamaları, kayıt (commit) mesajları, çekme isteği açıklamaları ve kod içi notlar.
   İngilizce yazma.
+- Bir harfi bir resmin (tohum, daire vb.) ortasına koyarken yazı kutusunu değil,
+  harfin boyalı kısmını ortala (`boyaliOrtala`). Yazı kutusunda harfin üstünde boşluk
+  olduğu için "a" gibi harfler yoksa aşağıda kalır.
