@@ -75,3 +75,6 @@ Her hatadan sonra buraya yeni bir kural ekle.
 
 - Kullanıcı istemedikçe ilerlemeyi kalıcı saklama. Sayfa yenilenince oyun baştan
   başlar (çanta boşalır, sandıklar kapanır). Kalıcı kayıt gerekirse önce kullanıcıya sor.
+- Kullanıcıya görünen her şey Türkçe olsun: iş arasındaki kısa notlar, komut
+  açıklamaları, kayıt (commit) mesajları, çekme isteği açıklamaları ve kod içi notlar.
+  İngilizce yazma.
