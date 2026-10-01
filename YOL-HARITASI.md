@@ -9,6 +9,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
 3. Tek kutu: büyük bir ada, adada gezen ana karakter (bir çocuk; dokunarak ve yön tuşlarıyla yürür), adada gizli "a" kutusu (karakter arayıp bulur, kutu öyle açılır), ses doğrulama (3 basamak: ses, hayvan kelimesi, otomatik onay), tohum ödülü.
    - Büyük ada ve gezen karakter: TAMAM.
    - Gizli kutu (hazine sandığı; çalı arkasında, karakter yaklaşınca görünür, dokununca ya da değince açılır, içinden "a" çıkar), yürüme tozu ve ayak sesi, hazine efekti: TAMAM.
+   - Hazine sensörü (karakterin çevresinde yaklaştıkça belirginleşen altın aura, yürürken sıklaşan ve incelen bip sesi): TAMAM.
    - Sıradaki iş: ses doğrulama (mikrofon testi de bu sırada yapılabilir).
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.
