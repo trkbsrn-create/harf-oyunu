@@ -107,6 +107,29 @@ function titret(yazi, piksel) {
   return yazi;
 }
 
+// Yazının dönme noktasını harfin gerçekten boyalı kısmının ortasına koyar.
+// (Yazı kutusunda harfin üstünde boşluk olduğu için "a" gibi harfler aşağıda kalır.)
+function boyaliOrtala(yazi) {
+  const tuval = yazi.canvas;
+  const piksel = tuval.getContext("2d").getImageData(0, 0, tuval.width, tuval.height).data;
+  let sol = tuval.width;
+  let sag = -1;
+  let ust = tuval.height;
+  let alt = -1;
+  for (let y = 0; y < tuval.height; y++) {
+    for (let x = 0; x < tuval.width; x++) {
+      if (piksel[(y * tuval.width + x) * 4 + 3] > 0) {
+        sol = Math.min(sol, x);
+        sag = Math.max(sag, x);
+        ust = Math.min(ust, y);
+        alt = Math.max(alt, y);
+      }
+    }
+  }
+  if (sag < 0) return yazi.setOrigin(0.5);
+  return yazi.setOrigin((sol + sag + 1) / 2 / tuval.width, (ust + alt + 1) / 2 / tuval.height);
+}
+
 // Boya kalemiyle taranmış, kalemle çevrelenmiş, titrek doodle yazı
 function doodleYazi(sahne, x, y, metin, boy, tarama = "beyaz") {
   const yazi = sahne.add.text(x, y, metin, {
@@ -324,11 +347,12 @@ class AdaSahnesi extends Phaser.Scene {
       const k = this.kutucuklar[i];
       if (!k || esya.tur !== "tohum") return;
       const resim = this.add.image(k.x, k.y - 8, "tohum");
-      const harf = this.add.text(k.x, k.y + 14, esya.harf, {
+      // Harf, tohumun gövdesinin tam ortasına (gövde resmin ortasından 12 px aşağıda)
+      const harf = this.add.text(k.x, k.y + 4, esya.harf, {
         fontFamily: "Andika", fontSize: "38px", color: "#ffffff",
         stroke: "#3b2a1a", strokeThickness: 7, padding: { x: 3, y: 3 },
-      }).setOrigin(0.5);
-      titret(harf, 1.5);
+      });
+      boyaliOrtala(titret(harf, 1.5));
       this.cantaIcerigi.add([resim, harf]);
     });
   }
