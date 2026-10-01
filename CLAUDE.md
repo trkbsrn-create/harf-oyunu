@@ -35,7 +35,7 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 - Ünsüzler tek başına sesletilmez; ünsüzlerde çocuktan hece veya kelime söylemesi istenir.
 - Heceleme önce kapalı hece (an), sonra açık hece (na).
 - Hece tablosu yok.
-- Öğrenilmemiş harf içeren sözcüğün yerine görsel koyma.
+- Öğrenilmemiş harf içeren sözcük yazıyla gösterilmez; onun yerine görsel konur.
 
 ## Ses doğrulama (3 basamak)
 1. Chrome'un konuşma tanıması (tr-TR).
