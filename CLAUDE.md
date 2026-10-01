@@ -1,3 +1,5 @@
+Göreve başlamadan önce YOL-HARITASI.md dosyasını oku ve hangi etapta olduğumuzu dikkate al.
+
 # CLAUDE.md – Harf Oyunu kuralları
 
 Bu dosya, bu depoda çalışan yapay zekâ için kurallardır. Her işten önce okunmalıdır.
