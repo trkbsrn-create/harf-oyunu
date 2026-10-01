@@ -18,6 +18,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - Dolum süresi tüm harfler için 3 saniye: TAMAM.
    - İkinci sandık (n): "a" tohumu çantaya girince devreye girer, sensör onu gösterir; "a"dan uzak bir çalının arkasında. Öğretmenin kararıyla önce tek başına "nnnn" uzatılarak denenir (dolum çubuğu); 20 sn'de olmazsa çantadaki "a" tohumu uçup "an" hecesini kurar ve nar resmi çıkar ("an" ya da "nar" kabul); 40 sn'de kendiliğinden onay: TAMAM. Gerçek mikrofonla denenecek ("an" Chrome'da nasıl yazılıyor bakılacak).
    - "a" sesinin tınısıyla tanınması (o, u, e, i, gürültü reddedilir): önce "a" denir, düşünce balonu, doğruysa "Tohumu kazanmak için gücünü göster!" ve yalnızca "a" sesiyle dolan bar; mikrofon.html'de "a" denetimi ve ölçümler: TAMAM. Gerçek mikrofonla denenecek; başarılı olursa "n" için de güncellenecek.
+   - Doodle tarzı denemesi: örnek sahne gösterildi; karakter ve sandık doodle tarzına çevrildi: TAMAM. Diğer görseller kullanıcının kararına göre.
    - Sıradaki iş: kullanıcıyla konuşulacak.
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.

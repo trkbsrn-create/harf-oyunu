@@ -27,6 +27,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 - `sesler.js` – Oyun sesleri. Ses dosyası yok; sesler tarayıcıda (Web Audio) üretilir.
 - `yazitipi/` – Andika yazı tipi ve lisansı (SIL Open Font License).
 - `gorseller/` – Kendi çizdiğimiz SVG görseller (karakter, ağaç, çalı, kaya, sandık, çiçek, ot, kelebek, martı, çanta, tohum, mikrofon, arı, nar).
+  Karakter (cocuk*.svg) ve sandık (sandik-*.svg) doodle tarzında: titrek kalem çizgisi
+  (SVG içinde feTurbulence/feDisplacementMap süzgeci) ve boya kalemi taraması. Diğerleri
+  şimdilik eski kartonumsu tarzda; kullanıcı beğenirse sırayla çevrilecek.
 - Phaser 3, sabit sürümle (3.90.0) jsDelivr CDN'den yüklenir. Sürüm numarası
   rastgele değiştirilmez.
 - Yayın: GitHub Pages (kök klasörden).

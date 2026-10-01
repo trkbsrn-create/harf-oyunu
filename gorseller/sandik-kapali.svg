@@ -1,17 +1,39 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="110" height="96" viewBox="0 0 110 96">
-  <!-- Kapalı hazine sandığı (kendi çizimimiz) -->
-  <ellipse cx="55" cy="90" rx="48" ry="6" fill="#000" fill-opacity="0.2"/>
-  <g stroke="#3b2a1a" stroke-width="5" stroke-linejoin="round">
+  <!-- Kapalı hazine sandığı, doodle tarzı (kendi çizimimiz) -->
+  <defs>
+    <!-- Kalem titremesi: çizgileri hafifçe büker, elle çizilmiş gibi gösterir -->
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="5" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="tahta" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#efc08d"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#d8945a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="kapak" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(40)">
+      <rect width="7" height="7" fill="#e3a868"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#c47d3e" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="altin" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+      <rect width="6" height="6" fill="#ffe680"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffc928" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="55" cy="90" rx="46" ry="5" fill="#000" fill-opacity="0.15"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
     <!-- gövde -->
-    <rect x="10" y="40" width="90" height="48" rx="6" fill="#b5713a"/>
+    <rect x="12" y="42" width="86" height="44" rx="5" fill="url(#tahta)"/>
     <!-- kapak -->
-    <path d="M8 44 v-12 q0 -24 47 -24 q47 0 47 24 v12 z" fill="#c9844a"/>
-    <!-- altın şeritler -->
-    <rect x="22" y="12" width="12" height="76" fill="#ffcf3f"/>
-    <rect x="76" y="12" width="12" height="76" fill="#ffcf3f"/>
-    <!-- kilit -->
-    <rect x="44" y="36" width="22" height="24" rx="4" fill="#ffcf3f"/>
+    <path d="M10 44 v-10 q0 -24 45 -24 q45 0 45 24 v10 z" fill="url(#kapak)"/>
+    <!-- tahta çizgileri -->
+    <path d="M14 62 h18 M78 62 h18 M14 74 h18 M78 74 h18" fill="none" stroke-width="2.5"/>
+    <!-- altın şeritler ve kilit -->
+    <path d="M28 14 v72 M82 14 v72" fill="none" stroke-width="3"/>
+    <rect x="44" y="38" width="22" height="22" rx="4" fill="url(#altin)"/>
+    <path d="M55 46 v6" fill="none" stroke-width="3"/>
   </g>
-  <circle cx="55" cy="47" r="3.5" fill="#3b2a1a"/>
-  <path d="M30 20 q20 -8 46 -4" fill="none" stroke="#fff" stroke-opacity="0.35" stroke-width="5" stroke-linecap="round"/>
+  <!-- küçük parıltı çizgileri -->
+  <g filter="url(#titrek)" stroke="#f4b400" stroke-width="3" stroke-linecap="round">
+    <path d="M100 18 l6 -6 M104 28 h6"/>
+  </g>
 </svg>
