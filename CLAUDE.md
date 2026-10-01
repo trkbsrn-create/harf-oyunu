@@ -15,6 +15,7 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 - `oyun.js` – Phaser sahneleri ve oyun kodu.
 - `harfler.js` – Harf grupları ve kelimeler (sadece veri).
 - `yazitipi/` – Andika yazı tipi ve lisansı (SIL Open Font License).
+- `gorseller/` – Kendi çizdiğimiz SVG görseller (karakter, ağaç, çalı, kaya).
 - Phaser 3, sabit sürümle (3.90.0) jsDelivr CDN'den yüklenir. Sürüm numarası
   rastgele değiştirilmez.
 - Yayın: GitHub Pages (kök klasörden).
