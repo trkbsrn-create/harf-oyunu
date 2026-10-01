@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="110" viewBox="0 0 130 110">
+  <!-- Arı: "a" harfinin ipucu resmi (kendi çizimimiz) -->
+  <g stroke="#3b2a1a" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+    <!-- kanatlar -->
+    <ellipse cx="50" cy="28" rx="20" ry="24" fill="#dff4ff" transform="rotate(-20 50 28)"/>
+    <ellipse cx="76" cy="26" rx="18" ry="22" fill="#dff4ff" transform="rotate(20 76 26)"/>
+    <!-- iğne -->
+    <path d="M106 66 l18 4 l-18 8 z" fill="#3b2a1a"/>
+    <!-- gövde -->
+    <ellipse cx="68" cy="70" rx="42" ry="32" fill="#ffcf3f"/>
+  </g>
+  <!-- çizgiler -->
+  <path d="M62 40 q-8 30 0 60" fill="none" stroke="#3b2a1a" stroke-width="10"/>
+  <path d="M84 42 q-6 28 0 56" fill="none" stroke="#3b2a1a" stroke-width="10"/>
+  <g stroke="#3b2a1a" stroke-width="5" stroke-linecap="round">
+    <!-- baş -->
+    <circle cx="30" cy="68" r="22" fill="#ffcf3f"/>
+    <path d="M22 48 q-4 -14 -12 -16 M34 47 q2 -14 10 -18" fill="none" stroke-width="4"/>
+  </g>
+  <circle cx="22" cy="64" r="4" fill="#3b2a1a"/>
+  <circle cx="36" cy="64" r="4" fill="#3b2a1a"/>
+  <path d="M23 76 q6 6 12 0" fill="none" stroke="#3b2a1a" stroke-width="3" stroke-linecap="round"/>
+  <circle cx="16" cy="72" r="4" fill="#f39b8a" fill-opacity="0.8"/>
+</svg>

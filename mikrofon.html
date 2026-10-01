@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mikrofon Testi</title>
+  <style>
+    @font-face {
+      font-family: "Andika";
+      src: url("yazitipi/Andika-Regular.ttf") format("truetype");
+    }
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: #bfe8f5;
+      font-family: "Andika", sans-serif;
+      color: #3b2a1a;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 24px;
+      padding: 32px 16px;
+      box-sizing: border-box;
+    }
+    h1 { margin: 0; font-size: 44px; }
+    p { margin: 0; font-size: 22px; text-align: center; max-width: 640px; }
+    button {
+      font-family: inherit;
+      font-size: 36px;
+      padding: 18px 48px;
+      border: 5px solid #3b2a1a;
+      border-radius: 28px;
+      background: #ffcf3f;
+      color: #3b2a1a;
+      cursor: pointer;
+    }
+    button:disabled { background: #e6cfa3; cursor: default; }
+    #durum { font-size: 26px; min-height: 36px; }
+    #duyulan {
+      font-size: 48px;
+      background: #fff;
+      border: 5px solid #3b2a1a;
+      border-radius: 28px;
+      padding: 16px 32px;
+      min-width: 280px;
+      min-height: 64px;
+      text-align: center;
+    }
+    #tahminler { font-size: 20px; color: #7a5c3e; text-align: center; }
+    a { color: #2c7c76; font-size: 22px; }
+  </style>
+</head>
+<body>
+  <h1>Mikrofon Testi</h1>
+  <p>Düğmeye basıp bir şey söyleyin; örneğin "a", "kedi" ya da "leylek".
+     Chrome'un duyduğu ekrana yazılır. Hiçbir ses kaydedilmez.</p>
+  <button id="dugme">Dinle</button>
+  <div id="durum"></div>
+  <div id="duyulan"></div>
+  <div id="tahminler"></div>
+  <a href="index.html">Oyuna dön</a>
+
+  <script src="dinleyici.js"></script>
+  <script>
+    const dugme = document.getElementById("dugme");
+    const durum = document.getElementById("durum");
+    const duyulan = document.getElementById("duyulan");
+    const tahminler = document.getElementById("tahminler");
+
+    if (!Dinleyici.Tanima) {
+      durum.textContent = "Bu tarayıcıda konuşma tanıma yok. Lütfen Chrome kullanın.";
+      dugme.disabled = true;
+    }
+
+    Dinleyici.onDuydu = (enIyi) => {
+      duyulan.textContent = enIyi;
+    };
+
+    dugme.addEventListener("click", async () => {
+      dugme.disabled = true;
+      duyulan.textContent = "";
+      tahminler.textContent = "";
+      durum.textContent = "Dinliyorum... şimdi konuşun.";
+      const metinler = await Dinleyici.dinle(7000);
+      if (Dinleyici.izinYok) {
+        durum.textContent = "Mikrofon izni verilmedi. Adres çubuğundaki kilit simgesinden izin verebilirsiniz.";
+      } else if (metinler.length === 0) {
+        durum.textContent = "Hiçbir şey duyulmadı. Bir daha deneyin.";
+      } else {
+        durum.textContent = "Duyulan:";
+        duyulan.textContent = Dinleyici.enIyi;
+        const farkli = [...new Set(metinler.map((m) => m.trim()).filter(Boolean))];
+        tahminler.textContent = "Chrome'un tüm tahminleri: " + farkli.join(" · ");
+      }
+      dugme.disabled = false;
+    });
+  </script>
+</body>
+</html>
