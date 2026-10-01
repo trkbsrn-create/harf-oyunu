@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="760" height="170" viewBox="0 0 760 170">
+  <!-- Oyun adı tabelası (kâğıt şerit ve bant) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="44" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <path d="M34 40 q346 -26 692 0 l-14 108 q-332 20 -664 0z" fill="#000" fill-opacity="0.15"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M24 30 q346 -26 692 0 l-14 108 q-332 20 -664 0z" fill="#fffdf6" stroke-width="5"/>
+  </g>
+  <rect x="20" y="10" width="96" height="30" fill="#f6e27a" opacity="0.85" transform="rotate(-14 68 25)"/>
+  <rect x="644" y="10" width="96" height="30" fill="#f6e27a" opacity="0.85" transform="rotate(12 692 25)"/>
+</svg>

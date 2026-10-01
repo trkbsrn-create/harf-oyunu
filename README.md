@@ -1,10 +1,10 @@
-# Harf Adası
+# Harf Avcısı
 
 1. sınıf öğrencileri için Türkçe harf seslerini öğreten, tarayıcıda çalışan sevimli
 bir oyun. Çocuk bir adada dolaşır, harf kutuları açar, harfin sesini veya o harfle
 başlayan kelimeyi söyleyerek tohum kazanır.
 
-> Şu an sadece proje temeli hazır: ekranda "Merhaba Ada" yazıyor.
+> Oyun geliştirme aşamasında: şu an ilk iki harf sandığı (a, n) var.
 
 ## Nasıl açılır?
 GitHub Pages ile yayınlayın:

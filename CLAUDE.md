@@ -12,7 +12,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 
 ## Proje yapısı
 - `index.html` – Ana sayfa. Derleme adımı yok, doğrudan tarayıcıda açılır.
-- `oyun.js` – Phaser sahneleri ve oyun kodu.
+- `oyun.js` – Phaser sahneleri ve oyun kodu. Oyunun adı "Harf Avcısı". Önce karşılama
+  sahnesi (`KarsilamaSahnesi`), "Oyunu başlat" ile ada sahnesi (`AdaSahnesi`) açılır.
+  Sol üstteki menüde "Oyunu yeniden başlat" sayfayı yeniler; karşılama ekranını atlamak
+  için tek seferlik bir not (sessionStorage) bırakır, ilerleme saklanmaz.
 - `harfler.js` – Harf grupları ve kelimeler (sadece veri).
 - `canta.js` – Karakterin çantası (envanter). Kaydedilmez; sayfa yenilenince oyun baştan başlar.
 - `dinleyici.js` – Chrome konuşma tanıma (tr-TR), zaman aşımlı; söylenenin doğruluğunu kontrol eder.

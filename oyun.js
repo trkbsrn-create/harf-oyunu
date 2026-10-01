@@ -11,6 +11,8 @@ const SENSOR_MENZILI = 1600; // sandığa bu kadar yaklaşınca bip sesi başlar
 const PUSULA_ORTA = 1900;
 const PUSULA_YAKIN = 640;
 const SANDIK_CIKMA_UZAKLIGI = 110; // sandık ancak saklandığı yerin bu kadar yanında çıkar
+// "Oyunu yeniden başlat" deyince sayfa yenilenir; bu tek seferlik not karşılama ekranını atlatır
+const HEMEN_BASLA = "harfAvcisiHemenBasla";
 
 // Adanın kıyı çizgisi: dalgalı bir oval. Aynı şekil her açılışta aynı çıkar.
 function adaNoktalari(olcek) {
@@ -70,7 +72,8 @@ class AdaSahnesi extends Phaser.Scene {
     this.load.svg("tohum", "gorseller/tohum.svg");
     for (let i = 1; i <= 3; i++) this.load.svg(`aura-halka${i}`, `gorseller/aura-halka${i}.svg`);
     for (const ad of ["canta-pencere", "dusunce-balonu", "guc-bandi",
-      "doku-kagit", "doku-deniz", "doku-kum", "doku-cimen"]) {
+      "doku-kagit", "doku-deniz", "doku-kum", "doku-cimen",
+      "menu-dugmesi", "menu-kapat", "menu-pencere", "onay-pencere"]) {
       this.load.svg(ad, `gorseller/${ad}.svg`);
     }
     this.load.svg("mikrofon", "gorseller/mikrofon.svg");
@@ -129,9 +132,12 @@ class AdaSahnesi extends Phaser.Scene {
 
     // Dokunma / tıklama: karakter dokunulan yere yürür
     this.cantaKur();
+    this.menuKur();
+    this.cameras.main.fadeIn(400, 251, 247, 236);
 
     this.input.on("pointerdown", (p) => {
       Sesler.ac();
+      if (this.menuTiklamasi(p)) return;
       if (this.cantaTiklamasi(p)) return;
       if (this.sandik && this.sandikGorundu && !this.sandikAcildi
           && this.sandik.getBounds().contains(p.worldX, p.worldY)) {
@@ -141,11 +147,13 @@ class AdaSahnesi extends Phaser.Scene {
       this.hedefBelirle(p.worldX, p.worldY, true);
     });
     this.input.on("pointermove", (p) => {
-      if (p.isDown && !this.cantaAcik) this.hedefBelirle(p.worldX, p.worldY, false);
+      if (p.isDown && !this.cantaAcik && !this.menuAcik) this.hedefBelirle(p.worldX, p.worldY, false);
     });
     this.input.keyboard.on("keydown", () => Sesler.ac());
     this.input.keyboard.addCapture("SPACE");
-    this.input.keyboard.on("keydown-SPACE", () => this.cantayiAcKapat());
+    this.input.keyboard.on("keydown-SPACE", () => {
+      if (!this.menuAcik) this.cantayiAcKapat();
+    });
   }
 
   // ---- Çanta (envanter) ----
@@ -222,6 +230,98 @@ class AdaSahnesi extends Phaser.Scene {
       }).setOrigin(0.5);
       this.cantaIcerigi.add([resim, harf]);
     });
+  }
+
+  // ---- Menü (sol üst): oyunu yeniden başlat ----
+
+  menuKur() {
+    this.menuAcik = false;
+    this.menuDugmesi = this.add.image(64, 64, "menu-dugmesi")
+      .setScrollFactor(0).setDepth(9200);
+
+    // Açılınca düğmenin altında "Oyunu yeniden başlat" satırı çıkar
+    this.menuPenceresi = this.add.container(0, 0).setScrollFactor(0).setDepth(9200).setVisible(false);
+    const satir = this.add.image(20, 118, "menu-pencere").setOrigin(0);
+    const yazi = this.add.text(118, 168, "Oyunu yeniden başlat", {
+      fontFamily: "Andika", fontSize: "34px", color: "#2b2b2b",
+    }).setOrigin(0, 0.5);
+    this.menuPenceresi.add([satir, yazi]);
+    this.yenidenBaslatAlani = new Phaser.Geom.Rectangle(26, 124, 480, 90);
+
+    // Kazara basılmasın diye önce sorulur
+    this.onayPenceresi = this.add.container(0, 0).setScrollFactor(0).setDepth(9300).setVisible(false);
+    const karartma = this.add.graphics();
+    karartma.fillStyle(0x000000, 0.35);
+    karartma.fillRect(0, 0, 1280, 720);
+    const kart = this.add.image(370, 200, "onay-pencere").setOrigin(0);
+    const soru = this.add.text(640, 290, "Baştan başlasın mı?", {
+      fontFamily: "Andika", fontSize: "46px", color: "#2b2b2b",
+    }).setOrigin(0.5);
+    const not = this.add.text(640, 345, "Çanta boşalır.", {
+      fontFamily: "Andika", fontSize: "28px", color: "#6b6b6b",
+    }).setOrigin(0.5);
+    const evet = this.add.text(525, 438, "Evet", {
+      fontFamily: "Andika", fontSize: "40px", color: "#2b2b2b",
+    }).setOrigin(0.5);
+    const hayir = this.add.text(755, 438, "Hayır", {
+      fontFamily: "Andika", fontSize: "40px", color: "#2b2b2b",
+    }).setOrigin(0.5);
+    this.onayPenceresi.add([karartma, kart, soru, not, evet, hayir]);
+    this.evetAlani = new Phaser.Geom.Rectangle(430, 400, 190, 80);
+    this.hayirAlani = new Phaser.Geom.Rectangle(660, 400, 190, 80);
+  }
+
+  // Dokunuş menüyle ilgiliyse işler ve true döner.
+  menuTiklamasi(p) {
+    if (this.onayPenceresi.visible) {
+      if (this.evetAlani.contains(p.x, p.y)) {
+        this.oyunuYenidenBaslat();
+      } else if (this.hayirAlani.contains(p.x, p.y)) {
+        this.onayPenceresi.setVisible(false);
+        this.menuyuAcKapat();
+      }
+      return true;
+    }
+    if (this.menuDugmesi.getBounds().contains(p.x, p.y)) {
+      if (this.cantaAcik) this.cantayiAcKapat();
+      this.menuyuAcKapat();
+      return true;
+    }
+    if (this.menuAcik) {
+      if (this.yenidenBaslatAlani.contains(p.x, p.y)) {
+        Sesler.pling();
+        this.onayPenceresi.setVisible(true).setAlpha(0);
+        this.tweens.add({ targets: this.onayPenceresi, alpha: 1, duration: 180 });
+      } else {
+        this.menuyuAcKapat(); // menünün dışına dokununca kapanır
+      }
+      return true;
+    }
+    return false;
+  }
+
+  menuyuAcKapat() {
+    this.menuAcik = !this.menuAcik;
+    this.hedef = null;
+    Sesler.canta(this.menuAcik);
+    this.menuDugmesi.setTexture(this.menuAcik ? "menu-kapat" : "menu-dugmesi");
+    this.menuPenceresi.setVisible(this.menuAcik);
+    if (this.menuAcik) {
+      this.menuPenceresi.setAlpha(0).setY(-12);
+      this.tweens.add({ targets: this.menuPenceresi, alpha: 1, y: 0, duration: 180, ease: "Back.Out" });
+    }
+  }
+
+  // Sayfa yeniden yüklenir: çanta boşalır, sandıklar kapanır, mikrofon da baştan
+  // kurulur. Karşılama ekranı bu sefer atlanır (tek seferlik not; ilerleme saklanmaz).
+  oyunuYenidenBaslat() {
+    try {
+      sessionStorage.setItem(HEMEN_BASLA, "1");
+    } catch (e) {
+      // Not tutulamazsa karşılama ekranı yeniden görünür; sorun değil
+    }
+    this.cameras.main.fadeOut(300, 251, 247, 236);
+    this.cameras.main.once("camerafadeoutcomplete", () => window.location.reload());
   }
 
   // ---- Ses doğrulama (3 basamak) ----
@@ -1206,7 +1306,7 @@ class AdaSahnesi extends Phaser.Scene {
     let dx = 0;
     let dy = 0;
 
-    if (this.donuk || this.cantaAcik) {
+    if (this.donuk || this.cantaAcik || this.menuAcik) {
       this.cocuk.setAngle(0).setScale(1).setTexture("cocuk");
       return;
     }
@@ -1293,6 +1393,112 @@ class AdaSahnesi extends Phaser.Scene {
   }
 }
 
+// Karşılama ekranı: denizde küçük bir ada, oyunun adı ve "Oyunu başlat" düğmesi.
+// Düğmeye basınca oyunun sesleri açılır ve ada sahnesi başlar.
+class KarsilamaSahnesi extends Phaser.Scene {
+  constructor() {
+    super("KarsilamaSahnesi");
+  }
+
+  preload() {
+    for (const ad of ["doku-kagit", "doku-deniz", "doku-kum", "doku-cimen",
+      "agac-govde", "agac-tepe", "cocuk", "baslik-tabela", "dugme-baslat"]) {
+      this.load.svg(ad, `gorseller/${ad}.svg`);
+    }
+  }
+
+  create() {
+    // "Oyunu yeniden başlat"tan geliyorsak doğrudan adaya geç
+    let hemen = false;
+    try {
+      hemen = sessionStorage.getItem(HEMEN_BASLA) === "1";
+      sessionStorage.removeItem(HEMEN_BASLA);
+    } catch (e) {
+      hemen = false;
+    }
+    if (hemen) {
+      this.scene.start("AdaSahnesi");
+      return;
+    }
+
+    this.add.tileSprite(0, 0, 1280, 720, "doku-kagit").setOrigin(0);
+    this.deniz = this.add.tileSprite(0, 0, 1280, 720, "doku-deniz").setOrigin(0).setAlpha(0.85);
+    this.adaCiz(640, 440);
+
+    const govde = this.add.image(500, 450, "agac-govde").setOrigin(0.5, 1);
+    this.tepe = this.add.image(500, 365, "agac-tepe").setOrigin(0.5, 115 / 140);
+    this.cocuk = this.add.image(700, 500, "cocuk").setOrigin(0.5, 1).setScale(1.25);
+    this.tweens.add({ targets: this.cocuk, scaleY: 1.29, duration: 700, yoyo: true,
+      repeat: -1, ease: "Sine.InOut" });
+
+    const tabela = this.add.container(640, 110, [
+      this.add.image(0, 0, "baslik-tabela"),
+      this.add.text(0, 4, "Harf Avcısı", {
+        fontFamily: "Andika", fontSize: "88px", color: "#2b2b2b",
+      }).setOrigin(0.5),
+    ]);
+    this.tweens.add({ targets: tabela, angle: { from: -1.2, to: 1.2 }, duration: 1800,
+      yoyo: true, repeat: -1, ease: "Sine.InOut" });
+
+    const dugme = this.add.container(640, 630, [
+      this.add.image(0, 0, "dugme-baslat"),
+      this.add.text(40, -6, "Oyunu başlat", {
+        fontFamily: "Andika", fontSize: "46px", color: "#2b2b2b",
+      }).setOrigin(0.5),
+    ]).setSize(396, 92).setInteractive({ useHandCursor: true });
+    this.nabiz = this.tweens.add({ targets: dugme, scale: 1.06, duration: 650, yoyo: true,
+      repeat: -1, ease: "Sine.InOut" });
+    dugme.on("pointerdown", () => this.basla(dugme));
+    this.input.keyboard.on("keydown-ENTER", () => this.basla(dugme));
+    this.input.keyboard.on("keydown-SPACE", () => this.basla(dugme));
+  }
+
+  // Küçük doodle ada: taranmış kum ve çimen, titrek kalem kıyısı
+  adaCiz(x, y) {
+    const oval = (rx, ry, oynama, tohum) => {
+      const r = new Phaser.Math.RandomDataGenerator([tohum]);
+      const noktalar = [];
+      for (let i = 0; i < 60; i++) {
+        const a = (i / 60) * Math.PI * 2;
+        noktalar.push({ x: x + Math.cos(a) * rx + r.realInRange(-oynama, oynama),
+          y: y + Math.sin(a) * ry + r.realInRange(-oynama, oynama) });
+      }
+      return noktalar;
+    };
+    const boya = (noktalar, doku) => {
+      const kalip = this.make.graphics({ add: false });
+      kalip.fillStyle(0xffffff);
+      kalip.fillPoints(noktalar, true);
+      this.add.tileSprite(0, 0, 1280, 720, doku).setOrigin(0).setMask(kalip.createGeometryMask());
+    };
+    const kum = oval(330, 150, 0, "kum");
+    boya(kum, "doku-kum");
+    boya(oval(270, 112, 0, "cimen"), "doku-cimen");
+    const g = this.add.graphics();
+    g.lineStyle(6, 0x2b2b2b, 1);
+    g.strokePoints(oval(330, 150, 1.5, "kiyi1"), true);
+    g.lineStyle(2.5, 0x2b2b2b, 0.6);
+    g.strokePoints(oval(332, 151, 3.5, "kiyi2"), true);
+  }
+
+  update(zaman) {
+    this.deniz.tilePositionX = zaman * 0.012;
+    this.deniz.tilePositionY = Math.sin(zaman / 1500) * 6;
+    this.tepe.setAngle(Math.sin(zaman / 700) * 2.5);
+  }
+
+  basla(dugme) {
+    if (this.basladi) return;
+    this.basladi = true;
+    Sesler.ac();
+    Sesler.pling();
+    this.nabiz.stop();
+    this.tweens.add({ targets: dugme, scale: 0.92, duration: 90, yoyo: true });
+    this.cameras.main.fadeOut(350, 251, 247, 236);
+    this.cameras.main.once("camerafadeoutcomplete", () => this.scene.start("AdaSahnesi"));
+  }
+}
+
 // Yazı tipi yüklendikten sonra oyunu başlat (yoksa yazı yanlış görünür).
 document.fonts.load('72px "Andika"').finally(() => {
   new Phaser.Game({
@@ -1305,6 +1511,6 @@ document.fonts.load('72px "Andika"').finally(() => {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [AdaSahnesi],
+    scene: [KarsilamaSahnesi, AdaSahnesi],
   });
 });

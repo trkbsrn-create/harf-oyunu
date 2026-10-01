@@ -184,6 +184,49 @@ yaz("guc-bandi.svg", 880, 120, "Gücünü göster bandı (kâğıt şerit ve ban
   <rect x="790" y="4" width="84" height="28" fill="#f6e27a" opacity="0.85" transform="rotate(14 832 18)"/>
 ''', 43, 4)
 
+# ---- Karşılama ekranı ----
+# Oyun adı tabelası: 760x170. Yazı oyunda yazılır, tabelanın ortasına gelir.
+yaz("baslik-tabela.svg", 760, 170, "Oyun adı tabelası (kâğıt şerit ve bant)", "",
+    '  <path d="M34 40 q346 -26 692 0 l-14 108 q-332 20 -664 0z" fill="#000" fill-opacity="0.15"/>\n' +
+    kalem('''    <path d="M24 30 q346 -26 692 0 l-14 108 q-332 20 -664 0z" fill="#fffdf6" stroke-width="5"/>
+''') + '''  <rect x="20" y="10" width="96" height="30" fill="#f6e27a" opacity="0.85" transform="rotate(-14 68 25)"/>
+  <rect x="644" y="10" width="96" height="30" fill="#f6e27a" opacity="0.85" transform="rotate(12 692 25)"/>
+''', 44, 4)
+
+# "Oyunu başlat" düğmesi: 420x120. Yazı oyunda yazılır (orta noktanın 40 px sağına).
+yaz("dugme-baslat.svg", 420, 120, "Oyunu başlat düğmesi", SARI,
+    '  <rect x="14" y="20" width="396" height="92" rx="44" fill="#000" fill-opacity="0.15"/>\n' +
+    kalem('''    <rect x="8" y="10" width="396" height="92" rx="44" fill="url(#sari)" stroke-width="5"/>
+    <path d="M46 34 l40 22 l-40 22z" fill="#ffffff"/>
+''', 5), 45, 4)
+
+# ---- Menü (sol üst) ----
+# Menü düğmesi ve çarpısı: 90x90, oyunda orta noktası (64,64).
+MENU_KUTU = '    <rect x="8" y="8" width="74" height="74" rx="18" fill="#fffdf6"/>\n'
+yaz("menu-dugmesi.svg", 90, 90, "Menü düğmesi (üç çizgi)", "",
+    kalem(MENU_KUTU + '    <path d="M26 30 h38 M26 45 h38 M26 60 h38" fill="none" stroke-width="5"/>\n', 4), 46, 3)
+yaz("menu-kapat.svg", 90, 90, "Menü kapatma düğmesi (çarpı)", "",
+    kalem(MENU_KUTU + '    <path d="M30 30 l30 30 M60 30 l-30 30" fill="none" stroke-width="5"/>\n', 4), 47, 3)
+
+# Menü penceresi: 500x110, sol üst köşesi oyunda (20,118). Yazı oyunda yazılır.
+yaz("menu-pencere.svg", 500, 110, "Menü penceresi: yeniden başlat satırı", "",
+    '  <rect x="14" y="14" width="480" height="90" rx="22" fill="#000" fill-opacity="0.15"/>\n' +
+    kalem('''    <rect x="6" y="6" width="480" height="90" rx="22" fill="#fffdf6"/>
+    <path d="M70 36 a20 20 0 1 0 6 16" fill="none" stroke-width="5"/>
+    <path d="M60 32 l12 4 l-2 -14" fill="none" stroke-width="5"/>
+''', 4), 48, 3)
+
+# "Baştan başlasın mı?" penceresi: 540x320, oyunda ekranın ortasına gelir.
+# Düğmeler: Evet (orta noktası 155,240), Hayır (385,240); her biri 190x80.
+yaz("onay-pencere.svg", 540, 320, "Yeniden başlatma onay penceresi",
+    tarama("kagit", "#fbf4e2", "#f1e6c8", 30, 8, 3) + tarama("yesil", "#c9eba7", "#8fd16a", 35)
+    + tarama("pembe", "#ffd2c8", "#ff9c8a", -35),
+    '  <rect x="22" y="22" width="508" height="290" rx="30" fill="#000" fill-opacity="0.18"/>\n' +
+    kalem('''    <rect x="12" y="12" width="508" height="290" rx="30" fill="url(#kagit)"/>
+    <rect x="60" y="200" width="190" height="80" rx="36" fill="url(#yesil)"/>
+    <rect x="290" y="200" width="190" height="80" rx="36" fill="url(#pembe)"/>
+''', 5), 49, 4)
+
 # ---- Zemin dokuları (kesintisiz döşenir; titreme süzgeci yok) ----
 def doku(ad, boy, zemin, cizgiler, aciklama):
     s = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{boy}" height="{boy}" viewBox="0 0 {boy} {boy}">
