@@ -5,7 +5,12 @@ const DUNYA_YUKSEKLIK = 3600;
 const YURUME_HIZI = 260; // saniyede piksel
 const BASLANGIC_X = DUNYA_GENISLIK / 2;
 const BASLANGIC_Y = DUNYA_YUKSEKLIK / 2 + 120;
-const SENSOR_MENZILI = 1600; // sandığa bu kadar yaklaşınca aura ve bip başlar
+const SENSOR_MENZILI = 1600; // sandığa bu kadar yaklaşınca bip sesi başlar
+// Hazine pusulası: dış halka her zaman silik yanar; ortanca halka sandığa bu kadar
+// yaklaşınca (yaklaşık bir buçuk ekran), iç halka bu kadar yaklaşınca (yarım ekran) yanar.
+const PUSULA_ORTA = 1900;
+const PUSULA_YAKIN = 640;
+const SANDIK_CIKMA_UZAKLIGI = 110; // sandık ancak saklandığı yerin bu kadar yanında çıkar
 
 // Adanın kıyı çizgisi: dalgalı bir oval. Aynı şekil her açılışta aynı çıkar.
 function adaNoktalari(olcek) {
@@ -63,6 +68,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.load.svg("sandik-acik", "gorseller/sandik-acik.svg");
     this.load.svg("canta", "gorseller/canta.svg");
     this.load.svg("tohum", "gorseller/tohum.svg");
+    for (let i = 1; i <= 3; i++) this.load.svg(`aura-halka${i}`, `gorseller/aura-halka${i}.svg`);
     this.load.svg("mikrofon", "gorseller/mikrofon.svg");
     this.load.svg("ari", "gorseller/ari.svg");
     this.load.svg("nar", "gorseller/nar.svg");
@@ -730,7 +736,16 @@ class AdaSahnesi extends Phaser.Scene {
 
   // Hazine sensörü: karakterin çevresindeki aura ve bip sesi
   sensorKur() {
-    this.aura = this.add.image(this.cocuk.x, this.cocuk.y - 55, "aura").setAlpha(0);
+    // Üç halka × dört yön (yukarı, sağ, aşağı, sol) parça. Halka 1 dışta, 3 içte.
+    this.pusula = [];
+    for (let halka = 1; halka <= 3; halka++) {
+      [0, 90, 180, 270].forEach((aci) => {
+        const parca = this.add.image(this.cocuk.x, this.cocuk.y - 60, `aura-halka${halka}`)
+          .setAngle(aci).setAlpha(0);
+        this.pusula.push({ parca, halka, aci });
+      });
+    }
+    this.pusulaGorunurluk = 1; // sandık çıkınca pusula yavaşça söner
     this.auraFaz = 0;
     this.bipSayaci = 0;
     this.auraParilti = this.add.particles(0, 0, "parilti", {
@@ -743,19 +758,24 @@ class AdaSahnesi extends Phaser.Scene {
   }
 
   sensorGuncelle(fark, yuruyor) {
-    if (!this.sandik || this.sandikAcildi) return;
-    const uzaklik = Phaser.Math.Distance.Between(
-      this.cocuk.x, this.cocuk.y, this.sandik.x, this.sandik.y);
+    // Sandık yoksa ya da ortaya çıktıysa pusula söner
+    const calisiyor = this.sandik && !this.sandikGorundu && !this.sandikAcildi;
+    this.pusulaGorunurluk = Phaser.Math.Clamp(
+      this.pusulaGorunurluk + (calisiyor ? 1 : -1) * fark / 500, 0, 1);
+    if (!calisiyor) {
+      this.pusulaCiz(0, 0, 0);
+      this.auraParilti.emitting = false;
+      return;
+    }
+    const dx = this.saklanmaYeri.x - this.cocuk.x;
+    const dy = this.saklanmaYeri.y - this.cocuk.y;
+    const uzaklik = Math.hypot(dx, dy);
     // 0 = çok uzak, 1 = sandığın yanında
     const yakinlik = Phaser.Math.Clamp(1 - (uzaklik - 70) / (SENSOR_MENZILI - 70), 0, 1);
+    const seviye = uzaklik < PUSULA_YAKIN ? 3 : uzaklik < PUSULA_ORTA ? 2 : 1;
 
     this.auraFaz += fark * (0.003 + yakinlik * 0.012);
-    const nefes = 1 + 0.1 * Math.sin(this.auraFaz);
-    this.aura
-      .setPosition(this.cocuk.x, this.cocuk.y - 55)
-      .setDepth(this.cocuk.depth - 0.5)
-      .setAlpha(yakinlik * 0.9)
-      .setScale((0.7 + yakinlik * 1.1) * nefes);
+    this.pusulaCiz(Math.atan2(dy, dx), seviye, Math.sin(this.auraFaz));
 
     this.auraParilti.setDepth(this.cocuk.depth + 0.5);
     this.auraParilti.emitting = yakinlik > 0.6;
@@ -769,6 +789,29 @@ class AdaSahnesi extends Phaser.Scene {
       }
     } else {
       this.bipSayaci = 10000; // yürümeye başlayınca ilk bip hemen duyulsun
+    }
+  }
+
+  // Pusulanın parçalarını yerleştirir ve parlaklıklarını ayarlar.
+  // yon: sandığın yönü (radyan), seviye: kaç halka yanıyor (0 = hiçbiri), nabiz: -1..1
+  pusulaCiz(yon, seviye, nabiz) {
+    const x = this.cocuk.x;
+    const y = this.cocuk.y - 60;
+    for (const p of this.pusula) {
+      // Parçanın baktığı yön: 0° yukarı, 90° sağ ... (Phaser'da yukarı = -90°)
+      const parcaYonu = Phaser.Math.DegToRad(p.aci - 90);
+      const hizalama = Math.max(0, Math.cos(yon - parcaYonu)); // 1 = tam sandığa bakıyor
+      let alfa;
+      if (p.halka <= seviye) {
+        const acik = [0.45, 0.7, 1][seviye - 1];
+        alfa = 0.14 + (acik - 0.14) * hizalama;
+        // Yanan parçalar hafifçe nabız gibi atar
+        alfa *= 1 - 0.18 * hizalama * (0.5 + 0.5 * nabiz);
+      } else {
+        alfa = 0.05 + 0.07 * hizalama; // henüz yanmamış halka: çok silik bir iz
+      }
+      p.parca.setPosition(x, y).setDepth(this.cocuk.depth - 0.5)
+        .setAlpha(alfa * this.pusulaGorunurluk);
     }
   }
 
@@ -803,6 +846,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.saklanmaYeri = s ? s.cali : null;
     this.aktifHarf = s ? s.harfBilgisi : null;
     this.sandikGorundu = false;
+    this.sandikHazir = false; // çıkma hareketi bitti mi (üstüne yürüyünce açılabilir)
     this.sandikAcildi = false;
   }
 
@@ -816,6 +860,7 @@ class AdaSahnesi extends Phaser.Scene {
       targets: this.sandik, x: cali.x + 100, y: cali.y + 45,
       duration: 650, ease: "Back.Out",
       onComplete: () => {
+        this.sandikHazir = true;
         this.sandik.setDepth(this.sandik.y);
         this.sandikZipla = this.tweens.add({
           targets: this.sandik, y: this.sandik.y - 10,
@@ -838,7 +883,6 @@ class AdaSahnesi extends Phaser.Scene {
     if (this.sandikZipla) this.sandikZipla.stop();
     if (this.sandikParilti) this.sandikParilti.stop();
     this.auraParilti.emitting = false;
-    this.tweens.add({ targets: this.aura, alpha: 0, duration: 400 });
 
     const s = this.sandik;
     this.tweens.killTweensOf(s);
@@ -1216,9 +1260,9 @@ class AdaSahnesi extends Phaser.Scene {
     if (!this.sandik || this.sandikAcildi) return;
     const uzaklik = Phaser.Math.Distance.Between(
       this.cocuk.x, this.cocuk.y, this.sandik.x, this.sandik.y);
-    if (!this.sandikGorundu && uzaklik < 380) {
+    if (!this.sandikGorundu && uzaklik < SANDIK_CIKMA_UZAKLIGI) {
       this.sandigiGoster();
-    } else if (this.sandikGorundu && uzaklik < 70) {
+    } else if (this.sandikHazir && uzaklik < 70) {
       this.sandigiAc();
     }
   }

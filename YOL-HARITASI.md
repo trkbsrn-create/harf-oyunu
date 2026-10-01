@@ -20,6 +20,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - "a" sesinin tınısıyla tanınması (o, u, e, i, gürültü reddedilir): önce "a" denir, düşünce balonu, doğruysa "Tohumu kazanmak için gücünü göster!" ve yalnızca "a" sesiyle dolan bar; mikrofon.html'de "a" denetimi ve ölçümler: TAMAM. Gerçek mikrofonla denenecek; başarılı olursa "n" için de güncellenecek.
    - Doodle tarzı denemesi: örnek sahne gösterildi; karakter ve sandık doodle tarzına çevrildi: TAMAM. Diğer görseller kullanıcının kararına göre.
    - Tını kuralı gerçek seste "a"yı reddetti: ilk onay yeniden yarım saniye net sese döndü (Chrome kelimeleri de geçerli), güç aşaması her net sesle doluyor (kullanıcı isteği): TAMAM.
+   - Hazine pusulası (eski aura yerine): doodle tarzı 3 halka × 4 yön parça; dış halka oyunun başından silik yanar, ortanca ~1,5 ekranda, iç ~yarım ekranda yanar; sandığa bakan parçalar parlar ve nabız gibi atar. Sandık ancak saklandığı yerin hemen yanında (110 px) çıkar, çıkınca pusula söner; çıkma hareketi bitmeden üstüne yürüyünce açılmaz: TAMAM.
    - Sıradaki iş: kullanıcıyla konuşulacak.
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.
