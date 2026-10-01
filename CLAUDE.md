@@ -15,9 +15,11 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 - `oyun.js` – Phaser sahneleri ve oyun kodu.
 - `harfler.js` – Harf grupları ve kelimeler (sadece veri).
 - `canta.js` – Karakterin çantası (envanter). Kaydedilmez; sayfa yenilenince oyun baştan başlar.
+- `dinleyici.js` – Chrome konuşma tanıma (tr-TR), zaman aşımlı; söylenenin doğruluğunu kontrol eder.
+- `mikrofon.html` – Öğretmen için mikrofon testi sayfası (Chrome'un ne duyduğunu gösterir).
 - `sesler.js` – Oyun sesleri. Ses dosyası yok; sesler tarayıcıda (Web Audio) üretilir.
 - `yazitipi/` – Andika yazı tipi ve lisansı (SIL Open Font License).
-- `gorseller/` – Kendi çizdiğimiz SVG görseller (karakter, ağaç, çalı, kaya, sandık, çiçek, ot, kelebek, martı, çanta, tohum).
+- `gorseller/` – Kendi çizdiğimiz SVG görseller (karakter, ağaç, çalı, kaya, sandık, çiçek, ot, kelebek, martı, çanta, tohum, mikrofon, arı).
 - Phaser 3, sabit sürümle (3.90.0) jsDelivr CDN'den yüklenir. Sürüm numarası
   rastgele değiştirilmez.
 - Yayın: GitHub Pages (kök klasörden).

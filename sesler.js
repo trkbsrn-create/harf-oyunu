@@ -67,6 +67,16 @@ const Sesler = {
     this.nota(acik ? 440 : 294, 0.07, 0.14, 0.12, "triangle");
   },
 
+  // Dinleme başlarken: "şimdi söyle" anlamında kısa, yumuşak bir çan.
+  dinle() {
+    this.nota(880, 0, 0.18, 0.08, "sine");
+  },
+
+  // Harf doğru söylenince: sevinçli kısa melodi.
+  dogru() {
+    [659, 784, 988, 1319].forEach((f, i) => this.nota(f, i * 0.08, 0.22, 0.16));
+  },
+
   // Sandık göründüğünde: kısa bir "pling".
   pling() {
     this.nota(1318, 0, 0.25, 0.12, "sine");

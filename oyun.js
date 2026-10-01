@@ -63,6 +63,8 @@ class AdaSahnesi extends Phaser.Scene {
     this.load.svg("sandik-acik", "gorseller/sandik-acik.svg");
     this.load.svg("canta", "gorseller/canta.svg");
     this.load.svg("tohum", "gorseller/tohum.svg");
+    this.load.svg("mikrofon", "gorseller/mikrofon.svg");
+    this.load.svg("ari", "gorseller/ari.svg");
     for (const ad of ["cicek-kirmizi", "cicek-mor", "cicek-beyaz", "ot", "kelebek", "kus"]) {
       this.load.svg(ad, `gorseller/${ad}.svg`);
     }
@@ -232,9 +234,74 @@ class AdaSahnesi extends Phaser.Scene {
     });
   }
 
+  // ---- Ses doğrulama (3 basamak) ----
+  // 1) Chrome dinler. 2) 3 denemeden sonra ipucu resmi çıkar, ipucu kelimesi de
+  // kabul edilir. 3) Hâlâ olmazsa oyun kendiliğinden onaylar ve harf "tekrar
+  // edilecek" diye not edilir. Hata mesajı ya da başarısızlık ekranı yok.
+  async harfiDinle(harfBilgisi, yazi, hale, isik) {
+    const harf = harfBilgisi.kucuk;
+    const kelime = harfBilgisi.kelime;
+    const mikrofon = this.add.image(yazi.x + 160, yazi.y - 10, "mikrofon")
+      .setDepth(6002).setScale(0);
+    this.tweens.add({ targets: mikrofon, scale: 1, duration: 300, ease: "Back.Out" });
+    let ipucu = null;
+    let dogru = false;
+
+    for (let deneme = 1; deneme <= 5 && Dinleyici.destekleniyor; deneme++) {
+      Sesler.dinle();
+      const nabiz = this.tweens.add({ targets: mikrofon, scale: 1.15, duration: 380,
+        yoyo: true, repeat: -1, ease: "Sine.InOut" });
+      const baslangic = Date.now();
+      const metinler = await Dinleyici.dinle(6000);
+      nabiz.stop();
+      mikrofon.setScale(1);
+      if (Dinleyici.dogruMu(metinler, harf, kelime)) {
+        dogru = true;
+        break;
+      }
+      // Yanlış ya da boş: sadece harf hafifçe sallanır ("bir daha söyle")
+      this.tweens.add({ targets: yazi, angle: { from: -8, to: 8 }, duration: 90,
+        yoyo: true, repeat: 2, onComplete: () => yazi.setAngle(0) });
+      if (deneme === 3) ipucu = this.ipucuGoster(yazi);
+      // Tanıma hemen bittiyse biraz bekle, çocuk hazırlansın
+      const gecen = Date.now() - baslangic;
+      await this.bekle(Math.max(800, 1500 - gecen));
+    }
+
+    if (dogru) {
+      Sesler.dogru();
+      this.tweens.add({ targets: yazi, scale: 1.35, duration: 180, yoyo: true, repeat: 1 });
+      this.add.particles(yazi.x, yazi.y, "yildiz", {
+        speed: { min: 150, max: 350 }, lifespan: 900, scale: { start: 0.8, end: 0 },
+        tint: [0xffcf3f, 0xffffff, 0x9fe870], emitting: false,
+      }).setDepth(6003).explode(25);
+      await this.bekle(700);
+    } else {
+      // 3. basamak: birkaç saniye sonra kendiliğinden onay
+      await this.bekle(2500);
+    }
+
+    this.tweens.add({ targets: [mikrofon, ipucu].filter(Boolean), scale: 0, alpha: 0,
+      duration: 250, onComplete: () => { mikrofon.destroy(); if (ipucu) ipucu.destroy(); } });
+    this.tohumuKazan(harf, yazi, hale, isik, !dogru);
+  }
+
+  // İpucu: harfin kelimesinin resmi (kelimede öğrenilmemiş harfler olduğu için yazı değil)
+  ipucuGoster(yazi) {
+    const resim = this.add.image(yazi.x - 190, yazi.y + 10, "ari").setDepth(6002).setScale(0);
+    this.tweens.add({ targets: resim, scale: 1.2, duration: 400, ease: "Back.Out" });
+    this.tweens.add({ targets: resim, y: resim.y - 12, duration: 600, yoyo: true,
+      repeat: -1, ease: "Sine.InOut", delay: 400 });
+    Sesler.pling();
+    return resim;
+  }
+
+  bekle(ms) {
+    return new Promise((devam) => this.time.delayedCall(ms, devam));
+  }
+
   // Harf tohuma dönüşür ve çantaya uçar; açılmış sandık küçülüp sönükleşir.
-  // (Geçici: mikrofon adımında bu, çocuk harfi söyleyince olacak.)
-  tohumuKazan(harf, yazi, hale, isik) {
+  tohumuKazan(harf, yazi, hale, isik, tekrarEdilecek) {
     const kamera = this.cameras.main;
     this.tweens.killTweensOf(yazi);
     const ekranX = yazi.x - kamera.scrollX;
@@ -256,7 +323,9 @@ class AdaSahnesi extends Phaser.Scene {
       onComplete: () => {
         tohum.destroy();
         Sesler.tohum();
-        Canta.tohumEkle(harf);
+        Canta.tohumEkle(harf, tekrarEdilecek);
+        this.donuk = false;
+        kamera.startFollow(this.cocuk, true, 0.05, 0.05);
         if (this.cantaAcik) this.cantaIceriginiCiz();
         this.tweens.add({ targets: this.cantaDugmesi, scale: 1.25, duration: 120, yoyo: true });
       },
@@ -454,11 +523,8 @@ class AdaSahnesi extends Phaser.Scene {
     this.tweens.add({ targets: hale, scale: 1, duration: 900, ease: "Back.Out" });
     this.tweens.add({ targets: hale, alpha: 0.3, duration: 700, yoyo: true, repeat: -1, delay: 900 });
 
-    this.time.delayedCall(1800, () => {
-      this.donuk = false;
-      kamera.startFollow(this.cocuk, true, 0.05, 0.05);
-    });
-    this.time.delayedCall(2600, () => this.tohumuKazan(harf, yazi, hale, isik));
+    // Karakter, harf söylenip tohum çantaya girene kadar bekler (bkz. tohumuKazan)
+    this.time.delayedCall(2000, () => this.harfiDinle(HARFLER[0], yazi, hale, isik));
   }
 
   // Yürürken ayak altından çıkan küçük toz bulutu
