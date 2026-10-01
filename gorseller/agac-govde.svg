@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="200" viewBox="0 0 160 200">
+  <!-- Ağacın gövdesi (kendi çizimimiz). Tepesi agac-tepe.svg, rüzgârda sallanır. -->
+  <ellipse cx="80" cy="192" rx="44" ry="7" fill="#000" fill-opacity="0.18"/>
+  <path d="M68 190 l4 -80 h16 l4 80 z" fill="#9a6a3f" stroke="#3b2a1a" stroke-width="5" stroke-linejoin="round"/>
+</svg>
