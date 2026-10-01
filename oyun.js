@@ -61,6 +61,8 @@ class AdaSahnesi extends Phaser.Scene {
     this.load.svg("kaya", "gorseller/kaya.svg");
     this.load.svg("sandik-kapali", "gorseller/sandik-kapali.svg");
     this.load.svg("sandik-acik", "gorseller/sandik-acik.svg");
+    this.load.svg("canta", "gorseller/canta.svg");
+    this.load.svg("tohum", "gorseller/tohum.svg");
     for (const ad of ["cicek-kirmizi", "cicek-mor", "cicek-beyaz", "ot", "kelebek", "kus"]) {
       this.load.svg(ad, `gorseller/${ad}.svg`);
     }
@@ -113,8 +115,11 @@ class AdaSahnesi extends Phaser.Scene {
     this.tuslar = this.input.keyboard.createCursorKeys();
 
     // Dokunma / tıklama: karakter dokunulan yere yürür
+    this.cantaKur();
+
     this.input.on("pointerdown", (p) => {
       Sesler.ac();
+      if (this.cantaTiklamasi(p)) return;
       if (this.sandikGorundu && !this.sandikAcildi
           && this.sandik.getBounds().contains(p.worldX, p.worldY)) {
         this.sandigiAc();
@@ -123,9 +128,143 @@ class AdaSahnesi extends Phaser.Scene {
       this.hedefBelirle(p.worldX, p.worldY, true);
     });
     this.input.on("pointermove", (p) => {
-      if (p.isDown) this.hedefBelirle(p.worldX, p.worldY, false);
+      if (p.isDown && !this.cantaAcik) this.hedefBelirle(p.worldX, p.worldY, false);
     });
     this.input.keyboard.on("keydown", () => Sesler.ac());
+    this.input.keyboard.addCapture("SPACE");
+    this.input.keyboard.on("keydown-SPACE", () => this.cantayiAcKapat());
+  }
+
+  // ---- Çanta (envanter) ----
+
+  cantaKur() {
+    this.cantaAcik = false;
+    // Sağ üst köşede her zaman duran çanta düğmesi
+    this.cantaDugmesi = this.add.image(1280 - 80, 80, "canta")
+      .setScrollFactor(0).setDepth(9000);
+
+    // Çanta açılınca görünen pencere
+    const pencere = this.add.container(0, 0).setScrollFactor(0).setDepth(9100).setVisible(false);
+    const g = this.add.graphics();
+    g.fillStyle(0x000000, 0.35);
+    g.fillRect(0, 0, 1280, 720);
+    g.fillStyle(0x7a5c3e);
+    g.fillRoundedRect(330, 170, 620, 420, 36);
+    g.fillStyle(0xf3e2c0);
+    g.fillRoundedRect(320, 150, 620, 420, 36);
+    g.lineStyle(6, 0x3b2a1a);
+    g.strokeRoundedRect(320, 150, 620, 420, 36);
+    g.fillStyle(0x3fa7a0);
+    g.fillRoundedRect(320, 150, 620, 80, { tl: 36, tr: 36, bl: 0, br: 0 });
+    g.strokeRoundedRect(320, 150, 620, 80, { tl: 36, tr: 36, bl: 0, br: 0 });
+    // Kutucuklar
+    this.kutucuklar = [];
+    for (let i = 0; i < Canta.BOYUT; i++) {
+      const x = 410 + (i % 4) * 147;
+      const y = 315 + Math.floor(i / 4) * 150;
+      g.fillStyle(0xe6cfa3);
+      g.fillRoundedRect(x - 60, y - 60, 120, 120, 20);
+      g.lineStyle(4, 0x3b2a1a, 0.6);
+      g.strokeRoundedRect(x - 60, y - 60, 120, 120, 20);
+      this.kutucuklar.push({ x, y });
+    }
+    // Kapatma düğmesi (çarpı)
+    g.fillStyle(0xe0533d);
+    g.fillCircle(925, 165, 32);
+    g.lineStyle(5, 0x3b2a1a);
+    g.strokeCircle(925, 165, 32);
+    g.lineStyle(8, 0xffffff);
+    g.lineBetween(912, 152, 938, 178);
+    g.lineBetween(938, 152, 912, 178);
+    this.kapatmaAlani = new Phaser.Geom.Circle(925, 165, 36);
+    this.pencereAlani = new Phaser.Geom.Rectangle(320, 150, 620, 420);
+
+    const baslik = this.add.text(630, 190, "Çantam", {
+      fontFamily: "Andika", fontSize: "46px", color: "#ffffff",
+      stroke: "#3b2a1a", strokeThickness: 8,
+    }).setOrigin(0.5);
+    this.cantaIcerigi = this.add.container(0, 0);
+    pencere.add([g, baslik, this.cantaIcerigi]);
+    this.cantaPenceresi = pencere;
+  }
+
+  // Dokunuş çantayla ilgiliyse işler ve true döner.
+  cantaTiklamasi(p) {
+    if (this.cantaAcik) {
+      if (this.kapatmaAlani.contains(p.x, p.y) || !this.pencereAlani.contains(p.x, p.y)
+          || this.cantaDugmesi.getBounds().contains(p.x, p.y)) {
+        this.cantayiAcKapat();
+      }
+      return true; // çanta açıkken karakter yürümez
+    }
+    if (this.cantaDugmesi.getBounds().contains(p.x, p.y)
+        || this.cocuk.getBounds().contains(p.worldX, p.worldY)) {
+      this.cantayiAcKapat();
+      return true;
+    }
+    return false;
+  }
+
+  cantayiAcKapat() {
+    if (this.donuk) return; // hazine anında çanta açılmaz
+    this.cantaAcik = !this.cantaAcik;
+    this.hedef = null;
+    Sesler.canta(this.cantaAcik);
+    if (this.cantaAcik) this.cantaIceriginiCiz();
+    this.cantaPenceresi.setVisible(this.cantaAcik);
+    if (this.cantaAcik) {
+      this.cantaPenceresi.setScale(0.9).setAlpha(0);
+      this.tweens.add({ targets: this.cantaPenceresi, scale: 1, alpha: 1, duration: 180, ease: "Back.Out" });
+    }
+  }
+
+  cantaIceriginiCiz() {
+    this.cantaIcerigi.removeAll(true);
+    Canta.esyalar.forEach((esya, i) => {
+      const k = this.kutucuklar[i];
+      if (!k || esya.tur !== "tohum") return;
+      const resim = this.add.image(k.x, k.y - 8, "tohum");
+      const harf = this.add.text(k.x, k.y + 14, esya.harf, {
+        fontFamily: "Andika", fontSize: "38px", color: "#ffffff",
+        stroke: "#3b2a1a", strokeThickness: 7,
+      }).setOrigin(0.5);
+      this.cantaIcerigi.add([resim, harf]);
+    });
+  }
+
+  // Harf tohuma dönüşür ve çantaya uçar; açılmış sandık küçülüp sönükleşir.
+  // (Geçici: mikrofon adımında bu, çocuk harfi söyleyince olacak.)
+  tohumuKazan(harf, yazi, hale, isik) {
+    const kamera = this.cameras.main;
+    this.tweens.killTweensOf(yazi);
+    const ekranX = yazi.x - kamera.scrollX;
+    const ekranY = yazi.y - kamera.scrollY;
+    this.tweens.add({ targets: [yazi, hale], scale: 0, alpha: 0, duration: 350,
+      onComplete: () => { yazi.destroy(); hale.destroy(); } });
+    this.tweens.add({ targets: isik, alpha: 0, duration: 800,
+      onComplete: () => { this.tweens.killTweensOf(isik); isik.destroy(); } });
+
+    const tohum = this.add.image(ekranX, ekranY, "tohum")
+      .setScrollFactor(0).setDepth(9500).setScale(0);
+    this.tweens.chain({
+      targets: tohum,
+      tweens: [
+        { scale: 1.6, duration: 350, ease: "Back.Out" },
+        { x: this.cantaDugmesi.x, y: this.cantaDugmesi.y, scale: 0.5, angle: 360,
+          duration: 750, ease: "Cubic.In" },
+      ],
+      onComplete: () => {
+        tohum.destroy();
+        Sesler.tohum();
+        Canta.tohumEkle(harf);
+        if (this.cantaAcik) this.cantaIceriginiCiz();
+        this.tweens.add({ targets: this.cantaDugmesi, scale: 1.25, duration: 120, yoyo: true });
+      },
+    });
+
+    // Açılmış sandık adada kalır: küçük ve sönük
+    this.tweens.add({ targets: this.sandik, scale: 0.65, alpha: 0.6, duration: 600 });
+    this.sandik.setTint(0xc8bca8);
   }
 
   // Efektlerde kullanılan küçük yıldız ve parıltı resimleri
@@ -319,6 +458,7 @@ class AdaSahnesi extends Phaser.Scene {
       this.donuk = false;
       kamera.startFollow(this.cocuk, true, 0.05, 0.05);
     });
+    this.time.delayedCall(2600, () => this.tohumuKazan(harf, yazi, hale, isik));
   }
 
   // Yürürken ayak altından çıkan küçük toz bulutu
@@ -574,8 +714,8 @@ class AdaSahnesi extends Phaser.Scene {
     let dx = 0;
     let dy = 0;
 
-    if (this.donuk) {
-      this.cocuk.setAngle(0).setTexture("cocuk");
+    if (this.donuk || this.cantaAcik) {
+      this.cocuk.setAngle(0).setScale(1).setTexture("cocuk");
       return;
     }
 
