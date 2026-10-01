@@ -13,7 +13,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - Canlı ada (karakter adım atarak yürür, ağaç tepeleri ve çalılar rüzgârda sallanır, denizde köpük, dalga ve pırıltı): TAMAM.
    - Uçan martılar ve kelebekler, rüzgârda sallanan çiçek ve otlar, gölgesi geçen bulutlar: TAMAM.
    - Çanta/envanter (köşedeki düğme, karaktere dokunma veya boşluk tuşu ile açılır; 8 kutucuk; kaydedilmez, sayfa yenilenince oyun baştan başlar), harf tohuma dönüşüp çantaya uçar, açılmış sandık adada küçük ve sönük kalır: TAMAM.
-   - Ses doğrulama (3 basamak: dinleme, 3 denemeden sonra arı resmi ipucu, 5 denemeden sonra kendiliğinden onay ve "tekrar edilecek" notu; zaman aşımlı, hata ekranı yok); tohum ancak bundan sonra çantaya gelir: TAMAM. Gerçek mikrofonla Chrome'da denenecek.
+   - Ses doğrulama (3 basamak: dinleme, 3 denemeden sonra arı resmi ipucu, 5 denemeden sonra kendiliğinden onay ve "tekrar edilecek" notu; zaman aşımlı, hata ekranı yok); tohum ancak bundan sonra çantaya gelir: TAMAM. Kelimeler gerçek mikrofonla çalışıyor; Chrome tek "a" sesini yazıya çeviremediği için ünlülerde ses yüksekliği ölçümü eklendi (yarım saniye net ses yeterli), gerçek mikrofonla denenecek.
    - Sıradaki iş: ikinci sandık (n harfi; ünsüz olduğu için hece ya da kelime istenecek).
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.
