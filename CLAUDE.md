@@ -16,8 +16,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 - `harfler.js` – Harf grupları ve kelimeler (sadece veri).
 - `canta.js` – Karakterin çantası (envanter). Kaydedilmez; sayfa yenilenince oyun baştan başlar.
 - `dinleyici.js` – Chrome konuşma tanıma (tr-TR), zaman aşımlı; söylenenin doğruluğunu kontrol eder.
-  Chrome tek ünlüleri ("a") yazıya çeviremediği için ünlülerde ayrıca ses yüksekliği ölçülür
-  (yarım saniye net ses yeterli). Ses kaydedilmez.
+  Chrome tek ünlüleri ("a") yazıya çeviremediği için ünlülerde ses yüksekliği ölçülür.
+  Ünlü harf bir dolum çubuğudur: çocuk sesi uzattıkça (toplam 6 sn) harf dolar; ses kesilince
+  önce yavaşça boşalır, 3 kesintiden sonra kaldığı yerde durur. Ses kaydedilmez.
 - `mikrofon.html` – Öğretmen için mikrofon testi sayfası (Chrome'un ne duyduğunu gösterir).
 - `sesler.js` – Oyun sesleri. Ses dosyası yok; sesler tarayıcıda (Web Audio) üretilir.
 - `yazitipi/` – Andika yazı tipi ve lisansı (SIL Open Font License).

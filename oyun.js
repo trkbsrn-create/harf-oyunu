@@ -244,23 +244,27 @@ class AdaSahnesi extends Phaser.Scene {
     const mikrofon = this.add.image(yazi.x + 160, yazi.y - 10, "mikrofon")
       .setDepth(6002).setScale(0);
     this.tweens.add({ targets: mikrofon, scale: 1, duration: 300, ease: "Back.Out" });
+
+    // Ünlüler: harf, uzatılmış sesle dolan bir çubuğa dönüşür
+    if (harfBilgisi.unlu && await Dinleyici.olcerHazirla()) {
+      const sonuc = await this.harfiDoldur(harfBilgisi, yazi, mikrofon);
+      this.tweens.add({ targets: [mikrofon, sonuc.ipucu].filter(Boolean), scale: 0, alpha: 0,
+        duration: 250, onComplete: () => { mikrofon.destroy(); if (sonuc.ipucu) sonuc.ipucu.destroy(); } });
+      this.tohumuKazan(harf, yazi, hale, isik, !sonuc.dogru);
+      return;
+    }
+
     let ipucu = null;
     let dogru = false;
-    // Ünlülerde Chrome yazıya çeviremese bile net bir ses yeterli (bkz. dinleyici.js)
-    const SES_SURESI = Dinleyici.UNLU_SES_SURESI;
-    const unlu = harfBilgisi.unlu;
-    if (unlu) await Dinleyici.olcerHazirla();
-
     for (let deneme = 1; deneme <= 5 && Dinleyici.destekleniyor; deneme++) {
       Sesler.dinle();
       const nabiz = this.tweens.add({ targets: mikrofon, scale: 1.15, duration: 380,
         yoyo: true, repeat: -1, ease: "Sine.InOut" });
       const baslangic = Date.now();
-      const metinler = await Dinleyici.dinle(6000, unlu ? SES_SURESI : 0);
+      const metinler = await Dinleyici.dinle(6000);
       nabiz.stop();
       mikrofon.setScale(1);
-      if (Dinleyici.dogruMu(metinler, harf, kelime)
-          || (unlu && Dinleyici.sonSesSuresi >= SES_SURESI)) {
+      if (Dinleyici.dogruMu(metinler, harf, kelime)) {
         dogru = true;
         break;
       }
@@ -289,6 +293,142 @@ class AdaSahnesi extends Phaser.Scene {
     this.tweens.add({ targets: [mikrofon, ipucu].filter(Boolean), scale: 0, alpha: 0,
       duration: 250, onComplete: () => { mikrofon.destroy(); if (ipucu) ipucu.destroy(); } });
     this.tohumuKazan(harf, yazi, hale, isik, !dogru);
+  }
+
+  // Ünlü harfin dolumu. Çocuk sesini uzattıkça harfin içi aşağıdan yukarı altın
+  // sarısıyla dolar. Ses kesilince önce yavaşça geri boşalır; birkaç kesintiden
+  // sonra kaldığı yerde durur. 20 sn'de dolmazsa ipucu (arı resmi) çıkar ve "arı"
+  // kelimesi de kabul edilir; 40 sn'de oyun kendiliğinden onaylar.
+  // Dolum sırasında oyun ses çıkarmaz (oyunun sesi mikrofona girip harfi doldurmasın).
+  async harfiDoldur(harfBilgisi, yazi, mikrofon) {
+    const DOLUM = Dinleyici.UNLU_DOLUM_SURESI;
+    const BOSALMA_HIZI = 0.08; // saniyede (dolgunun oranı olarak)
+    const ZORLU_KESINTI = 3; // bu kadar kesintiden sonra dolgu artık boşalmaz
+    const IPUCU_SURESI = 20000;
+    const ONAY_SURESI = 40000;
+
+    // Harfin kıpırdamasını durdur, üstüne altın sarısı kopyasını koy
+    this.tweens.killTweensOf(yazi);
+    yazi.setAngle(0);
+    const dolgu = this.add.text(yazi.x, yazi.y, yazi.text, {
+      fontFamily: "Andika", fontSize: "180px", color: "#ffcf3f",
+      stroke: "#3b2a1a", strokeThickness: 14,
+    }).setOrigin(0.5).setDepth(6001.5).setScale(yazi.scale);
+    const genislik = dolgu.width;
+    const yukseklik = dolgu.height;
+    // Yazının çevresinde boşluk var: harfin gerçekten boyalı olduğu satırları bul,
+    // dolum yalnızca bu aralıkta ilerlesin (yarı dolu = harfin yarısı sarı).
+    const piksel = dolgu.canvas.getContext("2d")
+      .getImageData(0, 0, dolgu.canvas.width, dolgu.canvas.height);
+    let ust = dolgu.canvas.height;
+    let alt = 0;
+    for (let y = 0; y < piksel.height; y++) {
+      for (let x = 0; x < piksel.width; x++) {
+        if (piksel.data[(y * piksel.width + x) * 4 + 3] > 0) {
+          ust = Math.min(ust, y);
+          alt = Math.max(alt, y);
+          break;
+        }
+      }
+    }
+    const oranY = yukseklik / dolgu.canvas.height; // tuval ile görünen boyut farkı
+    const harfUst = ust * oranY;
+    const harfAlt = (alt + 1) * oranY;
+    const dolguyuCiz = (oran) => {
+      const cizgi = harfAlt - (harfAlt - harfUst) * oran; // dolgunun üst kenarı
+      dolgu.setCrop(0, cizgi, genislik, yukseklik - cizgi);
+    };
+    dolguyuCiz(0);
+    const parilti = this.add.particles(0, 0, "parilti", {
+      lifespan: 600, speedY: { min: -60, max: -20 }, speedX: { min: -30, max: 30 },
+      scale: { start: 0.6, end: 0 }, tint: [0xfff3b0, 0xffcf3f, 0xffffff],
+      frequency: 60, emitting: false,
+    }).setDepth(6003);
+
+    Sesler.dinle();
+    await this.bekle(400); // çan sesi bitsin, mikrofon onu duymasın
+
+    let oran = 0;
+    let kesinti = 0;
+    let sesVardi = false;
+    let sessizlik = 0;
+    let ipucu = null;
+    let tanimaCalisiyor = false;
+    let kelimeDuyuldu = false;
+    const baslangic = Date.now();
+    let onceki = Date.now();
+
+    while (oran < 1 && !kelimeDuyuldu) {
+      await this.bekle(40);
+      const simdi = Date.now();
+      const fark = simdi - onceki;
+      onceki = simdi;
+      const gecen = simdi - baslangic;
+
+      if (Dinleyici.sesVarMi()) {
+        oran = Math.min(1, oran + fark / DOLUM);
+        sesVardi = true;
+        sessizlik = 0;
+      } else {
+        sessizlik += fark;
+        if (sesVardi && sessizlik > 400) {
+          kesinti++; // çocuk nefes aldı ya da sesi kesti
+          sesVardi = false;
+        }
+        if (kesinti < ZORLU_KESINTI && sessizlik > 400) {
+          oran = Math.max(0, oran - (BOSALMA_HIZI * fark) / 1000);
+        }
+      }
+      dolguyuCiz(oran);
+
+      // Görsel geri bildirim: ses varken harf titrer, mikrofon büyür, parıltı çıkar
+      const dolarken = sessizlik === 0;
+      yazi.setAngle(dolarken ? Phaser.Math.FloatBetween(-2, 2) : 0);
+      dolgu.setAngle(yazi.angle);
+      mikrofon.setScale(dolarken ? 1.15 + 0.1 * Math.sin(simdi / 60) : 1);
+      parilti.emitting = dolarken;
+      if (dolarken) {
+        parilti.setPosition(yazi.x + Phaser.Math.Between(-50, 50),
+          yazi.y - yukseklik / 2 + harfAlt - (harfAlt - harfUst) * oran);
+      }
+
+      // 2. basamak: ipucu resmi çıkar, "arı" kelimesi de kabul edilir
+      if (!ipucu && gecen > IPUCU_SURESI) {
+        ipucu = this.ipucuGoster(yazi);
+      }
+      if (ipucu && !tanimaCalisiyor && Dinleyici.destekleniyor) {
+        tanimaCalisiyor = true;
+        Dinleyici.dinle(6000).then((metinler) => {
+          if (Dinleyici.kelimeVarMi(metinler, harfBilgisi.kelime)) kelimeDuyuldu = true;
+          tanimaCalisiyor = false;
+        });
+      }
+      // 3. basamak: kendiliğinden onay
+      if (gecen > ONAY_SURESI) break;
+    }
+
+    parilti.emitting = false;
+    yazi.setAngle(0);
+    dolgu.setAngle(0);
+    const dogru = oran >= 1 || kelimeDuyuldu;
+    // Dolgu kısa bir animasyonla tamamlanır
+    const tamamla = { oran };
+    await new Promise((bitti) => this.tweens.add({
+      targets: tamamla, oran: 1, duration: dogru ? 250 : 800,
+      onUpdate: () => dolguyuCiz(tamamla.oran), onComplete: bitti,
+    }));
+    if (dogru) {
+      Sesler.dogru();
+      this.tweens.add({ targets: [yazi, dolgu], scale: 1.35, duration: 180, yoyo: true, repeat: 1 });
+      this.add.particles(yazi.x, yazi.y, "yildiz", {
+        speed: { min: 150, max: 350 }, lifespan: 900, scale: { start: 0.8, end: 0 },
+        tint: [0xffcf3f, 0xffffff, 0x9fe870], emitting: false,
+      }).setDepth(6003).explode(30);
+    }
+    await this.bekle(700);
+    this.tweens.add({ targets: dolgu, alpha: 0, duration: 300,
+      onComplete: () => { dolgu.destroy(); parilti.destroy(); } });
+    return { dogru, ipucu };
   }
 
   // İpucu: harfin kelimesinin resmi (kelimede öğrenilmemiş harfler olduğu için yazı değil)

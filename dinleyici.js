@@ -12,7 +12,8 @@ const Dinleyici = {
   sonSesSuresi: 0, // son dinlemede net ses duyulan toplam süre (milisaniye)
   olcer: null, // ses ölçer (mikrofon izni alınınca kurulur)
   ENAZ_ESIK: 0.04, // bundan sessiz olan her şey "ses yok" sayılır
-  UNLU_SES_SURESI: 450, // ünlü harflerde bu kadar milisaniye net ses yeterli
+  UNLU_DOLUM_SURESI: 6000, // ünlü harf bu kadar milisaniye uzatılmış sesle tamamen dolar
+  taban: Infinity, // ortamın en sessiz anı (sınıf gürültüsü)
 
   // Ses ölçeri bir kez kurar. Mikrofon izni yoksa ya da izin sorusu 8 saniyede
   // cevaplanmazsa sessizce vazgeçer (oyun takılmasın).
@@ -35,6 +36,14 @@ const Dinleyici = {
     } catch (e) {
       return false;
     }
+  },
+
+  // Şu an net bir ses var mı? Ortam gürültüsünün epey üstündeki ses "net" sayılır.
+  sesVarMi() {
+    const s = this.seviye();
+    // Taban en sessiz ana iner; ortam gürültüsü artarsa yavaşça yükselir.
+    this.taban = Math.min(s, this.taban * 1.002);
+    return s > Math.max(this.ENAZ_ESIK, this.taban * 3);
   },
 
   // Şu anki ses yüksekliği (0 = sessiz). Ölçer yoksa 0.
@@ -66,15 +75,11 @@ const Dinleyici = {
       this.enIyi = "";
       let bitti = false;
 
-      // Ses ölçümü: ortamın en sessiz anı "taban" sayılır, net ses bunun epey üstüdür.
-      // İlk 300 ms ölçülmez (oyunun "şimdi söyle" çanı duyulmasın diye).
-      let taban = Infinity;
+      // Ses ölçümü. İlk 300 ms ölçülmez (oyunun "şimdi söyle" çanı duyulmasın diye).
       const olcumBasi = Date.now() + 300;
       const olcum = setInterval(() => {
         if (Date.now() < olcumBasi) return;
-        const s = this.seviye();
-        taban = Math.min(taban, s);
-        if (s > Math.max(this.ENAZ_ESIK, taban * 3)) {
+        if (this.sesVarMi()) {
           this.sonSesSuresi += 50;
           if (sesleBitir && this.sonSesSuresi >= sesleBitir) kapat();
         }
@@ -118,6 +123,12 @@ const Dinleyici = {
         kapat();
       }
     });
+  },
+
+  // Duyulanlar arasında tam olarak bu kelime var mı? (ipucu kelimesi için)
+  kelimeVarMi(metinler, kelime) {
+    return metinler.some((m) => m.toLocaleLowerCase("tr-TR")
+      .split(/[^a-zçğıöşü]+/u).includes(kelime));
   },
 
   // Duyulanlar arasında harfin kendisi, o harfle başlayan bir kelime ya da
