@@ -49,6 +49,11 @@ const Sesler = {
     osc.stop(t + 0.1);
   },
 
+  // Hazine sensörü: yakınlık 0..1 arttıkça ses incelir.
+  bip(yakinlik) {
+    this.nota(480 + yakinlik * 900, 0, 0.08, 0.06 + yakinlik * 0.06, "sine");
+  },
+
   // Sandık göründüğünde: kısa bir "pling".
   pling() {
     this.nota(1318, 0, 0.25, 0.12, "sine");

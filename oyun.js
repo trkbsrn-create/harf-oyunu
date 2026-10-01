@@ -5,6 +5,7 @@ const DUNYA_YUKSEKLIK = 3600;
 const YURUME_HIZI = 260; // saniyede piksel
 const BASLANGIC_X = DUNYA_GENISLIK / 2;
 const BASLANGIC_Y = DUNYA_YUKSEKLIK / 2 + 120;
+const SENSOR_MENZILI = 1600; // sandığa bu kadar yaklaşınca aura ve bip başlar
 
 // Adanın kıyı çizgisi: dalgalı bir oval. Aynı şekil her açılışta aynı çıkar.
 function adaNoktalari(olcek) {
@@ -79,6 +80,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.cocuk = this.add.image(BASLANGIC_X, BASLANGIC_Y, "cocuk")
       .setOrigin(0.5, 1);
     this.hedef = null;
+    this.sensorKur();
 
     // Kamera karakteri takip eder
     this.cameras.main.setBounds(0, 0, DUNYA_GENISLIK, DUNYA_YUKSEKLIK);
@@ -120,6 +122,61 @@ class AdaSahnesi extends Phaser.Scene {
     g.fillCircle(8, 8, 8);
     g.generateTexture("parilti", 16, 16);
     g.destroy();
+
+    // Aura için yumuşak, ortası parlak bir ışık bulutu
+    const tuval = this.textures.createCanvas("aura", 256, 256);
+    const ctx = tuval.getContext();
+    const renk = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
+    renk.addColorStop(0, "rgba(255, 236, 140, 0.95)");
+    renk.addColorStop(0.45, "rgba(255, 214, 90, 0.55)");
+    renk.addColorStop(1, "rgba(255, 214, 90, 0)");
+    ctx.fillStyle = renk;
+    ctx.fillRect(0, 0, 256, 256);
+    tuval.refresh();
+  }
+
+  // Hazine sensörü: karakterin çevresindeki aura ve bip sesi
+  sensorKur() {
+    this.aura = this.add.image(this.cocuk.x, this.cocuk.y - 55, "aura").setAlpha(0);
+    this.auraFaz = 0;
+    this.bipSayaci = 0;
+    this.auraParilti = this.add.particles(0, 0, "parilti", {
+      follow: this.cocuk, followOffset: { x: 0, y: -55 },
+      emitZone: { type: "random", source: new Phaser.Geom.Circle(0, 0, 70) },
+      lifespan: 700, frequency: 110, speedY: { min: -40, max: -10 },
+      scale: { start: 0.55, end: 0 }, tint: [0xfff3b0, 0xffcf3f, 0xffffff],
+      emitting: false,
+    });
+  }
+
+  sensorGuncelle(fark, yuruyor) {
+    if (this.sandikAcildi) return;
+    const uzaklik = Phaser.Math.Distance.Between(
+      this.cocuk.x, this.cocuk.y, this.sandik.x, this.sandik.y);
+    // 0 = çok uzak, 1 = sandığın yanında
+    const yakinlik = Phaser.Math.Clamp(1 - (uzaklik - 70) / (SENSOR_MENZILI - 70), 0, 1);
+
+    this.auraFaz += fark * (0.003 + yakinlik * 0.012);
+    const nefes = 1 + 0.1 * Math.sin(this.auraFaz);
+    this.aura
+      .setPosition(this.cocuk.x, this.cocuk.y - 55)
+      .setDepth(this.cocuk.depth - 0.5)
+      .setAlpha(yakinlik * 0.9)
+      .setScale((0.7 + yakinlik * 1.1) * nefes);
+
+    this.auraParilti.setDepth(this.cocuk.depth + 0.5);
+    this.auraParilti.emitting = yakinlik > 0.6;
+
+    // Yürürken bip: yaklaştıkça sıklaşır ve incelir
+    if (yuruyor && yakinlik > 0) {
+      this.bipSayaci += fark;
+      if (this.bipSayaci >= 900 - yakinlik * 780) {
+        this.bipSayaci = 0;
+        Sesler.bip(yakinlik);
+      }
+    } else {
+      this.bipSayaci = 10000; // yürümeye başlayınca ilk bip hemen duyulsun
+    }
   }
 
   // Sandığı başlangıçtan uzak bir çalının arkasına saklar.
@@ -166,6 +223,8 @@ class AdaSahnesi extends Phaser.Scene {
     this.hedef = null;
     if (this.sandikZipla) this.sandikZipla.stop();
     if (this.sandikParilti) this.sandikParilti.stop();
+    this.auraParilti.emitting = false;
+    this.tweens.add({ targets: this.aura, alpha: 0, duration: 400 });
 
     const s = this.sandik;
     this.tweens.killTweensOf(s);
@@ -323,6 +382,7 @@ class AdaSahnesi extends Phaser.Scene {
       this.adimSayaci = 230; // durup yeniden yürüyünce ilk adım hemen duyulsun
     }
 
+    this.sensorGuncelle(fark, yuruyor);
     this.sandikKontrol();
   }
 
