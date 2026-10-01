@@ -23,6 +23,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 - Kullanıcı kodlama bilmiyor. Tüm açıklamaları Türkçe, kısa ve sade yaz.
   İş bitince "Ne yaptım" ve "Nasıl denerim" bölümlerini ekle.
 - Her seferinde tek küçük iş yap. İstenmeyen özellik ekleme. Çalışan bir şeyi bozma.
+- GitHub işlerini (kaydetme, gönderme, çekme isteği açma, ana sürüme ekleme/merge)
+  Claude yapar. Kullanıcıdan GitHub'da düğmeye basmasını isteme; bu terimleri
+  kullanıcıya açıklamak gerekirse sade Türkçe kullan.
 
 ## Yazı ve harfler
 - Oyundaki bütün yazılar Türkçe.
