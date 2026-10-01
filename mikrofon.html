@@ -47,6 +47,18 @@
       text-align: center;
     }
     #tahminler { font-size: 20px; color: #7a5c3e; text-align: center; }
+    #gosterge {
+      position: relative;
+      width: min(480px, 90vw);
+      height: 34px;
+      border: 5px solid #3b2a1a;
+      border-radius: 20px;
+      background: #fff;
+      overflow: hidden;
+    }
+    #cubuk { height: 100%; width: 0; background: #6cc05a; transition: width 60ms; }
+    #esik { position: absolute; top: 0; bottom: 0; width: 4px; background: #e0533d; }
+    #sesBilgisi { font-size: 22px; text-align: center; min-height: 30px; }
     a { color: #2c7c76; font-size: 22px; }
   </style>
 </head>
@@ -58,6 +70,9 @@
   <div id="durum"></div>
   <div id="duyulan"></div>
   <div id="tahminler"></div>
+  <p>Ses göstergesi (kırmızı çizginin sağı "net ses" sayılır):</p>
+  <div id="gosterge"><div id="cubuk"></div><div id="esik"></div></div>
+  <div id="sesBilgisi"></div>
   <a href="index.html">Oyuna dön</a>
 
   <script src="dinleyici.js"></script>
@@ -72,6 +87,16 @@
       dugme.disabled = true;
     }
 
+    const cubuk = document.getElementById("cubuk");
+    const sesBilgisi = document.getElementById("sesBilgisi");
+    const OLCEK = 0.25; // bu yükseklik göstergeyi tamamen doldurur
+    document.getElementById("esik").style.left = (Dinleyici.ENAZ_ESIK / OLCEK) * 100 + "%";
+    function gostergeyiCiz() {
+      const oran = Math.min(1, Dinleyici.seviye() / OLCEK);
+      cubuk.style.width = oran * 100 + "%";
+      requestAnimationFrame(gostergeyiCiz);
+    }
+
     Dinleyici.onDuydu = (enIyi) => {
       duyulan.textContent = enIyi;
     };
@@ -80,12 +105,20 @@
       dugme.disabled = true;
       duyulan.textContent = "";
       tahminler.textContent = "";
+      sesBilgisi.textContent = "";
+      if (!Dinleyici.olcer && await Dinleyici.olcerHazirla()) gostergeyiCiz();
       durum.textContent = "Dinliyorum... şimdi konuşun.";
-      const metinler = await Dinleyici.dinle(7000);
+      const metinler = await Dinleyici.dinle(7000, Dinleyici.UNLU_SES_SURESI);
+      const saniye = (Dinleyici.sonSesSuresi / 1000).toLocaleString("tr-TR");
+      sesBilgisi.textContent = Dinleyici.olcer
+        ? `Net ses süresi: ${saniye} saniye. ` + (Dinleyici.sonSesSuresi >= Dinleyici.UNLU_SES_SURESI
+          ? "Oyun bunu ünlü harf için kabul eder."
+          : "Ünlü harf için biraz daha uzun ya da yüksek söyleyin.")
+        : "Ses göstergesi çalışmıyor (mikrofon izni yok).";
       if (Dinleyici.izinYok) {
         durum.textContent = "Mikrofon izni verilmedi. Adres çubuğundaki kilit simgesinden izin verebilirsiniz.";
       } else if (metinler.length === 0) {
-        durum.textContent = "Hiçbir şey duyulmadı. Bir daha deneyin.";
+        durum.textContent = "Chrome bunu yazıya çeviremedi.";
       } else {
         durum.textContent = "Duyulan:";
         duyulan.textContent = Dinleyici.enIyi;

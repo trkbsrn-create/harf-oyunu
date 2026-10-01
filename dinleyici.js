@@ -1,10 +1,52 @@
 // Chrome'un konuşma tanıması (tr-TR). Ses kaydı tutulmaz, hiçbir şey saklanmaz.
 // Not: Chrome, sesi yazıya çevirmek için Google'ın sunucularını kullanır.
+//
+// Chrome tek başına söylenen kısa ünlüleri ("a" gibi) çoğu zaman yazıya çevirmez.
+// Bu yüzden ayrıca mikrofondaki sesin yüksekliği ölçülür (ses ölçer). Sadece o anki
+// yüksekliğe bakılır; ses kaydedilmez, hiçbir yere gönderilmez.
 
 const Dinleyici = {
   Tanima: window.SpeechRecognition || window.webkitSpeechRecognition,
   izinYok: false, // mikrofon izni verilmediyse true olur
   enIyi: "", // son dinlemede en iyi tahmin
+  sonSesSuresi: 0, // son dinlemede net ses duyulan toplam süre (milisaniye)
+  olcer: null, // ses ölçer (mikrofon izni alınınca kurulur)
+  ENAZ_ESIK: 0.04, // bundan sessiz olan her şey "ses yok" sayılır
+  UNLU_SES_SURESI: 450, // ünlü harflerde bu kadar milisaniye net ses yeterli
+
+  // Ses ölçeri bir kez kurar. Mikrofon izni yoksa ya da izin sorusu 8 saniyede
+  // cevaplanmazsa sessizce vazgeçer (oyun takılmasın).
+  async olcerHazirla() {
+    if (this.olcer) return true;
+    try {
+      const akis = await Promise.race([
+        navigator.mediaDevices.getUserMedia({
+          audio: { echoCancellation: true, noiseSuppression: true },
+        }),
+        new Promise((_, vazgec) => setTimeout(() => vazgec(new Error("süre doldu")), 8000)),
+      ]);
+      const Baglam = window.AudioContext || window.webkitAudioContext;
+      const baglam = new Baglam();
+      const analiz = baglam.createAnalyser();
+      analiz.fftSize = 1024;
+      baglam.createMediaStreamSource(akis).connect(analiz);
+      this.olcer = { baglam, analiz, veri: new Float32Array(analiz.fftSize) };
+      return true;
+    } catch (e) {
+      return false;
+    }
+  },
+
+  // Şu anki ses yüksekliği (0 = sessiz). Ölçer yoksa 0.
+  seviye() {
+    const o = this.olcer;
+    if (!o) return 0;
+    if (o.baglam.state === "suspended") o.baglam.resume();
+    o.analiz.getFloatTimeDomainData(o.veri);
+    let toplam = 0;
+    for (const v of o.veri) toplam += v * v;
+    return Math.sqrt(toplam / o.veri.length);
+  },
 
   get destekleniyor() {
     return Boolean(this.Tanima) && !this.izinYok;
@@ -12,8 +54,10 @@ const Dinleyici = {
 
   // Bir kez dinler; duyduğu metinleri (tüm tahminleriyle) bir dizi olarak verir.
   // Tanıma bazen hiç sonuç döndürmez: en geç `sure` milisaniye sonra mutlaka biter.
-  dinle(sure = 6000) {
+  // sesleBitir: verilirse, bu kadar milisaniye net ses duyulunca dinleme hemen biter.
+  dinle(sure = 6000, sesleBitir = 0) {
     return new Promise((bitir) => {
+      this.sonSesSuresi = 0;
       if (!this.destekleniyor) {
         bitir([]);
         return;
@@ -21,6 +65,20 @@ const Dinleyici = {
       const metinler = [];
       this.enIyi = "";
       let bitti = false;
+
+      // Ses ölçümü: ortamın en sessiz anı "taban" sayılır, net ses bunun epey üstüdür.
+      // İlk 300 ms ölçülmez (oyunun "şimdi söyle" çanı duyulmasın diye).
+      let taban = Infinity;
+      const olcumBasi = Date.now() + 300;
+      const olcum = setInterval(() => {
+        if (Date.now() < olcumBasi) return;
+        const s = this.seviye();
+        taban = Math.min(taban, s);
+        if (s > Math.max(this.ENAZ_ESIK, taban * 3)) {
+          this.sonSesSuresi += 50;
+          if (sesleBitir && this.sonSesSuresi >= sesleBitir) kapat();
+        }
+      }, 50);
       const tanima = new this.Tanima();
       tanima.lang = "tr-TR";
       tanima.interimResults = true;
@@ -30,6 +88,7 @@ const Dinleyici = {
         if (bitti) return;
         bitti = true;
         clearTimeout(zamanAsimi);
+        clearInterval(olcum);
         try { tanima.abort(); } catch (e) { /* zaten kapalı */ }
         bitir(metinler);
       };
@@ -49,7 +108,10 @@ const Dinleyici = {
         }
         kapat();
       };
-      tanima.onend = kapat;
+      // Tanıma hiçbir şey yazmadan biterse ve ölçer varsa, ölçüm sürene kadar beklenir.
+      tanima.onend = () => {
+        if (metinler.length > 0 || !sesleBitir || !this.olcer) kapat();
+      };
       try {
         tanima.start();
       } catch (e) {
@@ -62,11 +124,14 @@ const Dinleyici = {
   // kabul edilen kelime (ipucu kelimesi) var mı?
   // (Ünlüler için. Ünsüzlerde tek başına ses kabul edilmeyecek; o harfe gelince değişecek.)
   dogruMu(metinler, harf, kelime) {
+    // Chrome "a" sesini bazen "ha" diye yazar
+    const benzerleri = { a: ["ha", "haa", "hah"] };
     for (const metin of metinler) {
       const kelimeler = metin.toLocaleLowerCase("tr-TR").split(/[^a-zçğıöşü]+/u);
       for (const k of kelimeler) {
         if (!k) continue;
         if (k === harf || k.startsWith(harf) || k === kelime) return true;
+        if ((benzerleri[harf] || []).includes(k)) return true;
       }
     }
     return false;

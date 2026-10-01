@@ -246,16 +246,21 @@ class AdaSahnesi extends Phaser.Scene {
     this.tweens.add({ targets: mikrofon, scale: 1, duration: 300, ease: "Back.Out" });
     let ipucu = null;
     let dogru = false;
+    // Ünlülerde Chrome yazıya çeviremese bile net bir ses yeterli (bkz. dinleyici.js)
+    const SES_SURESI = Dinleyici.UNLU_SES_SURESI;
+    const unlu = harfBilgisi.unlu;
+    if (unlu) await Dinleyici.olcerHazirla();
 
     for (let deneme = 1; deneme <= 5 && Dinleyici.destekleniyor; deneme++) {
       Sesler.dinle();
       const nabiz = this.tweens.add({ targets: mikrofon, scale: 1.15, duration: 380,
         yoyo: true, repeat: -1, ease: "Sine.InOut" });
       const baslangic = Date.now();
-      const metinler = await Dinleyici.dinle(6000);
+      const metinler = await Dinleyici.dinle(6000, unlu ? SES_SURESI : 0);
       nabiz.stop();
       mikrofon.setScale(1);
-      if (Dinleyici.dogruMu(metinler, harf, kelime)) {
+      if (Dinleyici.dogruMu(metinler, harf, kelime)
+          || (unlu && Dinleyici.sonSesSuresi >= SES_SURESI)) {
         dogru = true;
         break;
       }
