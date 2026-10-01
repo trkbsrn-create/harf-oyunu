@@ -248,6 +248,18 @@ class AdaSahnesi extends Phaser.Scene {
 
     // Ünlüler (ve öğretmenin kararıyla tek başına denenen ünsüzler): harf,
     // uzatılmış sesle dolan bir çubuğa dönüşür
+    // Tınısı tanınabilen ünlüler ("a"): önce harf söylenir ve oyun düşünür; doğruysa
+    // "gücünü göster" aşamasında harf uzatılarak doldurulur.
+    const tanirim = Boolean(Dinleyici.UNLU_KURALLARI[harf]);
+    if (tanirim && await Dinleyici.olcerHazirla()) {
+      const sonuc = await this.harfiSoyletVeGucGoster(harfBilgisi, yazi, mikrofon);
+      const kaldir = [mikrofon, ...sonuc.ipucu];
+      this.tweens.add({ targets: kaldir, scale: 0, alpha: 0, duration: 250,
+        onComplete: () => kaldir.forEach((n) => n.destroy()) });
+      this.tohumuKazan(harf, yazi, hale, isik, !sonuc.dogru);
+      return;
+    }
+
     const uzatilir = harfBilgisi.unlu || harfBilgisi.tekBasinaDenenir;
     if (uzatilir && await Dinleyici.olcerHazirla()) {
       const sonuc = await this.harfiDoldur(harfBilgisi, yazi, mikrofon);
@@ -301,18 +313,176 @@ class AdaSahnesi extends Phaser.Scene {
     this.tohumuKazan(harf, yazi, hale, isik, !dogru);
   }
 
+  // "a" gibi tınısı tanınan ünlüler için iki aşama:
+  // 1) Çocuk harfi söyler, oyun "düşünür" (düşünce balonu). Seslerin çoğu o ünlüye
+  //    benziyorsa doğru sayılır. 3 denemede olmazsa ipucu (resim; kelime de kabul),
+  //    5 denemede olmazsa kendiliğinden onay (tekrar edilecek).
+  // 2) Doğruysa "Tohumu kazanmak için gücünü göster!" yazısı çıkar; harf yalnızca o
+  //    ünlüye benzeyen uzatılmış sesle dolar. 30 sn'de dolmazsa kendiliğinden dolar.
+  async harfiSoyletVeGucGoster(harfBilgisi, yazi, mikrofon) {
+    const harf = harfBilgisi.kucuk;
+    let ipucu = [];
+    let dogru = false;
+
+    for (let deneme = 1; deneme <= 5 && !dogru; deneme++) {
+      Sesler.dinle();
+      await this.bekle(400); // çan sesi mikrofona girmesin
+      // Chrome da paralel dinler (kelimeler: "araba", ipucundan sonra "arı" ...)
+      const kelimeSozu = Dinleyici.dinle(5000);
+      const baslangic = Date.now();
+      let onceki = baslangic;
+      let sesli = 0;
+      let benzeyen = 0;
+      let sessizlik = 0;
+      while (Date.now() - baslangic < 5000) {
+        await this.bekle(40);
+        const simdi = Date.now();
+        const fark = simdi - onceki;
+        onceki = simdi;
+        const k = Dinleyici.sesiIncele();
+        if (k.sesli) {
+          sesli++;
+          if (Dinleyici.unluyeBenziyor(k, harf)) benzeyen++;
+          sessizlik = 0;
+        } else {
+          sessizlik += fark;
+          if (sesli >= 8 && sessizlik > 350) break; // çocuk söyledi ve sustu
+        }
+        mikrofon.setScale(k.ses ? 1.15 + 0.1 * Math.sin(simdi / 60) : 1);
+      }
+      mikrofon.setScale(1);
+
+      // Düşünme efekti: oyun sesi tartar (hiç ses yoksa düşünecek bir şey de yok)
+      const balon = sesli >= 3 ? this.dusunceBalonu(yazi) : null;
+      const [metinler] = await Promise.all([kelimeSozu, this.bekle(balon ? 1100 : 0)]);
+      const sesDogru = sesli >= 8 && benzeyen / sesli >= 0.6;
+      const kelimeDogru = Dinleyici.dogruMu(metinler, harf, harfBilgisi.kelime);
+      dogru = sesDogru || kelimeDogru;
+      if (balon) await this.balonuBitir(balon, dogru);
+
+      if (!dogru) {
+        // Hata yok: harf hafifçe "bir daha" der gibi sallanır
+        this.tweens.add({ targets: yazi, angle: { from: -8, to: 8 }, duration: 90,
+          yoyo: true, repeat: 2, onComplete: () => yazi.setAngle(0) });
+        if (deneme === 3) ipucu = this.ipucuGoster(yazi, harfBilgisi);
+        await this.bekle(700);
+      }
+    }
+
+    if (!dogru) {
+      await this.bekle(1500); // 3. basamak: kendiliğinden onay, güç aşaması yok
+      return { dogru: false, ipucu };
+    }
+
+    // 2. aşama: güç
+    const yazi2 = this.gucYazisiGoster();
+    const son = []; // son seslerin "a"ya benzeyip benzemediği (kayan pencere)
+    const sesUygun = () => {
+      const k = Dinleyici.sesiIncele();
+      if (!k.sesli) return false;
+      son.push(Dinleyici.unluyeBenziyor(k, harf));
+      if (son.length > 8) son.shift();
+      return son.filter(Boolean).length / son.length >= 0.6;
+    };
+    await this.harfiDoldur(harfBilgisi, yazi, mikrofon,
+      { sesUygun, ipucuYok: true, onaySuresi: 30000, otomatikDogru: true });
+    this.tweens.add({ targets: yazi2, alpha: 0, y: yazi2.y - 30, duration: 400,
+      onComplete: () => yazi2.destroy() });
+    return { dogru: true, ipucu };
+  }
+
+  // Harfin sağ üstünde, içinde üç noktanın sırayla zıpladığı bir düşünce balonu
+  dusunceBalonu(yazi) {
+    const x = yazi.x + 120;
+    const y = yazi.y - 150;
+    const kap = this.add.container(x, y).setDepth(6004).setScale(0);
+    const g = this.add.graphics();
+    g.fillStyle(0xffffff);
+    g.lineStyle(5, 0x3b2a1a);
+    for (const [cx, cy, r] of [[-70, 70, 9], [-52, 50, 14]]) {
+      g.fillCircle(cx, cy, r);
+      g.strokeCircle(cx, cy, r);
+    }
+    g.fillRoundedRect(-60, -38, 120, 76, 38);
+    g.strokeRoundedRect(-60, -38, 120, 76, 38);
+    kap.add(g);
+    const noktalar = [-28, 0, 28].map((nx, i) => {
+      const n = this.add.circle(nx, 0, 9, 0x3b2a1a);
+      this.tweens.add({ targets: n, y: -12, duration: 260, yoyo: true, repeat: -1,
+        delay: i * 140, ease: "Sine.InOut" });
+      return n;
+    });
+    kap.add(noktalar);
+    kap.noktalar = noktalar;
+    this.tweens.add({ targets: kap, scale: 1, duration: 250, ease: "Back.Out" });
+    return kap;
+  }
+
+  // Balon, doğruysa yeşil bir onay işaretine dönüşür; değilse söner.
+  async balonuBitir(balon, dogru) {
+    balon.noktalar.forEach((n) => { this.tweens.killTweensOf(n); n.destroy(); });
+    if (dogru) {
+      const g = this.add.graphics();
+      g.fillStyle(0x6cc05a);
+      g.fillCircle(0, 0, 30);
+      g.lineStyle(9, 0xffffff);
+      g.beginPath();
+      g.moveTo(-14, 0);
+      g.lineTo(-3, 12);
+      g.lineTo(16, -12);
+      g.strokePath();
+      balon.add(g);
+      Sesler.pling();
+      this.tweens.add({ targets: balon, scale: 1.2, duration: 150, yoyo: true });
+      await this.bekle(900);
+    }
+    await new Promise((bitti) => this.tweens.add({ targets: balon, scale: 0, alpha: 0,
+      duration: 250, onComplete: () => { balon.destroy(); bitti(); } }));
+  }
+
+  // Ekranın üstünde: "Tohumu kazanmak için gücünü göster!" (yanında şimşek)
+  gucYazisiGoster() {
+    const kap = this.add.container(640, 70).setScrollFactor(0).setDepth(9050).setScale(0);
+    const g = this.add.graphics();
+    g.fillStyle(0x3b2a1a, 0.25);
+    g.fillRoundedRect(-412, -34, 830, 84, 30);
+    g.fillStyle(0xffffff);
+    g.fillRoundedRect(-420, -42, 830, 84, 30);
+    g.lineStyle(5, 0x3b2a1a);
+    g.strokeRoundedRect(-420, -42, 830, 84, 30);
+    // Şimşek
+    g.fillStyle(0xffcf3f);
+    g.lineStyle(4, 0x3b2a1a);
+    const simsek = [[-372, -30], [-396, 6], [-380, 6], [-392, 34], [-356, -6], [-372, -6], [-358, -30]]
+      .map(([px, py]) => ({ x: px, y: py }));
+    g.fillPoints(simsek, true);
+    g.strokePoints(simsek, true);
+    const metin = this.add.text(20, 0, "Tohumu kazanmak için gücünü göster!", {
+      fontFamily: "Andika", fontSize: "40px", color: "#3b2a1a",
+    }).setOrigin(0.5);
+    kap.add([g, metin]);
+    this.tweens.add({ targets: kap, scale: 1, duration: 350, ease: "Back.Out" });
+    this.tweens.add({ targets: kap, angle: { from: -1.5, to: 1.5 }, duration: 500,
+      yoyo: true, repeat: -1, ease: "Sine.InOut", delay: 350 });
+    return kap;
+  }
+
   // Harfin dolumu. Çocuk sesini uzattıkça harfin içi aşağıdan yukarı altın
   // sarısıyla dolar. Ses kesilince önce yavaşça geri boşalır; birkaç kesintiden
   // sonra kaldığı yerde durur. 20 sn'de dolmazsa ipucu çıkar (kelimenin resmi,
   // ünsüzde ayrıca hece) ve o kelime ya da hece de kabul edilir; 40 sn'de oyun
   // kendiliğinden onaylar.
   // Dolum sırasında oyun ses çıkarmaz (oyunun sesi mikrofona girip harfi doldurmasın).
-  async harfiDoldur(harfBilgisi, yazi, mikrofon) {
+  // secenek.sesUygun: hangi sesin harfi dolduracağı (verilmezse her net ses),
+  // secenek.ipucuYok: ipucu çıkmasın, secenek.onaySuresi: kendiliğinden bitme süresi,
+  // secenek.otomatikDogru: süre dolunca da "doğru" sayılsın.
+  async harfiDoldur(harfBilgisi, yazi, mikrofon, secenek = {}) {
     const DOLUM = Dinleyici.DOLUM_SURESI;
     const BOSALMA_HIZI = 0.08; // saniyede (dolgunun oranı olarak)
     const ZORLU_KESINTI = 3; // bu kadar kesintiden sonra dolgu artık boşalmaz
     const IPUCU_SURESI = 20000;
-    const ONAY_SURESI = 40000;
+    const ONAY_SURESI = secenek.onaySuresi || 40000;
+    const sesUygun = secenek.sesUygun || (() => Dinleyici.sesVarMi());
 
     // Harfin kıpırdamasını durdur, üstüne altın sarısı kopyasını koy
     this.tweens.killTweensOf(yazi);
@@ -372,7 +542,7 @@ class AdaSahnesi extends Phaser.Scene {
       onceki = simdi;
       const gecen = simdi - baslangic;
 
-      if (Dinleyici.sesVarMi()) {
+      if (sesUygun()) {
         oran = Math.min(1, oran + fark / DOLUM);
         sesVardi = true;
         sessizlik = 0;
@@ -400,7 +570,7 @@ class AdaSahnesi extends Phaser.Scene {
       }
 
       // 2. basamak: ipucu çıkar; kelime (ve varsa hece) de kabul edilir
-      if (!ipucu.length && gecen > IPUCU_SURESI) {
+      if (!secenek.ipucuYok && !ipucu.length && gecen > IPUCU_SURESI) {
         ipucu = this.ipucuGoster(yazi, harfBilgisi);
       }
       if (ipucu.length && !tanimaCalisiyor && Dinleyici.destekleniyor) {
@@ -418,7 +588,7 @@ class AdaSahnesi extends Phaser.Scene {
     parilti.emitting = false;
     yazi.setAngle(0);
     dolgu.setAngle(0);
-    const dogru = oran >= 1 || kelimeDuyuldu;
+    const dogru = oran >= 1 || kelimeDuyuldu || Boolean(secenek.otomatikDogru);
     // Dolgu kısa bir animasyonla tamamlanır
     const tamamla = { oran };
     await new Promise((bitti) => this.tweens.add({
