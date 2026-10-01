@@ -313,12 +313,14 @@ class AdaSahnesi extends Phaser.Scene {
     this.tohumuKazan(harf, yazi, hale, isik, !dogru);
   }
 
-  // "a" gibi tınısı tanınan ünlüler için iki aşama:
-  // 1) Çocuk harfi söyler, oyun "düşünür" (düşünce balonu). Seslerin çoğu o ünlüye
-  //    benziyorsa doğru sayılır. 3 denemede olmazsa ipucu (resim; kelime de kabul),
-  //    5 denemede olmazsa kendiliğinden onay (tekrar edilecek).
-  // 2) Doğruysa "Tohumu kazanmak için gücünü göster!" yazısı çıkar; harf yalnızca o
-  //    ünlüye benzeyen uzatılmış sesle dolar. 30 sn'de dolmazsa kendiliğinden dolar.
+  // "a" için iki aşama:
+  // 1) Çocuk harfi söyler, oyun "düşünür" (düşünce balonu). Yarım saniye net ses ya da
+  //    Chrome'un tanıdığı bir kelime ("araba", ipucundan sonra "arı") doğru sayılır.
+  //    (Tını kuralı gerçek seslerde "a"yı reddettiği için şimdilik kullanılmıyor;
+  //    mikrofon.html'deki ölçümlerle ayarlanınca yeniden denenebilir.)
+  //    3 denemede olmazsa ipucu (resim; kelime de kabul), 5 denemede kendiliğinden onay.
+  // 2) Doğruysa "Tohumu kazanmak için gücünü göster!" yazısı çıkar; harf her net sesle
+  //    uzatıldıkça dolar (bu aşama titiz değil). 30 sn'de dolmazsa kendiliğinden dolar.
   async harfiSoyletVeGucGoster(harfBilgisi, yazi, mikrofon) {
     const harf = harfBilgisi.kucuk;
     let ipucu = [];
@@ -331,31 +333,29 @@ class AdaSahnesi extends Phaser.Scene {
       const kelimeSozu = Dinleyici.dinle(5000);
       const baslangic = Date.now();
       let onceki = baslangic;
-      let sesli = 0;
-      let benzeyen = 0;
+      let sesKaresi = 0; // net ses duyulan 40 ms'lik kareler
       let sessizlik = 0;
       while (Date.now() - baslangic < 5000) {
         await this.bekle(40);
         const simdi = Date.now();
         const fark = simdi - onceki;
         onceki = simdi;
-        const k = Dinleyici.sesiIncele();
-        if (k.sesli) {
-          sesli++;
-          if (Dinleyici.unluyeBenziyor(k, harf)) benzeyen++;
+        const ses = Dinleyici.sesVarMi();
+        if (ses) {
+          sesKaresi++;
           sessizlik = 0;
         } else {
           sessizlik += fark;
-          if (sesli >= 8 && sessizlik > 350) break; // çocuk söyledi ve sustu
+          if (sesKaresi * 40 >= Dinleyici.ILK_ONAY_SURESI && sessizlik > 350) break; // söyledi, sustu
         }
-        mikrofon.setScale(k.ses ? 1.15 + 0.1 * Math.sin(simdi / 60) : 1);
+        mikrofon.setScale(ses ? 1.15 + 0.1 * Math.sin(simdi / 60) : 1);
       }
       mikrofon.setScale(1);
 
       // Düşünme efekti: oyun sesi tartar (hiç ses yoksa düşünecek bir şey de yok)
-      const balon = sesli >= 3 ? this.dusunceBalonu(yazi) : null;
+      const balon = sesKaresi >= 3 ? this.dusunceBalonu(yazi) : null;
       const [metinler] = await Promise.all([kelimeSozu, this.bekle(balon ? 1100 : 0)]);
-      const sesDogru = sesli >= 8 && benzeyen / sesli >= 0.6;
+      const sesDogru = sesKaresi * 40 >= Dinleyici.ILK_ONAY_SURESI;
       const kelimeDogru = Dinleyici.dogruMu(metinler, harf, harfBilgisi.kelime);
       dogru = sesDogru || kelimeDogru;
       if (balon) await this.balonuBitir(balon, dogru);
@@ -376,16 +376,8 @@ class AdaSahnesi extends Phaser.Scene {
 
     // 2. aşama: güç
     const yazi2 = this.gucYazisiGoster();
-    const son = []; // son seslerin "a"ya benzeyip benzemediği (kayan pencere)
-    const sesUygun = () => {
-      const k = Dinleyici.sesiIncele();
-      if (!k.sesli) return false;
-      son.push(Dinleyici.unluyeBenziyor(k, harf));
-      if (son.length > 8) son.shift();
-      return son.filter(Boolean).length / son.length >= 0.6;
-    };
     await this.harfiDoldur(harfBilgisi, yazi, mikrofon,
-      { sesUygun, ipucuYok: true, onaySuresi: 30000, otomatikDogru: true });
+      { ipucuYok: true, onaySuresi: 30000, otomatikDogru: true });
     this.tweens.add({ targets: yazi2, alpha: 0, y: yazi2.y - 30, duration: 400,
       onComplete: () => yazi2.destroy() });
     return { dogru: true, ipucu };

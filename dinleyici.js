@@ -13,6 +13,7 @@ const Dinleyici = {
   olcer: null, // ses ölçer (mikrofon izni alınınca kurulur)
   ENAZ_ESIK: 0.04, // bundan sessiz olan her şey "ses yok" sayılır
   DOLUM_SURESI: 3000, // harf bu kadar milisaniye uzatılmış sesle tamamen dolar
+  ILK_ONAY_SURESI: 450, // "a" denirken bu kadar milisaniye net ses ilk onay için yeterli
   taban: Infinity, // ortamın en sessiz anı (sınıf gürültüsü)
 
   // Ses ölçeri bir kez kurar. Mikrofon izni yoksa ya da izin sorusu 8 saniyede
@@ -49,6 +50,8 @@ const Dinleyici = {
   //   F1 ağzın ne kadar açık olduğunu gösterir ("a"da yüksek, "i"/"u"da düşük),
   //   F2 sesin ne kadar parlak olduğunu gösterir ("e"/"i"de çok yüksek, "o"/"u"da düşük).
   // Kural tahminidir; gerçek seslerle mikrofon.html sayfasından ayarlanır.
+  // ŞİMDİLİK OYUNDA KULLANILMIYOR: gerçek seste "a"yı da reddetti (kullanıcı denemesi).
+  // Yalnızca mikrofon.html'de ölçüm için gösteriliyor.
   // Çocuk sesi incedir (yüksek "f0"); ince seste tını tepeleri de yukarı kayar, bu
   // yüzden sınır sesin inceliğine göre seçilir.
   UNLU_KURALLARI: {
