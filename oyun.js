@@ -746,6 +746,8 @@ class AdaSahnesi extends Phaser.Scene {
       });
     }
     this.pusulaGorunurluk = 1; // sandık çıkınca pusula yavaşça söner
+    this.titremeSayaci = 0; // doodle çizgilerin kıpırdaması için
+    this.kivilcimSayaci = 0; // sandığın yönüne fırlayan yıldızcıklar için
     this.auraFaz = 0;
     this.bipSayaci = 0;
     this.auraParilti = this.add.particles(0, 0, "parilti", {
@@ -763,7 +765,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.pusulaGorunurluk = Phaser.Math.Clamp(
       this.pusulaGorunurluk + (calisiyor ? 1 : -1) * fark / 500, 0, 1);
     if (!calisiyor) {
-      this.pusulaCiz(0, 0, 0);
+      this.pusulaCiz(0, 0, 0, fark);
       this.auraParilti.emitting = false;
       return;
     }
@@ -775,7 +777,7 @@ class AdaSahnesi extends Phaser.Scene {
     const seviye = uzaklik < PUSULA_YAKIN ? 3 : uzaklik < PUSULA_ORTA ? 2 : 1;
 
     this.auraFaz += fark * (0.003 + yakinlik * 0.012);
-    this.pusulaCiz(Math.atan2(dy, dx), seviye, Math.sin(this.auraFaz));
+    this.pusulaCiz(Math.atan2(dy, dx), seviye, this.auraFaz, fark);
 
     this.auraParilti.setDepth(this.cocuk.depth + 0.5);
     this.auraParilti.emitting = yakinlik > 0.6;
@@ -792,26 +794,60 @@ class AdaSahnesi extends Phaser.Scene {
     }
   }
 
-  // Pusulanın parçalarını yerleştirir ve parlaklıklarını ayarlar.
-  // yon: sandığın yönü (radyan), seviye: kaç halka yanıyor (0 = hiçbiri), nabiz: -1..1
-  pusulaCiz(yon, seviye, nabiz) {
+  // Pusulanın parçalarını yerleştirir, parlaklıklarını ve hareketlerini ayarlar.
+  // yon: sandığın yönü (radyan), seviye: kaç halka yanıyor (0 = hiçbiri),
+  // faz: nabzın ilerleyişi (yaklaştıkça hızlanır), fark: geçen süre (ms)
+  pusulaCiz(yon, seviye, faz, fark) {
     const x = this.cocuk.x;
     const y = this.cocuk.y - 60;
+    // Doodle çizgiler her ~120 ms'de hafifçe kıpırdar (her an yeniden çiziliyormuş gibi)
+    this.titremeSayaci += fark;
+    const titret = this.titremeSayaci > 120;
+    if (titret) this.titremeSayaci = 0;
+
     for (const p of this.pusula) {
       // Parçanın baktığı yön: 0° yukarı, 90° sağ ... (Phaser'da yukarı = -90°)
       const parcaYonu = Phaser.Math.DegToRad(p.aci - 90);
       const hizalama = Math.max(0, Math.cos(yon - parcaYonu)); // 1 = tam sandığa bakıyor
+      // Radar dalgası: iç halkadan dışa doğru sırayla parlar (sandığa dalga gönderir gibi)
+      const sira = 3 - p.halka; // iç halka 0, dış halka 2
+      const dalga = 0.5 + 0.5 * Math.sin(faz * 1.6 - sira * 1.3);
       let alfa;
+      let olcek = 1;
       if (p.halka <= seviye) {
-        const acik = [0.45, 0.7, 1][seviye - 1];
-        alfa = 0.14 + (acik - 0.14) * hizalama;
-        // Yanan parçalar hafifçe nabız gibi atar
-        alfa *= 1 - 0.18 * hizalama * (0.5 + 0.5 * nabiz);
+        const acik = [0.55, 0.8, 1][seviye - 1];
+        const taban = 0.14 + (acik - 0.14) * hizalama;
+        // Yanan parçalar dalgayla yanıp söner ve hafifçe büyüyüp küçülür
+        alfa = taban * (1 - 0.6 * hizalama * (1 - dalga));
+        olcek = 1 + 0.08 * hizalama * dalga;
       } else {
         alfa = 0.05 + 0.07 * hizalama; // henüz yanmamış halka: çok silik bir iz
       }
+      if (titret) p.titreme = Phaser.Math.FloatBetween(-2.5, 2.5);
       p.parca.setPosition(x, y).setDepth(this.cocuk.depth - 0.5)
+        .setAngle(p.aci + (p.titreme || 0)).setScale(olcek)
         .setAlpha(alfa * this.pusulaGorunurluk);
+    }
+
+    // Kıvılcımlar: sandığın yönüne küçük yıldızlar fırlar; yaklaştıkça sıklaşır
+    if (seviye > 0 && this.pusulaGorunurluk > 0.5) {
+      this.kivilcimSayaci += fark;
+      const aralik = [700, 380, 160][seviye - 1];
+      if (this.kivilcimSayaci >= aralik) {
+        this.kivilcimSayaci = 0;
+        const sapma = yon + Phaser.Math.FloatBetween(-0.3, 0.3);
+        const basla = 100 + Phaser.Math.Between(0, 40);
+        const yildiz = this.add.image(x + Math.cos(sapma) * basla, y + Math.sin(sapma) * basla, "yildiz")
+          .setTint(Phaser.Utils.Array.GetRandom([0xffd84d, 0xffc928, 0xffffff]))
+          .setScale(0.35 + 0.1 * seviye).setDepth(this.cocuk.depth + 1);
+        const yol = 90 + 30 * seviye;
+        this.tweens.add({
+          targets: yildiz,
+          x: yildiz.x + Math.cos(sapma) * yol, y: yildiz.y + Math.sin(sapma) * yol,
+          angle: 180, alpha: 0, scale: 0.1, duration: 650, ease: "Cubic.Out",
+          onComplete: () => yildiz.destroy(),
+        });
+      }
     }
   }
 
