@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="110" height="96" viewBox="0 0 110 96">
+  <!-- Açık hazine sandığı (kendi çizimimiz) -->
+  <ellipse cx="55" cy="90" rx="48" ry="6" fill="#000" fill-opacity="0.2"/>
+  <g stroke="#3b2a1a" stroke-width="5" stroke-linejoin="round">
+    <!-- arkaya açılmış kapak -->
+    <path d="M12 40 l6 -34 q37 -10 74 0 l6 34 z" fill="#8f5527"/>
+    <rect x="22" y="4" width="12" height="36" fill="#e0b02f"/>
+    <rect x="76" y="4" width="12" height="36" fill="#e0b02f"/>
+    <!-- içindeki altın ışıltı -->
+    <rect x="12" y="34" width="86" height="12" rx="4" fill="#fff3b0"/>
+    <!-- gövde -->
+    <rect x="10" y="44" width="90" height="44" rx="6" fill="#b5713a"/>
+    <rect x="22" y="44" width="12" height="44" fill="#ffcf3f"/>
+    <rect x="76" y="44" width="12" height="44" fill="#ffcf3f"/>
+    <rect x="44" y="44" width="22" height="18" rx="4" fill="#ffcf3f"/>
+  </g>
+</svg>

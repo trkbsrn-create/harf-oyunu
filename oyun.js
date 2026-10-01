@@ -55,6 +55,8 @@ class AdaSahnesi extends Phaser.Scene {
     this.load.svg("agac", "gorseller/agac.svg");
     this.load.svg("cali", "gorseller/cali.svg");
     this.load.svg("kaya", "gorseller/kaya.svg");
+    this.load.svg("sandik-kapali", "gorseller/sandik-kapali.svg");
+    this.load.svg("sandik-acik", "gorseller/sandik-acik.svg");
   }
 
   create() {
@@ -63,9 +65,16 @@ class AdaSahnesi extends Phaser.Scene {
     // Karakterin yürüyebildiği alan (kumsal dahil, denize girmeden)
     this.yuruyusAlani = new Phaser.Geom.Polygon(adaNoktalari(0.95));
 
-    for (const sus of suslerUret()) {
+    const susler = suslerUret();
+    for (const sus of susler) {
       this.add.image(sus.x, sus.y, sus.tur).setOrigin(0.5, 1).setDepth(sus.y);
     }
+
+    this.dokulariUret();
+    this.sandigiSakla(susler);
+    this.adimSayaci = 0;
+    this.tekAdim = false;
+    this.donuk = false; // sandık açılırken karakter kısa bir süre durur
 
     this.cocuk = this.add.image(BASLANGIC_X, BASLANGIC_Y, "cocuk")
       .setOrigin(0.5, 1);
@@ -79,9 +88,156 @@ class AdaSahnesi extends Phaser.Scene {
     this.tuslar = this.input.keyboard.createCursorKeys();
 
     // Dokunma / tıklama: karakter dokunulan yere yürür
-    this.input.on("pointerdown", (p) => this.hedefBelirle(p.worldX, p.worldY, true));
+    this.input.on("pointerdown", (p) => {
+      Sesler.ac();
+      if (this.sandikGorundu && !this.sandikAcildi
+          && this.sandik.getBounds().contains(p.worldX, p.worldY)) {
+        this.sandigiAc();
+        return;
+      }
+      this.hedefBelirle(p.worldX, p.worldY, true);
+    });
     this.input.on("pointermove", (p) => {
       if (p.isDown) this.hedefBelirle(p.worldX, p.worldY, false);
+    });
+    this.input.keyboard.on("keydown", () => Sesler.ac());
+  }
+
+  // Efektlerde kullanılan küçük yıldız ve parıltı resimleri
+  dokulariUret() {
+    const g = this.make.graphics({ add: false });
+    g.fillStyle(0xffffff);
+    const noktalar = [];
+    for (let i = 0; i < 10; i++) {
+      const r = i % 2 === 0 ? 16 : 7;
+      const aci = (i / 10) * Math.PI * 2 - Math.PI / 2;
+      noktalar.push({ x: 16 + Math.cos(aci) * r, y: 16 + Math.sin(aci) * r });
+    }
+    g.fillPoints(noktalar, true);
+    g.generateTexture("yildiz", 32, 32);
+    g.clear();
+    g.fillStyle(0xffffff);
+    g.fillCircle(8, 8, 8);
+    g.generateTexture("parilti", 16, 16);
+    g.destroy();
+  }
+
+  // Sandığı başlangıçtan uzak bir çalının arkasına saklar.
+  sandigiSakla(susler) {
+    const calilar = susler.filter((s) => s.tur === "cali");
+    const uzaklik = (s) => Math.hypot(s.x - BASLANGIC_X, s.y - BASLANGIC_Y);
+    const cali = calilar.reduce((a, b) =>
+      Math.abs(uzaklik(a) - 2000) < Math.abs(uzaklik(b) - 2000) ? a : b);
+    this.saklanmaYeri = cali;
+    this.sandik = this.add.image(cali.x + 8, cali.y - 24, "sandik-kapali")
+      .setOrigin(0.5, 1).setDepth(cali.y - 1).setAlpha(0);
+    this.sandikGorundu = false;
+    this.sandikAcildi = false;
+  }
+
+  // Karakter yaklaşınca sandık çalının arkasından çıkar.
+  sandigiGoster() {
+    this.sandikGorundu = true;
+    Sesler.pling();
+    const cali = this.saklanmaYeri;
+    this.tweens.add({ targets: this.sandik, alpha: 1, duration: 300 });
+    this.tweens.add({
+      targets: this.sandik, x: cali.x + 100, y: cali.y + 45,
+      duration: 650, ease: "Back.Out",
+      onComplete: () => {
+        this.sandik.setDepth(this.sandik.y);
+        this.sandikZipla = this.tweens.add({
+          targets: this.sandik, y: this.sandik.y - 10,
+          duration: 380, yoyo: true, repeat: -1, ease: "Sine.InOut",
+        });
+      },
+    });
+    this.sandikParilti = this.add.particles(cali.x + 100, cali.y, "parilti", {
+      emitZone: { type: "random", source: new Phaser.Geom.Circle(0, 0, 60) },
+      lifespan: 900, frequency: 160, speedY: { min: -40, max: -15 },
+      scale: { start: 0.7, end: 0 }, tint: [0xfff3b0, 0xffffff, 0xffcf3f],
+    }).setDepth(5000);
+  }
+
+  // Hazine anı: sandık titrer, açılır, ışık saçar, içinden harf yükselir.
+  sandigiAc() {
+    this.sandikAcildi = true;
+    this.donuk = true;
+    this.hedef = null;
+    if (this.sandikZipla) this.sandikZipla.stop();
+    if (this.sandikParilti) this.sandikParilti.stop();
+
+    const s = this.sandik;
+    this.tweens.killTweensOf(s);
+    s.setAlpha(1);
+    this.tweens.add({
+      targets: s, angle: { from: -7, to: 7 }, duration: 70, yoyo: true, repeat: 5,
+      onComplete: () => {
+        s.setAngle(0).setTexture("sandik-acik");
+        this.hazineEfekti(s.x, s.y - 50);
+      },
+    });
+  }
+
+  hazineEfekti(x, y) {
+    Sesler.hazine();
+    const kamera = this.cameras.main;
+    kamera.stopFollow();
+    kamera.pan(x, y - 120, 500, Phaser.Math.Easing.Sine.InOut);
+    kamera.flash(300, 255, 245, 200);
+    kamera.shake(250, 0.006);
+
+    // Dönen ışık huzmeleri
+    const isik = this.add.graphics({ x, y }).setDepth(0).setScale(0); // zemin hizasında
+    isik.fillStyle(0xfff3b0, 0.55);
+    for (let i = 0; i < 12; i++) {
+      const a = (i / 12) * Math.PI * 2;
+      isik.fillTriangle(0, 0,
+        Math.cos(a - 0.12) * 300, Math.sin(a - 0.12) * 300,
+        Math.cos(a + 0.12) * 300, Math.sin(a + 0.12) * 300);
+    }
+    this.tweens.add({ targets: isik, scale: 1, duration: 500, ease: "Back.Out" });
+    this.tweens.add({ targets: isik, angle: 360, duration: 8000, repeat: -1 });
+
+    // Saçılan yıldızlar
+    this.add.particles(x, y, "yildiz", {
+      speed: { min: 220, max: 560 }, angle: { min: 200, max: 340 },
+      gravityY: 700, lifespan: 1700, rotate: { start: 0, end: 540 },
+      scale: { start: 1, end: 0.2 },
+      tint: [0xffcf3f, 0xffffff, 0xff8fb1, 0x8fd3ff, 0x9fe870],
+      emitting: false,
+    }).setDepth(6000).explode(50);
+
+    // İçinden yükselen harf
+    const harf = HARFLER[0].kucuk;
+    const hale = this.add.circle(x, y - 210, 110, 0xffffff, 0.6).setDepth(6000).setScale(0);
+    const yazi = this.add.text(x, y, harf, {
+      fontFamily: "Andika", fontSize: "180px", color: "#ffffff",
+      stroke: "#3b2a1a", strokeThickness: 14,
+    }).setOrigin(0.5).setDepth(6001).setScale(0);
+    this.tweens.add({
+      targets: yazi, y: y - 210, scale: 1, duration: 900, ease: "Back.Out",
+      onComplete: () => {
+        this.tweens.add({ targets: yazi, y: y - 225, duration: 900, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+      },
+    });
+    this.tweens.add({ targets: hale, scale: 1, duration: 900, ease: "Back.Out" });
+    this.tweens.add({ targets: hale, alpha: 0.3, duration: 700, yoyo: true, repeat: -1, delay: 900 });
+
+    this.time.delayedCall(1800, () => {
+      this.donuk = false;
+      kamera.startFollow(this.cocuk, true, 0.05, 0.05);
+    });
+  }
+
+  // Yürürken ayak altından çıkan küçük toz bulutu
+  tozCikar() {
+    const x = this.cocuk.x + Phaser.Math.Between(-12, 12);
+    const y = this.cocuk.y - 4;
+    const toz = this.add.circle(x, y, 10, 0xd9c79c).setDepth(y - 1);
+    this.tweens.add({
+      targets: toz, scale: 2.2, alpha: 0, y: y - 12, duration: 420,
+      onComplete: () => toz.destroy(),
     });
   }
 
@@ -118,6 +274,11 @@ class AdaSahnesi extends Phaser.Scene {
     let dx = 0;
     let dy = 0;
 
+    if (this.donuk) {
+      this.cocuk.setAngle(0);
+      return;
+    }
+
     if (this.tuslar.left.isDown) dx -= 1;
     if (this.tuslar.right.isDown) dx += 1;
     if (this.tuslar.up.isDown) dy -= 1;
@@ -147,9 +308,33 @@ class AdaSahnesi extends Phaser.Scene {
       if (ax !== 0) this.cocuk.setFlipX(ax < 0);
     }
 
-    // Yürürken hafif sallanma
+    // Yürürken hafif sallanma, toz ve ayak sesi
     this.cocuk.setAngle(yuruyor ? Math.sin(zaman / 70) * 5 : 0);
     this.cocuk.setDepth(this.cocuk.y);
+    if (yuruyor) {
+      this.adimSayaci += fark;
+      if (this.adimSayaci >= 230) {
+        this.adimSayaci = 0;
+        this.tekAdim = !this.tekAdim;
+        this.tozCikar();
+        Sesler.adim(this.tekAdim);
+      }
+    } else {
+      this.adimSayaci = 230; // durup yeniden yürüyünce ilk adım hemen duyulsun
+    }
+
+    this.sandikKontrol();
+  }
+
+  sandikKontrol() {
+    if (this.sandikAcildi) return;
+    const uzaklik = Phaser.Math.Distance.Between(
+      this.cocuk.x, this.cocuk.y, this.sandik.x, this.sandik.y);
+    if (!this.sandikGorundu && uzaklik < 380) {
+      this.sandigiGoster();
+    } else if (this.sandikGorundu && uzaklik < 70) {
+      this.sandigiAc();
+    }
   }
 
   // Adım adadaysa yürü; değilse kıyı boyunca kaymayı dene.

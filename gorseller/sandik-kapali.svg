@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="110" height="96" viewBox="0 0 110 96">
+  <!-- Kapalı hazine sandığı (kendi çizimimiz) -->
+  <ellipse cx="55" cy="90" rx="48" ry="6" fill="#000" fill-opacity="0.2"/>
+  <g stroke="#3b2a1a" stroke-width="5" stroke-linejoin="round">
+    <!-- gövde -->
+    <rect x="10" y="40" width="90" height="48" rx="6" fill="#b5713a"/>
+    <!-- kapak -->
+    <path d="M8 44 v-12 q0 -24 47 -24 q47 0 47 24 v12 z" fill="#c9844a"/>
+    <!-- altın şeritler -->
+    <rect x="22" y="12" width="12" height="76" fill="#ffcf3f"/>
+    <rect x="76" y="12" width="12" height="76" fill="#ffcf3f"/>
+    <!-- kilit -->
+    <rect x="44" y="36" width="22" height="24" rx="4" fill="#ffcf3f"/>
+  </g>
+  <circle cx="55" cy="47" r="3.5" fill="#3b2a1a"/>
+  <path d="M30 20 q20 -8 46 -4" fill="none" stroke="#fff" stroke-opacity="0.35" stroke-width="5" stroke-linecap="round"/>
+</svg>
