@@ -69,6 +69,10 @@ class AdaSahnesi extends Phaser.Scene {
     this.load.svg("canta", "gorseller/canta.svg");
     this.load.svg("tohum", "gorseller/tohum.svg");
     for (let i = 1; i <= 3; i++) this.load.svg(`aura-halka${i}`, `gorseller/aura-halka${i}.svg`);
+    for (const ad of ["canta-pencere", "dusunce-balonu", "guc-bandi",
+      "doku-kagit", "doku-deniz", "doku-kum", "doku-cimen"]) {
+      this.load.svg(ad, `gorseller/${ad}.svg`);
+    }
     this.load.svg("mikrofon", "gorseller/mikrofon.svg");
     this.load.svg("ari", "gorseller/ari.svg");
     this.load.svg("nar", "gorseller/nar.svg");
@@ -154,37 +158,16 @@ class AdaSahnesi extends Phaser.Scene {
 
     // Çanta açılınca görünen pencere
     const pencere = this.add.container(0, 0).setScrollFactor(0).setDepth(9100).setVisible(false);
+    // Arkadaki karartma ve doodle pencere çizimi (gorseller/canta-pencere.svg).
+    // Çizimdeki kutucuklar ve çarpı aşağıdaki konumlarla aynı yerdedir.
     const g = this.add.graphics();
     g.fillStyle(0x000000, 0.35);
     g.fillRect(0, 0, 1280, 720);
-    g.fillStyle(0x7a5c3e);
-    g.fillRoundedRect(330, 170, 620, 420, 36);
-    g.fillStyle(0xf3e2c0);
-    g.fillRoundedRect(320, 150, 620, 420, 36);
-    g.lineStyle(6, 0x3b2a1a);
-    g.strokeRoundedRect(320, 150, 620, 420, 36);
-    g.fillStyle(0x3fa7a0);
-    g.fillRoundedRect(320, 150, 620, 80, { tl: 36, tr: 36, bl: 0, br: 0 });
-    g.strokeRoundedRect(320, 150, 620, 80, { tl: 36, tr: 36, bl: 0, br: 0 });
-    // Kutucuklar
+    const pencereResmi = this.add.image(300, 120, "canta-pencere").setOrigin(0);
     this.kutucuklar = [];
     for (let i = 0; i < Canta.BOYUT; i++) {
-      const x = 410 + (i % 4) * 147;
-      const y = 315 + Math.floor(i / 4) * 150;
-      g.fillStyle(0xe6cfa3);
-      g.fillRoundedRect(x - 60, y - 60, 120, 120, 20);
-      g.lineStyle(4, 0x3b2a1a, 0.6);
-      g.strokeRoundedRect(x - 60, y - 60, 120, 120, 20);
-      this.kutucuklar.push({ x, y });
+      this.kutucuklar.push({ x: 410 + (i % 4) * 147, y: 315 + Math.floor(i / 4) * 150 });
     }
-    // Kapatma düğmesi (çarpı)
-    g.fillStyle(0xe0533d);
-    g.fillCircle(925, 165, 32);
-    g.lineStyle(5, 0x3b2a1a);
-    g.strokeCircle(925, 165, 32);
-    g.lineStyle(8, 0xffffff);
-    g.lineBetween(912, 152, 938, 178);
-    g.lineBetween(938, 152, 912, 178);
     this.kapatmaAlani = new Phaser.Geom.Circle(925, 165, 36);
     this.pencereAlani = new Phaser.Geom.Rectangle(320, 150, 620, 420);
 
@@ -193,7 +176,7 @@ class AdaSahnesi extends Phaser.Scene {
       stroke: "#3b2a1a", strokeThickness: 8,
     }).setOrigin(0.5);
     this.cantaIcerigi = this.add.container(0, 0);
-    pencere.add([g, baslik, this.cantaIcerigi]);
+    pencere.add([g, pencereResmi, baslik, this.cantaIcerigi]);
     this.cantaPenceresi = pencere;
   }
 
@@ -394,16 +377,8 @@ class AdaSahnesi extends Phaser.Scene {
     const x = yazi.x + 120;
     const y = yazi.y - 150;
     const kap = this.add.container(x, y).setDepth(6004).setScale(0);
-    const g = this.add.graphics();
-    g.fillStyle(0xffffff);
-    g.lineStyle(5, 0x3b2a1a);
-    for (const [cx, cy, r] of [[-70, 70, 9], [-52, 50, 14]]) {
-      g.fillCircle(cx, cy, r);
-      g.strokeCircle(cx, cy, r);
-    }
-    g.fillRoundedRect(-60, -38, 120, 76, 38);
-    g.strokeRoundedRect(-60, -38, 120, 76, 38);
-    kap.add(g);
+    // Doodle balon çizimi; balonun ortası kabın ortasına gelir
+    kap.add(this.add.image(0, 0, "dusunce-balonu").setOrigin(88 / 180, 58 / 150));
     const noktalar = [-28, 0, 28].map((nx, i) => {
       const n = this.add.circle(nx, 0, 9, 0x3b2a1a);
       this.tweens.add({ targets: n, y: -12, duration: 260, yoyo: true, repeat: -1,
@@ -441,21 +416,9 @@ class AdaSahnesi extends Phaser.Scene {
   // Ekranın üstünde: "Tohumu kazanmak için gücünü göster!" (yanında şimşek)
   gucYazisiGoster() {
     const kap = this.add.container(640, 70).setScrollFactor(0).setDepth(9050).setScale(0);
-    const g = this.add.graphics();
-    g.fillStyle(0x3b2a1a, 0.25);
-    g.fillRoundedRect(-412, -34, 830, 84, 30);
-    g.fillStyle(0xffffff);
-    g.fillRoundedRect(-420, -42, 830, 84, 30);
-    g.lineStyle(5, 0x3b2a1a);
-    g.strokeRoundedRect(-420, -42, 830, 84, 30);
-    // Şimşek
-    g.fillStyle(0xffcf3f);
-    g.lineStyle(4, 0x3b2a1a);
-    const simsek = [[-372, -30], [-396, 6], [-380, 6], [-392, 34], [-356, -6], [-372, -6], [-358, -30]]
-      .map(([px, py]) => ({ x: px, y: py }));
-    g.fillPoints(simsek, true);
-    g.strokePoints(simsek, true);
-    const metin = this.add.text(20, 0, "Tohumu kazanmak için gücünü göster!", {
+    // Doodle kâğıt şerit, bant ve şimşek (gorseller/guc-bandi.svg)
+    const g = this.add.image(0, 0, "guc-bandi").setOrigin(0.5, 62 / 120);
+    const metin = this.add.text(40, 0, "Tohumu kazanmak için gücünü göster!", {
       fontFamily: "Andika", fontSize: "40px", color: "#3b2a1a",
     }).setOrigin(0.5);
     kap.add([g, metin]);
@@ -712,8 +675,8 @@ class AdaSahnesi extends Phaser.Scene {
     g.fillCircle(8, 8, 8);
     g.generateTexture("parilti", 16, 16);
     g.clear();
-    // Denizdeki küçük dalga kıvrımı
-    g.lineStyle(4, 0xffffff, 1);
+    // Denizdeki küçük dalga kıvrımı (kalem çizgisi)
+    g.lineStyle(3.5, 0x2b2b2b, 1);
     const kivrim = [];
     for (let i = 0; i <= 20; i++) {
       kivrim.push({ x: 4 + i * 2, y: 10 + Math.sin((i / 20) * Math.PI * 2) * 5 });
@@ -994,11 +957,11 @@ class AdaSahnesi extends Phaser.Scene {
 
   // Deniz: kıyıya doğru açılan renkler, gelip giden köpük, kayan dalgalar
   denizKur() {
-    const g = this.add.graphics().setDepth(-4);
-    g.fillStyle(0xaee2f2);
-    g.fillPoints(adaNoktalari(1.1), true);
-    g.fillStyle(0xc4ecf7);
-    g.fillPoints(adaNoktalari(1.05), true);
+    // Doodle: kareli defter kâğıdının üstüne boya kalemiyle taranmış deniz
+    this.add.tileSprite(0, 0, DUNYA_GENISLIK, DUNYA_YUKSEKLIK, "doku-kagit")
+      .setOrigin(0).setDepth(-6);
+    this.add.tileSprite(0, 0, DUNYA_GENISLIK, DUNYA_YUKSEKLIK, "doku-deniz")
+      .setOrigin(0).setDepth(-5).setAlpha(0.85);
 
     this.kopuk = this.add.graphics().setDepth(-2);
     this.kopukNoktalari = adaNoktalari(1);
@@ -1197,28 +1160,37 @@ class AdaSahnesi extends Phaser.Scene {
     }
   }
 
+  // Doodle ada: kum ve çimen boya kalemi taramasıyla boyanır (taranmış doku, ada
+  // şeklinde kesilir), kıyı kalemle iki kez, hafif titrek çizilir.
   adayiCiz() {
-    const g = this.add.graphics().setDepth(-1);
     const kum = adaNoktalari(1);
     const cimen = adaNoktalari(0.93);
+    const boya = (noktalar, doku, derinlik) => {
+      const kalip = this.make.graphics({ add: false });
+      kalip.fillStyle(0xffffff);
+      kalip.fillPoints(noktalar, true);
+      this.add.tileSprite(0, 0, DUNYA_GENISLIK, DUNYA_YUKSEKLIK, doku)
+        .setOrigin(0).setDepth(derinlik).setMask(kalip.createGeometryMask());
+    };
+    boya(kum, "doku-kum", -1.5);
+    boya(cimen, "doku-cimen", -1.4);
 
-    // Kartonumsu kalınlık: adanın altında koyu bir kenar
-    g.fillStyle(0x7a5c3e);
-    g.fillPoints(kum.map((n) => ({ x: n.x, y: n.y + 18 })), true);
-
-    g.fillStyle(0xf6d98b);
-    g.fillPoints(kum, true);
-    g.lineStyle(6, 0x3b2a1a);
-    g.strokePoints(kum, true);
-
-    g.fillStyle(0x9fd87a);
-    g.fillPoints(cimen, true);
+    const g = this.add.graphics().setDepth(-1);
+    const rastgele = new Phaser.Math.RandomDataGenerator(["kiyi"]);
+    const titrek = (noktalar, oynama) => noktalar.map((n) => ({
+      x: n.x + rastgele.realInRange(-oynama, oynama),
+      y: n.y + rastgele.realInRange(-oynama, oynama),
+    }));
+    g.lineStyle(6, 0x2b2b2b, 1);
+    g.strokePoints(titrek(kum, 3), true);
+    g.lineStyle(2.5, 0x2b2b2b, 0.6);
+    g.strokePoints(titrek(kum, 7), true); // ikinci, eskiz gibi çizgi
   }
 
   hedefBelirle(x, y, isaretGoster) {
     this.hedef = { x, y };
     if (isaretGoster) {
-      const isaret = this.add.circle(x, y, 14).setStrokeStyle(4, 0xffffff).setDepth(5000);
+      const isaret = this.add.circle(x, y, 14).setStrokeStyle(4, 0x2b2b2b).setDepth(5000);
       this.tweens.add({
         targets: isaret, scale: 1.8, alpha: 0, duration: 450,
         onComplete: () => isaret.destroy(),
@@ -1328,7 +1300,7 @@ document.fonts.load('72px "Andika"').finally(() => {
     parent: "oyun",
     width: 1280,
     height: 720,
-    backgroundColor: "#8fd2ea",
+    backgroundColor: "#fbf7ec",
     scale: {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,

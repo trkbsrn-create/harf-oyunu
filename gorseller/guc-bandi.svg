@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="880" height="120" viewBox="0 0 880 120">
+  <!-- Gücünü göster bandı (kâğıt şerit ve bant) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="43" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="sari" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+      <rect width="6" height="6" fill="#ffe680"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffc928" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 28 L850 20 L856 98 L24 104 Z" fill="#ffffff" stroke-width="4.5"/>
+    <path d="M72 30 l-22 36 h18 l-12 28 l34 -42 h-18 l16 -22z" fill="url(#sari)" stroke-width="3.5"/>
+  </g>
+  <rect x="8" y="8" width="84" height="28" fill="#f6e27a" opacity="0.85" transform="rotate(-16 50 22)"/>
+  <rect x="790" y="4" width="84" height="28" fill="#f6e27a" opacity="0.85" transform="rotate(14 832 18)"/>
+</svg>
