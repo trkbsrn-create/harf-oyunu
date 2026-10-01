@@ -24,6 +24,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - Pusula efektleri: içten dışa radar dalgası gibi yanıp sönme, nabızla büyüyüp küçülme, doodle çizgilerin kıpırdaması, sandık yönüne fırlayan yıldızcıklar (yaklaştıkça sıklaşır): TAMAM.
    - Bütün tasarım doodle tarzında (karakter, sandık ve pusula olduğu gibi kaldı): defter kâğıdı zemin, taranmış deniz/kum/çimen, kalemle çizilmiş kıyı, ağaç, çalı, kaya, çiçek, ot, kelebek, martı, çanta, tohum, mikrofon, arı, nar, çanta penceresi, düşünce balonu, güç bandı: TAMAM. (4. etaptaki "görünüm stilini seçme" bununla yapılmış oldu.)
    - Oyunun adı "Harf Avcısı". Karşılama ekranı (denizde küçük ada, ad tabelası, "Oyunu başlat" düğmesi) ve sol üstte menü ("Oyunu yeniden başlat", önce "Baştan başlasın mı?" diye sorar): TAMAM.
+   - Doodle yazılar: başlık, düğme ve pencere yazıları boya kalemiyle taranmış ve titrek; sandık harfi ve çantadaki harfler aynı biçimde, sadece titrek kalem kenarlı: TAMAM.
    - Sıradaki iş: kullanıcıyla konuşulacak.
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.

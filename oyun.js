@@ -14,6 +14,109 @@ const SANDIK_CIKMA_UZAKLIGI = 110; // sandık ancak saklandığı yerin bu kadar
 // "Oyunu yeniden başlat" deyince sayfa yenilenir; bu tek seferlik not karşılama ekranını atlatır
 const HEMEN_BASLA = "harfAvcisiHemenBasla";
 
+// ---- Doodle yazılar ----
+// Harflerin biçimi değişmez (Andika, dik temel harf). Yazının kenarı titrek kalem gibi
+// oynar; başlık, düğme ve pencere yazılarının içi ayrıca boya kalemiyle taranır.
+// Öğretilen harfler (sandık harfi, çantadaki harfler) taranmaz, sadece titrer.
+const KALEM_RENGI = "#2b2b2b";
+const TARAMA_RENKLERI = {
+  beyaz: ["#ffffff", "#e9e2d0"],
+  mavi: ["#c9ecff", "#7cc4ef"],
+};
+const taramaDesenleri = {};
+
+// Boya kalemi taraması: çapraz çizgili küçük bir kare, yazının içine döşenir
+function taramaDeseni(ad) {
+  if (!taramaDesenleri[ad]) {
+    const [zemin, cizgi] = TARAMA_RENKLERI[ad];
+    const kare = document.createElement("canvas");
+    kare.width = 8;
+    kare.height = 8;
+    const c = kare.getContext("2d");
+    c.fillStyle = zemin;
+    c.fillRect(0, 0, 8, 8);
+    c.strokeStyle = cizgi;
+    c.lineWidth = 2.5;
+    c.beginPath();
+    c.moveTo(-2, 10); c.lineTo(10, -2); // döşenince kesintisiz devam eden çizgiler
+    c.moveTo(-2, 2); c.lineTo(2, -2);
+    c.moveTo(6, 10); c.lineTo(10, 6);
+    c.stroke();
+    taramaDesenleri[ad] = c.createPattern(kare, "repeat");
+  }
+  return taramaDesenleri[ad];
+}
+
+// Yazıyı titrek kalem çizgisi gibi oynatır (piksel: en çok ne kadar kayacağı).
+// Yazının resmi bir kez, oluşturulurken bükülür. Aynı yazı ve boyut hep aynı
+// şekilde bükülür; böylece sandık harfinin sarı dolgusu harfin tam üstüne oturur.
+function titret(yazi, piksel) {
+  const tuval = yazi.canvas;
+  const en = tuval.width;
+  const boy = tuval.height;
+  if (!en || !boy) return yazi;
+  const c = tuval.getContext("2d");
+  const kaynak = c.getImageData(0, 0, en, boy).data;
+  const hedef = c.createImageData(en, boy);
+
+  // Yumuşak gürültü: 22 piksellik ızgaranın köşelerine rastgele kayma, arası yumuşak geçiş
+  const HUCRE = 22;
+  const sx = Math.ceil(en / HUCRE) + 2;
+  const sy = Math.ceil(boy / HUCRE) + 2;
+  const rastgele = new Phaser.Math.RandomDataGenerator([`${yazi.text}-${en}-${boy}`]);
+  const kx = [];
+  const ky = [];
+  for (let i = 0; i < sx * sy; i++) {
+    kx.push(rastgele.realInRange(-1, 1));
+    ky.push(rastgele.realInRange(-1, 1));
+  }
+  const ornek = (dizi, x, y) => {
+    const gx = x / HUCRE;
+    const gy = y / HUCRE;
+    const ix = Math.floor(gx);
+    const iy = Math.floor(gy);
+    let fx = gx - ix;
+    let fy = gy - iy;
+    fx = fx * fx * (3 - 2 * fx);
+    fy = fy * fy * (3 - 2 * fy);
+    const a = dizi[iy * sx + ix];
+    const b = dizi[iy * sx + ix + 1];
+    const d = dizi[(iy + 1) * sx + ix];
+    const e = dizi[(iy + 1) * sx + ix + 1];
+    return a + (b - a) * fx + (d - a) * fy + (a - b - d + e) * fx * fy;
+  };
+
+  for (let y = 0; y < boy; y++) {
+    for (let x = 0; x < en; x++) {
+      const kaynakX = Math.round(x + ornek(kx, x, y) * piksel);
+      const kaynakY = Math.round(y + ornek(ky, x, y) * piksel);
+      if (kaynakX < 0 || kaynakY < 0 || kaynakX >= en || kaynakY >= boy) continue;
+      const k = (kaynakY * en + kaynakX) * 4;
+      const h = (y * en + x) * 4;
+      hedef.data[h] = kaynak[k];
+      hedef.data[h + 1] = kaynak[k + 1];
+      hedef.data[h + 2] = kaynak[k + 2];
+      hedef.data[h + 3] = kaynak[k + 3];
+    }
+  }
+  c.putImageData(hedef, 0, 0);
+  // Ekran kartına (WebGL) yeni resmi gönder
+  if (yazi.renderer && yazi.renderer.gl) {
+    yazi.frame.source.glTexture = yazi.renderer.canvasToTexture(tuval, yazi.frame.source.glTexture, true);
+  }
+  return yazi;
+}
+
+// Boya kalemiyle taranmış, kalemle çevrelenmiş, titrek doodle yazı
+function doodleYazi(sahne, x, y, metin, boy, tarama = "beyaz") {
+  const yazi = sahne.add.text(x, y, metin, {
+    fontFamily: "Andika", fontSize: `${boy}px`, color: taramaDeseni(tarama),
+    stroke: KALEM_RENGI, strokeThickness: Math.max(5, Math.round(boy / 14)),
+    padding: { x: 4, y: 4 },
+  });
+  return titret(yazi, Math.max(1.5, boy / 24));
+}
+
 // Adanın kıyı çizgisi: dalgalı bir oval. Aynı şekil her açılışta aynı çıkar.
 function adaNoktalari(olcek) {
   const noktalar = [];
@@ -179,10 +282,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.kapatmaAlani = new Phaser.Geom.Circle(925, 165, 36);
     this.pencereAlani = new Phaser.Geom.Rectangle(320, 150, 620, 420);
 
-    const baslik = this.add.text(630, 190, "Çantam", {
-      fontFamily: "Andika", fontSize: "46px", color: "#ffffff",
-      stroke: "#3b2a1a", strokeThickness: 8,
-    }).setOrigin(0.5);
+    const baslik = doodleYazi(this, 630, 190, "Çantam", 46).setOrigin(0.5);
     this.cantaIcerigi = this.add.container(0, 0);
     pencere.add([g, pencereResmi, baslik, this.cantaIcerigi]);
     this.cantaPenceresi = pencere;
@@ -226,8 +326,9 @@ class AdaSahnesi extends Phaser.Scene {
       const resim = this.add.image(k.x, k.y - 8, "tohum");
       const harf = this.add.text(k.x, k.y + 14, esya.harf, {
         fontFamily: "Andika", fontSize: "38px", color: "#ffffff",
-        stroke: "#3b2a1a", strokeThickness: 7,
+        stroke: "#3b2a1a", strokeThickness: 7, padding: { x: 3, y: 3 },
       }).setOrigin(0.5);
+      titret(harf, 1.5);
       this.cantaIcerigi.add([resim, harf]);
     });
   }
@@ -242,9 +343,7 @@ class AdaSahnesi extends Phaser.Scene {
     // Açılınca düğmenin altında "Oyunu yeniden başlat" satırı çıkar
     this.menuPenceresi = this.add.container(0, 0).setScrollFactor(0).setDepth(9200).setVisible(false);
     const satir = this.add.image(20, 118, "menu-pencere").setOrigin(0);
-    const yazi = this.add.text(118, 168, "Oyunu yeniden başlat", {
-      fontFamily: "Andika", fontSize: "34px", color: "#2b2b2b",
-    }).setOrigin(0, 0.5);
+    const yazi = doodleYazi(this, 114, 168, "Oyunu yeniden başlat", 36).setOrigin(0, 0.5);
     this.menuPenceresi.add([satir, yazi]);
     this.yenidenBaslatAlani = new Phaser.Geom.Rectangle(26, 124, 480, 90);
 
@@ -254,18 +353,12 @@ class AdaSahnesi extends Phaser.Scene {
     karartma.fillStyle(0x000000, 0.35);
     karartma.fillRect(0, 0, 1280, 720);
     const kart = this.add.image(370, 200, "onay-pencere").setOrigin(0);
-    const soru = this.add.text(640, 290, "Baştan başlasın mı?", {
-      fontFamily: "Andika", fontSize: "46px", color: "#2b2b2b",
-    }).setOrigin(0.5);
-    const not = this.add.text(640, 345, "Çanta boşalır.", {
+    const soru = doodleYazi(this, 640, 290, "Baştan başlasın mı?", 48).setOrigin(0.5);
+    const not = titret(this.add.text(640, 348, "Çanta boşalır.", {
       fontFamily: "Andika", fontSize: "28px", color: "#6b6b6b",
-    }).setOrigin(0.5);
-    const evet = this.add.text(525, 438, "Evet", {
-      fontFamily: "Andika", fontSize: "40px", color: "#2b2b2b",
-    }).setOrigin(0.5);
-    const hayir = this.add.text(755, 438, "Hayır", {
-      fontFamily: "Andika", fontSize: "40px", color: "#2b2b2b",
-    }).setOrigin(0.5);
+    }).setOrigin(0.5), 1.2);
+    const evet = doodleYazi(this, 525, 438, "Evet", 42).setOrigin(0.5);
+    const hayir = doodleYazi(this, 755, 438, "Hayır", 42).setOrigin(0.5);
     this.onayPenceresi.add([karartma, kart, soru, not, evet, hayir]);
     this.evetAlani = new Phaser.Geom.Rectangle(430, 400, 190, 80);
     this.hayirAlani = new Phaser.Geom.Rectangle(660, 400, 190, 80);
@@ -518,9 +611,7 @@ class AdaSahnesi extends Phaser.Scene {
     const kap = this.add.container(640, 70).setScrollFactor(0).setDepth(9050).setScale(0);
     // Doodle kâğıt şerit, bant ve şimşek (gorseller/guc-bandi.svg)
     const g = this.add.image(0, 0, "guc-bandi").setOrigin(0.5, 62 / 120);
-    const metin = this.add.text(40, 0, "Tohumu kazanmak için gücünü göster!", {
-      fontFamily: "Andika", fontSize: "40px", color: "#3b2a1a",
-    }).setOrigin(0.5);
+    const metin = doodleYazi(this, 40, 0, "Tohumu kazanmak için gücünü göster!", 40).setOrigin(0.5);
     kap.add([g, metin]);
     this.tweens.add({ targets: kap, scale: 1, duration: 350, ease: "Back.Out" });
     this.tweens.add({ targets: kap, angle: { from: -1.5, to: 1.5 }, duration: 500,
@@ -550,8 +641,9 @@ class AdaSahnesi extends Phaser.Scene {
     yazi.setAngle(0);
     const dolgu = this.add.text(yazi.x, yazi.y, yazi.text, {
       fontFamily: "Andika", fontSize: "180px", color: "#ffcf3f",
-      stroke: "#3b2a1a", strokeThickness: 14,
+      stroke: "#3b2a1a", strokeThickness: 14, padding: { x: 4, y: 4 },
     }).setOrigin(0.5).setDepth(6001.5).setScale(yazi.scale);
+    titret(dolgu, 3); // altındaki harfle aynı titreme, tam üstüne oturur
     const genislik = dolgu.width;
     const yukseklik = dolgu.height;
     // Yazının çevresinde boşluk var: harfin gerçekten boyalı olduğu satırları bul,
@@ -694,8 +786,9 @@ class AdaSahnesi extends Phaser.Scene {
         .setDepth(6002).setScale(0.5);
       const harf = this.add.text(hedefX, yazi.y, oburHarf, {
         fontFamily: "Andika", fontSize: "180px", color: "#ffffff",
-        stroke: "#3b2a1a", strokeThickness: 14,
+        stroke: "#3b2a1a", strokeThickness: 14, padding: { x: 4, y: 4 },
       }).setOrigin(0.5).setDepth(6001).setScale(0);
+      titret(harf, 3);
       this.tweens.add({ targets: this.cantaDugmesi, scale: 1.2, duration: 120, yoyo: true });
       this.tweens.add({
         targets: tohum, x: hedefX, y: yazi.y, scale: 1, angle: 360, duration: 800, ease: "Cubic.Out",
@@ -1029,8 +1122,9 @@ class AdaSahnesi extends Phaser.Scene {
     const hale = this.add.circle(x, y - 210, 110, 0xffffff, 0.6).setDepth(6000).setScale(0);
     const yazi = this.add.text(x, y, harf, {
       fontFamily: "Andika", fontSize: "180px", color: "#ffffff",
-      stroke: "#3b2a1a", strokeThickness: 14,
+      stroke: "#3b2a1a", strokeThickness: 14, padding: { x: 4, y: 4 },
     }).setOrigin(0.5).setDepth(6001).setScale(0);
+    titret(yazi, 3);
     this.tweens.add({
       targets: yazi, y: y - 210, scale: 1, duration: 900, ease: "Back.Out",
       onComplete: () => {
@@ -1433,18 +1527,14 @@ class KarsilamaSahnesi extends Phaser.Scene {
 
     const tabela = this.add.container(640, 110, [
       this.add.image(0, 0, "baslik-tabela"),
-      this.add.text(0, 4, "Harf Avcısı", {
-        fontFamily: "Andika", fontSize: "88px", color: "#2b2b2b",
-      }).setOrigin(0.5),
+      doodleYazi(this, 0, 4, "Harf Avcısı", 92, "mavi").setOrigin(0.5),
     ]);
     this.tweens.add({ targets: tabela, angle: { from: -1.2, to: 1.2 }, duration: 1800,
       yoyo: true, repeat: -1, ease: "Sine.InOut" });
 
     const dugme = this.add.container(640, 630, [
       this.add.image(0, 0, "dugme-baslat"),
-      this.add.text(40, -6, "Oyunu başlat", {
-        fontFamily: "Andika", fontSize: "46px", color: "#2b2b2b",
-      }).setOrigin(0.5),
+      doodleYazi(this, 40, -6, "Oyunu başlat", 46).setOrigin(0.5),
     ]).setSize(396, 92).setInteractive({ useHandCursor: true });
     this.nabiz = this.tweens.add({ targets: dugme, scale: 1.06, duration: 650, yoyo: true,
       repeat: -1, ease: "Sine.InOut" });
