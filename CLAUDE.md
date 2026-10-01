@@ -19,10 +19,11 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   Chrome tek ünlüleri ("a") yazıya çeviremediği için ünlülerde ses yüksekliği ölçülür.
   Harf bir dolum çubuğudur: çocuk sesi uzattıkça (toplam 3 sn) harf dolar; ses kesilince
   önce yavaşça boşalır, 3 kesintiden sonra kaldığı yerde durur. Ses kaydedilmez.
-  "a" için ayrıca sesin tınısı incelenir (LPC ile F1/F2, perdeye göre sınır; kural
-  `UNLU_KURALLARI` içinde): önce harf söylenir, oyun düşünür (düşünce balonu), doğruysa
-  "Tohumu kazanmak için gücünü göster!" aşamasında harf yalnızca "a"ya benzeyen sesle dolar.
-  Kural yapay seslerle ayarlandı; gerçek seslerle mikrofon.html'deki ölçümlerle düzeltilir.
+  "a" sandığı: önce harf söylenir, oyun düşünür (düşünce balonu); yarım saniye net ses
+  (`ILK_ONAY_SURESI`) ya da Chrome'un tanıdığı kelime doğru sayılır. Sonra "Tohumu kazanmak
+  için gücünü göster!" aşamasında harf her net sesle dolar (titiz değil; kullanıcı isteği).
+  Tını tanıma (LPC ile F1/F2, `UNLU_KURALLARI`) kodda duruyor ama gerçek seste "a"yı
+  reddettiği için oyunda kullanılmıyor; yalnızca mikrofon.html'de ölçüm gösteriyor.
 - `mikrofon.html` – Öğretmen için mikrofon testi sayfası (Chrome'un ne duyduğunu gösterir).
 - `sesler.js` – Oyun sesleri. Ses dosyası yok; sesler tarayıcıda (Web Audio) üretilir.
 - `yazitipi/` – Andika yazı tipi ve lisansı (SIL Open Font License).

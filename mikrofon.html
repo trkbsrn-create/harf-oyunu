@@ -76,7 +76,7 @@
   <p>Ses göstergesi (kırmızı çizginin sağı "net ses" sayılır):</p>
   <div id="gosterge"><div id="cubuk"></div><div id="esik"></div></div>
   <div id="sesBilgisi"></div>
-  <p>"a" sesi denetimi (oyundaki "a" sandığı için):</p>
+  <p>"a" sesinin tınısı (deneme ölçümü; şimdilik oyunda kullanılmıyor):</p>
   <div id="aCanli"></div>
   <div id="aBilgisi"></div>
   <div id="olcumler"></div>
@@ -143,8 +143,7 @@
         const orta = (x) => x.sort((p, q) => p - q)[Math.floor(x.length / 2)];
         if (sesli >= 8) {
           const yuzde = Math.round((benzeyen / sesli) * 100);
-          aBilgisi.textContent = `Konuşma sesinin %${yuzde}'i "a"ya benziyordu. ` +
-            (yuzde >= 60 ? "Oyun bunu \"a\" olarak kabul eder." : "Oyun bunu \"a\" olarak kabul etmez.");
+          aBilgisi.textContent = `Tınıya göre konuşma sesinin %${yuzde}'i "a"ya benziyordu.`;
           olcumler.textContent = `Ölçümler (Claude'a iletmek için): perde ${orta(f0ler)} Hz, F1 ${orta(f1ler)} Hz, F2 ${orta(f2ler)} Hz`;
         } else {
           aBilgisi.textContent = "Yeterince konuşma sesi duyulmadı.";
@@ -152,9 +151,13 @@
       }
       const saniye = (Dinleyici.sonSesSuresi / 1000).toLocaleString("tr-TR");
       sesBilgisi.textContent = Dinleyici.olcer
-        ? `Net ses süresi: ${saniye} saniye. ` + (Dinleyici.sonSesSuresi >= Dinleyici.DOLUM_SURESI
-          ? "Bu, oyunda harfi tamamen doldurur."
-          : `Oyunda harfi doldurmak için sesi ${Dinleyici.DOLUM_SURESI / 1000} saniye uzatmak gerekir.`)
+        ? `Net ses süresi: ${saniye} saniye. ` +
+          (Dinleyici.sonSesSuresi >= Dinleyici.ILK_ONAY_SURESI
+            ? "\"a\" sandığında ilk onay için yeterli. "
+            : "\"a\" sandığında ilk onay için biraz daha uzun söyleyin. ") +
+          (Dinleyici.sonSesSuresi >= Dinleyici.DOLUM_SURESI
+            ? "Bu, oyunda harfi tamamen doldurur."
+            : `Harfi doldurmak için sesi ${Dinleyici.DOLUM_SURESI / 1000} saniye uzatmak gerekir.`)
         : "Ses göstergesi çalışmıyor (mikrofon izni yok).";
       if (Dinleyici.izinYok) {
         durum.textContent = "Mikrofon izni verilmedi. Adres çubuğundaki kilit simgesinden izin verebilirsiniz.";
