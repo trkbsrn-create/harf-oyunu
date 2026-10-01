@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="44" height="34" viewBox="0 0 44 34">
+  <!-- Ot öbeği (kendi çizimimiz) -->
+  <g fill="#5fae4e" stroke="#3b2a1a" stroke-width="2.5" stroke-linejoin="round">
+    <path d="M10 32 q-6 -14 -8 -26 q8 10 12 26 z"/>
+    <path d="M18 32 q-2 -16 2 -30 q4 14 4 30 z"/>
+    <path d="M26 32 q4 -14 14 -24 q-4 12 -8 24 z"/>
+    <path d="M32 32 q4 -8 10 -12 q-2 6 -4 12 z"/>
+  </g>
+</svg>

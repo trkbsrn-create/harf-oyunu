@@ -1,0 +1,11 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="44" viewBox="0 0 80 44">
+  <!-- Martı, yukarıdan (kendi çizimimiz). Kanat çırpma kodda yapılır. -->
+  <g stroke="#3b2a1a" stroke-width="3" stroke-linejoin="round">
+    <path d="M40 18 q-16 -14 -38 -6 q16 4 30 14 z" fill="#ffffff"/>
+    <path d="M40 18 q16 -14 38 -6 q-16 4 -30 14 z" fill="#ffffff"/>
+    <ellipse cx="40" cy="22" rx="7" ry="16" fill="#ffffff"/>
+    <path d="M36 6 l4 -5 l4 5 z" fill="#ffb03f"/>
+  </g>
+  <path d="M4 12 q8 -2 14 0" fill="none" stroke="#8a8a8a" stroke-width="3" stroke-linecap="round"/>
+  <path d="M76 12 q-8 -2 -14 0" fill="none" stroke="#8a8a8a" stroke-width="3" stroke-linecap="round"/>
+</svg>
