@@ -8,11 +8,16 @@
 //   grup   : 1–5 arası grup numarası
 //   kelime : bu harfle ilgili kelime (ipucu olarak da kullanılır)
 //   harfKelimeBasinda : harf kelimenin başında mı? (ğ için false, çünkü "dağ")
+//   resim  : ipucu resmi (gorseller/ içindeki dosya adı); kelimede öğrenilmemiş
+//            harfler olduğu için kelime yazılmaz, resmi gösterilir
+//   hece   : ünsüzlerde ipucu hecesi (önce kapalı hece: "an")
+//   tekBasinaDenenir : öğretmenin kararıyla bu ünsüz önce tek başına, uzatılarak
+//            ("nnnn") denenir; olmazsa hece ipucu gelir
 
 const HARFLER = [
   // Grup 1
-  { kucuk: "a", buyuk: "A", unlu: true,  grup: 1, kelime: "arı",      harfKelimeBasinda: true },
-  { kucuk: "n", buyuk: "N", unlu: false, grup: 1, kelime: "nar",      harfKelimeBasinda: true },
+  { kucuk: "a", buyuk: "A", unlu: true,  grup: 1, kelime: "arı",      harfKelimeBasinda: true, resim: "ari" },
+  { kucuk: "n", buyuk: "N", unlu: false, grup: 1, kelime: "nar",      harfKelimeBasinda: true, resim: "nar", hece: "an", tekBasinaDenenir: true },
   { kucuk: "e", buyuk: "E", unlu: true,  grup: 1, kelime: "eşek",     harfKelimeBasinda: true },
   { kucuk: "t", buyuk: "T", unlu: false, grup: 1, kelime: "tilki",    harfKelimeBasinda: true },
   { kucuk: "i", buyuk: "İ", unlu: true,  grup: 1, kelime: "inek",     harfKelimeBasinda: true },
