@@ -108,12 +108,12 @@
       sesBilgisi.textContent = "";
       if (!Dinleyici.olcer && await Dinleyici.olcerHazirla()) gostergeyiCiz();
       durum.textContent = "Dinliyorum... şimdi konuşun.";
-      const metinler = await Dinleyici.dinle(8000, Dinleyici.UNLU_DOLUM_SURESI);
+      const metinler = await Dinleyici.dinle(8000, Dinleyici.DOLUM_SURESI);
       const saniye = (Dinleyici.sonSesSuresi / 1000).toLocaleString("tr-TR");
       sesBilgisi.textContent = Dinleyici.olcer
-        ? `Net ses süresi: ${saniye} saniye. ` + (Dinleyici.sonSesSuresi >= Dinleyici.UNLU_DOLUM_SURESI
-          ? "Bu, oyunda ünlü harfi tamamen doldurur."
-          : `Oyunda ünlü harfi doldurmak için sesi ${Dinleyici.UNLU_DOLUM_SURESI / 1000} saniye uzatmak gerekir.`)
+        ? `Net ses süresi: ${saniye} saniye. ` + (Dinleyici.sonSesSuresi >= Dinleyici.DOLUM_SURESI
+          ? "Bu, oyunda harfi tamamen doldurur."
+          : `Oyunda harfi doldurmak için sesi ${Dinleyici.DOLUM_SURESI / 1000} saniye uzatmak gerekir.`)
         : "Ses göstergesi çalışmıyor (mikrofon izni yok).";
       if (Dinleyici.izinYok) {
         durum.textContent = "Mikrofon izni verilmedi. Adres çubuğundaki kilit simgesinden izin verebilirsiniz.";

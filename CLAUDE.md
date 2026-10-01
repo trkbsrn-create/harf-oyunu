@@ -17,12 +17,12 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 - `canta.js` – Karakterin çantası (envanter). Kaydedilmez; sayfa yenilenince oyun baştan başlar.
 - `dinleyici.js` – Chrome konuşma tanıma (tr-TR), zaman aşımlı; söylenenin doğruluğunu kontrol eder.
   Chrome tek ünlüleri ("a") yazıya çeviremediği için ünlülerde ses yüksekliği ölçülür.
-  Ünlü harf bir dolum çubuğudur: çocuk sesi uzattıkça (toplam 6 sn) harf dolar; ses kesilince
+  Harf bir dolum çubuğudur: çocuk sesi uzattıkça (toplam 3 sn) harf dolar; ses kesilince
   önce yavaşça boşalır, 3 kesintiden sonra kaldığı yerde durur. Ses kaydedilmez.
 - `mikrofon.html` – Öğretmen için mikrofon testi sayfası (Chrome'un ne duyduğunu gösterir).
 - `sesler.js` – Oyun sesleri. Ses dosyası yok; sesler tarayıcıda (Web Audio) üretilir.
 - `yazitipi/` – Andika yazı tipi ve lisansı (SIL Open Font License).
-- `gorseller/` – Kendi çizdiğimiz SVG görseller (karakter, ağaç, çalı, kaya, sandık, çiçek, ot, kelebek, martı, çanta, tohum, mikrofon, arı).
+- `gorseller/` – Kendi çizdiğimiz SVG görseller (karakter, ağaç, çalı, kaya, sandık, çiçek, ot, kelebek, martı, çanta, tohum, mikrofon, arı, nar).
 - Phaser 3, sabit sürümle (3.90.0) jsDelivr CDN'den yüklenir. Sürüm numarası
   rastgele değiştirilmez.
 - Yayın: GitHub Pages (kök klasörden).
@@ -46,6 +46,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 ## Pedagoji (MEB ses esaslı yöntem)
 - Ünlüler tek başına sesletilebilir.
 - Ünsüzler tek başına sesletilmez; ünsüzlerde çocuktan hece veya kelime söylemesi istenir.
+  İstisna (öğretmenin kararı): "n" önce tek başına, uzatılarak ("nnnn") denenir; olmazsa
+  hece ("an") ve kelime resmi ipucu olarak gelir. Hangi ünsüzde böyle yapılacağı
+  `harfler.js`'deki `tekBasinaDenenir` ile belirtilir; yeni ünsüzlerde öğretmene sor.
 - Heceleme önce kapalı hece (an), sonra açık hece (na).
 - Hece tablosu yok.
 - Öğrenilmemiş harf içeren sözcük yazıyla gösterilmez; onun yerine görsel konur.

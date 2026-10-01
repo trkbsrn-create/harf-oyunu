@@ -12,7 +12,7 @@ const Dinleyici = {
   sonSesSuresi: 0, // son dinlemede net ses duyulan toplam süre (milisaniye)
   olcer: null, // ses ölçer (mikrofon izni alınınca kurulur)
   ENAZ_ESIK: 0.04, // bundan sessiz olan her şey "ses yok" sayılır
-  UNLU_DOLUM_SURESI: 6000, // ünlü harf bu kadar milisaniye uzatılmış sesle tamamen dolar
+  DOLUM_SURESI: 3000, // harf bu kadar milisaniye uzatılmış sesle tamamen dolar
   taban: Infinity, // ortamın en sessiz anı (sınıf gürültüsü)
 
   // Ses ölçeri bir kez kurar. Mikrofon izni yoksa ya da izin sorusu 8 saniyede
@@ -41,8 +41,9 @@ const Dinleyici = {
   // Şu an net bir ses var mı? Ortam gürültüsünün epey üstündeki ses "net" sayılır.
   sesVarMi() {
     const s = this.seviye();
-    // Taban en sessiz ana iner; ortam gürültüsü artarsa yavaşça yükselir.
-    this.taban = Math.min(s, this.taban * 1.002);
+    // Taban en sessiz ana hemen iner; ortam gürültüsü artarsa çok yavaş yükselir
+    // (uzun ve kesintisiz bir ses, kısa sürede "gürültü" sanılmasın diye).
+    this.taban = Math.min(s, this.taban * 1.0005);
     return s > Math.max(this.ENAZ_ESIK, this.taban * 3);
   },
 
@@ -125,10 +126,11 @@ const Dinleyici = {
     });
   },
 
-  // Duyulanlar arasında tam olarak bu kelime var mı? (ipucu kelimesi için)
-  kelimeVarMi(metinler, kelime) {
+  // Duyulanlar arasında bu kelimelerden biri tam olarak var mı? (ipucu kelimesi, hece)
+  kelimeVarMi(metinler, kelimeler) {
+    const aranan = [].concat(kelimeler);
     return metinler.some((m) => m.toLocaleLowerCase("tr-TR")
-      .split(/[^a-zçğıöşü]+/u).includes(kelime));
+      .split(/[^a-zçğıöşü]+/u).some((k) => aranan.includes(k)));
   },
 
   // Duyulanlar arasında harfin kendisi, o harfle başlayan bir kelime ya da

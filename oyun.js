@@ -65,6 +65,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.load.svg("tohum", "gorseller/tohum.svg");
     this.load.svg("mikrofon", "gorseller/mikrofon.svg");
     this.load.svg("ari", "gorseller/ari.svg");
+    this.load.svg("nar", "gorseller/nar.svg");
     for (const ad of ["cicek-kirmizi", "cicek-mor", "cicek-beyaz", "ot", "kelebek", "kus"]) {
       this.load.svg(ad, `gorseller/${ad}.svg`);
     }
@@ -122,7 +123,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.input.on("pointerdown", (p) => {
       Sesler.ac();
       if (this.cantaTiklamasi(p)) return;
-      if (this.sandikGorundu && !this.sandikAcildi
+      if (this.sandik && this.sandikGorundu && !this.sandikAcildi
           && this.sandik.getBounds().contains(p.worldX, p.worldY)) {
         this.sandigiAc();
         return;
@@ -245,16 +246,19 @@ class AdaSahnesi extends Phaser.Scene {
       .setDepth(6002).setScale(0);
     this.tweens.add({ targets: mikrofon, scale: 1, duration: 300, ease: "Back.Out" });
 
-    // Ünlüler: harf, uzatılmış sesle dolan bir çubuğa dönüşür
-    if (harfBilgisi.unlu && await Dinleyici.olcerHazirla()) {
+    // Ünlüler (ve öğretmenin kararıyla tek başına denenen ünsüzler): harf,
+    // uzatılmış sesle dolan bir çubuğa dönüşür
+    const uzatilir = harfBilgisi.unlu || harfBilgisi.tekBasinaDenenir;
+    if (uzatilir && await Dinleyici.olcerHazirla()) {
       const sonuc = await this.harfiDoldur(harfBilgisi, yazi, mikrofon);
-      this.tweens.add({ targets: [mikrofon, sonuc.ipucu].filter(Boolean), scale: 0, alpha: 0,
-        duration: 250, onComplete: () => { mikrofon.destroy(); if (sonuc.ipucu) sonuc.ipucu.destroy(); } });
+      const kaldir = [mikrofon, ...sonuc.ipucu];
+      this.tweens.add({ targets: kaldir, scale: 0, alpha: 0, duration: 250,
+        onComplete: () => kaldir.forEach((n) => n.destroy()) });
       this.tohumuKazan(harf, yazi, hale, isik, !sonuc.dogru);
       return;
     }
 
-    let ipucu = null;
+    let ipucu = [];
     let dogru = false;
     for (let deneme = 1; deneme <= 5 && Dinleyici.destekleniyor; deneme++) {
       Sesler.dinle();
@@ -264,14 +268,15 @@ class AdaSahnesi extends Phaser.Scene {
       const metinler = await Dinleyici.dinle(6000);
       nabiz.stop();
       mikrofon.setScale(1);
-      if (Dinleyici.dogruMu(metinler, harf, kelime)) {
+      if (Dinleyici.dogruMu(metinler, harf, kelime)
+          || (ipucu.length && Dinleyici.kelimeVarMi(metinler, this.heceYazimlari(harfBilgisi.hece)))) {
         dogru = true;
         break;
       }
       // Yanlış ya da boş: sadece harf hafifçe sallanır ("bir daha söyle")
       this.tweens.add({ targets: yazi, angle: { from: -8, to: 8 }, duration: 90,
         yoyo: true, repeat: 2, onComplete: () => yazi.setAngle(0) });
-      if (deneme === 3) ipucu = this.ipucuGoster(yazi);
+      if (deneme === 3) ipucu = this.ipucuGoster(yazi, harfBilgisi);
       // Tanıma hemen bittiyse biraz bekle, çocuk hazırlansın
       const gecen = Date.now() - baslangic;
       await this.bekle(Math.max(800, 1500 - gecen));
@@ -290,18 +295,20 @@ class AdaSahnesi extends Phaser.Scene {
       await this.bekle(2500);
     }
 
-    this.tweens.add({ targets: [mikrofon, ipucu].filter(Boolean), scale: 0, alpha: 0,
-      duration: 250, onComplete: () => { mikrofon.destroy(); if (ipucu) ipucu.destroy(); } });
+    const kaldir = [mikrofon, ...ipucu];
+    this.tweens.add({ targets: kaldir, scale: 0, alpha: 0, duration: 250,
+      onComplete: () => kaldir.forEach((n) => n.destroy()) });
     this.tohumuKazan(harf, yazi, hale, isik, !dogru);
   }
 
-  // Ünlü harfin dolumu. Çocuk sesini uzattıkça harfin içi aşağıdan yukarı altın
+  // Harfin dolumu. Çocuk sesini uzattıkça harfin içi aşağıdan yukarı altın
   // sarısıyla dolar. Ses kesilince önce yavaşça geri boşalır; birkaç kesintiden
-  // sonra kaldığı yerde durur. 20 sn'de dolmazsa ipucu (arı resmi) çıkar ve "arı"
-  // kelimesi de kabul edilir; 40 sn'de oyun kendiliğinden onaylar.
+  // sonra kaldığı yerde durur. 20 sn'de dolmazsa ipucu çıkar (kelimenin resmi,
+  // ünsüzde ayrıca hece) ve o kelime ya da hece de kabul edilir; 40 sn'de oyun
+  // kendiliğinden onaylar.
   // Dolum sırasında oyun ses çıkarmaz (oyunun sesi mikrofona girip harfi doldurmasın).
   async harfiDoldur(harfBilgisi, yazi, mikrofon) {
-    const DOLUM = Dinleyici.UNLU_DOLUM_SURESI;
+    const DOLUM = Dinleyici.DOLUM_SURESI;
     const BOSALMA_HIZI = 0.08; // saniyede (dolgunun oranı olarak)
     const ZORLU_KESINTI = 3; // bu kadar kesintiden sonra dolgu artık boşalmaz
     const IPUCU_SURESI = 20000;
@@ -352,7 +359,7 @@ class AdaSahnesi extends Phaser.Scene {
     let kesinti = 0;
     let sesVardi = false;
     let sessizlik = 0;
-    let ipucu = null;
+    let ipucu = [];
     let tanimaCalisiyor = false;
     let kelimeDuyuldu = false;
     const baslangic = Date.now();
@@ -392,14 +399,15 @@ class AdaSahnesi extends Phaser.Scene {
           yazi.y - yukseklik / 2 + harfAlt - (harfAlt - harfUst) * oran);
       }
 
-      // 2. basamak: ipucu resmi çıkar, "arı" kelimesi de kabul edilir
-      if (!ipucu && gecen > IPUCU_SURESI) {
-        ipucu = this.ipucuGoster(yazi);
+      // 2. basamak: ipucu çıkar; kelime (ve varsa hece) de kabul edilir
+      if (!ipucu.length && gecen > IPUCU_SURESI) {
+        ipucu = this.ipucuGoster(yazi, harfBilgisi);
       }
-      if (ipucu && !tanimaCalisiyor && Dinleyici.destekleniyor) {
+      if (ipucu.length && !tanimaCalisiyor && Dinleyici.destekleniyor) {
         tanimaCalisiyor = true;
+        const kabul = [harfBilgisi.kelime, ...this.heceYazimlari(harfBilgisi.hece)];
         Dinleyici.dinle(6000).then((metinler) => {
-          if (Dinleyici.kelimeVarMi(metinler, harfBilgisi.kelime)) kelimeDuyuldu = true;
+          if (Dinleyici.kelimeVarMi(metinler, kabul)) kelimeDuyuldu = true;
           tanimaCalisiyor = false;
         });
       }
@@ -431,14 +439,50 @@ class AdaSahnesi extends Phaser.Scene {
     return { dogru, ipucu };
   }
 
-  // İpucu: harfin kelimesinin resmi (kelimede öğrenilmemiş harfler olduğu için yazı değil)
-  ipucuGoster(yazi) {
-    const resim = this.add.image(yazi.x - 190, yazi.y + 10, "ari").setDepth(6002).setScale(0);
+  // İpucu: harfin kelimesinin resmi (kelimede öğrenilmemiş harfler olduğu için yazı
+  // değil). Ünsüzde ayrıca çantadaki tohum uçup gelir ve harfle hece kurar (a + n = an).
+  // Ekranda oluşan nesneleri dizi olarak verir.
+  ipucuGoster(yazi, harfBilgisi) {
+    const nesneler = [];
+    const hece = harfBilgisi.hece;
+    const resimX = hece ? yazi.x - 330 : yazi.x - 190;
+    const resim = this.add.image(resimX, yazi.y + 10, harfBilgisi.resim).setDepth(6002).setScale(0);
     this.tweens.add({ targets: resim, scale: 1.2, duration: 400, ease: "Back.Out" });
     this.tweens.add({ targets: resim, y: resim.y - 12, duration: 600, yoyo: true,
       repeat: -1, ease: "Sine.InOut", delay: 400 });
+    nesneler.push(resim);
     Sesler.pling();
-    return resim;
+
+    if (hece) {
+      // Hecenin öbür harfi (a), çantadan tohum olarak uçup harfin soluna gelir
+      const oburHarf = hece.replace(harfBilgisi.kucuk, "");
+      const hedefX = yazi.x - 120;
+      const kamera = this.cameras.main;
+      const tohum = this.add.image(
+        this.cantaDugmesi.x + kamera.scrollX, this.cantaDugmesi.y + kamera.scrollY, "tohum")
+        .setDepth(6002).setScale(0.5);
+      const harf = this.add.text(hedefX, yazi.y, oburHarf, {
+        fontFamily: "Andika", fontSize: "180px", color: "#ffffff",
+        stroke: "#3b2a1a", strokeThickness: 14,
+      }).setOrigin(0.5).setDepth(6001).setScale(0);
+      this.tweens.add({ targets: this.cantaDugmesi, scale: 1.2, duration: 120, yoyo: true });
+      this.tweens.add({
+        targets: tohum, x: hedefX, y: yazi.y, scale: 1, angle: 360, duration: 800, ease: "Cubic.Out",
+        onComplete: () => {
+          tohum.destroy();
+          this.tweens.add({ targets: harf, scale: 1, duration: 300, ease: "Back.Out" });
+          this.tweens.add({ targets: yazi, x: yazi.x + 10, duration: 120, yoyo: true });
+        },
+      });
+      nesneler.push(harf);
+    }
+    return nesneler;
+  }
+
+  // Chrome'un bir heceyi yazabileceği şekiller ("an" bazen "han" yazılır)
+  heceYazimlari(hece) {
+    if (!hece) return [];
+    return [hece, "h" + hece, hece.replace(/^(.)/, "$1h")];
   }
 
   bekle(ms) {
@@ -469,6 +513,7 @@ class AdaSahnesi extends Phaser.Scene {
         tohum.destroy();
         Sesler.tohum();
         Canta.tohumEkle(harf, tekrarEdilecek);
+        this.siradakiSandik();
         this.donuk = false;
         kamera.startFollow(this.cocuk, true, 0.05, 0.05);
         if (this.cantaAcik) this.cantaIceriginiCiz();
@@ -477,8 +522,9 @@ class AdaSahnesi extends Phaser.Scene {
     });
 
     // Açılmış sandık adada kalır: küçük ve sönük
-    this.tweens.add({ targets: this.sandik, scale: 0.65, alpha: 0.6, duration: 600 });
-    this.sandik.setTint(0xc8bca8);
+    const acilan = this.sandik;
+    this.tweens.add({ targets: acilan, scale: 0.65, alpha: 0.6, duration: 600 });
+    acilan.setTint(0xc8bca8);
   }
 
   // Efektlerde kullanılan küçük yıldız ve parıltı resimleri
@@ -535,7 +581,7 @@ class AdaSahnesi extends Phaser.Scene {
   }
 
   sensorGuncelle(fark, yuruyor) {
-    if (this.sandikAcildi) return;
+    if (!this.sandik || this.sandikAcildi) return;
     const uzaklik = Phaser.Math.Distance.Between(
       this.cocuk.x, this.cocuk.y, this.sandik.x, this.sandik.y);
     // 0 = çok uzak, 1 = sandığın yanında
@@ -564,15 +610,36 @@ class AdaSahnesi extends Phaser.Scene {
     }
   }
 
-  // Sandığı başlangıçtan uzak bir çalının arkasına saklar.
+  // Harf sandıklarını çalıların arkasına saklar (şimdilik a ve n). Sandıklar sırayla
+  // açılır: bir sandığın tohumu çantaya girmeden sıradaki sandık ortaya çıkmaz.
   sandigiSakla(susler) {
     const calilar = susler.filter((s) => s.tur === "cali");
-    const uzaklik = (s) => Math.hypot(s.x - BASLANGIC_X, s.y - BASLANGIC_Y);
-    const cali = calilar.reduce((a, b) =>
-      Math.abs(uzaklik(a) - 2000) < Math.abs(uzaklik(b) - 2000) ? a : b);
-    this.saklanmaYeri = cali;
-    this.sandik = this.add.image(cali.x + 8, cali.y - 24, "sandik-kapali")
-      .setOrigin(0.5, 1).setDepth(cali.y - 1).setAlpha(0);
+    const uzaklik = (s, x, y) => Math.hypot(s.x - x, s.y - y);
+    // a: başlangıçtan yaklaşık 2000 px uzakta
+    const caliA = calilar.reduce((a, b) =>
+      Math.abs(uzaklik(a, BASLANGIC_X, BASLANGIC_Y) - 2000)
+        < Math.abs(uzaklik(b, BASLANGIC_X, BASLANGIC_Y) - 2000) ? a : b);
+    // n: başlangıçtan da uzak, a'nın sandığından da olabildiğince uzak
+    const adaylar = calilar.filter((s) => uzaklik(s, BASLANGIC_X, BASLANGIC_Y) > 1500);
+    const caliN = adaylar.reduce((a, b) =>
+      uzaklik(a, caliA.x, caliA.y) > uzaklik(b, caliA.x, caliA.y) ? a : b);
+
+    this.sandiklar = [[HARFLER[0], caliA], [HARFLER[1], caliN]].map(([harfBilgisi, cali]) => ({
+      harfBilgisi,
+      cali,
+      nesne: this.add.image(cali.x + 8, cali.y - 24, "sandik-kapali")
+        .setOrigin(0.5, 1).setDepth(cali.y - 1).setAlpha(0),
+    }));
+    this.siradakiSira = 0;
+    this.siradakiSandik();
+  }
+
+  // Sıradaki sandığı devreye alır (sensör onu gösterir). Sandık kalmadıysa sensör susar.
+  siradakiSandik() {
+    const s = this.sandiklar[this.siradakiSira++];
+    this.sandik = s ? s.nesne : null;
+    this.saklanmaYeri = s ? s.cali : null;
+    this.aktifHarf = s ? s.harfBilgisi : null;
     this.sandikGorundu = false;
     this.sandikAcildi = false;
   }
@@ -653,7 +720,7 @@ class AdaSahnesi extends Phaser.Scene {
     }).setDepth(6000).explode(50);
 
     // İçinden yükselen harf
-    const harf = HARFLER[0].kucuk;
+    const harf = this.aktifHarf.kucuk;
     const hale = this.add.circle(x, y - 210, 110, 0xffffff, 0.6).setDepth(6000).setScale(0);
     const yazi = this.add.text(x, y, harf, {
       fontFamily: "Andika", fontSize: "180px", color: "#ffffff",
@@ -669,7 +736,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.tweens.add({ targets: hale, alpha: 0.3, duration: 700, yoyo: true, repeat: -1, delay: 900 });
 
     // Karakter, harf söylenip tohum çantaya girene kadar bekler (bkz. tohumuKazan)
-    this.time.delayedCall(2000, () => this.harfiDinle(HARFLER[0], yazi, hale, isik));
+    this.time.delayedCall(2000, () => this.harfiDinle(this.aktifHarf, yazi, hale, isik));
   }
 
   // Yürürken ayak altından çıkan küçük toz bulutu
@@ -984,7 +1051,7 @@ class AdaSahnesi extends Phaser.Scene {
   }
 
   sandikKontrol() {
-    if (this.sandikAcildi) return;
+    if (!this.sandik || this.sandikAcildi) return;
     const uzaklik = Phaser.Math.Distance.Between(
       this.cocuk.x, this.cocuk.y, this.sandik.x, this.sandik.y);
     if (!this.sandikGorundu && uzaklik < 380) {

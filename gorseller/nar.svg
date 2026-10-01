@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+  <!-- Nar: "n" harfinin ipucu resmi (kendi çizimimiz) -->
+  <g stroke="#3b2a1a" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
+    <!-- yaprak -->
+    <path d="M62 22 q18 -18 34 -10 q-14 16 -34 10 z" fill="#6cc05a"/>
+    <!-- taç -->
+    <path d="M46 30 l4 -16 l6 10 l4 -12 l4 12 l6 -10 l4 16 z" fill="#c8323c"/>
+    <!-- meyve -->
+    <circle cx="60" cy="70" r="44" fill="#e0533d"/>
+  </g>
+  <!-- parlaklık ve gölge -->
+  <path d="M34 52 q10 -16 28 -18" fill="none" stroke="#fff" stroke-opacity="0.5" stroke-width="7" stroke-linecap="round"/>
+  <path d="M30 92 q28 22 62 0" fill="none" stroke="#b8323a" stroke-opacity="0.6" stroke-width="6" stroke-linecap="round"/>
+</svg>
