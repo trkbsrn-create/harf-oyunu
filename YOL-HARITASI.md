@@ -12,7 +12,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - Hazine sensörü (karakterin çevresinde yaklaştıkça belirginleşen altın aura, yürürken sıklaşan ve incelen bip sesi): TAMAM.
    - Canlı ada (karakter adım atarak yürür, ağaç tepeleri ve çalılar rüzgârda sallanır, denizde köpük, dalga ve pırıltı): TAMAM.
    - Uçan martılar ve kelebekler, rüzgârda sallanan çiçek ve otlar, gölgesi geçen bulutlar: TAMAM.
-   - Çanta/envanter (köşedeki düğme, karaktere dokunma veya boşluk tuşu ile açılır; 8 kutucuk; localStorage'da saklanır), harf tohuma dönüşüp çantaya uçar, açılmış sandık adada küçük ve sönük kalır: TAMAM. (Geçici: tohum şimdilik kendiliğinden gelir.)
+   - Çanta/envanter (köşedeki düğme, karaktere dokunma veya boşluk tuşu ile açılır; 8 kutucuk; kaydedilmez, sayfa yenilenince oyun baştan başlar), harf tohuma dönüşüp çantaya uçar, açılmış sandık adada küçük ve sönük kalır: TAMAM. (Geçici: tohum şimdilik kendiliğinden gelir.)
    - Sıradaki iş: ses doğrulama; tohum ancak çocuk harfi söyleyince gelsin (mikrofon testi de bu sırada yapılabilir).
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.

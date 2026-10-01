@@ -14,7 +14,7 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 - `index.html` – Ana sayfa. Derleme adımı yok, doğrudan tarayıcıda açılır.
 - `oyun.js` – Phaser sahneleri ve oyun kodu.
 - `harfler.js` – Harf grupları ve kelimeler (sadece veri).
-- `canta.js` – Karakterin çantası (envanter); içindekiler yalnızca localStorage'da saklanır.
+- `canta.js` – Karakterin çantası (envanter). Kaydedilmez; sayfa yenilenince oyun baştan başlar.
 - `sesler.js` – Oyun sesleri. Ses dosyası yok; sesler tarayıcıda (Web Audio) üretilir.
 - `yazitipi/` – Andika yazı tipi ve lisansı (SIL Open Font License).
 - `gorseller/` – Kendi çizdiğimiz SVG görseller (karakter, ağaç, çalı, kaya, sandık, çiçek, ot, kelebek, martı, çanta, tohum).
@@ -71,4 +71,5 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 ## Hatalardan öğrenilen kurallar
 Her hatadan sonra buraya yeni bir kural ekle.
 
-- (Henüz yok.)
+- Kullanıcı istemedikçe ilerlemeyi kalıcı saklama. Sayfa yenilenince oyun baştan
+  başlar (çanta boşalır, sandıklar kapanır). Kalıcı kayıt gerekirse önce kullanıcıya sor.
