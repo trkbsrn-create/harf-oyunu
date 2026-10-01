@@ -1,36 +1,49 @@
 // Oyunun ana kodu: büyük bir ada ve adada gezen ana karakter.
 
-const DUNYA_GENISLIK = 2400;
-const DUNYA_YUKSEKLIK = 1600;
+const DUNYA_GENISLIK = 6400;
+const DUNYA_YUKSEKLIK = 3600;
 const YURUME_HIZI = 260; // saniyede piksel
+const BASLANGIC_X = DUNYA_GENISLIK / 2;
+const BASLANGIC_Y = DUNYA_YUKSEKLIK / 2 + 120;
 
 // Adanın kıyı çizgisi: dalgalı bir oval. Aynı şekil her açılışta aynı çıkar.
 function adaNoktalari(olcek) {
   const noktalar = [];
   const merkezX = DUNYA_GENISLIK / 2;
   const merkezY = DUNYA_YUKSEKLIK / 2;
-  for (let i = 0; i < 72; i++) {
-    const aci = (i / 72) * Math.PI * 2;
-    const dalga = 1 + 0.07 * Math.sin(3 * aci) + 0.04 * Math.sin(5 * aci + 1);
+  const yaricapX = DUNYA_GENISLIK / 2 - 260;
+  const yaricapY = DUNYA_YUKSEKLIK / 2 - 220;
+  for (let i = 0; i < 160; i++) {
+    const aci = (i / 160) * Math.PI * 2;
+    const dalga = 1 + 0.06 * Math.sin(3 * aci) + 0.04 * Math.sin(5 * aci + 1)
+      + 0.02 * Math.sin(11 * aci + 2);
     noktalar.push(new Phaser.Geom.Point(
-      merkezX + Math.cos(aci) * 1020 * dalga * olcek,
-      merkezY + Math.sin(aci) * 640 * dalga * olcek
+      merkezX + Math.cos(aci) * yaricapX * dalga * olcek,
+      merkezY + Math.sin(aci) * yaricapY * dalga * olcek
     ));
   }
   return noktalar;
 }
 
-// Ağaç, çalı ve kayaların yerleri
-const SUSLER = [
-  { tur: "agac", x: 700, y: 520 }, { tur: "agac", x: 1550, y: 430 },
-  { tur: "agac", x: 1900, y: 900 }, { tur: "agac", x: 520, y: 1050 },
-  { tur: "agac", x: 1250, y: 1220 }, { tur: "agac", x: 1050, y: 470 },
-  { tur: "cali", x: 900, y: 820 }, { tur: "cali", x: 1650, y: 1150 },
-  { tur: "cali", x: 400, y: 760 }, { tur: "cali", x: 1400, y: 700 },
-  { tur: "cali", x: 2000, y: 640 }, { tur: "cali", x: 800, y: 1250 },
-  { tur: "kaya", x: 1150, y: 980 }, { tur: "kaya", x: 1800, y: 560 },
-  { tur: "kaya", x: 620, y: 650 }, { tur: "kaya", x: 1500, y: 1350 },
-];
+// Ağaç, çalı ve kayaları adaya serpiştirir. Sabit tohumla rastgele seçildiği
+// için yerleri her açılışta aynıdır.
+function suslerUret() {
+  const rastgele = new Phaser.Math.RandomDataGenerator(["harf-adasi"]);
+  const cimen = new Phaser.Geom.Polygon(adaNoktalari(0.9));
+  const turler = ["agac", "agac", "cali", "cali", "cali", "kaya"];
+  const susler = [];
+  let deneme = 0;
+  while (susler.length < 140 && deneme < 5000) {
+    deneme++;
+    const x = rastgele.between(0, DUNYA_GENISLIK);
+    const y = rastgele.between(0, DUNYA_YUKSEKLIK);
+    if (!cimen.contains(x, y)) continue;
+    if (Math.hypot(x - BASLANGIC_X, y - BASLANGIC_Y) < 260) continue;
+    if (susler.some((s) => Math.hypot(s.x - x, s.y - y) < 190)) continue;
+    susler.push({ tur: rastgele.pick(turler), x, y });
+  }
+  return susler;
+}
 
 class AdaSahnesi extends Phaser.Scene {
   constructor() {
@@ -50,11 +63,11 @@ class AdaSahnesi extends Phaser.Scene {
     // Karakterin yürüyebildiği alan (kumsal dahil, denize girmeden)
     this.yuruyusAlani = new Phaser.Geom.Polygon(adaNoktalari(0.95));
 
-    for (const sus of SUSLER) {
+    for (const sus of suslerUret()) {
       this.add.image(sus.x, sus.y, sus.tur).setOrigin(0.5, 1).setDepth(sus.y);
     }
 
-    this.cocuk = this.add.image(DUNYA_GENISLIK / 2, DUNYA_YUKSEKLIK / 2 + 120, "cocuk")
+    this.cocuk = this.add.image(BASLANGIC_X, BASLANGIC_Y, "cocuk")
       .setOrigin(0.5, 1);
     this.hedef = null;
 
@@ -75,7 +88,7 @@ class AdaSahnesi extends Phaser.Scene {
   adayiCiz() {
     const g = this.add.graphics().setDepth(-1);
     const kum = adaNoktalari(1);
-    const cimen = adaNoktalari(0.88);
+    const cimen = adaNoktalari(0.93);
 
     // Kartonumsu kalınlık: adanın altında koyu bir kenar
     g.fillStyle(0x7a5c3e);
