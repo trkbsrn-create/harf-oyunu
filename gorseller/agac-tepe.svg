@@ -1,8 +1,6 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="160" height="200" viewBox="0 0 160 200">
-  <!-- Kartonumsu ağaç (kendi çizimimiz) -->
-  <ellipse cx="80" cy="192" rx="44" ry="7" fill="#000" fill-opacity="0.18"/>
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="140" viewBox="0 0 160 140">
+  <!-- Ağacın yapraklı tepesi (kendi çizimimiz). Gövdesi agac-govde.svg. -->
   <g stroke="#3b2a1a" stroke-width="5" stroke-linejoin="round">
-    <path d="M68 190 l4 -80 h16 l4 80 z" fill="#9a6a3f"/>
     <circle cx="50" cy="96" r="36" fill="#5fae4e"/>
     <circle cx="110" cy="96" r="36" fill="#5fae4e"/>
     <circle cx="80" cy="60" r="46" fill="#6cc05a"/>

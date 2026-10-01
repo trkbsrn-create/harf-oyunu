@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="90" height="130" viewBox="0 0 90 130">
+  <!-- Ana karakter, yürüme karesi (kendi çizimimiz) -->
+  <g stroke="#3b2a1a" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
+    <!-- gölge -->
+    <ellipse cx="45" cy="124" rx="26" ry="5" fill="#000" fill-opacity="0.18" stroke="none"/>
+    <!-- bacaklar -->
+    <rect x="30" y="92" width="12" height="26" rx="5" fill="#f2c79b"/>
+    <rect x="48" y="92" width="12" height="17" rx="5" fill="#f2c79b"/>
+    <!-- ayakkabılar -->
+    <ellipse cx="34" cy="119" rx="10" ry="5" fill="#e0533d"/>
+    <ellipse cx="55" cy="110" rx="10" ry="5" fill="#e0533d"/>
+    <!-- şort -->
+    <path d="M26 84 h38 v14 h-16 l-3 -5 l-3 5 h-16 z" fill="#4a7fc1"/>
+    <!-- kollar -->
+    <rect x="12" y="62" width="12" height="28" rx="6" fill="#f2c79b" transform="rotate(-14 18 66)"/>
+    <rect x="66" y="62" width="12" height="28" rx="6" fill="#f2c79b" transform="rotate(-22 72 66)"/>
+    <!-- tişört -->
+    <path d="M22 60 q23 -8 46 0 l6 12 l-10 4 v12 h-38 v-12 l-10 -4 z" fill="#ffcf3f"/>
+    <!-- baş -->
+    <circle cx="45" cy="36" r="24" fill="#f2c79b"/>
+    <!-- saç -->
+    <path d="M21 34 q2 -24 24 -24 q22 0 24 24 q-8 -10 -24 -10 q-16 0 -24 10 z" fill="#7a4a24"/>
+  </g>
+  <!-- yüz -->
+  <circle cx="37" cy="38" r="3.5" fill="#3b2a1a"/>
+  <circle cx="53" cy="38" r="3.5" fill="#3b2a1a"/>
+  <circle cx="31" cy="46" r="4" fill="#f39b8a" fill-opacity="0.7"/>
+  <circle cx="59" cy="46" r="4" fill="#f39b8a" fill-opacity="0.7"/>
+  <path d="M38 48 q7 6 14 0" fill="none" stroke="#3b2a1a" stroke-width="3" stroke-linecap="round"/>
+</svg>

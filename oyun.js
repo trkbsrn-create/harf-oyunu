@@ -53,7 +53,10 @@ class AdaSahnesi extends Phaser.Scene {
 
   preload() {
     this.load.svg("cocuk", "gorseller/cocuk.svg");
-    this.load.svg("agac", "gorseller/agac.svg");
+    this.load.svg("cocuk-adim1", "gorseller/cocuk-adim1.svg");
+    this.load.svg("cocuk-adim2", "gorseller/cocuk-adim2.svg");
+    this.load.svg("agac-govde", "gorseller/agac-govde.svg");
+    this.load.svg("agac-tepe", "gorseller/agac-tepe.svg");
     this.load.svg("cali", "gorseller/cali.svg");
     this.load.svg("kaya", "gorseller/kaya.svg");
     this.load.svg("sandik-kapali", "gorseller/sandik-kapali.svg");
@@ -61,17 +64,29 @@ class AdaSahnesi extends Phaser.Scene {
   }
 
   create() {
+    this.dokulariUret();
+    this.denizKur();
     this.adayiCiz();
 
     // Karakterin yürüyebildiği alan (kumsal dahil, denize girmeden)
     this.yuruyusAlani = new Phaser.Geom.Polygon(adaNoktalari(0.95));
 
     const susler = suslerUret();
+    this.sallananlar = []; // rüzgârda sallanan ağaç tepeleri ve çalılar
     for (const sus of susler) {
-      this.add.image(sus.x, sus.y, sus.tur).setOrigin(0.5, 1).setDepth(sus.y);
+      const faz = Phaser.Math.FloatBetween(0, Math.PI * 2);
+      if (sus.tur === "agac") {
+        this.add.image(sus.x, sus.y, "agac-govde").setOrigin(0.5, 1).setDepth(sus.y);
+        // Tepe, gövdenin üst ucundan döner
+        const tepe = this.add.image(sus.x, sus.y - 85, "agac-tepe")
+          .setOrigin(0.5, 115 / 140).setDepth(sus.y + 0.1);
+        this.sallananlar.push({ nesne: tepe, tur: "agac", faz });
+      } else {
+        const nesne = this.add.image(sus.x, sus.y, sus.tur).setOrigin(0.5, 1).setDepth(sus.y);
+        if (sus.tur === "cali") this.sallananlar.push({ nesne, tur: "cali", faz });
+      }
     }
 
-    this.dokulariUret();
     this.sandigiSakla(susler);
     this.adimSayaci = 0;
     this.tekAdim = false;
@@ -121,6 +136,15 @@ class AdaSahnesi extends Phaser.Scene {
     g.fillStyle(0xffffff);
     g.fillCircle(8, 8, 8);
     g.generateTexture("parilti", 16, 16);
+    g.clear();
+    // Denizdeki küçük dalga kıvrımı
+    g.lineStyle(4, 0xffffff, 1);
+    const kivrim = [];
+    for (let i = 0; i <= 20; i++) {
+      kivrim.push({ x: 4 + i * 2, y: 10 + Math.sin((i / 20) * Math.PI * 2) * 5 });
+    }
+    g.strokePoints(kivrim);
+    g.generateTexture("dalga", 48, 20);
     g.destroy();
 
     // Aura için yumuşak, ortası parlak bir ışık bulutu
@@ -300,6 +324,81 @@ class AdaSahnesi extends Phaser.Scene {
     });
   }
 
+  // Deniz: kıyıya doğru açılan renkler, gelip giden köpük, kayan dalgalar
+  denizKur() {
+    const g = this.add.graphics().setDepth(-4);
+    g.fillStyle(0xaee2f2);
+    g.fillPoints(adaNoktalari(1.1), true);
+    g.fillStyle(0xc4ecf7);
+    g.fillPoints(adaNoktalari(1.05), true);
+
+    this.kopuk = this.add.graphics().setDepth(-2);
+    this.kopukNoktalari = adaNoktalari(1);
+
+    // Dalga kıvrımları: denizde yavaşça kayar, belirip kaybolur
+    const kara = new Phaser.Geom.Polygon(adaNoktalari(1.04));
+    this.dalgalar = [];
+    let deneme = 0;
+    while (this.dalgalar.length < 160 && deneme < 4000) {
+      deneme++;
+      const x = Phaser.Math.Between(0, DUNYA_GENISLIK);
+      const y = Phaser.Math.Between(0, DUNYA_YUKSEKLIK);
+      if (kara.contains(x, y)) continue;
+      const d = this.add.image(x, y, "dalga").setDepth(-3).setAlpha(0);
+      this.dalgalar.push({ nesne: d, faz: Phaser.Math.FloatBetween(0, Math.PI * 2),
+        hiz: Phaser.Math.FloatBetween(6, 14) });
+    }
+    this.denizKarasi = new Phaser.Geom.Polygon(adaNoktalari(1.02));
+
+    // Ara sıra güneşte parlayan pırıltılar (sadece ekranda görünen denizde)
+    this.time.addEvent({ delay: 180, loop: true, callback: () => this.denizPiriltisi() });
+  }
+
+  denizPiriltisi() {
+    const gorunen = this.cameras.main.worldView;
+    const x = Phaser.Math.Between(gorunen.x, gorunen.right);
+    const y = Phaser.Math.Between(gorunen.y, gorunen.bottom);
+    if (this.denizKarasi.contains(x, y)) return;
+    const p = this.add.image(x, y, "yildiz").setDepth(-3).setScale(0).setAlpha(0.9);
+    this.tweens.add({
+      targets: p, scale: 0.45, angle: 90, duration: 350, yoyo: true,
+      onComplete: () => p.destroy(),
+    });
+  }
+
+  // Her karede: köpük kıyıya vurur, dalgalar kayar, ağaçlar ve çalılar sallanır
+  canlandir(zaman, fark) {
+    const merkezX = DUNYA_GENISLIK / 2;
+    const merkezY = DUNYA_YUKSEKLIK / 2;
+    this.kopuk.clear();
+    for (let i = 0; i < 2; i++) {
+      const dalga = (Math.sin(zaman * 0.0012 + i * Math.PI) + 1) / 2; // 0..1
+      const olcek = 1.006 + dalga * 0.028;
+      this.kopuk.lineStyle(12 - dalga * 6, 0xffffff, 0.95 - dalga * 0.6);
+      this.kopuk.strokePoints(this.kopukNoktalari.map((n) => ({
+        x: merkezX + (n.x - merkezX) * olcek,
+        y: merkezY + (n.y - merkezY) * olcek + 10,
+      })), true);
+    }
+
+    for (const d of this.dalgalar) {
+      d.nesne.x += (d.hiz * fark) / 1000;
+      if (d.nesne.x > DUNYA_GENISLIK + 30) d.nesne.x = -30;
+      d.nesne.setAlpha(Math.max(0, Math.sin(zaman * 0.0009 + d.faz)) * 0.8);
+    }
+
+    // Rüzgâr: yavaş ana salınım ve üstüne küçük titreşim
+    const ruzgar = zaman * 0.0013;
+    for (const s of this.sallananlar) {
+      const salinim = Math.sin(ruzgar + s.faz) + 0.3 * Math.sin(ruzgar * 2.7 + s.faz * 2);
+      if (s.tur === "agac") {
+        s.nesne.setAngle(salinim * 2.2);
+      } else {
+        s.nesne.setScale(1 + salinim * 0.025, 1 - salinim * 0.02);
+      }
+    }
+  }
+
   adayiCiz() {
     const g = this.add.graphics().setDepth(-1);
     const kum = adaNoktalari(1);
@@ -330,11 +429,12 @@ class AdaSahnesi extends Phaser.Scene {
   }
 
   update(zaman, fark) {
+    this.canlandir(zaman, fark);
     let dx = 0;
     let dy = 0;
 
     if (this.donuk) {
-      this.cocuk.setAngle(0);
+      this.cocuk.setAngle(0).setTexture("cocuk");
       return;
     }
 
@@ -367,19 +467,24 @@ class AdaSahnesi extends Phaser.Scene {
       if (ax !== 0) this.cocuk.setFlipX(ax < 0);
     }
 
-    // Yürürken hafif sallanma, toz ve ayak sesi
-    this.cocuk.setAngle(yuruyor ? Math.sin(zaman / 70) * 5 : 0);
+    // Yürürken adım resimleri sırayla değişir; her adımda toz ve ayak sesi
     this.cocuk.setDepth(this.cocuk.y);
     if (yuruyor) {
       this.adimSayaci += fark;
       if (this.adimSayaci >= 230) {
         this.adimSayaci = 0;
         this.tekAdim = !this.tekAdim;
+        this.cocuk.setTexture(this.tekAdim ? "cocuk-adim1" : "cocuk-adim2");
         this.tozCikar();
         Sesler.adim(this.tekAdim);
       }
+      // Adımın ortasında gövde hafifçe yükselir, yere basınca iner
+      const adimOrani = this.adimSayaci / 230;
+      this.cocuk.setScale(1, 1 + Math.sin(adimOrani * Math.PI) * 0.03);
+      this.cocuk.setAngle(this.tekAdim ? 1.5 : -1.5);
     } else {
-      this.adimSayaci = 230; // durup yeniden yürüyünce ilk adım hemen duyulsun
+      this.adimSayaci = 230; // durup yeniden yürüyünce ilk adım hemen atılsın
+      this.cocuk.setTexture("cocuk").setScale(1).setAngle(0);
     }
 
     this.sensorGuncelle(fark, yuruyor);
@@ -422,7 +527,7 @@ document.fonts.load('72px "Andika"').finally(() => {
     parent: "oyun",
     width: 1280,
     height: 720,
-    backgroundColor: "#bfe8f5",
+    backgroundColor: "#8fd2ea",
     scale: {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
