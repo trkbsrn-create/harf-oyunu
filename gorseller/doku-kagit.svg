@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64" viewBox="0 0 64 64">
+  <!-- Kareli defter kâğıdı (kesintisiz döşenen doku, kendi çizimimiz) -->
+  <rect width="64" height="64" fill="#fbf7ec"/>
+  <path d="M0 0.6 H64 M0 32.6 H64 M0.6 0 V64 M32.6 0 V64" stroke="#bcd3ea" stroke-width="1.2"/>
+</svg>

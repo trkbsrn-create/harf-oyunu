@@ -1,10 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="70" height="80" viewBox="0 0 70 80">
-  <!-- Harf tohumu, filizlenmek üzere (kendi çizimimiz) -->
-  <g stroke="#3b2a1a" stroke-width="4" stroke-linejoin="round" stroke-linecap="round">
-    <path d="M35 30 q-2 -12 2 -20" fill="none" stroke-width="5"/>
-    <path d="M36 14 q-14 -8 -20 2 q12 6 20 -2 z" fill="#6cc05a"/>
-    <path d="M37 12 q12 -12 22 -4 q-10 10 -22 4 z" fill="#5fae4e"/>
-    <path d="M35 28 q24 0 26 24 q0 24 -26 24 q-26 0 -26 -24 q2 -24 26 -24 z" fill="#d99a4e"/>
+  <!-- Harf tohumu (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="32" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="tohum" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="7" height="7" fill="#f2c48e"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#d99a4e" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M35 30 q-2 -12 2 -20" fill="none" stroke-width="4"/>
+    <path d="M36 14 q-14 -8 -20 2 q12 6 20 -2z M37 12 q12 -12 22 -4 q-10 10 -22 4z" fill="#8fd16a" stroke-width="3"/>
+    <path d="M35 28 q24 0 26 24 q0 24 -26 24 q-26 0 -26 -24 q2 -24 26 -24z" fill="url(#tohum)"/>
   </g>
-  <path d="M22 40 q6 -6 14 -6" fill="none" stroke="#fff" stroke-opacity="0.45" stroke-width="4" stroke-linecap="round"/>
 </svg>

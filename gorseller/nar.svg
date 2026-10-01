@@ -1,14 +1,19 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
-  <!-- Nar: "n" harfinin ipucu resmi (kendi çizimimiz) -->
-  <g stroke="#3b2a1a" stroke-width="5" stroke-linejoin="round" stroke-linecap="round">
-    <!-- yaprak -->
-    <path d="M62 22 q18 -18 34 -10 q-14 16 -34 10 z" fill="#6cc05a"/>
-    <!-- taç -->
-    <path d="M46 30 l4 -16 l6 10 l4 -12 l4 12 l6 -10 l4 16 z" fill="#c8323c"/>
-    <!-- meyve -->
-    <circle cx="60" cy="70" r="44" fill="#e0533d"/>
+  <!-- Nar: n harfinin ipucu resmi (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="35" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="nar" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#ff9c8a"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#e0533d" stroke-width="3.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M62 22 q18 -18 34 -10 q-14 16 -34 10z" fill="#8fd16a"/>
+    <path d="M46 30 l4 -16 l6 10 l4 -12 l4 12 l6 -10 l4 16z" fill="#e0533d"/>
+    <path d="M60 26 q44 0 44 44 q0 44 -44 44 q-44 0 -44 -44 q0 -44 44 -44z" fill="url(#nar)"/>
+    <path d="M34 52 q10 -16 28 -18" fill="none" stroke="#ffffff" stroke-width="5"/>
   </g>
-  <!-- parlaklık ve gölge -->
-  <path d="M34 52 q10 -16 28 -18" fill="none" stroke="#fff" stroke-opacity="0.5" stroke-width="7" stroke-linecap="round"/>
-  <path d="M30 92 q28 22 62 0" fill="none" stroke="#b8323a" stroke-opacity="0.6" stroke-width="6" stroke-linecap="round"/>
 </svg>

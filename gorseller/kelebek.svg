@@ -1,12 +1,17 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="44" height="36" viewBox="0 0 44 36">
-  <!-- Kelebek, yukarıdan (kendi çizimimiz). Kanat çırpma kodda yapılır. -->
-  <g stroke="#3b2a1a" stroke-width="2.5" stroke-linejoin="round">
-    <ellipse cx="12" cy="12" rx="10" ry="9" fill="#ffffff"/>
-    <ellipse cx="32" cy="12" rx="10" ry="9" fill="#ffffff"/>
-    <ellipse cx="14" cy="26" rx="7" ry="7" fill="#ffffff"/>
-    <ellipse cx="30" cy="26" rx="7" ry="7" fill="#ffffff"/>
-    <rect x="20" y="6" width="4" height="26" rx="2" fill="#3b2a1a"/>
+  <!-- Kelebek, yukarıdan; kanat çırpma kodda (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="25" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kanat" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(40)">
+      <rect width="5" height="5" fill="#ffffff"/>
+      <line x1="0" y1="2.5" x2="5" y2="2.5" stroke="#e8e8e8" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 18 q-12 -16 -18 -10 q-6 8 4 14 q-6 10 4 10 q6 0 10 -8z M22 18 q12 -16 18 -10 q6 8 -4 14 q6 10 -4 10 q-6 0 -10 -8z" fill="url(#kanat)"/>
+    <path d="M22 8 v24 M22 8 l-4 -5 M22 8 l4 -5" fill="none" stroke-width="3"/>
   </g>
-  <circle cx="12" cy="12" r="3.5" fill="#ffffff" fill-opacity="0.6"/>
-  <circle cx="32" cy="12" r="3.5" fill="#ffffff" fill-opacity="0.6"/>
 </svg>

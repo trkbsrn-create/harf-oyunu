@@ -1,7 +1,18 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="110" height="80" viewBox="0 0 110 80">
-  <!-- Kartonumsu kaya (kendi çizimimiz) -->
-  <ellipse cx="55" cy="74" rx="46" ry="6" fill="#000" fill-opacity="0.18"/>
-  <path d="M10 72 q-4 -30 18 -46 q16 -18 38 -12 q30 8 36 36 q4 14 -4 22 z"
-        fill="#a9a59c" stroke="#3b2a1a" stroke-width="5" stroke-linejoin="round"/>
-  <path d="M34 28 q10 -8 22 -6" fill="none" stroke="#fff" stroke-opacity="0.4" stroke-width="5" stroke-linecap="round"/>
+  <!-- Kaya (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="14" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="gri" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(25)">
+      <rect width="7" height="7" fill="#d6d3cc"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#a9a59c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="55" cy="74" rx="44" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 72 q-6 -28 16 -44 q16 -18 38 -12 q30 8 34 34 q4 14 -4 22 z" fill="url(#gri)"/>
+    <path d="M36 32 q10 -8 22 -6 M70 50 l8 6" fill="none" stroke-width="3"/>
+  </g>
 </svg>

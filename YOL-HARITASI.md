@@ -22,6 +22,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - Tını kuralı gerçek seste "a"yı reddetti: ilk onay yeniden yarım saniye net sese döndü (Chrome kelimeleri de geçerli), güç aşaması her net sesle doluyor (kullanıcı isteği): TAMAM.
    - Hazine pusulası (eski aura yerine): doodle tarzı 3 halka × 4 yön parça; dış halka oyunun başından silik yanar, ortanca ~1,5 ekranda, iç ~yarım ekranda yanar; sandığa bakan parçalar parlar ve nabız gibi atar. Sandık ancak saklandığı yerin hemen yanında (110 px) çıkar, çıkınca pusula söner; çıkma hareketi bitmeden üstüne yürüyünce açılmaz: TAMAM.
    - Pusula efektleri: içten dışa radar dalgası gibi yanıp sönme, nabızla büyüyüp küçülme, doodle çizgilerin kıpırdaması, sandık yönüne fırlayan yıldızcıklar (yaklaştıkça sıklaşır): TAMAM.
+   - Bütün tasarım doodle tarzında (karakter, sandık ve pusula olduğu gibi kaldı): defter kâğıdı zemin, taranmış deniz/kum/çimen, kalemle çizilmiş kıyı, ağaç, çalı, kaya, çiçek, ot, kelebek, martı, çanta, tohum, mikrofon, arı, nar, çanta penceresi, düşünce balonu, güç bandı: TAMAM. (4. etaptaki "görünüm stilini seçme" bununla yapılmış oldu.)
    - Sıradaki iş: kullanıcıyla konuşulacak.
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.
