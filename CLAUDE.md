@@ -14,8 +14,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 - `index.html` – Ana sayfa. Derleme adımı yok, doğrudan tarayıcıda açılır.
 - `oyun.js` – Phaser sahneleri ve oyun kodu.
 - `harfler.js` – Harf grupları ve kelimeler (sadece veri).
+- `sesler.js` – Oyun sesleri. Ses dosyası yok; sesler tarayıcıda (Web Audio) üretilir.
 - `yazitipi/` – Andika yazı tipi ve lisansı (SIL Open Font License).
-- `gorseller/` – Kendi çizdiğimiz SVG görseller (karakter, ağaç, çalı, kaya).
+- `gorseller/` – Kendi çizdiğimiz SVG görseller (karakter, ağaç, çalı, kaya, sandık).
 - Phaser 3, sabit sürümle (3.90.0) jsDelivr CDN'den yüklenir. Sürüm numarası
   rastgele değiştirilmez.
 - Yayın: GitHub Pages (kök klasörden).
