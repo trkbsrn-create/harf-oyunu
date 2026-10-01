@@ -452,23 +452,11 @@ class AdaSahnesi extends Phaser.Scene {
       .setDepth(6002).setScale(0);
     this.tweens.add({ targets: mikrofon, scale: 1, duration: 300, ease: "Back.Out" });
 
-    // Ünlüler (ve öğretmenin kararıyla tek başına denenen ünsüzler): harf,
-    // uzatılmış sesle dolan bir çubuğa dönüşür
-    // Tınısı tanınabilen ünlüler ("a"): önce harf söylenir ve oyun düşünür; doğruysa
-    // "gücünü göster" aşamasında harf uzatılarak doldurulur.
-    const tanirim = Boolean(Dinleyici.UNLU_KURALLARI[harf]);
-    if (tanirim && await Dinleyici.olcerHazirla()) {
-      const sonuc = await this.harfiSoyletVeGucGoster(harfBilgisi, yazi, mikrofon);
-      const kaldir = [mikrofon, ...sonuc.ipucu];
-      this.tweens.add({ targets: kaldir, scale: 0, alpha: 0, duration: 250,
-        onComplete: () => kaldir.forEach((n) => n.destroy()) });
-      this.tohumuKazan(harf, yazi, hale, isik, !sonuc.dogru);
-      return;
-    }
-
+    // Ünlüler ve öğretmenin kararıyla tek başına denenen ünsüzler ("a", "n"): önce harf
+    // söylenir ve oyun düşünür; doğruysa "gücünü göster" aşamasında harf uzatılarak doldurulur.
     const uzatilir = harfBilgisi.unlu || harfBilgisi.tekBasinaDenenir;
     if (uzatilir && await Dinleyici.olcerHazirla()) {
-      const sonuc = await this.harfiDoldur(harfBilgisi, yazi, mikrofon);
+      const sonuc = await this.harfiSoyletVeGucGoster(harfBilgisi, yazi, mikrofon);
       const kaldir = [mikrofon, ...sonuc.ipucu];
       this.tweens.add({ targets: kaldir, scale: 0, alpha: 0, duration: 250,
         onComplete: () => kaldir.forEach((n) => n.destroy()) });
@@ -519,12 +507,13 @@ class AdaSahnesi extends Phaser.Scene {
     this.tohumuKazan(harf, yazi, hale, isik, !dogru);
   }
 
-  // "a" için iki aşama:
+  // "a" ve "n" için iki aşama:
   // 1) Çocuk harfi söyler, oyun "düşünür" (düşünce balonu). Yarım saniye net ses ya da
-  //    Chrome'un tanıdığı bir kelime ("araba", ipucundan sonra "arı") doğru sayılır.
+  //    Chrome'un tanıdığı bir kelime ("araba", "nar"; ipucundan sonra hece "an") doğru sayılır.
   //    (Tını kuralı gerçek seslerde "a"yı reddettiği için şimdilik kullanılmıyor;
   //    mikrofon.html'deki ölçümlerle ayarlanınca yeniden denenebilir.)
-  //    3 denemede olmazsa ipucu (resim; kelime de kabul), 5 denemede kendiliğinden onay.
+  //    3 denemede olmazsa ipucu (resim, ünsüzde hece de; kelime ve hece de kabul),
+  //    5 denemede kendiliğinden onay.
   // 2) Doğruysa "Tohumu kazanmak için gücünü göster!" yazısı çıkar; harf her net sesle
   //    uzatıldıkça dolar (bu aşama titiz değil). 30 sn'de dolmazsa kendiliğinden dolar.
   async harfiSoyletVeGucGoster(harfBilgisi, yazi, mikrofon) {
@@ -562,7 +551,9 @@ class AdaSahnesi extends Phaser.Scene {
       const balon = sesKaresi >= 3 ? this.dusunceBalonu(yazi) : null;
       const [metinler] = await Promise.all([kelimeSozu, this.bekle(balon ? 1100 : 0)]);
       const sesDogru = sesKaresi * 40 >= Dinleyici.ILK_ONAY_SURESI;
-      const kelimeDogru = Dinleyici.dogruMu(metinler, harf, harfBilgisi.kelime);
+      const kelimeDogru = Dinleyici.dogruMu(metinler, harf, harfBilgisi.kelime)
+        || (ipucu.length > 0
+          && Dinleyici.kelimeVarMi(metinler, this.heceYazimlari(harfBilgisi.hece)));
       dogru = sesDogru || kelimeDogru;
       if (balon) await this.balonuBitir(balon, dogru);
 
