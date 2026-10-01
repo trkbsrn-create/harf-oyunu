@@ -54,6 +54,19 @@ const Sesler = {
     this.nota(480 + yakinlik * 900, 0, 0.08, 0.06 + yakinlik * 0.06, "sine");
   },
 
+  // Tohum çantaya girerken: hafif bir "pıt" ve iki parlak nota.
+  tohum() {
+    this.nota(392, 0, 0.12, 0.15, "triangle");
+    this.nota(988, 0.08, 0.2, 0.1, "sine");
+    this.nota(1319, 0.16, 0.3, 0.1, "sine");
+  },
+
+  // Çanta açılıp kapanırken: kısa, yumuşak iki nota.
+  canta(acik) {
+    this.nota(acik ? 330 : 392, 0, 0.1, 0.12, "triangle");
+    this.nota(acik ? 440 : 294, 0.07, 0.14, 0.12, "triangle");
+  },
+
   // Sandık göründüğünde: kısa bir "pling".
   pling() {
     this.nota(1318, 0, 0.25, 0.12, "sine");
