@@ -64,7 +64,7 @@
 </head>
 <body>
   <h1>Mikrofon Testi</h1>
-  <p>Düğmeye basıp bir şey söyleyin; örneğin "a", "kedi" ya da "leylek".
+  <p>Düğmeye basıp bir şey söyleyin; örneğin "aaaaa" (uzatarak), "kedi" ya da "leylek".
      Chrome'un duyduğu ekrana yazılır. Hiçbir ses kaydedilmez.</p>
   <button id="dugme">Dinle</button>
   <div id="durum"></div>
@@ -108,12 +108,12 @@
       sesBilgisi.textContent = "";
       if (!Dinleyici.olcer && await Dinleyici.olcerHazirla()) gostergeyiCiz();
       durum.textContent = "Dinliyorum... şimdi konuşun.";
-      const metinler = await Dinleyici.dinle(7000, Dinleyici.UNLU_SES_SURESI);
+      const metinler = await Dinleyici.dinle(8000, Dinleyici.UNLU_DOLUM_SURESI);
       const saniye = (Dinleyici.sonSesSuresi / 1000).toLocaleString("tr-TR");
       sesBilgisi.textContent = Dinleyici.olcer
-        ? `Net ses süresi: ${saniye} saniye. ` + (Dinleyici.sonSesSuresi >= Dinleyici.UNLU_SES_SURESI
-          ? "Oyun bunu ünlü harf için kabul eder."
-          : "Ünlü harf için biraz daha uzun ya da yüksek söyleyin.")
+        ? `Net ses süresi: ${saniye} saniye. ` + (Dinleyici.sonSesSuresi >= Dinleyici.UNLU_DOLUM_SURESI
+          ? "Bu, oyunda ünlü harfi tamamen doldurur."
+          : `Oyunda ünlü harfi doldurmak için sesi ${Dinleyici.UNLU_DOLUM_SURESI / 1000} saniye uzatmak gerekir.`)
         : "Ses göstergesi çalışmıyor (mikrofon izni yok).";
       if (Dinleyici.izinYok) {
         durum.textContent = "Mikrofon izni verilmedi. Adres çubuğundaki kilit simgesinden izin verebilirsiniz.";
