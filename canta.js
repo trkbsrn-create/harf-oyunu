@@ -35,6 +35,13 @@ const Canta = {
     return true;
   },
 
+  // Harfin damlasından birini kullanır (tohum sulanınca). Damla yoksa false döner.
+  damlaKullan(harf) {
+    if (this.damlaSayisi(harf) <= 0) return false;
+    this.damlalar[harf]--;
+    return true;
+  },
+
   // Sıradaki eşyayı çantadan çıkarır ve verir (ör. tohum tarlaya ekilince).
   cikar(sira) {
     return this.esyalar.splice(sira, 1)[0];

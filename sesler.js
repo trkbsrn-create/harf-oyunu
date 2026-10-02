@@ -79,6 +79,12 @@ const Sesler = {
     osc.stop(t + 0.2);
   },
 
+  // Bitki büyürken: yükselen, sevinçli dört nota ve parıltı.
+  buyume() {
+    [523, 659, 784, 1047].forEach((f, i) => this.nota(f, i * 0.07, 0.25, 0.14, "triangle"));
+    this.nota(1568, 0.3, 0.4, 0.08, "sine");
+  },
+
   // Çanta açılıp kapanırken: kısa, yumuşak iki nota.
   canta(acik) {
     this.nota(acik ? 330 : 392, 0, 0.1, 0.12, "triangle");

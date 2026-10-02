@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="150" viewBox="0 0 130 150">
+  <!-- Küçük ağaç: tohum iki kez sulanınca (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="72" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="koyuToprak" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#8e6340"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#6f4a2c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="koyuYesil" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#b5e48c"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#6fbf4a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="govde" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(80)">
+      <rect width="6" height="6" fill="#c98f4f"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#9a6c43" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="translate(10 0)">
+    <path d="M48 140 l2 -62 h10 l2 62z" fill="url(#govde)" stroke-width="3"/>
+    <path d="M55 96 l-14 -12 M56 90 l12 -10" fill="none" stroke-width="3"/>
+    <path d="M24 70 q-18 -6 -12 -26 q-2 -24 22 -26 q10 -16 30 -10 q22 -6 32 12 q20 6 16 28 q8 22 -14 26 q-14 12 -34 4 q-24 10 -40 -8z" fill="url(#koyuYesil)"/>
+    <path d="M38 44 q8 -8 18 -2 M64 56 q8 -6 16 0" fill="none" stroke-width="2.5"/>
+    <path d="M15.0 146 q40.0 -22 80 0z" fill="url(#koyuToprak)" stroke-width="3.5"/>
+    </g>
+  </g>
+</svg>
