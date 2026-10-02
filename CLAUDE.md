@@ -44,7 +44,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   benzer harf artar, 3. seviyede balonlar gezinir); harfi-ciz (Harfi Çiz: harfin ipucu
   resmi yazılış yönünde yol boyunca götürülür, sarı iz kalır; sapınca çizgi baştan, can
   gider; harf 3 kez; yollar `HARF_YOLLARI` dik temel harf yönüne göre; seviyeyle yardım
-  azalır: oklar/numaralar → başlangıç noktası → silik iz). Ortak "Yakala:/Patlat:" paneli
+  azalır: oklar/numaralar → başlangıç noktası → silik iz); resimden-ses (Resimden Sesi
+  Bul: ses söylenir ve harf görünür, o sesle başlayan resim seçilir; kart köşesindeki
+  hoparlör resmin adını okur; 1. seviyede hep oyunun harfi, sonra öbür harfler de;
+  şimdilik her harfin tek resmi var). Ortak "Yakala:/Patlat:" paneli
   `hedefPaneliKur`.
 - `harfler.js` – Harf grupları ve kelimeler (sadece veri).
 - `canta.js` – Karakterin çantası (envanter). Kaydedilmez; sayfa yenilenince oyun baştan başlar.
