@@ -438,6 +438,11 @@ SOLMA = f'''    <linearGradient id="solma" x1="0" y1="0" x2="0" y2="{KISA_BOY}" 
 yaz("bitki-sirik.svg", SIRIK_EN, KISA_BOY, "Fasulye sırığı: tarlada son aşama, gökyüzüne doğru solar",
     KOYU_TOPRAK + KOYU_YESIL + SOLMA,
     '  <g mask="url(#sol)">\n' + kalem(kenarlar + yesiller + yapraklar + tumsek(120, 374, 110), 3.5) + '  </g>\n'
+    # Solan tepede silik bir bulut: sırık buluta çıkıyor
+    + '  <g opacity="0.55">\n' + kalem("".join(
+        f'    <circle cx="{x}" cy="{y}" r="{r}" fill="#ffffff" stroke-width="2.5"/>\n'
+        for x, y, r in [(78, 52, 28), (120, 34, 34), (162, 54, 28), (100, 70, 24), (142, 72, 24)])
+        + '    <path d="M74 72 q46 14 92 0" fill="none" stroke="#ffffff" stroke-width="14"/>\n', 2.5) + '  </g>\n'
     + '''  <path d="M70 60 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4z M176 30 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3z M150 110 l2 6 l6 2 l-6 2 l-2 6 l-2 -6 l-6 -2 l6 -2z" fill="#ffe680" stroke="#2b2b2b" stroke-width="1.5" opacity="0.7"/>
 ''', 75)
 

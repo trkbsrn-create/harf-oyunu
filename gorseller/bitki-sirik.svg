@@ -46,5 +46,15 @@
     <path d="M65.0 374 q55.0 -22 110 0z" fill="url(#koyuToprak)" stroke-width="3.5"/>
   </g>
   </g>
+  <g opacity="0.55">
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="78" cy="52" r="28" fill="#ffffff" stroke-width="2.5"/>
+    <circle cx="120" cy="34" r="34" fill="#ffffff" stroke-width="2.5"/>
+    <circle cx="162" cy="54" r="28" fill="#ffffff" stroke-width="2.5"/>
+    <circle cx="100" cy="70" r="24" fill="#ffffff" stroke-width="2.5"/>
+    <circle cx="142" cy="72" r="24" fill="#ffffff" stroke-width="2.5"/>
+    <path d="M74 72 q46 14 92 0" fill="none" stroke="#ffffff" stroke-width="14"/>
+  </g>
+  </g>
   <path d="M70 60 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4z M176 30 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3z M150 110 l2 6 l6 2 l-6 2 l-2 6 l-2 -6 l-6 -2 l6 -2z" fill="#ffe680" stroke="#2b2b2b" stroke-width="1.5" opacity="0.7"/>
 </svg>
