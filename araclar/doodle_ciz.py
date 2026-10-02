@@ -311,6 +311,32 @@ yaz("tesis-pencere.svg", 700, 480, "Su arıtma tesisi paneli",
     <path d="M612 32 l26 26 M638 32 l-26 26" fill="none" stroke="#ffffff" stroke-width="7"/>
 ''', 5), 68, 4)
 
+# "İncele" düğmesi: 180x70. Yazı oyunda yazılır.
+yaz("incele-dugmesi.svg", 180, 70, "İncele düğmesi", SARI,
+    '  <rect x="10" y="14" width="168" height="54" rx="27" fill="#000" fill-opacity="0.15"/>\n' +
+    kalem('''    <rect x="5" y="8" width="168" height="54" rx="27" fill="url(#sari)" stroke-width="4"/>
+'''), 69, 3)
+
+# Şişenin içi (incele): 500x520, sol üst köşesi oyunda (390,170).
+# 6 bölme (3 sıra x 2): sol üst köşeler (44 + 218c, 124 + 128r), her biri 194x112.
+# Çarpı (470,92).
+bolmeler = ""
+for i in range(6):
+    x = 44 + 218 * (i % 2)
+    y = 124 + 128 * (i // 2)
+    bolmeler += f'    <rect x="{x}" y="{y}" width="194" height="112" rx="18" fill="#ffffff" stroke-width="3"/>\n'
+yaz("sise-pencere.svg", 500, 520, "Sihirli su şişesinin içi: her harf için bir bölme",
+    SU + tarama("mantar", "#e3b77e", "#c98f4f", 80, 6, 2.5) + tarama("cam", "#eef8ff", "#d7efff", -30, 8, 3),
+    '  <rect x="22" y="100" width="472" height="420" rx="70" fill="#000" fill-opacity="0.18"/>\n' +
+    kalem(f'''    <rect x="214" y="6" width="72" height="42" rx="8" fill="url(#mantar)"/>
+    <path d="M202 44 h96 v52 h-96z" fill="url(#cam)"/>
+    <rect x="14" y="90" width="472" height="420" rx="70" fill="url(#cam)"/>
+    <path d="M44 150 q4 -30 30 -40" fill="none" stroke="#ffffff" stroke-width="8"/>
+{bolmeler}    <circle cx="470" cy="92" r="28" fill="#ff8a7a"/>
+    <path d="M458 80 l24 24 M482 80 l-24 24" fill="none" stroke="#ffffff" stroke-width="7"/>
+''', 5) + '''  <path d="M30 40 l5 12 l12 5 l-12 5 l-5 12 l-5 -12 l-12 -5 l12 -5z M440 20 l4 9 l9 4 l-9 4 l-4 9 l-4 -9 l-9 -4 l9 -4z M150 30 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3z" fill="#ffe680" stroke="#2b2b2b" stroke-width="2"/>
+''', 70, 4)
+
 # ---- Mini harita kartı (sol alt) ----
 # 250x160 kâğıt kart. İçindeki harita alanı (15,15)'ten başlar, 220 px genişliğinde:
 # dünya (6400x3600) 220/6400 ölçeğiyle küçültülür. Ada şekli oyundaki adaNoktalari()
