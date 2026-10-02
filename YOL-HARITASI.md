@@ -34,6 +34,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - İskele uzatıldı (dünya aşağı doğru genişletildi, 560 px daha uzun iskele): TAMAM.
    - Son aşama: büyük ağaç yerine gökyüzüne uzanan fasulye sırığı (tepesi bulutlarda): TAMAM.
    - Sırığa tırmanma: sırığa dokununca karakter tırmanır, bulutların üstüne çıkar (her harfin kendi bölgesi; şimdilik harf tabelası), gezer, sırıktan inip adaya döner: TAMAM. Bölgelerin içeriği sonra konuşulacak.
+   - Karşılama ekranında sağ üstte sürüm yazısı ("Sürüm 37"); her güncellemede çekme isteği numarasıyla artar: TAMAM.
    - Sıradaki iş: kullanıcıyla konuşulacak (geliştirmeler).
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.
