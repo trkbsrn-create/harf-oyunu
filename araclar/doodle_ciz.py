@@ -500,6 +500,15 @@ yaz("balon.svg", 80, 130, "Harf balonu (oyunda boyanır)", tarama("balonTarama",
     <path d="M22 22 q6 -10 16 -12" fill="none" stroke="#ffffff" stroke-width="6"/>
 """, 3.5), 81, 2.5)
 
+# Balık: 200x110 (beyaz taranmış; oyunda renk verilir). Başı solda; gövdenin ortası (88,55).
+yaz("balik.svg", 200, 110, "Hece balığı (oyunda boyanır)", tarama("balikTarama", "#ffffff", "#e3e3e3", -35, 6, 2.5),
+    kalem("""    <path d="M160 55 L196 22 Q186 55 196 88 Z" fill="url(#balikTarama)"/>
+    <path d="M70 16 Q92 -2 118 14" fill="url(#balikTarama)"/>
+    <ellipse cx="88" cy="55" rx="80" ry="44" fill="url(#balikTarama)"/>
+    <circle cx="34" cy="44" r="6" fill="#2b2b2b" stroke-width="0"/>
+    <path d="M18 66 q8 6 16 2" fill="none" stroke-width="2.5"/>
+""", 3.5), 82, 2.5)
+
 # ---- Mini harita kartı (sol alt) ----
 # 250x175 kâğıt kart. İçindeki harita alanı (15,15)'ten başlar, 220 px genişliğinde:
 # dünya (6400x4200; altta iskele için geniş deniz) 220/6400 ölçeğiyle küçültülür. Ada şekli oyundaki adaNoktalari()
