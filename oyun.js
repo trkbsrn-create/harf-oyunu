@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 37;
+const SURUM = 38;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -253,7 +253,9 @@ class AdaSahnesi extends Phaser.Scene {
     }
   }
 
-  create() {
+  // veri.tanriModu: karşılama ekranındaki "God mode" düğmesiyle (deneme için) bütün
+  // sandıklar açılmış ve tohumlar çantada başlar
+  create(veri = {}) {
     this.dokulariUret();
     this.denizKur();
     this.adayiCiz();
@@ -280,6 +282,7 @@ class AdaSahnesi extends Phaser.Scene {
     }
 
     this.sandigiSakla(susler);
+    if (veri.tanriModu) this.hepsiniAc();
     this.cicekleriEk();
     this.kelebekleriKur();
     this.kuslar = [];
@@ -1744,6 +1747,18 @@ class AdaSahnesi extends Phaser.Scene {
     this.siradakiSandik();
   }
 
+  // "God mode": bütün sandıklar açılmış (sönük, çalının yanında), tohumlar çantada
+  hepsiniAc() {
+    for (const s of this.sandiklar) {
+      s.acildi = true;
+      s.nesne.setTexture("sandik-acik").setPosition(s.cali.x + 100, s.cali.y + 45)
+        .setDepth(s.cali.y + 45).setAlpha(0.6).setScale(0.65).setTint(0xc8bca8);
+      Canta.tohumEkle(s.harfBilgisi.kucuk, false);
+    }
+    this.siradakiSira = this.sandiklar.length;
+    this.siradakiSandik(); // sandık kalmadı: pusula susar
+  }
+
   // Sıradaki sandığı devreye alır (sensör onu gösterir). Sandık kalmadıysa sensör susar.
   siradakiSandik() {
     const s = this.sandiklar[this.siradakiSira++];
@@ -2241,7 +2256,7 @@ class KarsilamaSahnesi extends Phaser.Scene {
 
   preload() {
     for (const ad of ["doku-kagit", "doku-deniz", "doku-kum", "doku-cimen",
-      "agac-govde", "agac-tepe", "cocuk", "baslik-tabela", "dugme-baslat"]) {
+      "agac-govde", "agac-tepe", "cocuk", "baslik-tabela", "dugme-baslat", "incele-dugmesi"]) {
       this.load.svg(ad, `gorseller/${ad}.svg`);
     }
   }
@@ -2287,6 +2302,13 @@ class KarsilamaSahnesi extends Phaser.Scene {
     dugme.on("pointerdown", () => this.basla(dugme));
     this.input.keyboard.on("keydown-ENTER", () => this.basla(dugme));
     this.input.keyboard.on("keydown-SPACE", () => this.basla(dugme));
+
+    // Deneme için: bütün sandıklar açılmış, tohumlar çantada başlar
+    const tanri = this.add.container(110, 46, [
+      this.add.image(0, 0, "incele-dugmesi"),
+      doodleYazi(this, 0, -3, "God mode", 30).setOrigin(0.5),
+    ]).setSize(170, 56).setInteractive({ useHandCursor: true });
+    tanri.on("pointerdown", () => this.basla(tanri, true));
   }
 
   // Küçük doodle ada: taranmış kum ve çimen, titrek kalem kıyısı
@@ -2323,7 +2345,7 @@ class KarsilamaSahnesi extends Phaser.Scene {
     this.tepe.setAngle(Math.sin(zaman / 700) * 2.5);
   }
 
-  basla(dugme) {
+  basla(dugme, tanriModu = false) {
     if (this.basladi) return;
     this.basladi = true;
     Sesler.ac();
@@ -2331,7 +2353,7 @@ class KarsilamaSahnesi extends Phaser.Scene {
     this.nabiz.stop();
     this.tweens.add({ targets: dugme, scale: 0.92, duration: 90, yoyo: true });
     this.cameras.main.fadeOut(350, 251, 247, 236);
-    this.cameras.main.once("camerafadeoutcomplete", () => this.scene.start("AdaSahnesi"));
+    this.cameras.main.once("camerafadeoutcomplete", () => this.scene.start("AdaSahnesi", { tanriModu }));
   }
 }
 

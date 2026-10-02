@@ -16,6 +16,8 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   sahnesi (`KarsilamaSahnesi`), "Oyunu başlat" ile ada sahnesi (`AdaSahnesi`) açılır.
   Sol üstteki menüde "Oyunu yeniden başlat" sayfayı yeniler; karşılama ekranını atlamak
   için tek seferlik bir not (sessionStorage) bırakır, ilerleme saklanmaz.
+  Karşılama ekranının sol üstünde öğretmenin deneme düğmesi "God mode" var (öğretmen
+  bu adla istedi): oyun bütün sandıklar açılmış ve tohumlar çantada başlar (`hepsiniAc`).
   Yazılar da doodle: `doodleYazi` (başlık, düğme, pencere yazıları: boya kalemi taraması,
   kalem çerçevesi, titrek kenar) ve `titret` (öğretilen harfler: biçim aynı, yalnızca
   kenar titrer). Harf biçimi her zaman Andika'dır; başka yazı tipi kullanılmaz.
