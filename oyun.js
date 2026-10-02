@@ -471,12 +471,13 @@ class AdaSahnesi extends Phaser.Scene {
   // Tohum toprağa girer: tümsek, filiz ve harf belirir, biraz toprak sıçrar
   tohumuEk(kare) {
     const x = kare.alan.centerX;
-    const y = kare.alan.centerY + 4;
+    const y = kare.alan.centerY - 4; // toprak yığını karenin içinde kalsın
     const resim = this.add.image(x, y, "ekili-tohum").setDepth(-0.8).setScale(0);
-    // Tohum gövdesinin ortası resmin ortasından 14 px aşağıda (gorseller/ekili-tohum.svg)
-    const harf = this.add.text(x, y + 14, kare.ekili.harf, {
-      fontFamily: "Andika", fontSize: "32px", color: "#ffffff",
-      stroke: "#3b2a1a", strokeThickness: 6, padding: { x: 3, y: 3 },
+    // Harf, tohumun topraktan görünen üst kısmının ortasına: resmin ortasından 3 px
+    // aşağıda (gorseller/ekili-tohum.svg)
+    const harf = this.add.text(x, y + 3, kare.ekili.harf, {
+      fontFamily: "Andika", fontSize: "26px", color: "#ffffff",
+      stroke: "#3b2a1a", strokeThickness: 5, padding: { x: 3, y: 3 },
     }).setDepth(-0.79).setScale(0);
     boyaliOrtala(titret(harf, 1.2));
     this.tweens.add({ targets: [resim, harf], scale: 1, duration: 400, ease: "Back.Out" });

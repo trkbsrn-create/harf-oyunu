@@ -230,14 +230,19 @@ yaz("tarla.svg", 480, 340, "Çitli tarla: 6 ekim karesi", TOPRAK + KOYU_TOPRAK +
 {kareler}{kaziklar}    <path d="M4 22 h460 M4 302 h460" fill="none" stroke-width="5"/>
 '''), 61)
 
-# Ekilmiş tohum: 80x80, oyunda orta noktası karenin ortasına gelir.
-# Tohum gövdesinin ortası (40,54): harf oyunda oraya yazılır.
-yaz("ekili-tohum.svg", 80, 80, "Toprağa ekilmiş tohum ve filizi",
+# Ekilmiş tohum: 100x96, oyunda orta noktası karenin ortasına gelir.
+# Tohumun büyük kısmı toprağın içinde; önünde toprak yığını var. Görünen üst kısmın
+# ortası (50,51): harf oyunda oraya yazılır.
+yaz("ekili-tohum.svg", 100, 96, "Toprağa ekilmiş tohum ve filizi",
     KOYU_TOPRAK + tarama("tohum", "#f2c48e", "#d99a4e", 35, 6, 2.5),
-    kalem('''    <path d="M4 70 q36 -26 72 0z" fill="url(#koyuToprak)" stroke-width="3.5"/>
-    <path d="M40 38 q-2 -12 2 -22" fill="none" stroke-width="3.5"/>
-    <path d="M42 18 q-14 -10 -20 2 q12 6 20 -2z M43 16 q12 -12 22 -2 q-10 10 -22 2z" fill="#8fd16a" stroke-width="3"/>
-    <ellipse cx="40" cy="54" rx="20" ry="18" fill="url(#tohum)" stroke-width="3.5"/>
+    '  <ellipse cx="50" cy="66" rx="34" ry="9" fill="#5e3d22"/>\n' +
+    kalem('''    <path d="M50 38 q-2 -12 2 -24" fill="none" stroke-width="3.5"/>
+    <path d="M52 16 q-14 -10 -20 2 q12 6 20 -2z M53 14 q12 -12 22 -2 q-10 10 -22 2z" fill="#8fd16a" stroke-width="3"/>
+    <ellipse cx="50" cy="60" rx="26" ry="23" fill="url(#tohum)" stroke-width="3.5"/>
+    <path d="M2 92 q4 -20 22 -25 q8 -4 12 0 q8 -5 14 -1 q8 -4 14 1 q6 -3 12 1 q18 5 22 24z" fill="url(#koyuToprak)" stroke-width="3.5"/>
+    <circle cx="20" cy="76" r="2.5" fill="#5e3d22" stroke-width="1.5"/>
+    <circle cx="70" cy="80" r="2.5" fill="#5e3d22" stroke-width="1.5"/>
+    <circle cx="46" cy="84" r="2" fill="#5e3d22" stroke-width="1.5"/>
 '''), 62)
 
 # ---- Ekran pencereleri ----
