@@ -250,16 +250,20 @@ SU = tarama("su", "#c9ecff", "#7cc4ef", 35, 6, 2.5)
 DUVAR = tarama("duvar", "#eef8ff", "#cfe9fb", -30, 7, 2.5)
 KIREMIT = tarama("kiremit", "#ffb3a8", "#e0533d", -35, 6, 2.5)
 
-# Tesis: 240x300. Üstte kıyıdan gelen iskele (x 95-145, y 0-90), altında deniz üstünde
-# ayaklı güverte, ev ve su deposu. Oyunda sol üst köşesi (TESIS_X - 120, TESIS_Y).
-tahtalar = "".join(f'    <path d="M97 {y} h46" fill="none" stroke-width="2.5"/>\n' for y in range(12, 90, 13))
+# Tesis: 240x(300 + ISKELE_EK). Üstte kıyıdan gelen uzun iskele (x 95-145), altında
+# deniz üstünde ayaklı güverte, ev ve su deposu. Oyunda sol üst köşesi
+# (TESIS_X - 120, TESIS_Y). ISKELE_EK oyundaki ISKELE_EK ile aynı olmalı.
+ISKELE_EK = 560
+tahtalar = "".join(f'    <path d="M97 {y} h46" fill="none" stroke-width="2.5"/>\n' for y in range(12, ISKELE_EK + 90, 13))
+iskele_ayaklari = "".join(f'    <circle cx="{x}" cy="{y}" r="6" fill="#8e6340" stroke-width="2.5"/>\n'
+                          for y in range(120, ISKELE_EK + 80, 110) for x in (93, 147))
 guverte = "".join(f'    <path d="M12 {y} h216" fill="none" stroke-width="2" opacity="0.7"/>\n' for y in range(100, 236, 16))
-yaz("su-tesisi.svg", 240, 300, "Su arıtma tesisi: iskele, ayaklı güverte, ev ve su deposu",
+yaz("su-tesisi.svg", 240, 300 + ISKELE_EK, "Su arıtma tesisi: uzun iskele, ayaklı güverte, ev ve su deposu",
     TAHTA + SU + DUVAR + KIREMIT,
-    kalem('''    <path d="M26 236 v54 M90 236 v54 M150 236 v54 M214 236 v54" fill="none" stroke="#8e6340" stroke-width="7"/>
+    kalem(f'''    <rect x="95" y="0" width="50" height="{ISKELE_EK + 20}" fill="url(#tahta)"/>
+''' + tahtalar + iskele_ayaklari) + f'  <g transform="translate(0 {ISKELE_EK})">\n' + kalem('''    <path d="M26 236 v54 M90 236 v54 M150 236 v54 M214 236 v54" fill="none" stroke="#8e6340" stroke-width="7"/>
     <path d="M6 290 q20 -8 40 0 q20 8 40 0 q20 -8 40 0 q20 8 40 0 q20 -8 40 0 q20 8 30 0" fill="none" stroke="#7cc4ef" stroke-width="3"/>
-    <rect x="95" y="0" width="50" height="94" fill="url(#tahta)"/>
-''' + tahtalar + '''    <rect x="10" y="84" width="220" height="152" rx="6" fill="url(#tahta)"/>
+    <rect x="10" y="84" width="220" height="152" rx="6" fill="url(#tahta)"/>
 ''' + guverte + '''    <path d="M226 160 q14 0 12 30 v100" fill="none" stroke="#8a8a8a" stroke-width="9"/>
     <path d="M226 160 q14 0 12 30 v100" fill="none" stroke-width="2"/>
     <rect x="24" y="130" width="122" height="96" fill="url(#duvar)"/>
@@ -272,6 +276,7 @@ yaz("su-tesisi.svg", 240, 300, "Su arıtma tesisi: iskele, ayaklı güverte, ev 
     <ellipse cx="191" cy="120" rx="31" ry="10" fill="#e6f6ff"/>
     <path d="M191 146 q-14 20 -14 30 q0 14 14 14 q14 0 14 -14 q0 -10 -14 -30z" fill="#ffffff" stroke-width="3"/>
 ''') + '''  <path d="M200 70 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4z M222 96 l3 6 l6 3 l-6 3 l-3 6 l-3 -6 l-6 -3 l6 -3z" fill="#ffe680" stroke="#2b2b2b" stroke-width="2"/>
+  </g>
 ''', 64)
 
 # Su damlası: 40x52
@@ -383,8 +388,8 @@ yaz("harf-tabela.svg", 46, 60, "Bitkinin harf tabelası", TAHTA,
 '''), 74, 2.5)
 
 # ---- Mini harita kartı (sol alt) ----
-# 250x160 kâğıt kart. İçindeki harita alanı (15,15)'ten başlar, 220 px genişliğinde:
-# dünya (6400x3600) 220/6400 ölçeğiyle küçültülür. Ada şekli oyundaki adaNoktalari()
+# 250x175 kâğıt kart. İçindeki harita alanı (15,15)'ten başlar, 220 px genişliğinde:
+# dünya (6400x4200; altta iskele için geniş deniz) 220/6400 ölçeğiyle küçültülür. Ada şekli oyundaki adaNoktalari()
 # ile aynı formülle çizilir; oyunda değişirse burada da değişmeli.
 HARITA_OLCEK = 220 / 6400
 
@@ -401,21 +406,24 @@ def ada_yolu(olcek):
 
 
 # Tarla: dünyada (2620,1630), 480x340 (oyundaki TARLA_X, TARLA_Y).
-# Su tesisi: güvertesi dünyada (3090,3324), 220x150 (oyundaki TESIS_X, TESIS_Y).
+# Su tesisi: iskele dünyada y 3240'tan başlar; güvertesi (3090, 3324 + ISKELE_EK), 220x150
+# (oyundaki TESIS_X, TESIS_Y).
+HARITA_BOY = 4200 * HARITA_OLCEK
 tx = 15 + 2620 * HARITA_OLCEK
 ty = 15 + 1630 * HARITA_OLCEK
-yaz("harita-karti.svg", 250, 160, "Mini harita kartı: ada ve tarla",
+yaz("harita-karti.svg", 250, 175, "Mini harita kartı: ada ve tarla",
     tarama("hDeniz", "#d7efff", "#a9dcf5", 45, 6, 2) + tarama("hKum", "#fbe7b5", "#f0cf86", 30, 6, 2)
     + tarama("hCimen", "#c9eba7", "#a3d97c", -35, 6, 2)
-    + '    <clipPath id="kart"><rect x="15" y="15" width="220" height="124" rx="6"/></clipPath>\n',
-    '  <rect x="7" y="9" width="240" height="148" rx="12" fill="#000" fill-opacity="0.15"/>\n' +
-    kalem('''    <rect x="3" y="4" width="240" height="148" rx="12" fill="#fffdf6" stroke-width="3.5"/>
+    + f'    <clipPath id="kart"><rect x="15" y="15" width="220" height="{HARITA_BOY:.1f}" rx="6"/></clipPath>\n',
+    '  <rect x="7" y="9" width="240" height="163" rx="12" fill="#000" fill-opacity="0.15"/>\n' +
+    kalem('''    <rect x="3" y="4" width="240" height="163" rx="12" fill="#fffdf6" stroke-width="3.5"/>
 ''') +
-    '  <g clip-path="url(#kart)">\n    <rect x="15" y="15" width="220" height="124" fill="url(#hDeniz)"/>\n  </g>\n' +
+    f'  <g clip-path="url(#kart)">\n    <rect x="15" y="15" width="220" height="{HARITA_BOY:.1f}" fill="url(#hDeniz)"/>\n  </g>\n' +
     kalem(f'''    <path d="{ada_yolu(1)}" fill="url(#hKum)" stroke-width="2.5"/>
     <path d="{ada_yolu(0.93)}" fill="url(#hCimen)" stroke="none"/>
     <rect x="{tx:.1f}" y="{ty:.1f}" width="{480 * HARITA_OLCEK:.1f}" height="{340 * HARITA_OLCEK:.1f}" rx="2" fill="#8e6340" stroke-width="1.8"/>
-    <rect x="{15 + 3090 * HARITA_OLCEK:.1f}" y="{15 + 3324 * HARITA_OLCEK:.1f}" width="{220 * HARITA_OLCEK:.1f}" height="{150 * HARITA_OLCEK:.1f}" rx="1.5" fill="#9be3dc" stroke-width="1.8"/>
+    <path d="M{15 + 3200 * HARITA_OLCEK:.1f} {15 + 3240 * HARITA_OLCEK:.1f} V{15 + (3324 + ISKELE_EK) * HARITA_OLCEK:.1f}" fill="none" stroke="#c98f4f" stroke-width="2.5"/>
+    <rect x="{15 + 3090 * HARITA_OLCEK:.1f}" y="{15 + (3324 + ISKELE_EK) * HARITA_OLCEK:.1f}" width="{220 * HARITA_OLCEK:.1f}" height="{150 * HARITA_OLCEK:.1f}" rx="1.5" fill="#9be3dc" stroke-width="1.8"/>
 ''', 2.5) +
     '''  <rect x="2" y="0" width="50" height="16" fill="#f6e27a" opacity="0.85" transform="rotate(-12 27 8)"/>
 ''', 63, 2.5)

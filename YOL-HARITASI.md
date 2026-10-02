@@ -31,6 +31,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - Tarla: başlangıç yerinin solunda çitli 6 kareli tarla. Çantadan tohum tutulup boş kareye sürüklenince ekilir (tümsek, filiz, harf); dolu kareye ya da tarla dışına bırakılırsa çantaya döner: TAMAM.
    - Mini harita (sol alt, kâğıt kart): bütün ada, tarla, karakter, ekranda görünen bölge, açılmış sandıklar (kırmızı çarpı); kapalı sandıklar görünmez: TAMAM.
    - Su ve büyüme (3 aşama): 1) Su arıtma tesisi (alt kıyıda, iskeleli), harf düğmeli panel, damla toplama, çantada sihirli su şişesi: TAMAM. 2) Şişeyi inceleme ("İncele" düğmesi, harf bölmelerinde damlalar): TAMAM. 3) Şişeyi tarladaki tohuma sürükleyip sulama; tohum → filiz → küçük ağaç → büyük ağaç: TAMAM. (İleride aşama sayısı artırılabilir.)
+   - İskele uzatıldı (dünya aşağı doğru genişletildi, 560 px daha uzun iskele): TAMAM.
    - Sıradaki iş: kullanıcıyla konuşulacak (geliştirmeler).
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.

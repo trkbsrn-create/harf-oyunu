@@ -1,10 +1,13 @@
 // Oyunun ana kodu: büyük bir ada ve adada gezen ana karakter.
 
 const DUNYA_GENISLIK = 6400;
-const DUNYA_YUKSEKLIK = 3600;
+// Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
+// 6400x3600'lük alanın ortasındadır (ADA_YUKSEKLIK).
+const DUNYA_YUKSEKLIK = 4200;
+const ADA_YUKSEKLIK = 3600;
 const YURUME_HIZI = 260; // saniyede piksel
 const BASLANGIC_X = DUNYA_GENISLIK / 2;
-const BASLANGIC_Y = DUNYA_YUKSEKLIK / 2 + 120;
+const BASLANGIC_Y = ADA_YUKSEKLIK / 2 + 120;
 // Tarla: karakterin başladığı yerin hemen solunda; oyun açılınca tamamı ekranda
 // görünür (gorseller/tarla.svg, 480x340).
 // Kareler: sol üst köşeler (45 + 132i, 52 + 122j), her biri 118x104.
@@ -13,13 +16,14 @@ const TARLA_Y = BASLANGIC_Y - 290;
 // Bu alanda süs yok. Alt pay büyük: ağaçlar tabanından yukarı uzanır, tarlayı örtmesin.
 const TARLA_ALANI = new Phaser.Geom.Rectangle(TARLA_X - 60, TARLA_Y - 60, 480 + 120, 340 + 60 + 240);
 // Su arıtma tesisi: başlangıç yerinin güneyinde, alt kıyıda (gorseller/su-tesisi.svg,
-// 240x300). TESIS_Y resmin üst kenarı; üstteki iskele kıyıdan gelir, karakter iskelede
-// yürüyebilir.
+// 240x(300 + ISKELE_EK)). TESIS_Y resmin üst kenarı; üstteki uzun iskele kıyıdan gelir,
+// karakter iskelede yürüyebilir. ISKELE_EK araclar/doodle_ciz.py'deki ile aynı olmalı.
 const TESIS_X = BASLANGIC_X;
 const TESIS_Y = 3240;
-const ISKELE_ALANI = new Phaser.Geom.Rectangle(TESIS_X - 22, TESIS_Y - 40, 44, 128);
+const ISKELE_EK = 560;
+const ISKELE_ALANI = new Phaser.Geom.Rectangle(TESIS_X - 22, TESIS_Y - 40, 44, 128 + ISKELE_EK);
 const ISKELE_BASI = { x: TESIS_X, y: TESIS_Y - 15 };
-const ISKELE_SONU = { x: TESIS_X, y: TESIS_Y + 82 };
+const ISKELE_SONU = { x: TESIS_X, y: TESIS_Y + ISKELE_EK + 82 };
 const TESIS_ALANI = new Phaser.Geom.Rectangle(TESIS_X - 160, TESIS_Y - 260, 320, 600); // süs yok
 const SENSOR_MENZILI = 1600; // sandığa bu kadar yaklaşınca bip sesi başlar
 // Hazine pusulası: dış halka her zaman silik yanar; ortanca halka sandığa bu kadar
@@ -167,9 +171,9 @@ function doodleYazi(sahne, x, y, metin, boy, tarama = "beyaz") {
 function adaNoktalari(olcek) {
   const noktalar = [];
   const merkezX = DUNYA_GENISLIK / 2;
-  const merkezY = DUNYA_YUKSEKLIK / 2;
+  const merkezY = ADA_YUKSEKLIK / 2;
   const yaricapX = DUNYA_GENISLIK / 2 - 260;
-  const yaricapY = DUNYA_YUKSEKLIK / 2 - 220;
+  const yaricapY = ADA_YUKSEKLIK / 2 - 220;
   for (let i = 0; i < 160; i++) {
     const aci = (i / 160) * Math.PI * 2;
     const dalga = 1 + 0.06 * Math.sin(3 * aci) + 0.04 * Math.sin(5 * aci + 1)
@@ -193,7 +197,7 @@ function suslerUret() {
   while (susler.length < 140 && deneme < 5000) {
     deneme++;
     const x = rastgele.between(0, DUNYA_GENISLIK);
-    const y = rastgele.between(0, DUNYA_YUKSEKLIK);
+    const y = rastgele.between(0, ADA_YUKSEKLIK);
     if (!cimen.contains(x, y)) continue;
     if (Math.hypot(x - BASLANGIC_X, y - BASLANGIC_Y) < 260) continue;
     if (susler.some((s) => Math.hypot(s.x - x, s.y - y) < 190)) continue;
@@ -895,14 +899,14 @@ class AdaSahnesi extends Phaser.Scene {
 
   haritaKur() {
     const kartX = 12;
-    const kartY = 720 - 12 - 160;
+    const kartY = 720 - 12 - 175;
     this.add.image(kartX, kartY, "harita-karti").setOrigin(0).setScrollFactor(0).setDepth(8900);
     this.haritaCizim = this.add.graphics().setScrollFactor(0).setDepth(8901);
     // Kartın içindeki harita alanı (15,15)'ten başlar; dünya 220/6400 ölçeğinde
     this.haritaX = kartX + 15;
     this.haritaY = kartY + 15;
     this.haritaOlcek = 220 / DUNYA_GENISLIK;
-    this.haritaAlani = new Phaser.Geom.Rectangle(kartX, kartY, 250, 160);
+    this.haritaAlani = new Phaser.Geom.Rectangle(kartX, kartY, 250, 175);
   }
 
   haritayiGuncelle(zaman) {
@@ -1820,7 +1824,7 @@ class AdaSahnesi extends Phaser.Scene {
     let eklenen = 0;
     for (let deneme = 0; deneme < 4000 && eklenen < 500; deneme++) {
       const x = rastgele.between(0, DUNYA_GENISLIK);
-      const y = rastgele.between(0, DUNYA_YUKSEKLIK);
+      const y = rastgele.between(0, ADA_YUKSEKLIK);
       if (!cimen.contains(x, y)) continue;
       const tur = rastgele.pick(turler);
       const faz = rastgele.frac() * Math.PI * 2;
@@ -1946,7 +1950,7 @@ class AdaSahnesi extends Phaser.Scene {
   // Her karede: köpük kıyıya vurur, dalgalar kayar, ağaçlar ve çalılar sallanır
   canlandir(zaman, fark) {
     const merkezX = DUNYA_GENISLIK / 2;
-    const merkezY = DUNYA_YUKSEKLIK / 2;
+    const merkezY = ADA_YUKSEKLIK / 2;
     this.kopuk.clear();
     for (let i = 0; i < 2; i++) {
       const dalga = (Math.sin(zaman * 0.0012 + i * Math.PI) + 1) / 2; // 0..1
@@ -2062,7 +2066,9 @@ class AdaSahnesi extends Phaser.Scene {
     let yuruyor = false;
 
     if (uzunluk > 0) {
-      const adim = (YURUME_HIZI * fark) / 1000;
+      let adim = (YURUME_HIZI * fark) / 1000;
+      // Hedefe kalan yoldan uzun adım atma (yavaş cihazda hedefin çevresinde gidip gelmesin)
+      if (this.hedef) adim = Math.min(adim, uzunluk);
       const ax = (dx / uzunluk) * adim;
       const ay = (dy / uzunluk) * adim;
       yuruyor = this.ilerle(ax, ay);
