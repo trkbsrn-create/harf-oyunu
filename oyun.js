@@ -218,6 +218,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.load.svg("ari", "gorseller/ari.svg");
     this.load.svg("nar", "gorseller/nar.svg");
     this.load.svg("tarla", "gorseller/tarla.svg");
+    this.load.svg("harita-karti", "gorseller/harita-karti.svg");
     this.load.svg("ekili-tohum", "gorseller/ekili-tohum.svg");
     for (const ad of ["esek", "tilki", "inek", "leylek"]) this.load.svg(ad, `gorseller/${ad}.svg`);
     for (const ad of ["cicek-kirmizi", "cicek-mor", "cicek-beyaz", "ot", "kelebek", "kus"]) {
@@ -275,11 +276,13 @@ class AdaSahnesi extends Phaser.Scene {
     // Dokunma / tıklama: karakter dokunulan yere yürür
     this.cantaKur();
     this.menuKur();
+    this.haritaKur();
     this.cameras.main.fadeIn(400, 251, 247, 236);
 
     this.input.on("pointerdown", (p) => {
       Sesler.ac();
       if (this.menuTiklamasi(p)) return;
+      if (!this.cantaAcik && this.haritaAlani.contains(p.x, p.y)) return; // haritaya dokununca yürümez
       if (this.cantaTiklamasi(p)) return;
       if (this.sandik && this.sandikGorundu && !this.sandikAcildi
           && this.sandik.getBounds().contains(p.worldX, p.worldY)) {
@@ -490,6 +493,57 @@ class AdaSahnesi extends Phaser.Scene {
       });
     }
     Sesler.tohum();
+  }
+
+  // ---- Mini harita (sol alt) ----
+  // Kart, ada ve tarla sabit bir resim (gorseller/harita-karti.svg). Üstüne her karede
+  // karakter, ekranda görünen bölge ve açılmış sandıklar çizilir. Kapalı sandıklar
+  // haritada görünmez (arama heyecanı bozulmasın).
+
+  haritaKur() {
+    const kartX = 12;
+    const kartY = 720 - 12 - 160;
+    this.add.image(kartX, kartY, "harita-karti").setOrigin(0).setScrollFactor(0).setDepth(8900);
+    this.haritaCizim = this.add.graphics().setScrollFactor(0).setDepth(8901);
+    // Kartın içindeki harita alanı (15,15)'ten başlar; dünya 220/6400 ölçeğinde
+    this.haritaX = kartX + 15;
+    this.haritaY = kartY + 15;
+    this.haritaOlcek = 220 / DUNYA_GENISLIK;
+    this.haritaAlani = new Phaser.Geom.Rectangle(kartX, kartY, 250, 160);
+  }
+
+  haritayiGuncelle(zaman) {
+    const g = this.haritaCizim;
+    const o = this.haritaOlcek;
+    const hx = (x) => this.haritaX + x * o;
+    const hy = (y) => this.haritaY + y * o;
+    g.clear();
+
+    // Ekranda görünen bölge
+    const gorunen = this.cameras.main.worldView;
+    g.lineStyle(2, 0x2b2b2b, 0.55);
+    g.strokeRoundedRect(hx(gorunen.x), hy(gorunen.y), gorunen.width * o, gorunen.height * o, 3);
+
+    // Açılmış sandıklar: kırmızı çarpı
+    g.lineStyle(3.5, 0xe0533d, 1);
+    for (const s of this.sandiklar) {
+      if (!s.acildi) continue;
+      const x = hx(s.nesne.x);
+      const y = hy(s.nesne.y);
+      g.lineBetween(x - 5, y - 5, x + 5, y + 5);
+      g.lineBetween(x + 5, y - 5, x - 5, y + 5);
+    }
+
+    // Karakter: sarı nokta ve çevresinde atan halka
+    const x = hx(this.cocuk.x);
+    const y = hy(this.cocuk.y);
+    const nabiz = (zaman % 1200) / 1200;
+    g.lineStyle(2.5, 0xff7a59, 0.8 * (1 - nabiz));
+    g.strokeCircle(x, y, 7 + nabiz * 9);
+    g.fillStyle(0xffc928, 1);
+    g.fillCircle(x, y, 6);
+    g.lineStyle(2.5, 0x2b2b2b, 1);
+    g.strokeCircle(x, y, 6);
   }
 
   // ---- Menü (sol üst): oyunu yeniden başlat ----
@@ -1240,6 +1294,8 @@ class AdaSahnesi extends Phaser.Scene {
   // Hazine anı: sandık titrer, açılır, ışık saçar, içinden harf yükselir.
   sandigiAc() {
     this.sandikAcildi = true;
+    const acilan = this.sandiklar.find((s) => s.nesne === this.sandik);
+    if (acilan) acilan.acildi = true; // mini haritada çarpıyla görünür
     this.donuk = true;
     this.hedef = null;
     if (this.sandikZipla) this.sandikZipla.stop();
@@ -1566,6 +1622,7 @@ class AdaSahnesi extends Phaser.Scene {
   }
 
   update(zaman, fark) {
+    this.haritayiGuncelle(zaman);
     this.canlandir(zaman, fark);
     this.kelebekleriUcur(zaman, fark);
     this.kuslariUcur(zaman, fark);

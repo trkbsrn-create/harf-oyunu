@@ -245,6 +245,42 @@ yaz("ekili-tohum.svg", 100, 96, "Toprağa ekilmiş tohum ve filizi",
     <circle cx="46" cy="84" r="2" fill="#5e3d22" stroke-width="1.5"/>
 '''), 62)
 
+# ---- Mini harita kartı (sol alt) ----
+# 250x160 kâğıt kart. İçindeki harita alanı (15,15)'ten başlar, 220 px genişliğinde:
+# dünya (6400x3600) 220/6400 ölçeğiyle küçültülür. Ada şekli oyundaki adaNoktalari()
+# ile aynı formülle çizilir; oyunda değişirse burada da değişmeli.
+HARITA_OLCEK = 220 / 6400
+
+
+def ada_yolu(olcek):
+    noktalar = []
+    for i in range(160):
+        a = i / 160 * math.pi * 2
+        dalga = 1 + 0.06 * math.sin(3 * a) + 0.04 * math.sin(5 * a + 1) + 0.02 * math.sin(11 * a + 2)
+        x = 15 + (3200 + math.cos(a) * 2940 * dalga * olcek) * HARITA_OLCEK
+        y = 15 + (1800 + math.sin(a) * 1580 * dalga * olcek) * HARITA_OLCEK
+        noktalar.append(f"{x:.1f} {y:.1f}")
+    return "M" + " L".join(noktalar) + "Z"
+
+
+# Tarla: dünyada (2620,1630), 480x340 (oyundaki TARLA_X, TARLA_Y)
+tx = 15 + 2620 * HARITA_OLCEK
+ty = 15 + 1630 * HARITA_OLCEK
+yaz("harita-karti.svg", 250, 160, "Mini harita kartı: ada ve tarla",
+    tarama("hDeniz", "#d7efff", "#a9dcf5", 45, 6, 2) + tarama("hKum", "#fbe7b5", "#f0cf86", 30, 6, 2)
+    + tarama("hCimen", "#c9eba7", "#a3d97c", -35, 6, 2)
+    + '    <clipPath id="kart"><rect x="15" y="15" width="220" height="124" rx="6"/></clipPath>\n',
+    '  <rect x="7" y="9" width="240" height="148" rx="12" fill="#000" fill-opacity="0.15"/>\n' +
+    kalem('''    <rect x="3" y="4" width="240" height="148" rx="12" fill="#fffdf6" stroke-width="3.5"/>
+''') +
+    '  <g clip-path="url(#kart)">\n    <rect x="15" y="15" width="220" height="124" fill="url(#hDeniz)"/>\n  </g>\n' +
+    kalem(f'''    <path d="{ada_yolu(1)}" fill="url(#hKum)" stroke-width="2.5"/>
+    <path d="{ada_yolu(0.93)}" fill="url(#hCimen)" stroke="none"/>
+    <rect x="{tx:.1f}" y="{ty:.1f}" width="{480 * HARITA_OLCEK:.1f}" height="{340 * HARITA_OLCEK:.1f}" rx="2" fill="#8e6340" stroke-width="1.8"/>
+''', 2.5) +
+    '''  <rect x="2" y="0" width="50" height="16" fill="#f6e27a" opacity="0.85" transform="rotate(-12 27 8)"/>
+''', 63, 2.5)
+
 # ---- Ekran pencereleri ----
 # Çanta penceresi: 700x480, sol üst köşesi oyunda (300,120). İçinde 8 kutucuk ve çarpı.
 kutular = ""
