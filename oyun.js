@@ -36,9 +36,10 @@ const HEMEN_BASLA = "harfAvcisiHemenBasla";
 // Uzatılamayan ünsüzler ("t"): ilk aşamada bu kadar net ses yeter (ms);
 // güç aşamasında harf bu kadar ayrı kısa sesle dolar
 const KISA_SES_SURESI = 120;
-// Tohum her damlada bir aşama büyür: 0 ekili tohum, 1 filiz, 2 küçük ağaç, 3 büyük ağaç
+// Tohum her damlada bir aşama büyür: 0 ekili tohum, 1 filiz, 2 küçük ağaç, 3 gökyüzüne
+// uzanan fasulye sırığı (tepesi bulutlarda)
 const BUYUME_ASAMASI = 3;
-const BITKI_RESIMLERI = [null, "bitki-filiz", "bitki-fidan", "bitki-agac"];
+const BITKI_RESIMLERI = [null, "bitki-filiz", "bitki-fidan", "bitki-sirik"];
 const KESIK_SES_ADIMI = 6;
 
 // ---- Doodle yazılar ----
@@ -236,7 +237,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.load.svg("tarla", "gorseller/tarla.svg");
     this.load.svg("harita-karti", "gorseller/harita-karti.svg");
     for (const ad of ["su-tesisi", "tesis-pencere", "damla", "damla-bos", "sise",
-      "incele-dugmesi", "sise-pencere", "bitki-filiz", "bitki-fidan", "bitki-agac", "harf-tabela"]) {
+      "incele-dugmesi", "sise-pencere", "bitki-filiz", "bitki-fidan", "bitki-sirik", "harf-tabela"]) {
       this.load.svg(ad, `gorseller/${ad}.svg`);
     }
     this.load.svg("ekili-tohum", "gorseller/ekili-tohum.svg");
@@ -624,7 +625,15 @@ class AdaSahnesi extends Phaser.Scene {
     bitki.setScale(1, 0);
     tabela.setScale(0);
     harf.setScale(0);
-    this.tweens.add({ targets: bitki, scaleY: 1, duration: 500, delay: 150, ease: "Back.Out" });
+    // Fasulye sırığı gökyüzüne doğru daha uzun sürede fışkırır
+    const sirik = kare.asama === BUYUME_ASAMASI;
+    this.tweens.add({ targets: bitki, scaleY: 1, duration: sirik ? 1400 : 500, delay: 150,
+      ease: sirik ? "Cubic.Out" : "Back.Out",
+      onComplete: () => {
+        // Sırık rüzgârda tabanından hafifçe sallanır
+        if (sirik) this.tweens.add({ targets: bitki, angle: { from: -1.2, to: 1.2 }, duration: 2200,
+          yoyo: true, repeat: -1, ease: "Sine.InOut" });
+      } });
     this.tweens.add({ targets: [tabela, harf], scale: 1, duration: 350, delay: 350, ease: "Back.Out" });
     this.add.particles(kare.alan.centerX, kare.alan.bottom - 40, "parilti", {
       speed: { min: 80, max: 200 }, lifespan: 700, scale: { start: 0.7, end: 0 },
