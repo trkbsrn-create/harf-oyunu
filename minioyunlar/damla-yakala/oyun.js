@@ -64,7 +64,7 @@ class DamlaYakalaSahnesi extends MiniOyunSahnesi {
     panel.add([zemin, yazi, harf]);
     panel.setSize(240, 68).setInteractive({ useHandCursor: true });
     panel.on("pointerdown", () => harfiSoyle(this.harf));
-    this.time.delayedCall(400, () => harfiSoyle(this.harf));
+
 
     // Yanlış seçenek havuzu: öğrenilmiş öteki harfler; benzer harfler ayrıca
     const ogrenilmis = ogrenilmisHarfler(this.harf).filter((h) => h !== this.harf);
@@ -73,8 +73,13 @@ class DamlaYakalaSahnesi extends MiniOyunSahnesi {
 
     this.damlalar = [];
     this.sonXler = [];
-    this.uretici = this.time.addEvent({ delay: this.ayar.aralik, loop: true, callback: () => this.damlaUret() });
-    this.time.delayedCall(900, () => this.damlaUret());
+    // Önce harf tanıtılır (ünsüzde kapalı hece kurulur), sonra damlalar düşmeye başlar
+    this.uretici = null;
+    this.time.delayedCall(400, () => this.harfiTanit(() => {
+      if (this.bitti) return;
+      this.uretici = this.time.addEvent({ delay: this.ayar.aralik, loop: true, callback: () => this.damlaUret() });
+      this.damlaUret();
+    }));
 
     this.input.on("gameobjectdown", (p, nesne) => {
       if (nesne.damla) this.damlayaDokun(nesne);
@@ -158,7 +163,7 @@ class DamlaYakalaSahnesi extends MiniOyunSahnesi {
   }
 
   oyunBitti() {
-    this.uretici.remove();
+    if (this.uretici) this.uretici.remove();
     for (const kap of this.damlalar) kap.disableInteractive();
   }
 }

@@ -93,10 +93,19 @@ const Sesler = {
 
   // Tarayıcının Türkçe sesiyle bir harfi, heceyi ya da kelimeyi sesli söyler (ses
   // dosyası yok, kayıt yok). Türkçe ses yoksa ya da tarayıcı desteklemiyorsa sessiz kalır.
-  soyle(metin) {
+  // bitince: söyleme bitince bir kez çağrılır (ses hiç çıkmasa bile, tahmini süre sonunda).
+  soyle(metin, bitince) {
+    let cagrildi = false;
+    const bitti = () => {
+      if (cagrildi || !bitince) return;
+      cagrildi = true;
+      bitince();
+    };
+    setTimeout(bitti, Math.max(1200, metin.length * 90) + 1500); // güvence
     if (!("speechSynthesis" in window)) return;
     window.speechSynthesis.cancel();
     const soz = new SpeechSynthesisUtterance(metin);
+    soz.onend = bitti;
     soz.lang = "tr-TR";
     soz.rate = 0.8;
     const turkce = window.speechSynthesis.getVoices().find((v) => v.lang && v.lang.startsWith("tr"));
