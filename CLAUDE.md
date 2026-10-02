@@ -112,6 +112,8 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   Sesli okuma `Sesler.soyle`: telefonda ilk dokunuşta ses motoru ısıtılır, önceki söz
   susturulunca kısa ara verilir, güvence süresi ses başlayınca yeniden kurulur (yavaş
   telefonda sözler kesilmesin). Susturmak için `Sesler.sustur`.
+  Telefonda tarayıcı sesi yalnızca parmak kalkınca açmaya izin verir; bu yüzden ses ve
+  sesli okuma her dokunuşun sonunda (pointerup/touchend) açılır (sesler.js sonu).
 - `yazitipi/` – Andika yazı tipi ve lisansı (SIL Open Font License).
 - `gorseller/` – Kendi çizdiğimiz SVG görseller. Bütün oyun doodle tarzında: titrek kalem
   çizgisi (SVG içinde feTurbulence/feDisplacementMap süzgeci), boya kalemi taraması,
@@ -192,3 +194,5 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Karakter bir hedefe yürürken bir karedeki adımı hedefe kalan yoldan uzun olmasın.
   Yavaş cihazda (düşük kare hızı) adım büyür, karakter hedefin çevresinde gidip gelir
   ve hiç varamaz. Testleri yavaş tarayıcıda da çalıştır.
+- Telefonda sesi parmak ekrana değdiği an (pointerdown/touchstart) açmaya çalışma; tarayıcı
+  izin vermez, ses mikrofon iznine kadar hiç gelmez. Ses parmak kalkınca açılmalı.

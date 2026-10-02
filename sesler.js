@@ -12,7 +12,6 @@ const Sesler = {
       this.baglam = new Baglam();
     }
     if (this.baglam.state === "suspended") this.baglam.resume();
-    this.konusmayiIsit();
   },
 
   // Tek bir nota çalar.
@@ -211,3 +210,13 @@ const Sesler = {
     }
   },
 };
+
+// Telefonda tarayıcı sesi yalnızca parmak ekrandan kalkınca açmaya izin verir (parmak
+// değdiği an yetmez). Bu yüzden ses ve sesli okuma her dokunuşun sonunda açılır; böylece
+// mikrofon izni beklenmeden ilk dokunuştan itibaren sesler gelir.
+for (const olay of ["pointerup", "touchend", "click", "keydown"]) {
+  document.addEventListener(olay, () => {
+    Sesler.ac();
+    Sesler.konusmayiIsit();
+  }, { capture: true, passive: true });
+}
