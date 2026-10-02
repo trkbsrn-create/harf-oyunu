@@ -265,8 +265,8 @@ const Dinleyici = {
   // kabul edilen kelime (ipucu kelimesi) var mı?
   // (Ünlüler için. Ünsüzlerde tek başına ses kabul edilmeyecek; o harfe gelince değişecek.)
   dogruMu(metinler, harf, kelime) {
-    // Chrome "a" sesini bazen "ha" diye yazar
-    const benzerleri = { a: ["ha", "haa", "hah"] };
+    // Chrome tek ünlüyü bazen başına "h" koyarak yazar ("a" → "ha")
+    const benzerleri = { a: ["ha", "haa", "hah"], e: ["he", "hee", "eh"], i: ["hi", "hii", "ih"] };
     for (const metin of metinler) {
       const kelimeler = metin.toLocaleLowerCase("tr-TR").split(/[^a-zçğıöşü]+/u);
       for (const k of kelimeler) {

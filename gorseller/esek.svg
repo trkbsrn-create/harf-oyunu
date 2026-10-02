@@ -1,0 +1,29 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="120" viewBox="0 0 150 120">
+  <!-- Eşek: e harfinin ipucu resmi (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="51" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="gri" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#d6d3cc"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#a9a59c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="pembe" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="6" height="6" fill="#ffd2c8"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ff9c8a" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 84 v28 M70 86 v26 M108 86 v26 M122 82 v30" fill="none" stroke-width="5"/>
+    <path d="M128 52 q16 6 12 32" fill="none"/>
+    <path d="M50 58 q4 -18 40 -18 q38 0 40 22 q2 26 -40 26 q-42 0 -40 -30z" fill="url(#gri)"/>
+    <path d="M26 6 q-6 22 8 30 M44 4 q4 24 -4 32" fill="url(#gri)"/>
+    <path d="M24 10 q2 -8 10 -4 q-2 18 0 28z M42 6 q8 -4 8 6 q-2 14 -8 24z" fill="url(#pembe)" stroke-width="3"/>
+    <path d="M58 52 q-14 -24 -30 -20 q-18 4 -22 26 q-4 18 10 22 q14 2 22 -8 q14 -6 20 -20z" fill="url(#gri)"/>
+    <path d="M6 60 q-2 18 12 20 q14 0 12 -16 q-12 -8 -24 -4z" fill="url(#pembe)" stroke-width="3"/>
+    <path d="M48 30 q10 4 16 16" fill="none" stroke-width="5"/>
+    <circle cx="30" cy="46" r="3.5" fill="#2b2b2b"/>
+    <circle cx="14" cy="68" r="2" fill="#2b2b2b"/>
+  </g>
+</svg>

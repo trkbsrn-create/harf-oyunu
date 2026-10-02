@@ -13,6 +13,10 @@ const PUSULA_YAKIN = 640;
 const SANDIK_CIKMA_UZAKLIGI = 110; // sandık ancak saklandığı yerin bu kadar yanında çıkar
 // "Oyunu yeniden başlat" deyince sayfa yenilenir; bu tek seferlik not karşılama ekranını atlatır
 const HEMEN_BASLA = "harfAvcisiHemenBasla";
+// Uzatılamayan ünsüzler ("t"): ilk aşamada bu kadar net ses yeter (ms);
+// güç aşamasında harf bu kadar ayrı kısa sesle dolar
+const KISA_SES_SURESI = 120;
+const KESIK_SES_ADIMI = 6;
 
 // ---- Doodle yazılar ----
 // Harflerin biçimi değişmez (Andika, dik temel harf). Yazının kenarı titrek kalem gibi
@@ -205,6 +209,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.load.svg("mikrofon", "gorseller/mikrofon.svg");
     this.load.svg("ari", "gorseller/ari.svg");
     this.load.svg("nar", "gorseller/nar.svg");
+    for (const ad of ["esek", "tilki", "inek", "leylek"]) this.load.svg(ad, `gorseller/${ad}.svg`);
     for (const ad of ["cicek-kirmizi", "cicek-mor", "cicek-beyaz", "ot", "kelebek", "kus"]) {
       this.load.svg(ad, `gorseller/${ad}.svg`);
     }
@@ -518,6 +523,8 @@ class AdaSahnesi extends Phaser.Scene {
   //    uzatıldıkça dolar (bu aşama titiz değil). 30 sn'de dolmazsa kendiliğinden dolar.
   async harfiSoyletVeGucGoster(harfBilgisi, yazi, mikrofon) {
     const harf = harfBilgisi.kucuk;
+    // Uzatılamayan ünsüzde ("t") kısa, net bir ses yeter (öğretmenin kararı: basit doğrulama)
+    const onaySuresi = harfBilgisi.kisaSes ? KISA_SES_SURESI : Dinleyici.ILK_ONAY_SURESI;
     let ipucu = [];
     let dogru = false;
 
@@ -541,7 +548,7 @@ class AdaSahnesi extends Phaser.Scene {
           sessizlik = 0;
         } else {
           sessizlik += fark;
-          if (sesKaresi * 40 >= Dinleyici.ILK_ONAY_SURESI && sessizlik > 350) break; // söyledi, sustu
+          if (sesKaresi * 40 >= onaySuresi && sessizlik > 350) break; // söyledi, sustu
         }
         mikrofon.setScale(ses ? 1.15 + 0.1 * Math.sin(simdi / 60) : 1);
       }
@@ -550,7 +557,7 @@ class AdaSahnesi extends Phaser.Scene {
       // Düşünme efekti: oyun sesi tartar (hiç ses yoksa düşünecek bir şey de yok)
       const balon = sesKaresi >= 3 ? this.dusunceBalonu(yazi) : null;
       const [metinler] = await Promise.all([kelimeSozu, this.bekle(balon ? 1100 : 0)]);
-      const sesDogru = sesKaresi * 40 >= Dinleyici.ILK_ONAY_SURESI;
+      const sesDogru = sesKaresi * 40 >= onaySuresi;
       const kelimeDogru = Dinleyici.dogruMu(metinler, harf, harfBilgisi.kelime)
         || (ipucu.length > 0
           && Dinleyici.kelimeVarMi(metinler, this.heceYazimlari(harfBilgisi.hece)));
@@ -574,7 +581,7 @@ class AdaSahnesi extends Phaser.Scene {
     // 2. aşama: güç
     const yazi2 = this.gucYazisiGoster();
     await this.harfiDoldur(harfBilgisi, yazi, mikrofon,
-      { ipucuYok: true, onaySuresi: 30000, otomatikDogru: true });
+      { ipucuYok: true, onaySuresi: 30000, otomatikDogru: true, kesikSes: harfBilgisi.kisaSes });
     this.tweens.add({ targets: yazi2, alpha: 0, y: yazi2.y - 30, duration: 400,
       onComplete: () => yazi2.destroy() });
     return { dogru: true, ipucu };
@@ -710,7 +717,17 @@ class AdaSahnesi extends Phaser.Scene {
       onceki = simdi;
       const gecen = simdi - baslangic;
 
-      if (sesUygun()) {
+      if (secenek.kesikSes) {
+        // "t t t": her yeni kısa ses harfin altıda birini doldurur, dolgu boşalmaz
+        if (sesUygun()) {
+          if (!sesVardi) oran = Math.min(1, oran + 1 / KESIK_SES_ADIMI);
+          sesVardi = true;
+          sessizlik = 0;
+        } else {
+          sessizlik += fark;
+          if (sessizlik > 150) sesVardi = false;
+        }
+      } else if (sesUygun()) {
         oran = Math.min(1, oran + fark / DOLUM);
         sesVardi = true;
         sessizlik = 0;
@@ -1025,18 +1042,26 @@ class AdaSahnesi extends Phaser.Scene {
   // Harf sandıklarını çalıların arkasına saklar (şimdilik a ve n). Sandıklar sırayla
   // açılır: bir sandığın tohumu çantaya girmeden sıradaki sandık ortaya çıkmaz.
   sandigiSakla(susler) {
-    const calilar = susler.filter((s) => s.tur === "cali");
+    // Sandık çalının yanından fırlar; fırladığı yer de karada kalsın
+    const kara = new Phaser.Geom.Polygon(adaNoktalari(0.85));
+    const calilar = susler.filter((s) => s.tur === "cali"
+      && kara.contains(s.x, s.y) && kara.contains(s.x + 100, s.y + 45));
     const uzaklik = (s, x, y) => Math.hypot(s.x - x, s.y - y);
+    const harfler = HARFLER.filter((h) => h.grup === 1); // ilk sürüm: a n e t i l
     // a: başlangıçtan yaklaşık 2000 px uzakta
-    const caliA = calilar.reduce((a, b) =>
+    const secilen = [calilar.reduce((a, b) =>
       Math.abs(uzaklik(a, BASLANGIC_X, BASLANGIC_Y) - 2000)
-        < Math.abs(uzaklik(b, BASLANGIC_X, BASLANGIC_Y) - 2000) ? a : b);
-    // n: başlangıçtan da uzak, a'nın sandığından da olabildiğince uzak
-    const adaylar = calilar.filter((s) => uzaklik(s, BASLANGIC_X, BASLANGIC_Y) > 1500);
-    const caliN = adaylar.reduce((a, b) =>
-      uzaklik(a, caliA.x, caliA.y) > uzaklik(b, caliA.x, caliA.y) ? a : b);
+        < Math.abs(uzaklik(b, BASLANGIC_X, BASLANGIC_Y) - 2000) ? a : b)];
+    // Sonrakiler: başlangıçtan uzak, önceki sandıkların hepsinden olabildiğince uzak
+    // (adaya dağılsınlar)
+    const enYakin = (s) => Math.min(...secilen.map((o) => uzaklik(s, o.x, o.y)));
+    while (secilen.length < harfler.length) {
+      const adaylar = calilar.filter((s) => !secilen.includes(s)
+        && uzaklik(s, BASLANGIC_X, BASLANGIC_Y) > 1500);
+      secilen.push(adaylar.reduce((a, b) => (enYakin(a) > enYakin(b) ? a : b)));
+    }
 
-    this.sandiklar = [[HARFLER[0], caliA], [HARFLER[1], caliN]].map(([harfBilgisi, cali]) => ({
+    this.sandiklar = harfler.map((harfBilgisi, i) => [harfBilgisi, secilen[i]]).map(([harfBilgisi, cali]) => ({
       harfBilgisi,
       cali,
       nesne: this.add.image(cali.x + 8, cali.y - 24, "sandik-kapali")

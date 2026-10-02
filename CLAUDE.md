@@ -25,9 +25,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   Chrome tek ünlüleri ("a") yazıya çeviremediği için ünlülerde ses yüksekliği ölçülür.
   Harf bir dolum çubuğudur: çocuk sesi uzattıkça (toplam 3 sn) harf dolar; ses kesilince
   önce yavaşça boşalır, 3 kesintiden sonra kaldığı yerde durur. Ses kaydedilmez.
-  "a" ve "n" sandığı (ünlüler ve `tekBasinaDenenir` ünsüzler): önce harf söylenir, oyun
+  Sandıklar (a n e t i l; ünlüler ve `tekBasinaDenenir` ünsüzler): önce harf söylenir, oyun
   düşünür (düşünce balonu); yarım saniye net ses (`ILK_ONAY_SURESI`) ya da Chrome'un
-  tanıdığı kelime (ipucundan sonra hece de, ör. "an") doğru sayılır. Sonra "Tohumu kazanmak
+  tanıdığı kelime (ipucundan sonra hece de, ör. "an") doğru sayılır; `kisaSes` harfte
+  kısa net ses yeter. Sonra "Tohumu kazanmak
   için gücünü göster!" aşamasında harf her net sesle dolar (titiz değil; kullanıcı isteği).
   Tını tanıma (LPC ile F1/F2, `UNLU_KURALLARI`) kodda duruyor ama gerçek seste "a"yı
   reddettiği için oyunda kullanılmıyor; yalnızca mikrofon.html'de ölçüm gösteriyor.
@@ -62,10 +63,12 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 
 ## Pedagoji (MEB ses esaslı yöntem)
 - Ünlüler tek başına sesletilebilir.
-- Ünsüzler tek başına sesletilmez; ünsüzlerde çocuktan hece veya kelime söylemesi istenir.
-  İstisna (öğretmenin kararı): "n" önce tek başına, uzatılarak ("nnnn") denenir; olmazsa
-  hece ("an") ve kelime resmi ipucu olarak gelir. Hangi ünsüzde böyle yapılacağı
-  `harfler.js`'deki `tekBasinaDenenir` ile belirtilir; yeni ünsüzlerde öğretmene sor.
+- Ünsüzler genelde tek başına sesletilmez. Öğretmenin kararı: bu oyunda bütün ünsüzler
+  önce tek başına (sadece sesi) denenir; çocuk sesi bildiği için basit doğrulama yeter,
+  hassas ölçüm gerekmez. Olmazsa kapalı hece ("an", "at", "al") ve kelime resmi ipucu
+  olarak gelir. `harfler.js`'de her ünsüze `tekBasinaDenenir: true` ve `hece` yazılır.
+  Sesi uzatılamayan ünsüzlere ("t") `kisaSes: true` yazılır: kısa ses yeter, güç
+  aşamasında harf her ayrı kısa sesle biraz dolar ("t t t").
 - Heceleme önce kapalı hece (an), sonra açık hece (na).
 - Hece tablosu yok.
 - Öğrenilmemiş harf içeren sözcük yazıyla gösterilmez; onun yerine görsel konur.

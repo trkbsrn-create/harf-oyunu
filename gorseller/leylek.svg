@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="140" viewBox="0 0 120 140">
+  <!-- Leylek: l harfinin ipucu resmi (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="54" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="turuncu" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="6" height="6" fill="#ffc58f"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#f08a3c" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M62 96 v40 M56 136 h12 M74 96 q8 14 0 24 l-10 -6" fill="none" stroke="#f08a3c" stroke-width="5"/>
+    <path d="M40 56 q30 -6 52 14 q16 16 22 34 q-26 -4 -40 -8 q-34 -4 -34 -40z" fill="#ffffff"/>
+    <path d="M78 64 q18 14 36 40 q-20 -4 -30 -10 q-10 -14 -6 -30z" fill="#2b2b2b" stroke-width="2"/>
+    <path d="M44 62 q-10 -22 -6 -40" fill="none" stroke-width="12"/>
+    <path d="M44 62 q-10 -22 -6 -40" fill="none" stroke="#ffffff" stroke-width="5"/>
+    <circle cx="38" cy="18" r="12" fill="#ffffff"/>
+    <path d="M28 16 l-26 8 l26 -1z" fill="url(#turuncu)" stroke-width="3"/>
+    <circle cx="38" cy="15" r="3" fill="#2b2b2b"/>
+  </g>
+</svg>
