@@ -17,13 +17,15 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   Sol üstteki menüde "Oyunu yeniden başlat" sayfayı yeniler; karşılama ekranını atlamak
   için tek seferlik bir not (sessionStorage) bırakır, ilerleme saklanmaz.
   Karşılama ekranının sol üstünde öğretmenin deneme düğmesi "God mode" var (öğretmen
-  bu adla istedi): oyun bütün sandıklar açılmış ve tohumlar çantada başlar (`hepsiniAc`).
+  bu adla istedi): oyun bütün sandıklar açılmış ve altı harf tarlada fasulye sırığına
+  dönüşmüş olarak başlar (`hepsiniAc`).
   Yazılar da doodle: `doodleYazi` (başlık, düğme, pencere yazıları: boya kalemi taraması,
   kalem çerçevesi, titrek kenar) ve `titret` (öğretilen harfler: biçim aynı, yalnızca
   kenar titrer). Harf biçimi her zaman Andika'dır; başka yazı tipi kullanılmaz.
 - `harfler.js` – Harf grupları ve kelimeler (sadece veri).
 - `canta.js` – Karakterin çantası (envanter). Kaydedilmez; sayfa yenilenince oyun baştan başlar.
-- Tarla: karakterin başladığı yerin solunda çitli, 6 kareli tarla (`tarlaKur`, tarla.svg).
+- Tarla: karakterin başladığı yerin üstünde çitli tarla, 6 kare yan yana tek sıra
+  (`tarlaKur`, tarla.svg).
   Çanta açıkken bir tohum tutulunca pencere silikleşir; tohum boş bir kareye bırakılırsa
   ekilir (ekili-tohum.svg), kare doluysa ya da tarla dışına bırakılırsa çantaya döner.
   Tarla da kaydedilmez.
@@ -43,7 +45,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   (`BUYUME_ASAMASI`, `BITKI_RESIMLERI`; bitki-*.svg). 1. aşamadan sonra harf, karenin
   sol altındaki tahta tabelada (harf-tabela.svg) durur.
   Büyümüş sırığın toprak karesine dokununca (sırıklar üst üste binebilir, kareler binmez;
-  seçilen sırık bir an parlar) karakter dibine yürür, tırmanır ve bulutların üstüne çıkar
+  seçilen sırık bir an parlar) karakter dibine yürür, arkası dönük (cocuk-tirman.svg; elle
+  çizildi, betikle üretilmez) basamak basamak tırmanır (`tirmanmaHareketi`); sırıklar
+  sallanmaz; tırmanır ve bulutların üstüne çıkar
   (`BulutSahnesi`; ada sahnesi uyutulur, durumu korunur). Her harfin kendi bölgesi var;
   şimdilik bölgede harfin büyük tabelası durur, içeriği sonra eklenecek. Karakter bulut
   zemininde gezer; sırığa dokununca aşağı iner ve adada o sırığın dibine döner.

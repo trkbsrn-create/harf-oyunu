@@ -1,0 +1,45 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="90" height="130" viewBox="0 0 90 130">
+  <!-- Ana karakter, tırmanma pozu: arkası dönük, sol kolu yukarıda (kendi çizimimiz).
+       Oyunda yatay çevrilince öbür kolu yukarıda olur. -->
+  <defs>
+    <!-- Kalem titremesi: çizgileri hafifçe büker, elle çizilmiş gibi gösterir -->
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="5" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="tisort" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+      <rect width="7" height="7" fill="#ffe680"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#ffc928" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="canta" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="7" height="7" fill="#9be3dc"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#4fc3b8" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="sort" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)">
+      <rect width="7" height="7" fill="#a9c8f0"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#6b9be0" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <!-- bacaklar: sol diz yukarıda (sırığa basıyor), sağ bacak aşağıda -->
+    <path d="M38 96 l-8 8 l3 10 M52 96 l3 22" fill="none"/>
+    <path d="M27 115 h10 M55 119 h10" fill="none" stroke="#e0533d" stroke-width="6"/>
+    <!-- şort -->
+    <path d="M30 86 h30 l2 12 h-12 l-5 -5 l-5 5 h-12 z" fill="url(#sort)"/>
+    <!-- kollar: sol kol yukarı uzanmış, sağ kol bükük, sırığı tutuyor -->
+    <path d="M27 66 l-9 -36 M63 68 l12 -4 l-2 -16" fill="none"/>
+    <circle cx="18" cy="28" r="5" fill="#ffe7cf"/>
+    <circle cx="73" cy="46" r="5" fill="#ffe7cf"/>
+    <!-- tişört (arkadan) -->
+    <path d="M26 64 q19 -8 38 0 l2 26 h-42 z" fill="url(#tisort)"/>
+    <!-- sırt çantası: arkadan bütünüyle görünür -->
+    <rect x="28" y="58" width="34" height="32" rx="9" fill="url(#canta)"/>
+    <path d="M30 70 h30" fill="none" stroke-width="2.5"/>
+    <!-- baş (arkadan): kulaklar ve saç -->
+    <circle cx="22" cy="40" r="4" fill="#ffe7cf"/>
+    <circle cx="68" cy="40" r="4" fill="#ffe7cf"/>
+    <circle cx="45" cy="36" r="23" fill="#ffe7cf"/>
+    <path d="M22 40 q-2 -30 23 -30 q25 0 23 30 q-4 8 -10 10 q-13 3 -26 0 q-6 -2 -10 -10z" fill="#8a5a33"/>
+    <path d="M36 22 q4 6 2 12 M50 20 q-2 8 2 14" fill="none" stroke-width="2.5"/>
+  </g>
+</svg>

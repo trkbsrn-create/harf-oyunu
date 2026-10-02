@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 39;
+const SURUM = 40;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -12,13 +12,42 @@ const ADA_YUKSEKLIK = 3600;
 const YURUME_HIZI = 260; // saniyede piksel
 const BASLANGIC_X = DUNYA_GENISLIK / 2;
 const BASLANGIC_Y = ADA_YUKSEKLIK / 2 + 120;
-// Tarla: karakterin başladığı yerin hemen solunda; oyun açılınca tamamı ekranda
-// görünür (gorseller/tarla.svg, 480x340).
-// Kareler: sol üst köşeler (45 + 132i, 52 + 122j), her biri 118x104.
-const TARLA_X = BASLANGIC_X - 580;
-const TARLA_Y = BASLANGIC_Y - 290;
+// Tarla: karakterin başladığı yerin hemen üstünde; 6 kare yan yana, oyun açılınca tamamı
+// ekranda görünür (gorseller/tarla.svg, 870x220).
+// Kareler: sol üst köşeler (45 + 132i, 52), her biri 118x104.
+const TARLA_X = BASLANGIC_X - 435;
+const TARLA_Y = BASLANGIC_Y - 330;
 // Bu alanda süs yok. Alt pay büyük: ağaçlar tabanından yukarı uzanır, tarlayı örtmesin.
-const TARLA_ALANI = new Phaser.Geom.Rectangle(TARLA_X - 60, TARLA_Y - 60, 480 + 120, 340 + 60 + 240);
+const TARLA_ALANI = new Phaser.Geom.Rectangle(TARLA_X - 60, TARLA_Y - 60, 870 + 120, 220 + 60 + 240);
+
+// Tırmanma ve inme: karakter arkası dönük (cocuk-tirman.svg), sırığa sarılmış; her
+// basamakta öbür kolu yukarı uzanır (resim yatay çevrilir), çekinip bir basamak çıkar ya
+// da iner, kısa bir an durur. hedefY'ye varınca bitince() çağrılır.
+const TIRMANMA_BASAMAGI = 34;
+function tirmanmaHareketi(sahne, cocuk, hedefY, bitince) {
+  const merkezX = cocuk.x;
+  let sag = false;
+  cocuk.setTexture("cocuk-tirman").setAngle(0).setScale(1);
+  const basamak = () => {
+    const kalan = hedefY - cocuk.y;
+    if (Math.abs(kalan) < 1) {
+      cocuk.setX(merkezX).setFlipX(false);
+      bitince();
+      return;
+    }
+    sag = !sag;
+    cocuk.setFlipX(sag);
+    Sesler.adim(sag);
+    sahne.tweens.add({
+      targets: cocuk,
+      y: cocuk.y + Math.sign(kalan) * Math.min(TIRMANMA_BASAMAGI, Math.abs(kalan)),
+      x: merkezX + (sag ? 3 : -3),
+      duration: 240, ease: kalan < 0 ? "Quad.Out" : "Quad.In",
+      onComplete: () => sahne.time.delayedCall(90, basamak),
+    });
+  };
+  basamak();
+}
 // Su arıtma tesisi: başlangıç yerinin güneyinde, alt kıyıda (gorseller/su-tesisi.svg,
 // 240x(300 + ISKELE_EK)). TESIS_Y resmin üst kenarı; üstteki uzun iskele kıyıdan gelir,
 // karakter iskelede yürüyebilir. ISKELE_EK araclar/doodle_ciz.py'deki ile aynı olmalı.
@@ -225,6 +254,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.load.svg("cocuk", "gorseller/cocuk.svg");
     this.load.svg("cocuk-adim1", "gorseller/cocuk-adim1.svg");
     this.load.svg("cocuk-adim2", "gorseller/cocuk-adim2.svg");
+    this.load.svg("cocuk-tirman", "gorseller/cocuk-tirman.svg");
     this.load.svg("agac-govde", "gorseller/agac-govde.svg");
     this.load.svg("agac-tepe", "gorseller/agac-tepe.svg");
     this.load.svg("cali", "gorseller/cali.svg");
@@ -652,11 +682,7 @@ class AdaSahnesi extends Phaser.Scene {
     const sirik = kare.asama === BUYUME_ASAMASI;
     this.tweens.add({ targets: bitki, scaleY: 1, duration: sirik ? 1400 : 500, delay: 150,
       ease: sirik ? "Cubic.Out" : "Back.Out",
-      onComplete: () => {
-        // Sırık rüzgârda tabanından hafifçe sallanır
-        if (sirik) this.tweens.add({ targets: bitki, angle: { from: -1.2, to: 1.2 }, duration: 2200,
-          yoyo: true, repeat: -1, ease: "Sine.InOut" });
-      } });
+    });
     this.tweens.add({ targets: [tabela, harf], scale: 1, duration: 350, delay: 350, ease: "Back.Out" });
     this.add.particles(kare.alan.centerX, kare.alan.bottom - 40, "parilti", {
       speed: { min: 80, max: 200 }, lifespan: 700, scale: { start: 0.7, end: 0 },
@@ -687,14 +713,6 @@ class AdaSahnesi extends Phaser.Scene {
     return { x: kare.alan.centerX + 10, y: kare.alan.bottom };
   }
 
-  // Tırmanırken karakter adım adım sallanır (tırmanma hareketi)
-  tirmanmaAdimlari() {
-    return this.time.addEvent({ delay: 220, loop: true, callback: () => {
-      this.tekAdim = !this.tekAdim;
-      this.cocuk.setTexture(this.tekAdim ? "cocuk-adim1" : "cocuk-adim2").setAngle(this.tekAdim ? 6 : -6);
-      Sesler.adim(this.tekAdim);
-    } });
-  }
 
   sirigaTirman(kare) {
     this.tirmaniyor = true;
@@ -702,19 +720,16 @@ class AdaSahnesi extends Phaser.Scene {
     const c = this.cocuk;
     const dip = this.sirikDibi(kare);
     c.setPosition(dip.x, dip.y).setDepth(dip.y + 10).setFlipX(false).setScale(1);
-    const adimlar = this.tirmanmaAdimlari();
     // Sırık boyunca yukarı; sırık gibi karakter de gökyüzünde solarak kaybolur
-    this.tweens.add({ targets: c, y: dip.y - SIRIK_TIRMANMA, duration: 2600, ease: "Sine.In" });
-    this.tweens.add({ targets: c, alpha: 0, duration: 900, delay: 1700,
-      onComplete: () => {
-        adimlar.remove();
-        const kamera = this.cameras.main;
-        kamera.fadeOut(500, 255, 255, 255);
-        kamera.once("camerafadeoutcomplete", () => {
-          this.scene.sleep();
-          this.scene.run("BulutSahnesi", { harf: kare.ekili.harf, kare: this.tarlaKareleri.indexOf(kare) });
-        });
-      } });
+    this.tweens.add({ targets: c, alpha: 0, duration: 1000, delay: 2000 });
+    tirmanmaHareketi(this, c, dip.y - SIRIK_TIRMANMA, () => {
+      const kamera = this.cameras.main;
+      kamera.fadeOut(500, 255, 255, 255);
+      kamera.once("camerafadeoutcomplete", () => {
+        this.scene.sleep();
+        this.scene.run("BulutSahnesi", { harf: kare.ekili.harf, kare: this.tarlaKareleri.indexOf(kare) });
+      });
+    });
   }
 
   // Bulutlardan dönüş: karakter sırığın üstünden aşağı iner
@@ -724,16 +739,13 @@ class AdaSahnesi extends Phaser.Scene {
     const dip = this.sirikDibi(kare);
     this.tirmaniyor = true;
     c.setPosition(dip.x, dip.y - SIRIK_TIRMANMA).setDepth(dip.y + 10).setAlpha(0);
-    this.tweens.add({ targets: c, alpha: 1, duration: 700 });
+    this.tweens.add({ targets: c, alpha: 1, duration: 900 });
     this.cameras.main.centerOn(c.x, c.y);
     this.cameras.main.fadeIn(500, 255, 255, 255);
-    const adimlar = this.tirmanmaAdimlari();
-    this.tweens.add({ targets: c, y: dip.y, duration: 2200, ease: "Sine.Out",
-      onComplete: () => {
-        adimlar.remove();
-        c.setTexture("cocuk").setAngle(0);
-        this.tirmaniyor = false;
-      } });
+    tirmanmaHareketi(this, c, dip.y, () => {
+      c.setTexture("cocuk");
+      this.tirmaniyor = false;
+    });
   }
 
   // Karenin şu anki aşamasına göre bitkiyi ve harf tabelasını çizer; nesneleri verir.
@@ -784,7 +796,7 @@ class AdaSahnesi extends Phaser.Scene {
     for (let i = 0; i < 6; i++) {
       this.tarlaKareleri.push({
         alan: new Phaser.Geom.Rectangle(
-          TARLA_X + 45 + 132 * (i % 3), TARLA_Y + 52 + 122 * Math.floor(i / 3), 118, 104),
+          TARLA_X + 45 + 132 * i, TARLA_Y + 52, 118, 104),
         ekili: null, // ekilen tohum (çantadaki eşya bilgisi)
       });
     }
@@ -1757,14 +1769,18 @@ class AdaSahnesi extends Phaser.Scene {
     this.siradakiSandik();
   }
 
-  // "God mode": bütün sandıklar açılmış (sönük, çalının yanında), tohumlar çantada
+  // "God mode": bütün sandıklar açılmış (sönük, çalının yanında); altı harfin tohumu
+  // tarlaya ekilmiş ve fasulye sırığına dönüşmüş olarak başlar (a n e t i l sırayla)
   hepsiniAc() {
-    for (const s of this.sandiklar) {
+    this.sandiklar.forEach((s, i) => {
       s.acildi = true;
       s.nesne.setTexture("sandik-acik").setPosition(s.cali.x + 100, s.cali.y + 45)
         .setDepth(s.cali.y + 45).setAlpha(0.6).setScale(0.65).setTint(0xc8bca8);
-      Canta.tohumEkle(s.harfBilgisi.kucuk, false);
-    }
+      const kare = this.tarlaKareleri[i];
+      kare.ekili = { tur: "tohum", harf: s.harfBilgisi.kucuk, tekrarEdilecek: false };
+      kare.asama = BUYUME_ASAMASI;
+      kare.nesneler = this.bitkiCiz(kare);
+    });
     this.siradakiSira = this.sandiklar.length;
     this.siradakiSandik(); // sandık kalmadı: pusula susar
   }
@@ -2416,15 +2432,11 @@ class BulutSahnesi extends Phaser.Scene {
     this.cocuk = this.add.image(300, 780, "cocuk").setOrigin(0.5, 1).setDepth(4);
     this.hazir = false;
     this.hedef = null;
-    this.tekAdim = false;
-    const adimlar = this.tirmanmaAdimlari();
-    this.tweens.add({ targets: this.cocuk, y: BULUT_YURUME.y + 40, duration: 1800, ease: "Sine.Out",
-      onComplete: () => {
-        adimlar.remove();
-        this.cocuk.setTexture("cocuk").setAngle(0);
-        this.hazir = true;
-        Sesler.pling();
-      } });
+    tirmanmaHareketi(this, this.cocuk, BULUT_YURUME.y + 40, () => {
+      this.cocuk.setTexture("cocuk");
+      this.hazir = true;
+      Sesler.pling();
+    });
 
     this.tuslar = this.input.keyboard.createCursorKeys();
     this.input.on("pointerdown", (p) => {
@@ -2442,14 +2454,6 @@ class BulutSahnesi extends Phaser.Scene {
         y: Phaser.Math.Clamp(p.y, BULUT_YURUME.y, BULUT_YURUME.bottom),
       };
     });
-  }
-
-  tirmanmaAdimlari() {
-    return this.time.addEvent({ delay: 220, loop: true, callback: () => {
-      this.tekAdim = !this.tekAdim;
-      this.cocuk.setTexture(this.tekAdim ? "cocuk-adim1" : "cocuk-adim2").setAngle(this.tekAdim ? 6 : -6);
-      Sesler.adim(this.tekAdim);
-    } });
   }
 
   update(zaman, fark) {
@@ -2495,16 +2499,13 @@ class BulutSahnesi extends Phaser.Scene {
   asagiIn() {
     this.hazir = false;
     this.cocuk.setFlipX(false);
-    const adimlar = this.tirmanmaAdimlari();
-    this.tweens.add({ targets: this.cocuk, y: 840, duration: 1500, ease: "Sine.In",
-      onComplete: () => {
-        adimlar.remove();
-        this.cameras.main.fadeOut(400, 255, 255, 255);
-        this.cameras.main.once("camerafadeoutcomplete", () => {
-          this.scene.stop();
-          this.scene.wake("AdaSahnesi", { kare: this.kareSira });
-        });
-      } });
+    tirmanmaHareketi(this, this.cocuk, 840, () => {
+      this.cameras.main.fadeOut(400, 255, 255, 255);
+      this.cameras.main.once("camerafadeoutcomplete", () => {
+        this.scene.stop();
+        this.scene.wake("AdaSahnesi", { kare: this.kareSira });
+      });
+    });
   }
 }
 

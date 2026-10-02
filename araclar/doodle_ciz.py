@@ -211,23 +211,23 @@ TOPRAK = tarama("toprak", "#b98a5e", "#9a6c43", -30, 8, 3)
 KOYU_TOPRAK = tarama("koyuToprak", "#8e6340", "#6f4a2c", 30, 7, 3)
 TAHTA = tarama("tahta", "#e3b77e", "#c98f4f", 80, 7, 2.5)
 
-# Çitli tarla: 480x340, sol üst köşesi oyunda TARLA_X, TARLA_Y'ye gelir.
-# 6 toprak karesi (3x2): sol üst köşeler (45 + 132i, 52 + 122j), her biri 118x104.
+# Çitli tarla: 870x220, sol üst köşesi oyunda TARLA_X, TARLA_Y'ye gelir.
+# 6 toprak karesi yan yana (tek sıra): sol üst köşeler (45 + 132i, 52), her biri 118x104.
 kareler = ""
 for i in range(6):
-    x = 45 + 132 * (i % 3)
-    y = 52 + 122 * (i // 3)
+    x = 45 + 132 * i
+    y = 52
     kareler += f'''    <rect x="{x}" y="{y}" width="118" height="104" rx="12" fill="url(#koyuToprak)"/>
     <path d="M{x+14} {y+30} q45 -10 90 0 M{x+14} {y+56} q45 -10 90 0 M{x+14} {y+82} q45 -10 90 0" fill="none" stroke="#5e3d22" stroke-width="2.5" opacity="0.6"/>
 '''
 kaziklar = ""
-for x in range(10, 470, 55):
-    for y in (12, 290):
+for x in range(10, 860, 55):
+    for y in (12, 168):
         kaziklar += f'    <path d="M{x} {y} v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>\n'
-yaz("tarla.svg", 480, 340, "Çitli tarla: 6 ekim karesi", TOPRAK + KOYU_TOPRAK + TAHTA,
-    '  <rect x="26" y="40" width="420" height="270" rx="16" fill="#000" fill-opacity="0.13"/>\n' +
-    kalem(f'''    <rect x="20" y="30" width="420" height="270" rx="16" fill="url(#toprak)"/>
-{kareler}{kaziklar}    <path d="M4 22 h460 M4 302 h460" fill="none" stroke-width="5"/>
+yaz("tarla.svg", 870, 220, "Çitli tarla: yan yana 6 ekim karesi", TOPRAK + KOYU_TOPRAK + TAHTA,
+    '  <rect x="26" y="40" width="828" height="148" rx="16" fill="#000" fill-opacity="0.13"/>\n' +
+    kalem(f'''    <rect x="20" y="30" width="828" height="148" rx="16" fill="url(#toprak)"/>
+{kareler}{kaziklar}    <path d="M4 22 h858 M4 180 h858" fill="none" stroke-width="5"/>
 '''), 61)
 
 # Ekilmiş tohum: 100x96, oyunda orta noktası karenin ortasına gelir.
@@ -491,12 +491,12 @@ def ada_yolu(olcek):
     return "M" + " L".join(noktalar) + "Z"
 
 
-# Tarla: dünyada (2620,1630), 480x340 (oyundaki TARLA_X, TARLA_Y).
+# Tarla: dünyada (2765,1590), 870x220 (oyundaki TARLA_X, TARLA_Y).
 # Su tesisi: iskele dünyada y 3240'tan başlar; güvertesi (3090, 3324 + ISKELE_EK), 220x150
 # (oyundaki TESIS_X, TESIS_Y).
 HARITA_BOY = 4200 * HARITA_OLCEK
-tx = 15 + 2620 * HARITA_OLCEK
-ty = 15 + 1630 * HARITA_OLCEK
+tx = 15 + 2765 * HARITA_OLCEK
+ty = 15 + 1590 * HARITA_OLCEK
 yaz("harita-karti.svg", 250, 175, "Mini harita kartı: ada ve tarla",
     tarama("hDeniz", "#d7efff", "#a9dcf5", 45, 6, 2) + tarama("hKum", "#fbe7b5", "#f0cf86", 30, 6, 2)
     + tarama("hCimen", "#c9eba7", "#a3d97c", -35, 6, 2)
@@ -507,7 +507,7 @@ yaz("harita-karti.svg", 250, 175, "Mini harita kartı: ada ve tarla",
     f'  <g clip-path="url(#kart)">\n    <rect x="15" y="15" width="220" height="{HARITA_BOY:.1f}" fill="url(#hDeniz)"/>\n  </g>\n' +
     kalem(f'''    <path d="{ada_yolu(1)}" fill="url(#hKum)" stroke-width="2.5"/>
     <path d="{ada_yolu(0.93)}" fill="url(#hCimen)" stroke="none"/>
-    <rect x="{tx:.1f}" y="{ty:.1f}" width="{480 * HARITA_OLCEK:.1f}" height="{340 * HARITA_OLCEK:.1f}" rx="2" fill="#8e6340" stroke-width="1.8"/>
+    <rect x="{tx:.1f}" y="{ty:.1f}" width="{870 * HARITA_OLCEK:.1f}" height="{220 * HARITA_OLCEK:.1f}" rx="2" fill="#8e6340" stroke-width="1.8"/>
     <path d="M{15 + 3200 * HARITA_OLCEK:.1f} {15 + 3240 * HARITA_OLCEK:.1f} V{15 + (3324 + ISKELE_EK) * HARITA_OLCEK:.1f}" fill="none" stroke="#c98f4f" stroke-width="2.5"/>
     <rect x="{15 + 3090 * HARITA_OLCEK:.1f}" y="{15 + (3324 + ISKELE_EK) * HARITA_OLCEK:.1f}" width="{220 * HARITA_OLCEK:.1f}" height="{150 * HARITA_OLCEK:.1f}" rx="1.5" fill="#9be3dc" stroke-width="1.8"/>
 ''', 2.5) +

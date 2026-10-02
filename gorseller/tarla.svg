@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="480" height="340" viewBox="0 0 480 340">
-  <!-- Çitli tarla: 6 ekim karesi (doodle tarzı, kendi çizimimiz) -->
+<svg xmlns="http://www.w3.org/2000/svg" width="870" height="220" viewBox="0 0 870 220">
+  <!-- Çitli tarla: yan yana 6 ekim karesi (doodle tarzı, kendi çizimimiz) -->
   <defs>
     <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
       <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="61" result="g"/>
@@ -18,39 +18,53 @@
       <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#c98f4f" stroke-width="2.5" stroke-linecap="round"/>
     </pattern>
   </defs>
-  <rect x="26" y="40" width="420" height="270" rx="16" fill="#000" fill-opacity="0.13"/>
+  <rect x="26" y="40" width="828" height="148" rx="16" fill="#000" fill-opacity="0.13"/>
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-    <rect x="20" y="30" width="420" height="270" rx="16" fill="url(#toprak)"/>
+    <rect x="20" y="30" width="828" height="148" rx="16" fill="url(#toprak)"/>
     <rect x="45" y="52" width="118" height="104" rx="12" fill="url(#koyuToprak)"/>
     <path d="M59 82 q45 -10 90 0 M59 108 q45 -10 90 0 M59 134 q45 -10 90 0" fill="none" stroke="#5e3d22" stroke-width="2.5" opacity="0.6"/>
     <rect x="177" y="52" width="118" height="104" rx="12" fill="url(#koyuToprak)"/>
     <path d="M191 82 q45 -10 90 0 M191 108 q45 -10 90 0 M191 134 q45 -10 90 0" fill="none" stroke="#5e3d22" stroke-width="2.5" opacity="0.6"/>
     <rect x="309" y="52" width="118" height="104" rx="12" fill="url(#koyuToprak)"/>
     <path d="M323 82 q45 -10 90 0 M323 108 q45 -10 90 0 M323 134 q45 -10 90 0" fill="none" stroke="#5e3d22" stroke-width="2.5" opacity="0.6"/>
-    <rect x="45" y="174" width="118" height="104" rx="12" fill="url(#koyuToprak)"/>
-    <path d="M59 204 q45 -10 90 0 M59 230 q45 -10 90 0 M59 256 q45 -10 90 0" fill="none" stroke="#5e3d22" stroke-width="2.5" opacity="0.6"/>
-    <rect x="177" y="174" width="118" height="104" rx="12" fill="url(#koyuToprak)"/>
-    <path d="M191 204 q45 -10 90 0 M191 230 q45 -10 90 0 M191 256 q45 -10 90 0" fill="none" stroke="#5e3d22" stroke-width="2.5" opacity="0.6"/>
-    <rect x="309" y="174" width="118" height="104" rx="12" fill="url(#koyuToprak)"/>
-    <path d="M323 204 q45 -10 90 0 M323 230 q45 -10 90 0 M323 256 q45 -10 90 0" fill="none" stroke="#5e3d22" stroke-width="2.5" opacity="0.6"/>
+    <rect x="441" y="52" width="118" height="104" rx="12" fill="url(#koyuToprak)"/>
+    <path d="M455 82 q45 -10 90 0 M455 108 q45 -10 90 0 M455 134 q45 -10 90 0" fill="none" stroke="#5e3d22" stroke-width="2.5" opacity="0.6"/>
+    <rect x="573" y="52" width="118" height="104" rx="12" fill="url(#koyuToprak)"/>
+    <path d="M587 82 q45 -10 90 0 M587 108 q45 -10 90 0 M587 134 q45 -10 90 0" fill="none" stroke="#5e3d22" stroke-width="2.5" opacity="0.6"/>
+    <rect x="705" y="52" width="118" height="104" rx="12" fill="url(#koyuToprak)"/>
+    <path d="M719 82 q45 -10 90 0 M719 108 q45 -10 90 0 M719 134 q45 -10 90 0" fill="none" stroke="#5e3d22" stroke-width="2.5" opacity="0.6"/>
     <path d="M10 12 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
-    <path d="M10 290 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M10 168 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
     <path d="M65 12 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
-    <path d="M65 290 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M65 168 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
     <path d="M120 12 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
-    <path d="M120 290 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M120 168 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
     <path d="M175 12 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
-    <path d="M175 290 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M175 168 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
     <path d="M230 12 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
-    <path d="M230 290 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M230 168 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
     <path d="M285 12 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
-    <path d="M285 290 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M285 168 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
     <path d="M340 12 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
-    <path d="M340 290 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M340 168 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
     <path d="M395 12 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
-    <path d="M395 290 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M395 168 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
     <path d="M450 12 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
-    <path d="M450 290 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
-    <path d="M4 22 h460 M4 302 h460" fill="none" stroke-width="5"/>
+    <path d="M450 168 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M505 12 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M505 168 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M560 12 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M560 168 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M615 12 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M615 168 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M670 12 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M670 168 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M725 12 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M725 168 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M780 12 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M780 168 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M835 12 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M835 168 v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>
+    <path d="M4 22 h858 M4 180 h858" fill="none" stroke-width="5"/>
   </g>
 </svg>
