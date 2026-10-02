@@ -12,6 +12,15 @@ const TARLA_X = BASLANGIC_X - 580;
 const TARLA_Y = BASLANGIC_Y - 290;
 // Bu alanda süs yok. Alt pay büyük: ağaçlar tabanından yukarı uzanır, tarlayı örtmesin.
 const TARLA_ALANI = new Phaser.Geom.Rectangle(TARLA_X - 60, TARLA_Y - 60, 480 + 120, 340 + 60 + 240);
+// Su arıtma tesisi: başlangıç yerinin güneyinde, alt kıyıda (gorseller/su-tesisi.svg,
+// 240x300). TESIS_Y resmin üst kenarı; üstteki iskele kıyıdan gelir, karakter iskelede
+// yürüyebilir.
+const TESIS_X = BASLANGIC_X;
+const TESIS_Y = 3240;
+const ISKELE_ALANI = new Phaser.Geom.Rectangle(TESIS_X - 22, TESIS_Y - 40, 44, 128);
+const ISKELE_BASI = { x: TESIS_X, y: TESIS_Y - 15 };
+const ISKELE_SONU = { x: TESIS_X, y: TESIS_Y + 82 };
+const TESIS_ALANI = new Phaser.Geom.Rectangle(TESIS_X - 160, TESIS_Y - 260, 320, 600); // süs yok
 const SENSOR_MENZILI = 1600; // sandığa bu kadar yaklaşınca bip sesi başlar
 // Hazine pusulası: dış halka her zaman silik yanar; ortanca halka sandığa bu kadar
 // yaklaşınca (yaklaşık bir buçuk ekran), iç halka bu kadar yaklaşınca (yarım ekran) yanar.
@@ -188,7 +197,7 @@ function suslerUret() {
     susler.push({ tur: rastgele.pick(turler), x, y });
   }
   // Tarlanın üstünde ağaç, çalı, kaya olmasın
-  return susler.filter((s) => !TARLA_ALANI.contains(s.x, s.y));
+  return susler.filter((s) => !TARLA_ALANI.contains(s.x, s.y) && !TESIS_ALANI.contains(s.x, s.y));
 }
 
 class AdaSahnesi extends Phaser.Scene {
@@ -219,6 +228,9 @@ class AdaSahnesi extends Phaser.Scene {
     this.load.svg("nar", "gorseller/nar.svg");
     this.load.svg("tarla", "gorseller/tarla.svg");
     this.load.svg("harita-karti", "gorseller/harita-karti.svg");
+    for (const ad of ["su-tesisi", "tesis-pencere", "damla", "damla-bos", "sise"]) {
+      this.load.svg(ad, `gorseller/${ad}.svg`);
+    }
     this.load.svg("ekili-tohum", "gorseller/ekili-tohum.svg");
     for (const ad of ["esek", "tilki", "inek", "leylek"]) this.load.svg(ad, `gorseller/${ad}.svg`);
     for (const ad of ["cicek-kirmizi", "cicek-mor", "cicek-beyaz", "ot", "kelebek", "kus"]) {
@@ -231,6 +243,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.denizKur();
     this.adayiCiz();
     this.tarlaKur();
+    this.tesisKur();
 
     // Karakterin yürüyebildiği alan (kumsal dahil, denize girmeden)
     this.yuruyusAlani = new Phaser.Geom.Polygon(adaNoktalari(0.95));
@@ -277,13 +290,19 @@ class AdaSahnesi extends Phaser.Scene {
     this.cantaKur();
     this.menuKur();
     this.haritaKur();
+    this.tesisPaneliKur();
     this.cameras.main.fadeIn(400, 251, 247, 236);
 
     this.input.on("pointerdown", (p) => {
       Sesler.ac();
       if (this.menuTiklamasi(p)) return;
+      if (this.tesisTiklamasi(p)) return;
       if (!this.cantaAcik && this.haritaAlani.contains(p.x, p.y)) return; // haritaya dokununca yürümez
       if (this.cantaTiklamasi(p)) return;
+      if (this.tesis.getBounds().contains(p.worldX, p.worldY)) {
+        this.tesiseGit();
+        return;
+      }
       if (this.sandik && this.sandikGorundu && !this.sandikAcildi
           && this.sandik.getBounds().contains(p.worldX, p.worldY)) {
         this.sandigiAc();
@@ -296,14 +315,14 @@ class AdaSahnesi extends Phaser.Scene {
         this.tohumuTasi(p);
         return;
       }
-      if (p.isDown && !this.cantaAcik && !this.menuAcik) this.hedefBelirle(p.worldX, p.worldY, false);
+      if (p.isDown && !this.cantaAcik && !this.menuAcik && !this.tesisAcik) this.hedefBelirle(p.worldX, p.worldY, false);
     });
     this.input.on("pointerup", (p) => this.tohumuBirak(p));
     this.input.on("pointerupoutside", (p) => this.tohumuBirak(p));
     this.input.keyboard.on("keydown", () => Sesler.ac());
     this.input.keyboard.addCapture("SPACE");
     this.input.keyboard.on("keydown-SPACE", () => {
-      if (!this.menuAcik) this.cantayiAcKapat();
+      if (!this.menuAcik && !this.tesisAcik) this.cantayiAcKapat();
     });
   }
 
@@ -373,7 +392,14 @@ class AdaSahnesi extends Phaser.Scene {
     this.kutucukNesneleri = [];
     Canta.esyalar.forEach((esya, i) => {
       const k = this.kutucuklar[i];
-      if (!k || esya.tur !== "tohum") return;
+      if (!k) return;
+      if (esya.tur === "sise") {
+        const sise = this.add.image(k.x, k.y, "sise");
+        this.cantaIcerigi.add(sise);
+        this.kutucukNesneleri[i] = [sise];
+        return;
+      }
+      if (esya.tur !== "tohum") return;
       const resim = this.add.image(k.x, k.y - 8, "tohum");
       // Harf, tohumun gövdesinin tam ortasına (gövde resmin ortasından 12 px aşağıda)
       const harf = this.add.text(k.x, k.y + 4, esya.harf, {
@@ -495,6 +521,114 @@ class AdaSahnesi extends Phaser.Scene {
     Sesler.tohum();
   }
 
+  // ---- Su arıtma tesisi ----
+  // Tesise dokununca karakter iskelenin ucuna yürür ve panel açılır. Panelde her harf
+  // için bir düğme var: dokununca o harf için sihirli şişeye bir damla su gelir.
+
+  tesisKur() {
+    // Karakter iskelede yürürken tesisin önünde görünsün
+    this.tesis = this.add.image(TESIS_X, TESIS_Y, "su-tesisi").setOrigin(0.5, 0).setDepth(TESIS_Y - 40);
+    this.yolSirasi = []; // sırayla gidilecek noktalar
+    this.tesiseGidiyor = false;
+  }
+
+  tesisPaneliKur() {
+    this.tesisAcik = false;
+    const pencere = this.add.container(0, 0).setScrollFactor(0).setDepth(9100).setVisible(false);
+    const karartma = this.add.graphics();
+    karartma.fillStyle(0x000000, 0.35);
+    karartma.fillRect(0, 0, 1280, 720);
+    // Çizimdeki düğmeler ve çarpı aşağıdaki konumlarla aynı yerdedir (tesis-pencere.svg)
+    const resim = this.add.image(290, 120, "tesis-pencere").setOrigin(0);
+    const baslik = doodleYazi(this, 630, 190, "Su Arıtma Tesisi", 44, "mavi").setOrigin(0.5);
+    pencere.add([karartma, resim, baslik]);
+    this.tesisDugmeleri = HARFLER.filter((h) => h.grup === 1).map((h, i) => {
+      const x = 290 + 160 + 190 * (i % 3);
+      const y = 120 + 195 + 145 * Math.floor(i / 3);
+      const yazi = this.add.text(x, y, h.kucuk, {
+        fontFamily: "Andika", fontSize: "70px", color: "#ffffff",
+        stroke: "#3b2a1a", strokeThickness: 10, padding: { x: 4, y: 4 },
+      });
+      boyaliOrtala(titret(yazi, 2));
+      // Altında üç küçük damla: şişede bu harf için kaç damla var
+      const noktalar = [0, 1, 2].map((j) => this.add.image(x - 26 + 26 * j, y + 72, "damla-bos").setScale(0.42));
+      pencere.add([yazi, ...noktalar]);
+      return { harf: h.kucuk, x, y, yazi, noktalar, alan: new Phaser.Geom.Circle(x, y, 62) };
+    });
+    this.tesisKapatmaAlani = new Phaser.Geom.Circle(290 + 625, 120 + 45, 36);
+    this.tesisPencereAlani = new Phaser.Geom.Rectangle(310, 150, 620, 420);
+    this.tesisPenceresi = pencere;
+  }
+
+  // Karakter iskelenin ucunda değilse oraya yürür (önce iskelenin başına), varınca panel açılır
+  tesiseGit() {
+    if (Phaser.Math.Distance.BetweenPoints(this.cocuk, ISKELE_SONU) < 40) {
+      this.tesisiAcKapat();
+      return;
+    }
+    this.hedef = { ...ISKELE_BASI };
+    this.yolSirasi = [{ ...ISKELE_SONU }];
+    this.tesiseGidiyor = true;
+  }
+
+  tesisiAcKapat() {
+    this.tesisAcik = !this.tesisAcik;
+    this.hedef = null;
+    Sesler.canta(this.tesisAcik);
+    this.tesisPenceresi.setVisible(this.tesisAcik);
+    if (this.tesisAcik) {
+      this.damlaNoktalariniCiz();
+      this.tesisPenceresi.setScale(0.9).setAlpha(0);
+      this.tweens.add({ targets: this.tesisPenceresi, scale: 1, alpha: 1, duration: 180, ease: "Back.Out" });
+    }
+  }
+
+  damlaNoktalariniCiz() {
+    for (const d of this.tesisDugmeleri) {
+      const sayi = Canta.damlaSayisi(d.harf);
+      d.noktalar.forEach((n, j) => n.setTexture(j < sayi ? "damla" : "damla-bos"));
+    }
+  }
+
+  // Dokunuş tesis paneliyle ilgiliyse işler ve true döner.
+  tesisTiklamasi(p) {
+    if (!this.tesisAcik) return false;
+    if (this.tesisKapatmaAlani.contains(p.x, p.y) || !this.tesisPencereAlani.contains(p.x, p.y)) {
+      this.tesisiAcKapat();
+      return true;
+    }
+    const dugme = this.tesisDugmeleri.find((d) => d.alan.contains(p.x, p.y));
+    if (dugme) this.damlaAl(dugme);
+    return true;
+  }
+
+  // Düğmeden bir damla çıkar ve çantaya (şişeye) uçar. Şişe o harf için doluysa
+  // düğme sadece hafifçe sallanır.
+  damlaAl(dugme) {
+    this.tweens.killTweensOf(dugme.yazi);
+    dugme.yazi.setScale(1).setAngle(0);
+    if (!Canta.damlaEkle(dugme.harf)) {
+      this.tweens.add({ targets: dugme.yazi, angle: { from: -8, to: 8 }, duration: 80,
+        yoyo: true, repeat: 2, onComplete: () => dugme.yazi.setAngle(0) });
+      return;
+    }
+    Sesler.damla();
+    this.tweens.add({ targets: dugme.yazi, scale: 0.85, duration: 80, yoyo: true });
+    this.damlaNoktalariniCiz();
+    const damla = this.add.image(dugme.x, dugme.y, "damla").setScrollFactor(0).setDepth(9600).setScale(0.3);
+    this.tweens.chain({
+      targets: damla,
+      tweens: [
+        { scale: 1.3, y: dugme.y - 40, duration: 220, ease: "Back.Out" },
+        { x: this.cantaDugmesi.x, y: this.cantaDugmesi.y, scale: 0.5, duration: 550, ease: "Cubic.In" },
+      ],
+      onComplete: () => {
+        damla.destroy();
+        this.tweens.add({ targets: this.cantaDugmesi, scale: 1.2, duration: 110, yoyo: true });
+      },
+    });
+  }
+
   // ---- Mini harita (sol alt) ----
   // Kart, ada ve tarla sabit bir resim (gorseller/harita-karti.svg). Üstüne her karede
   // karakter, ekranda görünen bölge ve açılmış sandıklar çizilir. Kapalı sandıklar
@@ -590,6 +724,7 @@ class AdaSahnesi extends Phaser.Scene {
     }
     if (this.menuDugmesi.getBounds().contains(p.x, p.y)) {
       if (this.cantaAcik) this.cantayiAcKapat();
+      if (this.tesisAcik) this.tesisiAcKapat();
       this.menuyuAcKapat();
       return true;
     }
@@ -1429,7 +1564,7 @@ class AdaSahnesi extends Phaser.Scene {
       if (!cimen.contains(x, y)) continue;
       const tur = rastgele.pick(turler);
       const faz = rastgele.frac() * Math.PI * 2;
-      if (TARLA_ALANI.contains(x, y)) continue; // tarlada çiçek ve ot yok
+      if (TARLA_ALANI.contains(x, y) || TESIS_ALANI.contains(x, y)) continue; // tarlada, tesiste yok
       const nesne = this.add.image(x, y, tur).setOrigin(0.5, 1).setDepth(y);
       this.sallananlar.push({ nesne, tur: "cicek", faz });
       eklenen++;
@@ -1612,6 +1747,8 @@ class AdaSahnesi extends Phaser.Scene {
 
   hedefBelirle(x, y, isaretGoster) {
     this.hedef = { x, y };
+    this.yolSirasi = [];
+    this.tesiseGidiyor = false;
     if (isaretGoster) {
       const isaret = this.add.circle(x, y, 14).setStrokeStyle(4, 0x2b2b2b).setDepth(5000);
       this.tweens.add({
@@ -1630,7 +1767,7 @@ class AdaSahnesi extends Phaser.Scene {
     let dx = 0;
     let dy = 0;
 
-    if (this.donuk || this.cantaAcik || this.menuAcik) {
+    if (this.donuk || this.cantaAcik || this.menuAcik || this.tesisAcik) {
       this.cocuk.setAngle(0).setScale(1).setTexture("cocuk");
       return;
     }
@@ -1642,6 +1779,8 @@ class AdaSahnesi extends Phaser.Scene {
 
     if (dx !== 0 || dy !== 0) {
       this.hedef = null; // tuşlar dokunmaya göre önceliklidir
+      this.yolSirasi = [];
+      this.tesiseGidiyor = false;
     } else if (this.hedef) {
       dx = this.hedef.x - this.cocuk.x;
       dy = this.hedef.y - this.cocuk.y;
@@ -1649,6 +1788,13 @@ class AdaSahnesi extends Phaser.Scene {
         this.hedef = null;
         dx = 0;
         dy = 0;
+        // Yolun sıradaki noktası (ör. tesise giderken önce iskelenin başı, sonra sonu)
+        if (this.yolSirasi.length) {
+          this.hedef = this.yolSirasi.shift();
+        } else if (this.tesiseGidiyor) {
+          this.tesiseGidiyor = false;
+          this.tesisiAcKapat();
+        }
       }
     }
 
@@ -1660,7 +1806,11 @@ class AdaSahnesi extends Phaser.Scene {
       const ax = (dx / uzunluk) * adim;
       const ay = (dy / uzunluk) * adim;
       yuruyor = this.ilerle(ax, ay);
-      if (!yuruyor) this.hedef = null; // kıyıya dayandı
+      if (!yuruyor) { // kıyıya dayandı
+        this.hedef = null;
+        this.yolSirasi = [];
+        this.tesiseGidiyor = false;
+      }
       if (ax !== 0) this.cocuk.setFlipX(ax < 0);
     }
 
@@ -1703,7 +1853,8 @@ class AdaSahnesi extends Phaser.Scene {
   ilerle(ax, ay) {
     const x = this.cocuk.x;
     const y = this.cocuk.y;
-    const alan = this.yuruyusAlani;
+    // Ada ya da iskele
+    const alan = { contains: (px, py) => this.yuruyusAlani.contains(px, py) || ISKELE_ALANI.contains(px, py) };
     if (alan.contains(x + ax, y + ay)) {
       this.cocuk.setPosition(x + ax, y + ay);
     } else if (ax !== 0 && alan.contains(x + ax, y)) {

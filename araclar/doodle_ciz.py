@@ -245,6 +245,72 @@ yaz("ekili-tohum.svg", 100, 96, "Toprağa ekilmiş tohum ve filizi",
     <circle cx="46" cy="84" r="2" fill="#5e3d22" stroke-width="1.5"/>
 '''), 62)
 
+# ---- Su arıtma tesisi ve su ----
+SU = tarama("su", "#c9ecff", "#7cc4ef", 35, 6, 2.5)
+DUVAR = tarama("duvar", "#eef8ff", "#cfe9fb", -30, 7, 2.5)
+KIREMIT = tarama("kiremit", "#ffb3a8", "#e0533d", -35, 6, 2.5)
+
+# Tesis: 240x300. Üstte kıyıdan gelen iskele (x 95-145, y 0-90), altında deniz üstünde
+# ayaklı güverte, ev ve su deposu. Oyunda sol üst köşesi (TESIS_X - 120, TESIS_Y).
+tahtalar = "".join(f'    <path d="M97 {y} h46" fill="none" stroke-width="2.5"/>\n' for y in range(12, 90, 13))
+guverte = "".join(f'    <path d="M12 {y} h216" fill="none" stroke-width="2" opacity="0.7"/>\n' for y in range(100, 236, 16))
+yaz("su-tesisi.svg", 240, 300, "Su arıtma tesisi: iskele, ayaklı güverte, ev ve su deposu",
+    TAHTA + SU + DUVAR + KIREMIT,
+    kalem('''    <path d="M26 236 v54 M90 236 v54 M150 236 v54 M214 236 v54" fill="none" stroke="#8e6340" stroke-width="7"/>
+    <path d="M6 290 q20 -8 40 0 q20 8 40 0 q20 -8 40 0 q20 8 40 0 q20 -8 40 0 q20 8 30 0" fill="none" stroke="#7cc4ef" stroke-width="3"/>
+    <rect x="95" y="0" width="50" height="94" fill="url(#tahta)"/>
+''' + tahtalar + '''    <rect x="10" y="84" width="220" height="152" rx="6" fill="url(#tahta)"/>
+''' + guverte + '''    <path d="M226 160 q14 0 12 30 v100" fill="none" stroke="#8a8a8a" stroke-width="9"/>
+    <path d="M226 160 q14 0 12 30 v100" fill="none" stroke-width="2"/>
+    <rect x="24" y="130" width="122" height="96" fill="url(#duvar)"/>
+    <path d="M14 134 l30 -38 h82 l30 38z" fill="url(#kiremit)"/>
+    <rect x="72" y="172" width="30" height="54" rx="4" fill="#9be3dc"/>
+    <circle cx="96" cy="200" r="2.5" fill="#2b2b2b"/>
+    <circle cx="46" cy="166" r="12" fill="#c9ecff"/>
+    <path d="M46 154 v24 M34 166 h24" fill="none" stroke-width="2.5"/>
+    <path d="M160 120 v100 q31 14 62 0 v-100z" fill="url(#su)"/>
+    <ellipse cx="191" cy="120" rx="31" ry="10" fill="#e6f6ff"/>
+    <path d="M191 146 q-14 20 -14 30 q0 14 14 14 q14 0 14 -14 q0 -10 -14 -30z" fill="#ffffff" stroke-width="3"/>
+''') + '''  <path d="M200 70 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4z M222 96 l3 6 l6 3 l-6 3 l-3 6 l-3 -6 l-6 -3 l6 -3z" fill="#ffe680" stroke="#2b2b2b" stroke-width="2"/>
+''', 64)
+
+# Su damlası: 40x52
+yaz("damla.svg", 40, 52, "Su damlası", SU,
+    kalem('''    <path d="M20 4 q-16 22 -16 32 q0 14 16 14 q16 0 16 -14 q0 -10 -16 -32z" fill="url(#su)" stroke-width="3.5"/>
+    <path d="M12 34 q0 -6 5 -10" fill="none" stroke="#ffffff" stroke-width="3.5"/>
+'''), 65, 2.5)
+
+# Boş damla yeri (soluk kesik çizgi): 40x52
+yaz("damla-bos.svg", 40, 52, "Boş damla yeri", "",
+    '''  <path d="M20 4 q-16 22 -16 32 q0 14 16 14 q16 0 16 -14 q0 -10 -16 -32z" fill="#ffffff" fill-opacity="0.5" stroke="#9fb6c4" stroke-width="3" stroke-dasharray="5 4"/>
+''', 66)
+
+# Sihirli su şişesi (çanta eşyası): 90x110
+yaz("sise.svg", 90, 110, "Sihirli su şişesi", SU + tarama("mantar", "#e3b77e", "#c98f4f", 80, 6, 2.5),
+    kalem('''    <rect x="34" y="6" width="22" height="18" rx="4" fill="url(#mantar)"/>
+    <path d="M36 24 v16 q-28 10 -28 36 q0 28 37 28 q37 0 37 -28 q0 -26 -28 -36 v-16z" fill="#ffffff"/>
+    <path d="M12 72 q33 -10 66 0 q0 26 -33 26 q-33 0 -33 -26z" fill="url(#su)" stroke-width="3"/>
+    <path d="M22 56 q4 -8 10 -10" fill="none" stroke="#cfe9fb" stroke-width="4"/>
+''') + '''  <path d="M70 18 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3z M18 36 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2z" fill="#ffe680" stroke="#2b2b2b" stroke-width="1.8"/>
+  <path d="M38 84 l2 4 l4 2 l-4 2 l-2 4 l-2 -4 l-4 -2 l4 -2z M54 76 l2 4 l4 2 l-4 2 l-2 4 l-2 -4 l-4 -2 l4 -2z" fill="#ffffff"/>
+''', 67, 3)
+
+# Su arıtma tesisi paneli: 700x480, sol üst köşesi oyunda (290,120).
+# 6 harf düğmesi (2 sıra x 3): ortaları (160|350|540, 195|340), yarıçap 58. Çarpı (625,45).
+dugmeler = ""
+for i in range(6):
+    x = 160 + 190 * (i % 3)
+    y = 195 + 145 * (i // 3)
+    dugmeler += f'    <circle cx="{x}" cy="{y}" r="58" fill="url(#su)"/>\n'
+yaz("tesis-pencere.svg", 700, 480, "Su arıtma tesisi paneli",
+    tarama("kagit", "#fbf4e2", "#f1e6c8", 30, 8, 3) + tarama("bant", "#c9ecff", "#7cc4ef", 35) + SU,
+    '  <rect x="30" y="44" width="620" height="420" rx="30" fill="#000" fill-opacity="0.18"/>\n' +
+    kalem(f'''    <path d="M20 66 q0 -36 36 -36 h548 q36 0 36 36 v348 q0 36 -36 36 h-548 q-36 0 -36 -36z" fill="url(#kagit)"/>
+    <path d="M20 66 q0 -36 36 -36 h548 q36 0 36 36 v44 h-620z" fill="url(#bant)"/>
+{dugmeler}    <circle cx="625" cy="45" r="31" fill="#ff8a7a"/>
+    <path d="M612 32 l26 26 M638 32 l-26 26" fill="none" stroke="#ffffff" stroke-width="7"/>
+''', 5), 68, 4)
+
 # ---- Mini harita kartı (sol alt) ----
 # 250x160 kâğıt kart. İçindeki harita alanı (15,15)'ten başlar, 220 px genişliğinde:
 # dünya (6400x3600) 220/6400 ölçeğiyle küçültülür. Ada şekli oyundaki adaNoktalari()
@@ -263,7 +329,8 @@ def ada_yolu(olcek):
     return "M" + " L".join(noktalar) + "Z"
 
 
-# Tarla: dünyada (2620,1630), 480x340 (oyundaki TARLA_X, TARLA_Y)
+# Tarla: dünyada (2620,1630), 480x340 (oyundaki TARLA_X, TARLA_Y).
+# Su tesisi: güvertesi dünyada (3090,3324), 220x150 (oyundaki TESIS_X, TESIS_Y).
 tx = 15 + 2620 * HARITA_OLCEK
 ty = 15 + 1630 * HARITA_OLCEK
 yaz("harita-karti.svg", 250, 160, "Mini harita kartı: ada ve tarla",
@@ -277,6 +344,7 @@ yaz("harita-karti.svg", 250, 160, "Mini harita kartı: ada ve tarla",
     kalem(f'''    <path d="{ada_yolu(1)}" fill="url(#hKum)" stroke-width="2.5"/>
     <path d="{ada_yolu(0.93)}" fill="url(#hCimen)" stroke="none"/>
     <rect x="{tx:.1f}" y="{ty:.1f}" width="{480 * HARITA_OLCEK:.1f}" height="{340 * HARITA_OLCEK:.1f}" rx="2" fill="#8e6340" stroke-width="1.8"/>
+    <rect x="{15 + 3090 * HARITA_OLCEK:.1f}" y="{15 + 3324 * HARITA_OLCEK:.1f}" width="{220 * HARITA_OLCEK:.1f}" height="{150 * HARITA_OLCEK:.1f}" rx="1.5" fill="#9be3dc" stroke-width="1.8"/>
 ''', 2.5) +
     '''  <rect x="2" y="0" width="50" height="16" fill="#f6e27a" opacity="0.85" transform="rotate(-12 27 8)"/>
 ''', 63, 2.5)

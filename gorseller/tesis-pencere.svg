@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="700" height="480" viewBox="0 0 700 480">
+  <!-- Su arıtma tesisi paneli (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="68" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="4" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kagit" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="8" height="8" fill="#fbf4e2"/>
+      <line x1="0" y1="4.0" x2="8" y2="4.0" stroke="#f1e6c8" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="bant" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="7" height="7" fill="#c9ecff"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#7cc4ef" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="su" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9ecff"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#7cc4ef" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <rect x="30" y="44" width="620" height="420" rx="30" fill="#000" fill-opacity="0.18"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 66 q0 -36 36 -36 h548 q36 0 36 36 v348 q0 36 -36 36 h-548 q-36 0 -36 -36z" fill="url(#kagit)"/>
+    <path d="M20 66 q0 -36 36 -36 h548 q36 0 36 36 v44 h-620z" fill="url(#bant)"/>
+    <circle cx="160" cy="195" r="58" fill="url(#su)"/>
+    <circle cx="350" cy="195" r="58" fill="url(#su)"/>
+    <circle cx="540" cy="195" r="58" fill="url(#su)"/>
+    <circle cx="160" cy="340" r="58" fill="url(#su)"/>
+    <circle cx="350" cy="340" r="58" fill="url(#su)"/>
+    <circle cx="540" cy="340" r="58" fill="url(#su)"/>
+    <circle cx="625" cy="45" r="31" fill="#ff8a7a"/>
+    <path d="M612 32 l26 26 M638 32 l-26 26" fill="none" stroke="#ffffff" stroke-width="7"/>
+  </g>
+</svg>
