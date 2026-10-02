@@ -109,6 +109,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   reddettiği için oyunda kullanılmıyor; yalnızca mikrofon.html'de ölçüm gösteriyor.
 - `mikrofon.html` – Öğretmen için mikrofon testi sayfası (Chrome'un ne duyduğunu gösterir).
 - `sesler.js` – Oyun sesleri. Ses dosyası yok; sesler tarayıcıda (Web Audio) üretilir.
+  Sesli okuma `Sesler.soyle`: telefonda ilk dokunuşta ses motoru ısıtılır, önceki söz
+  susturulunca kısa ara verilir, güvence süresi ses başlayınca yeniden kurulur (yavaş
+  telefonda sözler kesilmesin). Susturmak için `Sesler.sustur`.
 - `yazitipi/` – Andika yazı tipi ve lisansı (SIL Open Font License).
 - `gorseller/` – Kendi çizdiğimiz SVG görseller. Bütün oyun doodle tarzında: titrek kalem
   çizgisi (SVG içinde feTurbulence/feDisplacementMap süzgeci), boya kalemi taraması,

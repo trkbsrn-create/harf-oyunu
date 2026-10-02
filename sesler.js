@@ -12,6 +12,7 @@ const Sesler = {
       this.baglam = new Baglam();
     }
     if (this.baglam.state === "suspended") this.baglam.resume();
+    this.konusmayiIsit();
   },
 
   // Tek bir nota çalar.
@@ -100,6 +101,12 @@ const Sesler = {
   // Tarayıcının Türkçe sesiyle bir harfi, heceyi ya da kelimeyi sesli söyler (ses
   // dosyası yok, kayıt yok). Türkçe ses yoksa ya da tarayıcı desteklemiyorsa sessiz kalır.
   // bitince: söyleme bitince bir kez çağrılır (ses hiç çıkmasa bile, tahmini süre sonunda).
+  //
+  // Telefon (Android Chrome) için önlemler: ses motoru ilk dokunuşta ısıtılır (yoksa ilk söz
+  // geç gelir); önceki söz susturulduktan hemen sonra yenisi verilmez, kısa bir ara verilir
+  // (yoksa yeni söz kesilir ya da hiç çıkmaz); söz nesnesi saklanır (yoksa tarayıcı onu
+  // silebilir, söz yarıda kalır). Güvence süresi, ses gerçekten başladığında yeniden
+  // kurulur: yavaş telefonda ses geç başlasa da sonraki adım onu kesmez.
   soyle(metin, bitince) {
     let cagrildi = false;
     const bitti = () => {
@@ -107,15 +114,66 @@ const Sesler = {
       cagrildi = true;
       bitince();
     };
-    setTimeout(bitti, Math.max(1200, metin.length * 90) + 1500); // güvence
+    const tahmin = Math.max(800, metin.length * 110);
+    let guvence = setTimeout(bitti, tahmin + 3500);
     if (!("speechSynthesis" in window)) return;
-    window.speechSynthesis.cancel();
+    const konusma = window.speechSynthesis;
     const soz = new SpeechSynthesisUtterance(metin);
-    soz.onend = bitti;
+    this.sonSoz = soz;
     soz.lang = "tr-TR";
     soz.rate = 0.8;
-    const turkce = window.speechSynthesis.getVoices().find((v) => v.lang && v.lang.startsWith("tr"));
+    const turkce = this.turkceSes();
     if (turkce) soz.voice = turkce;
+    soz.onstart = () => {
+      clearTimeout(guvence);
+      guvence = setTimeout(bitti, tahmin * 1.5 + 1500);
+    };
+    soz.onend = () => {
+      clearTimeout(guvence);
+      bitti();
+    };
+    const no = (this.sozNo = (this.sozNo || 0) + 1);
+    const soylet = () => {
+      if (no !== this.sozNo) return; // bu arada daha yeni bir söz geldi
+      konusma.resume();
+      konusma.speak(soz);
+    };
+    if (konusma.speaking || konusma.pending) {
+      konusma.cancel();
+      setTimeout(soylet, 120);
+    } else {
+      soylet();
+    }
+  },
+
+  // Söyleneni keser (sıradaki söz de söylenmez)
+  sustur() {
+    this.sozNo = (this.sozNo || 0) + 1;
+    if ("speechSynthesis" in window) window.speechSynthesis.cancel();
+  },
+
+  // Tarayıcının Türkçe sesi (sesler listesi telefonda geç gelir; gelince saklanır)
+  turkceSes() {
+    if (!("speechSynthesis" in window)) return null;
+    if (!this.sesDinleniyor) {
+      this.sesDinleniyor = true;
+      window.speechSynthesis.addEventListener?.("voiceschanged", () => { this.turkce = undefined; });
+    }
+    if (!this.turkce) {
+      this.turkce = window.speechSynthesis.getVoices().find((v) => v.lang && v.lang.replace("_", "-").startsWith("tr"));
+    }
+    return this.turkce || null;
+  },
+
+  // İlk dokunuşta ses motorunu ısıtır: duyulmayan kısa bir söz (telefonda ilk söz geç gelmesin)
+  konusmayiIsit() {
+    if (this.isindi || !("speechSynthesis" in window)) return;
+    this.isindi = true;
+    this.turkceSes();
+    const soz = new SpeechSynthesisUtterance(" ");
+    soz.volume = 0;
+    soz.lang = "tr-TR";
+    this.isitmaSozu = soz;
     window.speechSynthesis.speak(soz);
   },
 
