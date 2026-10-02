@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80" viewBox="0 0 80 80">
+  <!-- Toprağa ekilmiş tohum ve filizi (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="62" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="koyuToprak" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#8e6340"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#6f4a2c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="tohum" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#f2c48e"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#d99a4e" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 70 q36 -26 72 0z" fill="url(#koyuToprak)" stroke-width="3.5"/>
+    <path d="M40 38 q-2 -12 2 -22" fill="none" stroke-width="3.5"/>
+    <path d="M42 18 q-14 -10 -20 2 q12 6 20 -2z M43 16 q12 -12 22 -2 q-10 10 -22 2z" fill="#8fd16a" stroke-width="3"/>
+    <ellipse cx="40" cy="54" rx="20" ry="18" fill="url(#tohum)" stroke-width="3.5"/>
+  </g>
+</svg>

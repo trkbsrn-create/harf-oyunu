@@ -5,6 +5,13 @@ const DUNYA_YUKSEKLIK = 3600;
 const YURUME_HIZI = 260; // saniyede piksel
 const BASLANGIC_X = DUNYA_GENISLIK / 2;
 const BASLANGIC_Y = DUNYA_YUKSEKLIK / 2 + 120;
+// Tarla: karakterin başladığı yerin hemen solunda; oyun açılınca tamamı ekranda
+// görünür (gorseller/tarla.svg, 480x340).
+// Kareler: sol üst köşeler (45 + 132i, 52 + 122j), her biri 118x104.
+const TARLA_X = BASLANGIC_X - 580;
+const TARLA_Y = BASLANGIC_Y - 290;
+// Bu alanda süs yok. Alt pay büyük: ağaçlar tabanından yukarı uzanır, tarlayı örtmesin.
+const TARLA_ALANI = new Phaser.Geom.Rectangle(TARLA_X - 60, TARLA_Y - 60, 480 + 120, 340 + 60 + 240);
 const SENSOR_MENZILI = 1600; // sandığa bu kadar yaklaşınca bip sesi başlar
 // Hazine pusulası: dış halka her zaman silik yanar; ortanca halka sandığa bu kadar
 // yaklaşınca (yaklaşık bir buçuk ekran), iç halka bu kadar yaklaşınca (yarım ekran) yanar.
@@ -180,7 +187,8 @@ function suslerUret() {
     if (susler.some((s) => Math.hypot(s.x - x, s.y - y) < 190)) continue;
     susler.push({ tur: rastgele.pick(turler), x, y });
   }
-  return susler;
+  // Tarlanın üstünde ağaç, çalı, kaya olmasın
+  return susler.filter((s) => !TARLA_ALANI.contains(s.x, s.y));
 }
 
 class AdaSahnesi extends Phaser.Scene {
@@ -209,6 +217,8 @@ class AdaSahnesi extends Phaser.Scene {
     this.load.svg("mikrofon", "gorseller/mikrofon.svg");
     this.load.svg("ari", "gorseller/ari.svg");
     this.load.svg("nar", "gorseller/nar.svg");
+    this.load.svg("tarla", "gorseller/tarla.svg");
+    this.load.svg("ekili-tohum", "gorseller/ekili-tohum.svg");
     for (const ad of ["esek", "tilki", "inek", "leylek"]) this.load.svg(ad, `gorseller/${ad}.svg`);
     for (const ad of ["cicek-kirmizi", "cicek-mor", "cicek-beyaz", "ot", "kelebek", "kus"]) {
       this.load.svg(ad, `gorseller/${ad}.svg`);
@@ -219,6 +229,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.dokulariUret();
     this.denizKur();
     this.adayiCiz();
+    this.tarlaKur();
 
     // Karakterin yürüyebildiği alan (kumsal dahil, denize girmeden)
     this.yuruyusAlani = new Phaser.Geom.Polygon(adaNoktalari(0.95));
@@ -278,8 +289,14 @@ class AdaSahnesi extends Phaser.Scene {
       this.hedefBelirle(p.worldX, p.worldY, true);
     });
     this.input.on("pointermove", (p) => {
+      if (this.tasinan) {
+        this.tohumuTasi(p);
+        return;
+      }
       if (p.isDown && !this.cantaAcik && !this.menuAcik) this.hedefBelirle(p.worldX, p.worldY, false);
     });
+    this.input.on("pointerup", (p) => this.tohumuBirak(p));
+    this.input.on("pointerupoutside", (p) => this.tohumuBirak(p));
     this.input.keyboard.on("keydown", () => Sesler.ac());
     this.input.keyboard.addCapture("SPACE");
     this.input.keyboard.on("keydown-SPACE", () => {
@@ -319,6 +336,7 @@ class AdaSahnesi extends Phaser.Scene {
   // Dokunuş çantayla ilgiliyse işler ve true döner.
   cantaTiklamasi(p) {
     if (this.cantaAcik) {
+      if (this.tohumuTut(p)) return true; // tohum tarlaya sürüklenmeye başladı
       if (this.kapatmaAlani.contains(p.x, p.y) || !this.pencereAlani.contains(p.x, p.y)
           || this.cantaDugmesi.getBounds().contains(p.x, p.y)) {
         this.cantayiAcKapat();
@@ -335,6 +353,7 @@ class AdaSahnesi extends Phaser.Scene {
 
   cantayiAcKapat() {
     if (this.donuk) return; // hazine anında çanta açılmaz
+    if (this.tasinan) return; // tohum sürüklenirken çanta kapanmaz
     this.cantaAcik = !this.cantaAcik;
     this.hedef = null;
     Sesler.canta(this.cantaAcik);
@@ -348,6 +367,7 @@ class AdaSahnesi extends Phaser.Scene {
 
   cantaIceriginiCiz() {
     this.cantaIcerigi.removeAll(true);
+    this.kutucukNesneleri = [];
     Canta.esyalar.forEach((esya, i) => {
       const k = this.kutucuklar[i];
       if (!k || esya.tur !== "tohum") return;
@@ -359,7 +379,116 @@ class AdaSahnesi extends Phaser.Scene {
       });
       boyaliOrtala(titret(harf, 1.5));
       this.cantaIcerigi.add([resim, harf]);
+      this.kutucukNesneleri[i] = [resim, harf];
     });
+  }
+
+  // ---- Tarla: çantadaki tohumlar sürüklenip buraya ekilir ----
+
+  tarlaKur() {
+    this.add.image(TARLA_X, TARLA_Y, "tarla").setOrigin(0).setDepth(-0.9);
+    this.tarlaKareleri = [];
+    for (let i = 0; i < 6; i++) {
+      this.tarlaKareleri.push({
+        alan: new Phaser.Geom.Rectangle(
+          TARLA_X + 45 + 132 * (i % 3), TARLA_Y + 52 + 122 * Math.floor(i / 3), 118, 104),
+        ekili: null, // ekilen tohum (çantadaki eşya bilgisi)
+      });
+    }
+    this.kareIsigi = this.add.graphics().setDepth(-0.7); // sürüklerken hedef kare parlar
+    this.tasinan = null; // şu an sürüklenen tohum
+  }
+
+  // Çanta açıkken bir tohuma dokunulursa tohum parmağa gelir, çanta silikleşir
+  // (arkadaki tarla görünsün). Dokunuş bir tohumdaysa true döner.
+  tohumuTut(p) {
+    const sira = this.kutucuklar.findIndex((k, i) => Canta.esyalar[i]
+      && Canta.esyalar[i].tur === "tohum" && Math.abs(p.x - k.x) < 60 && Math.abs(p.y - k.y) < 60);
+    if (sira < 0) return false;
+    const esya = Canta.esyalar[sira];
+    const k = this.kutucuklar[sira];
+    // Kutucuktaki gibi: tohum resmi ve gövdesinin ortasında harf
+    const resim = this.add.image(0, -12, "tohum");
+    const harf = this.add.text(0, 0, esya.harf, {
+      fontFamily: "Andika", fontSize: "38px", color: "#ffffff",
+      stroke: "#3b2a1a", strokeThickness: 7, padding: { x: 3, y: 3 },
+    });
+    boyaliOrtala(titret(harf, 1.5));
+    const kap = this.add.container(p.x, p.y, [resim, harf])
+      .setScrollFactor(0).setDepth(9600).setScale(1.2);
+    this.tasinan = { kap, sira, esya, geriX: k.x, geriY: k.y + 4 };
+    this.kutucukNesneleri[sira].forEach((n) => n.setAlpha(0.25));
+    this.tweens.add({ targets: this.cantaPenceresi, alpha: 0.12, duration: 200 });
+    Sesler.nota(660, 0, 0.08, 0.12);
+    return true;
+  }
+
+  // Tohum parmakla gider; altındaki boş kare parlar
+  tohumuTasi(p) {
+    this.tasinan.kap.setPosition(p.x, p.y);
+    this.kareIsigi.clear();
+    const kare = this.bosKare(p.worldX, p.worldY);
+    if (kare) {
+      const a = kare.alan;
+      this.kareIsigi.fillStyle(0xfff3b0, 0.45);
+      this.kareIsigi.fillRoundedRect(a.x, a.y, a.width, a.height, 12);
+      this.kareIsigi.lineStyle(6, 0xffcf3f, 1);
+      this.kareIsigi.strokeRoundedRect(a.x, a.y, a.width, a.height, 12);
+    }
+  }
+
+  // Boş bir karenin üstünde bırakılırsa tohum ekilir; değilse (kare dolu, tarla
+  // uzakta) tohum çantadaki yerine geri döner.
+  tohumuBirak(p) {
+    const t = this.tasinan;
+    if (!t) return;
+    this.tasinan = null;
+    this.kareIsigi.clear();
+    this.tweens.add({ targets: this.cantaPenceresi, alpha: 1, duration: 250 });
+    const kare = this.bosKare(p.worldX, p.worldY);
+    if (!kare) {
+      this.tweens.add({
+        targets: t.kap, x: t.geriX, y: t.geriY, scale: 1, duration: 250, ease: "Cubic.Out",
+        onComplete: () => { t.kap.destroy(); this.cantaIceriginiCiz(); },
+      });
+      return;
+    }
+    Canta.cikar(t.sira);
+    kare.ekili = t.esya;
+    this.cantaIceriginiCiz();
+    const kamera = this.cameras.main;
+    this.tweens.add({
+      targets: t.kap, x: kare.alan.centerX - kamera.scrollX, y: kare.alan.centerY - kamera.scrollY,
+      scale: 0.7, duration: 200, ease: "Cubic.In",
+      onComplete: () => { t.kap.destroy(); this.tohumuEk(kare); },
+    });
+  }
+
+  bosKare(x, y) {
+    return this.tarlaKareleri.find((k) => !k.ekili && k.alan.contains(x, y)) || null;
+  }
+
+  // Tohum toprağa girer: tümsek, filiz ve harf belirir, biraz toprak sıçrar
+  tohumuEk(kare) {
+    const x = kare.alan.centerX;
+    const y = kare.alan.centerY + 4;
+    const resim = this.add.image(x, y, "ekili-tohum").setDepth(-0.8).setScale(0);
+    // Tohum gövdesinin ortası resmin ortasından 14 px aşağıda (gorseller/ekili-tohum.svg)
+    const harf = this.add.text(x, y + 14, kare.ekili.harf, {
+      fontFamily: "Andika", fontSize: "32px", color: "#ffffff",
+      stroke: "#3b2a1a", strokeThickness: 6, padding: { x: 3, y: 3 },
+    }).setDepth(-0.79).setScale(0);
+    boyaliOrtala(titret(harf, 1.2));
+    this.tweens.add({ targets: [resim, harf], scale: 1, duration: 400, ease: "Back.Out" });
+    for (let i = 0; i < 8; i++) {
+      const toz = this.add.circle(x, y + 20, Phaser.Math.Between(5, 9), 0x8e6340).setDepth(-0.78);
+      const aci = Phaser.Math.FloatBetween(Math.PI, Math.PI * 2);
+      this.tweens.add({
+        targets: toz, x: x + Math.cos(aci) * 50, y: y + 20 + Math.sin(aci) * 34,
+        alpha: 0, scale: 0.4, duration: 450, ease: "Cubic.Out", onComplete: () => toz.destroy(),
+      });
+    }
+    Sesler.tohum();
   }
 
   // ---- Menü (sol üst): oyunu yeniden başlat ----
@@ -1241,8 +1370,11 @@ class AdaSahnesi extends Phaser.Scene {
       const x = rastgele.between(0, DUNYA_GENISLIK);
       const y = rastgele.between(0, DUNYA_YUKSEKLIK);
       if (!cimen.contains(x, y)) continue;
-      const nesne = this.add.image(x, y, rastgele.pick(turler)).setOrigin(0.5, 1).setDepth(y);
-      this.sallananlar.push({ nesne, tur: "cicek", faz: rastgele.frac() * Math.PI * 2 });
+      const tur = rastgele.pick(turler);
+      const faz = rastgele.frac() * Math.PI * 2;
+      if (TARLA_ALANI.contains(x, y)) continue; // tarlada çiçek ve ot yok
+      const nesne = this.add.image(x, y, tur).setOrigin(0.5, 1).setDepth(y);
+      this.sallananlar.push({ nesne, tur: "cicek", faz });
       eklenen++;
     }
   }

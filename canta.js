@@ -13,4 +13,9 @@ const Canta = {
     this.esyalar.push({ tur: "tohum", harf, tekrarEdilecek });
     return true;
   },
+
+  // Sıradaki eşyayı çantadan çıkarır ve verir (ör. tohum tarlaya ekilince).
+  cikar(sira) {
+    return this.esyalar.splice(sira, 1)[0];
+  },
 };

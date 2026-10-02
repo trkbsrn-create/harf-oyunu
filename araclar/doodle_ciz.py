@@ -206,6 +206,40 @@ yaz("leylek.svg", 120, 140, "Leylek: l harfinin ipucu resmi", tarama("turuncu", 
     <circle cx="38" cy="15" r="3" fill="#2b2b2b"/>
 '''), 54)
 
+# ---- Tarla ----
+TOPRAK = tarama("toprak", "#b98a5e", "#9a6c43", -30, 8, 3)
+KOYU_TOPRAK = tarama("koyuToprak", "#8e6340", "#6f4a2c", 30, 7, 3)
+TAHTA = tarama("tahta", "#e3b77e", "#c98f4f", 80, 7, 2.5)
+
+# Çitli tarla: 480x340, sol üst köşesi oyunda TARLA_X, TARLA_Y'ye gelir.
+# 6 toprak karesi (3x2): sol üst köşeler (45 + 132i, 52 + 122j), her biri 118x104.
+kareler = ""
+for i in range(6):
+    x = 45 + 132 * (i % 3)
+    y = 52 + 122 * (i // 3)
+    kareler += f'''    <rect x="{x}" y="{y}" width="118" height="104" rx="12" fill="url(#koyuToprak)"/>
+    <path d="M{x+14} {y+30} q45 -10 90 0 M{x+14} {y+56} q45 -10 90 0 M{x+14} {y+82} q45 -10 90 0" fill="none" stroke="#5e3d22" stroke-width="2.5" opacity="0.6"/>
+'''
+kaziklar = ""
+for x in range(10, 470, 55):
+    for y in (12, 290):
+        kaziklar += f'    <path d="M{x} {y} v34 l6 -10 l6 10 v-34z" fill="url(#tahta)"/>\n'
+yaz("tarla.svg", 480, 340, "Çitli tarla: 6 ekim karesi", TOPRAK + KOYU_TOPRAK + TAHTA,
+    '  <rect x="26" y="40" width="420" height="270" rx="16" fill="#000" fill-opacity="0.13"/>\n' +
+    kalem(f'''    <rect x="20" y="30" width="420" height="270" rx="16" fill="url(#toprak)"/>
+{kareler}{kaziklar}    <path d="M4 22 h460 M4 302 h460" fill="none" stroke-width="5"/>
+'''), 61)
+
+# Ekilmiş tohum: 80x80, oyunda orta noktası karenin ortasına gelir.
+# Tohum gövdesinin ortası (40,54): harf oyunda oraya yazılır.
+yaz("ekili-tohum.svg", 80, 80, "Toprağa ekilmiş tohum ve filizi",
+    KOYU_TOPRAK + tarama("tohum", "#f2c48e", "#d99a4e", 35, 6, 2.5),
+    kalem('''    <path d="M4 70 q36 -26 72 0z" fill="url(#koyuToprak)" stroke-width="3.5"/>
+    <path d="M40 38 q-2 -12 2 -22" fill="none" stroke-width="3.5"/>
+    <path d="M42 18 q-14 -10 -20 2 q12 6 20 -2z M43 16 q12 -12 22 -2 q-10 10 -22 2z" fill="#8fd16a" stroke-width="3"/>
+    <ellipse cx="40" cy="54" rx="20" ry="18" fill="url(#tohum)" stroke-width="3.5"/>
+'''), 62)
+
 # ---- Ekran pencereleri ----
 # Çanta penceresi: 700x480, sol üst köşesi oyunda (300,120). İçinde 8 kutucuk ve çarpı.
 kutular = ""
