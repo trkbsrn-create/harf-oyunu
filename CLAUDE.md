@@ -47,7 +47,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   Büyümüş sırığın toprak karesine dokununca (sırıklar üst üste binebilir, kareler binmez;
   seçilen sırık bir an parlar) karakter dibine yürür, arkası dönük (cocuk-tirman.svg; elle
   çizildi, betikle üretilmez) basamak basamak tırmanır (`tirmanmaHareketi`); sırıklar
-  sallanmaz; tırmanır ve bulutların üstüne çıkar
+  sallanmaz, adadaki sırığın solan tepesinde silik bir bulut var. Bulutların üstünde
+  karakter zeminin arkasından görünmeden çıkar, zemin üstüne gelince zıplayıp buluta basar;
+  inerken sırığa zıplayıp bulutun arkasına iner; tırmanır ve bulutların üstüne çıkar
   (`BulutSahnesi`; ada sahnesi uyutulur, durumu korunur). Her harfin kendi bölgesi var;
   şimdilik bölgede harfin büyük tabelası durur, içeriği sonra eklenecek. Karakter bulut
   zemininde gezer; sırığa dokununca aşağı iner ve adada o sırığın dibine döner.
@@ -81,7 +83,8 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 
 ## Çalışma şekli
 - Kullanıcı kodlama bilmiyor. Tüm açıklamaları Türkçe, kısa ve sade yaz.
-  İş bitince "Ne yaptım" ve "Nasıl denerim" bölümlerini ekle.
+  İş bitince uzun "Ne yaptım" ve "Nasıl denerim" bölümleri yazma (kullanıcının isteği);
+  kısaca bitti de ve sürüm numarasını söyle. Kullanıcı sorarsa ayrıntıyı anlat.
 - Her seferinde tek küçük iş yap. İstenmeyen özellik ekleme. Çalışan bir şeyi bozma.
 - Her güncellemede sürüm numarasını artır: `oyun.js`'deki `SURUM` ve `index.html`'deki
   betik eklerindeki `?s=` sayısı, o güncellemenin çekme isteği numarası olsun. Sürüm,

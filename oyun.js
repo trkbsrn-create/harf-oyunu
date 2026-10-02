@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 40;
+const SURUM = 41;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -36,7 +36,7 @@ function tirmanmaHareketi(sahne, cocuk, hedefY, bitince) {
       return;
     }
     sag = !sag;
-    cocuk.setFlipX(sag);
+    cocuk.setTexture("cocuk-tirman").setFlipX(sag);
     Sesler.adim(sag);
     sahne.tweens.add({
       targets: cocuk,
@@ -77,6 +77,8 @@ const BITKI_RESIMLERI = [null, "bitki-filiz", "bitki-fidan", "bitki-sirik"];
 const SIRIK_TIRMANMA = 330;
 // Bulutların üstünde karakterin yürüyebildiği bant (ekran koordinatı)
 const BULUT_YURUME = new Phaser.Geom.Rectangle(80, 500, 1120, 150);
+// Sırıkta karakterin ayağının bulut zemininin üstüne çıktığı yer (ekran y'si)
+const BULUT_UST = 470;
 const KESIK_SES_ADIMI = 6;
 
 // ---- Doodle yazılar ----
@@ -2199,6 +2201,8 @@ class AdaSahnesi extends Phaser.Scene {
         }
       }
     }
+    // Sırığa yeni vardı ve tırmanmaya başladı: bu karede yürüme resmi koyma
+    if (this.tirmaniyor) return;
 
     const uzunluk = Math.hypot(dx, dy);
     let yuruyor = false;
@@ -2428,14 +2432,16 @@ class BulutSahnesi extends Phaser.Scene {
     }).setDepth(3.1);
     boyaliOrtala(titret(yazi, 2));
 
-    // Karakter sırıktan yukarı çıkar ve buluta basar
-    this.cocuk = this.add.image(300, 780, "cocuk").setOrigin(0.5, 1).setDepth(4);
+    // Karakter bulutun altından, görünmeden sırığa tırmanır (zeminin arkasında); bulutun
+    // üstüne çıkınca zıplayıp buluta basar
+    this.cocuk = this.add.image(this.sirik.x, 820, "cocuk-tirman").setOrigin(0.5, 1).setDepth(1.5);
     this.hazir = false;
     this.hedef = null;
-    tirmanmaHareketi(this, this.cocuk, BULUT_YURUME.y + 40, () => {
-      this.cocuk.setTexture("cocuk");
-      this.hazir = true;
-      Sesler.pling();
+    tirmanmaHareketi(this, this.cocuk, BULUT_UST, () => {
+      this.ziplat(this.sirik.x + 50, BULUT_YURUME.y + 40, () => {
+        this.hazir = true;
+        Sesler.pling();
+      });
     });
 
     this.tuslar = this.input.keyboard.createCursorKeys();
@@ -2445,7 +2451,7 @@ class BulutSahnesi extends Phaser.Scene {
       // Sırığa dokununca: dibine yürür ve aşağı iner
       if (Math.abs(p.x - this.sirik.x) < 80 && p.y > 130 && p.y < 480) {
         this.inecek = true;
-        this.hedef = { x: this.sirik.x, y: this.cocuk.y };
+        this.hedef = { x: this.sirik.x + 50, y: BULUT_YURUME.y + 40 };
         return;
       }
       this.inecek = false;
@@ -2495,10 +2501,31 @@ class BulutSahnesi extends Phaser.Scene {
     this.cocuk.setTexture(Math.floor(zaman / 230) % 2 ? "cocuk-adim1" : "cocuk-adim2");
   }
 
-  // Sırıktan aşağı iner, adaya döner
+  // Karakter yay çizerek zıplar: önden resim, zeminin önünde (buluta basma)
+  ziplat(x, y, bitince, sirigaDogru = false) {
+    const c = this.cocuk;
+    if (!sirigaDogru) c.setTexture("cocuk").setDepth(4).setFlipX(false);
+    const tepe = Math.min(c.y, y) - 40;
+    Sesler.adim(true);
+    this.tweens.add({ targets: c, x, duration: 420, ease: "Linear" });
+    this.tweens.chain({ targets: c, tweens: [
+      { y: tepe, duration: 210, ease: "Quad.Out" },
+      { y, duration: 210, ease: "Quad.In" },
+    ], onComplete: () => {
+      Sesler.adim(false);
+      bitince();
+    } });
+  }
+
+  // Sırığa zıplayıp tutunur, bulutun arkasına doğru iner; görünmez olunca adaya döner
   asagiIn() {
     this.hazir = false;
-    this.cocuk.setFlipX(false);
+    this.cocuk.setTexture("cocuk-tirman").setFlipX(false);
+    this.ziplat(this.sirik.x, BULUT_UST, () => this.sirikBoyuncaIn(), true);
+  }
+
+  sirikBoyuncaIn() {
+    this.cocuk.setDepth(1.5); // artık bulut zemininin arkasında: inerken bulut onu örter
     tirmanmaHareketi(this, this.cocuk, 840, () => {
       this.cameras.main.fadeOut(400, 255, 255, 255);
       this.cameras.main.once("camerafadeoutcomplete", () => {

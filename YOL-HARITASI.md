@@ -38,6 +38,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - "God mode" düğmesi (karşılama ekranı, sol üst; deneme için): bütün sandıklar açık, altı tohum çantada başlar: TAMAM.
    - Sırıklar üst üste gelince seçilemiyordu: adadaki sırık kısaldı ve yukarı doğru solarak kayboluyor; tırmanmak için sırığın toprak karesine dokunuluyor: TAMAM.
    - Tarla tek sıra (6 kare yan yana); tırmanma/inme gerçekçi (arkası dönük, kollar sırayla, basamak basamak); sırıklar sallanmıyor; God mode altı sırıkla başlıyor: TAMAM.
+   - Adada tırmanırken arkadan görünüm düzeltildi; bulutta karakter zeminin arkasından çıkar/iner, zıplayarak buluta basar; sırık tepelerinde silik bulut: TAMAM.
    - Sıradaki iş: kullanıcıyla konuşulacak (geliştirmeler).
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.
