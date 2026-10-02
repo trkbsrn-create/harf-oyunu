@@ -12,6 +12,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 
 ## Proje yapısı
 - `index.html` – Ana sayfa. Derleme adımı yok, doğrudan tarayıcıda açılır.
+  Telefon/tablet ayarları da burada: büyütme, kaydırma, basılı tutma menüsü ve yazı seçme
+  kapalı; dokunmatik cihaz dik tutulunca "Telefonu yan çevir" uyarısı; ilk dokunuşta tam
+  ekran ve (Android'de) yatay kilit. Bilgisayarda bunların etkisi yok.
 - `oyun.js` – Phaser sahneleri ve oyun kodu. Oyunun adı "Harf Avcısı". Önce karşılama
   sahnesi (`KarsilamaSahnesi`), "Oyunu başlat" ile ada sahnesi (`AdaSahnesi`) açılır.
   Sol üstteki menüde "Oyunu yeniden başlat" sayfayı yeniler; karşılama ekranını atlamak

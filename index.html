@@ -2,7 +2,9 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="theme-color" content="#fbf7ec">
   <title>Harf Avcısı</title>
   <style>
     @font-face {
@@ -15,32 +17,106 @@
       height: 100%;
       background: #fbf7ec;
       overflow: hidden;
+      /* Telefonda: iki kez dokununca ya da iki parmakla büyütme, kaydırma, basılı tutunca
+         çıkan menü ve yazı seçme kapalı (çocuk hızlı dokunur, sürükler) */
+      touch-action: none;
+      overscroll-behavior: none;
+      user-select: none;
+      -webkit-user-select: none;
+      -webkit-touch-callout: none;
+      -webkit-tap-highlight-color: transparent;
+    }
+    body {
+      position: fixed;
+      inset: 0;
     }
     #oyun {
       width: 100%;
       height: 100%;
     }
+    /* Dokunmatik cihaz dik tutulunca: "Telefonu yan çevir" uyarısı */
+    #yan-cevir {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 10;
+      background: #fbf7ec;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 24px;
+      font-family: "Andika", sans-serif;
+      font-size: 30px;
+      color: #2b2b2b;
+      text-align: center;
+      padding: 24px;
+    }
+    #yan-cevir svg {
+      width: 140px;
+      height: 140px;
+      animation: cevir 2s ease-in-out infinite;
+    }
+    @keyframes cevir {
+      0%, 25% { transform: rotate(0deg); }
+      60%, 100% { transform: rotate(-90deg); }
+    }
+    @media (orientation: portrait) and (pointer: coarse) {
+      #yan-cevir { display: flex; }
+    }
   </style>
 </head>
 <body>
   <div id="oyun"></div>
+  <div id="yan-cevir">
+    <svg viewBox="0 0 100 100" aria-hidden="true">
+      <rect x="30" y="10" width="40" height="80" rx="8" fill="#c9ecff" stroke="#2b2b2b" stroke-width="4"/>
+      <rect x="36" y="20" width="28" height="56" rx="2" fill="#ffffff" stroke="#2b2b2b" stroke-width="2"/>
+      <circle cx="50" cy="83" r="3" fill="#2b2b2b"/>
+    </svg>
+    <div>Telefonu yan çevir</div>
+  </div>
+  <script>
+    // Telefonda ilk dokunuşta oyun tam ekrana geçer ve (destekleniyorsa) yatay ekrana kilitlenir.
+    // Bilgisayarda (fare ile) bir şey değişmez. iPhone tam ekranı desteklemez; orada uyarı yeter.
+    (function () {
+      var dokunmatik = window.matchMedia && window.matchMedia("(pointer: coarse)").matches;
+      if (!dokunmatik) return;
+      document.addEventListener("contextmenu", function (e) { e.preventDefault(); });
+      function tamEkran() {
+        var kok = document.documentElement;
+        var iste = kok.requestFullscreen || kok.webkitRequestFullscreen;
+        if (document.fullscreenElement || document.webkitFullscreenElement || !iste) return;
+        try {
+          var sonuc = iste.call(kok, { navigationUI: "hide" });
+          if (sonuc && sonuc.then) {
+            sonuc.then(function () {
+              if (screen.orientation && screen.orientation.lock) {
+                screen.orientation.lock("landscape").catch(function () {});
+              }
+            }).catch(function () {});
+          }
+        } catch (e) {}
+      }
+      document.addEventListener("pointerup", tamEkran, { once: true });
+    })();
+  </script>
 
   <!-- Phaser 3, sabit sürüm -->
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js"></script>
-  <script src="harfler.js?s=51"></script>
-  <script src="sesler.js?s=51"></script>
-  <script src="canta.js?s=51"></script>
-  <script src="dinleyici.js?s=51"></script>
+  <script src="harfler.js?s=52"></script>
+  <script src="sesler.js?s=52"></script>
+  <script src="canta.js?s=52"></script>
+  <script src="dinleyici.js?s=52"></script>
   <!-- Mini oyunlar: oyun.js'den önce yüklenir (oyun başlarken sahne listesine eklenirler) -->
-  <script src="minioyunlar/ortak.js?s=51"></script>
-  <script src="minioyunlar/menu.js?s=51"></script>
-  <script src="minioyunlar/damla-yakala/oyun.js?s=51"></script>
-  <script src="minioyunlar/harf-balonlari/oyun.js?s=51"></script>
-  <script src="minioyunlar/harfi-ciz/oyun.js?s=51"></script>
-  <script src="minioyunlar/resimden-ses/oyun.js?s=51"></script>
-  <script src="minioyunlar/hafiza-kartlari/oyun.js?s=51"></script>
-  <script src="minioyunlar/hece-koprusu/oyun.js?s=51"></script>
-  <script src="minioyunlar/heceyi-bul/oyun.js?s=51"></script>
-  <script src="oyun.js?s=51"></script>
+  <script src="minioyunlar/ortak.js?s=52"></script>
+  <script src="minioyunlar/menu.js?s=52"></script>
+  <script src="minioyunlar/damla-yakala/oyun.js?s=52"></script>
+  <script src="minioyunlar/harf-balonlari/oyun.js?s=52"></script>
+  <script src="minioyunlar/harfi-ciz/oyun.js?s=52"></script>
+  <script src="minioyunlar/resimden-ses/oyun.js?s=52"></script>
+  <script src="minioyunlar/hafiza-kartlari/oyun.js?s=52"></script>
+  <script src="minioyunlar/hece-koprusu/oyun.js?s=52"></script>
+  <script src="minioyunlar/heceyi-bul/oyun.js?s=52"></script>
+  <script src="oyun.js?s=52"></script>
 </body>
 </html>
