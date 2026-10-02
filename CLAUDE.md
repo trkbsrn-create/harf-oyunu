@@ -37,11 +37,13 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   Çantada şişeye dokununca "İncele" düğmesi çıkar; basınca şişenin içi açılır
   (sise-pencere.svg): her harfin bölmesinde toplanan damlalar görünür (`siseKur`).
   Şişe sürüklenip tarladaki tohuma bırakılırsa (o harfin damlası varsa) şişe eğilir, bir
-  damla dökülür, bitki bir aşama büyür: 0 ekili tohum, 1 filiz, 2 küçük ağaç, 3 gökyüzüne
-  uzanan fasulye sırığı (tepesi bulutlarda, rüzgârda hafifçe sallanır)
+  damla dökülür, bitki bir aşama büyür: 0 ekili tohum, 1 filiz, 2 küçük ağaç, 3 fasulye
+  sırığı (adada kısa, yukarı doğru solarak gökyüzünde kaybolur: bitki-sirik.svg; bulutların
+  üstünde uzun hâli: bulut-sirik.svg)
   (`BUYUME_ASAMASI`, `BITKI_RESIMLERI`; bitki-*.svg). 1. aşamadan sonra harf, karenin
   sol altındaki tahta tabelada (harf-tabela.svg) durur.
-  Büyümüş sırığa dokununca karakter dibine yürür, tırmanır ve bulutların üstüne çıkar
+  Büyümüş sırığın toprak karesine dokununca (sırıklar üst üste binebilir, kareler binmez;
+  seçilen sırık bir an parlar) karakter dibine yürür, tırmanır ve bulutların üstüne çıkar
   (`BulutSahnesi`; ada sahnesi uyutulur, durumu korunur). Her harfin kendi bölgesi var;
   şimdilik bölgede harfin büyük tabelası durur, içeriği sonra eklenecek. Karakter bulut
   zemininde gezer; sırığa dokununca aşağı iner ve adada o sırığın dibine döner.

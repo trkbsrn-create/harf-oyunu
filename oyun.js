@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 38;
+const SURUM = 39;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -44,6 +44,8 @@ const KISA_SES_SURESI = 120;
 // uzanan fasulye sırığı (tepesi bulutlarda)
 const BUYUME_ASAMASI = 3;
 const BITKI_RESIMLERI = [null, "bitki-filiz", "bitki-fidan", "bitki-sirik"];
+// Adadaki sırık kısa ve yukarı doğru solar; karakter bu kadar tırmanıp gökyüzünde kaybolur
+const SIRIK_TIRMANMA = 330;
 // Bulutların üstünde karakterin yürüyebildiği bant (ekran koordinatı)
 const BULUT_YURUME = new Phaser.Geom.Rectangle(80, 500, 1120, 150);
 const KESIK_SES_ADIMI = 6;
@@ -326,8 +328,10 @@ class AdaSahnesi extends Phaser.Scene {
         this.tesiseGit();
         return;
       }
+      // Tırmanmak için sırığın dikildiği toprak karesine dokunulur (sırıklar üst üste
+      // binebilir ama kareler binmez)
       const sirik = this.tarlaKareleri.find((k) => k.asama === BUYUME_ASAMASI
-        && k.nesneler[0].getBounds().contains(p.worldX, p.worldY));
+        && k.alan.contains(p.worldX, p.worldY));
       if (sirik) {
         this.sirigaGit(sirik);
         return;
@@ -665,6 +669,11 @@ class AdaSahnesi extends Phaser.Scene {
 
   // Karakter sırığın dibine yürür, varınca tırmanır
   sirigaGit(kare) {
+    // Seçilen sırık bir an parlar
+    const bitki = kare.nesneler[0];
+    bitki.setTint(0xfff3b0);
+    this.time.delayedCall(350, () => bitki.clearTint());
+    Sesler.pling();
     const dip = this.sirikDibi(kare);
     if (Phaser.Math.Distance.BetweenPoints(this.cocuk, dip) < 12) {
       this.sirigaTirman(kare);
@@ -694,9 +703,9 @@ class AdaSahnesi extends Phaser.Scene {
     const dip = this.sirikDibi(kare);
     c.setPosition(dip.x, dip.y).setDepth(dip.y + 10).setFlipX(false).setScale(1);
     const adimlar = this.tirmanmaAdimlari();
-    // Sırık boyunca yukarı, bulutlara doğru
-    this.tweens.add({ targets: c, y: dip.y - 640, duration: 3200, ease: "Sine.In" });
-    this.tweens.add({ targets: c, alpha: 0, duration: 500, delay: 2700,
+    // Sırık boyunca yukarı; sırık gibi karakter de gökyüzünde solarak kaybolur
+    this.tweens.add({ targets: c, y: dip.y - SIRIK_TIRMANMA, duration: 2600, ease: "Sine.In" });
+    this.tweens.add({ targets: c, alpha: 0, duration: 900, delay: 1700,
       onComplete: () => {
         adimlar.remove();
         const kamera = this.cameras.main;
@@ -714,11 +723,12 @@ class AdaSahnesi extends Phaser.Scene {
     const c = this.cocuk;
     const dip = this.sirikDibi(kare);
     this.tirmaniyor = true;
-    c.setPosition(dip.x, dip.y - 640).setDepth(dip.y + 10).setAlpha(1);
+    c.setPosition(dip.x, dip.y - SIRIK_TIRMANMA).setDepth(dip.y + 10).setAlpha(0);
+    this.tweens.add({ targets: c, alpha: 1, duration: 700 });
     this.cameras.main.centerOn(c.x, c.y);
     this.cameras.main.fadeIn(500, 255, 255, 255);
     const adimlar = this.tirmanmaAdimlari();
-    this.tweens.add({ targets: c, y: dip.y, duration: 2600, ease: "Sine.Out",
+    this.tweens.add({ targets: c, y: dip.y, duration: 2200, ease: "Sine.Out",
       onComplete: () => {
         adimlar.remove();
         c.setTexture("cocuk").setAngle(0);
@@ -2368,6 +2378,7 @@ class BulutSahnesi extends Phaser.Scene {
   preload() {
     this.load.svg("bulut", "gorseller/bulut.svg");
     this.load.svg("bulut-zemin", "gorseller/bulut-zemin.svg");
+    this.load.svg("bulut-sirik", "gorseller/bulut-sirik.svg");
   }
 
   create(veri) {
@@ -2387,7 +2398,7 @@ class BulutSahnesi extends Phaser.Scene {
     doodleYazi(this, 640, 64, "Bulutların Üstü", 52, "mavi").setOrigin(0.5).setDepth(5);
 
     // Sırık zeminin altından gelir, tepesi bulutta
-    this.sirik = this.add.image(300, 130, "bitki-sirik").setOrigin(0.5, 0).setDepth(1);
+    this.sirik = this.add.image(300, 130, "bulut-sirik").setOrigin(0.5, 0).setDepth(1);
     this.add.image(640, 720, "bulut-zemin").setOrigin(0.5, 1).setDepth(2);
 
     // Harfin bölgesi: büyük tabela

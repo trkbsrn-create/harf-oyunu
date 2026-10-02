@@ -369,15 +369,18 @@ yaz("bitki-fidan.svg", 130, 150, "Küçük ağaç: tohum iki kez sulanınca", KO
     <path d="M38 44 q8 -8 18 -2 M64 56 q8 -6 16 0" fill="none" stroke-width="2.5"/>
 ''' + tumsek(55, 146, 80) + '    </g>\n'), 72)
 
-# 3) Fasulye sırığı (son aşama): 240x780, taban (120,774). Birbirine sarılan iki sap
-# gökyüzüne uzanır, yukarı çıktıkça incelir; tepesi bulutların içinde kaybolur.
+# 3) Fasulye sırığı. İki çizim var:
+#  - bulut-sirik.svg (240x780): bulutların üstündeki sahnede; tepesi bulutun içinde.
+#  - bitki-sirik.svg (240x380, taban (120,374)): adada tarladaki son aşama; kısa, yukarı
+#    doğru solarak gökyüzünde kaybolur (sonsuza gidiyormuş gibi, ekranı kaplamaz).
+# Birbirine sarılan iki sap yukarı çıktıkça incelir.
 SIRIK_EN, SIRIK_BOY = 240, 780
 
 
-def sap(faz, y1, y2):
+def sap(faz, y1, y2, boy=SIRIK_BOY):
     noktalar = []
     for y in range(y1, y2 - 1, -6):
-        genlik = 10 + 22 * (y / SIRIK_BOY)  # aşağıda geniş, yukarıda dar kıvrım
+        genlik = 10 + 22 * (y / boy)  # aşağıda geniş, yukarıda dar kıvrım
         x = SIRIK_EN / 2 + genlik * math.sin(y / 46 + faz)
         noktalar.append(f"{x:.1f} {y}")
     return "M" + " L".join(noktalar)
@@ -403,12 +406,41 @@ for i, y in enumerate(range(700, 130, -62)):
                   f'transform="translate({x:.0f} {y}) rotate({aci}) scale({olcek:.2f})"/>\n')
 bulut = "".join(f'    <circle cx="{x}" cy="{y}" r="{r}" fill="#ffffff" stroke-width="3.5"/>\n'
                 for x, y, r in [(70, 70, 34), (120, 48, 42), (172, 72, 34), (98, 96, 30), (148, 98, 30)])
-yaz("bitki-sirik.svg", SIRIK_EN, SIRIK_BOY, "Fasulye sırığı: gökyüzüne uzanan son aşama", KOYU_TOPRAK + KOYU_YESIL,
+yaz("bulut-sirik.svg", SIRIK_EN, SIRIK_BOY, "Fasulye sırığı: bulutların üstünde, tepesi bulutta", KOYU_TOPRAK + KOYU_YESIL,
     kalem(saplar + yapraklar + bulut +
           '    <path d="M64 104 q56 14 112 0" fill="none" stroke="#ffffff" stroke-width="16"/>\n'
           + tumsek(120, 774, 110), 3.5)
     + '''  <path d="M40 20 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4z M206 30 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3z" fill="#ffe680" stroke="#2b2b2b" stroke-width="2"/>
 ''', 75)
+
+# Adadaki kısa, solan sırık
+KISA_BOY = 380
+kenarlar = ""
+yesiller = ""
+for y1, y2, kalinlik in [(374, 280, 16), (286, 190, 13), (196, 110, 11), (116, 10, 9)]:
+    for faz in (0, math.pi):
+        kenarlar += f'    <path d="{sap(faz, y1, y2, KISA_BOY)}" fill="none" stroke="{KALEM}" stroke-width="{kalinlik + 5}"/>\n'
+        yesiller += f'    <path d="{sap(faz, y1, y2, KISA_BOY)}" fill="none" stroke="#6fbf4a" stroke-width="{kalinlik}"/>\n'
+yapraklar = ""
+for i, y in enumerate(range(330, 40, -52)):
+    sag = i % 2 == 0
+    olcek = 0.8 + 0.7 * (y / KISA_BOY)
+    x = SIRIK_EN / 2 + (18 if sag else -18)
+    aci = -35 if sag else 215
+    yapraklar += (f'    <path d="M0 0 q20 -26 48 -14 q-6 30 -48 14z" fill="url(#koyuYesil)" stroke-width="3" '
+                  f'transform="translate({x:.0f} {y}) rotate({aci}) scale({olcek:.2f})"/>\n')
+SOLMA = f'''    <linearGradient id="solma" x1="0" y1="0" x2="0" y2="{KISA_BOY}" gradientUnits="userSpaceOnUse">
+      <stop offset="0.04" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="1"/>
+    </linearGradient>
+    <mask id="sol"><rect width="{SIRIK_EN}" height="{KISA_BOY}" fill="url(#solma)"/></mask>
+'''
+yaz("bitki-sirik.svg", SIRIK_EN, KISA_BOY, "Fasulye sırığı: tarlada son aşama, gökyüzüne doğru solar",
+    KOYU_TOPRAK + KOYU_YESIL + SOLMA,
+    '  <g mask="url(#sol)">\n' + kalem(kenarlar + yesiller + yapraklar + tumsek(120, 374, 110), 3.5) + '  </g>\n'
+    + '''  <path d="M70 60 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4z M176 30 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3z M150 110 l2 6 l6 2 l-6 2 l-2 6 l-2 -6 l-6 -2 l6 -2z" fill="#ffe680" stroke="#2b2b2b" stroke-width="1.5" opacity="0.7"/>
+''', 75)
+
 
 # Harf tabelası: 46x60. Tahta levha (3-43, 4-34) ve kazık; harf oyunda levhanın
 # ortasına (23,19) yazılır. Alt ortası karenin dibine konur.
