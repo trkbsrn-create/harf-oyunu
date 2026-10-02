@@ -33,8 +33,8 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   oyun şimdilik yok. Mini oyunlar bitince ana oyuna (tesis düğmeleri) bağlanacak.
   Ortak sınıf `MiniOyunSahnesi` (ortak.js): kâğıt zemin, Geri, 3 can (kalp.svg), ilerleme
   çubuğu, bitiş penceresi ("Aferin!" / "Bir daha dene", Tekrar / Geri). Sesli okuma
-  `Sesler.soyle`. Ünlü kendisi okunur; ünsüz tek başına okunmaz (tarayıcı "ne", "te" der),
-  kapalı hecesi okunur. Oyun başında `harfiTanit`: ünsüzde "Bu sesi tek başına okumam
+  `Sesler.soyle`. Ünlü kendisi okunur; ünsüz oyun içinde hiç okunmaz (öğretmenin kararı:
+  tarayıcı "ne", "te" der, hece de resimle karışıyor), yalnızca harf görünür. Oyun başında `harfiTanit`: ünsüzde "Bu sesi tek başına okumam
   kolay değil, o yüzden biraz yardım almam gerekiyor." yazılır ve söylenir, "a" yay çizerek
   gelip ünsüzün önüne yerleşir, kapalı hece ("an") okunur (öğretmenin isteği). Benzer harfler `BENZER_HARFLER` (yalnızca öğrenilmiş olanlar kullanılır).
   Mini oyun betikleri index.html'de oyun.js'den önce yüklenir.
