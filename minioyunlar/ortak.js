@@ -96,6 +96,26 @@ class MiniOyunSahnesi extends Phaser.Scene {
     if (this.canSayisi === 0) this.time.delayedCall(500, () => this.bitir(false));
   }
 
+  // Üstte ortada "Yakala: a" gibi panel; dokununca harf (ünsüzde hece) yeniden söylenir
+  hedefPaneliKur(baslik) {
+    const panel = this.add.container(640, 50).setDepth(900);
+    const zemin = this.add.graphics();
+    zemin.fillStyle(0xfffdf6, 1);
+    zemin.fillRoundedRect(-120, -34, 240, 68, 18);
+    zemin.lineStyle(4, 0x2b2b2b, 1);
+    zemin.strokeRoundedRect(-120, -34, 240, 68, 18);
+    const yazi = doodleYazi(this, -40, -2, baslik, 32).setOrigin(0.5);
+    const harf = this.add.text(70, 0, this.harf, {
+      fontFamily: "Andika", fontSize: "54px", color: "#ffffff",
+      stroke: "#3b2a1a", strokeThickness: 9, padding: { x: 4, y: 4 },
+    });
+    boyaliOrtala(titret(harf, 1.5));
+    panel.add([zemin, yazi, harf]);
+    panel.setSize(240, 68).setInteractive({ useHandCursor: true });
+    panel.on("pointerdown", () => harfiSoyle(this.harf));
+    return panel;
+  }
+
   // Sağ üstte (geri düğmesinin solunda) ilerleme çubuğu: kaç doğru yapıldı
   ilerlemeKur(hedef) {
     this.ilerlemeHedef = hedef;

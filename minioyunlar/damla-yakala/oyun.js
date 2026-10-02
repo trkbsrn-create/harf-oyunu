@@ -48,22 +48,7 @@ class DamlaYakalaSahnesi extends MiniOyunSahnesi {
     cimen.fillPath();
     cimen.strokePath();
 
-    // Üstte "Yakala: a" (dokununca harf yeniden söylenir)
-    const panel = this.add.container(640, 50).setDepth(900);
-    const zemin = this.add.graphics();
-    zemin.fillStyle(0xfffdf6, 1);
-    zemin.fillRoundedRect(-120, -34, 240, 68, 18);
-    zemin.lineStyle(4, 0x2b2b2b, 1);
-    zemin.strokeRoundedRect(-120, -34, 240, 68, 18);
-    const yazi = doodleYazi(this, -40, -2, "Yakala:", 32).setOrigin(0.5);
-    const harf = this.add.text(70, 0, this.harf, {
-      fontFamily: "Andika", fontSize: "54px", color: "#ffffff",
-      stroke: "#3b2a1a", strokeThickness: 9, padding: { x: 4, y: 4 },
-    });
-    boyaliOrtala(titret(harf, 1.5));
-    panel.add([zemin, yazi, harf]);
-    panel.setSize(240, 68).setInteractive({ useHandCursor: true });
-    panel.on("pointerdown", () => harfiSoyle(this.harf));
+    this.hedefPaneliKur("Yakala:");
 
 
     // Yanlış seçenek havuzu: öğrenilmiş öteki harfler; benzer harfler ayrıca

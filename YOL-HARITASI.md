@@ -44,7 +44,8 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - "Mini Games" düğmesi ve deneme menüsü (harf seçici, oyun kartları, "Yakında"): TAMAM.
    - Mini oyun 1: Damla Yakalama (dokunarak yakala; seviye 1-3: hız, benzer harf, 8/10/12 damla; 3 can): TAMAM. Menüye seviye seçici eklendi.
    - Mini oyunlarda ünsüz tanıtımı: açıklama yazılır ve söylenir, "a" gelip kapalı heceyi kurar, hece okunur: TAMAM.
-   - Sıradaki iş: mini oyunları tek tek yapmak (sıradaki: Harf Balonları). Ana oyunun geri kalanı mini oyunlar bitince.
+   - Mini oyun 2: Harf Balonları (yüzen balonlar, tur tur; seviye 1-3: 7/9/11 balon, 3/3/4 tur, benzer harf, 3. seviyede gezinen balonlar): TAMAM.
+   - Sıradaki iş: mini oyunları tek tek yapmak (sıradaki: Harfi Çiz). Ana oyunun geri kalanı mini oyunlar bitince.
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.
 

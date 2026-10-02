@@ -492,6 +492,14 @@ yaz("kalp.svg", 50, 46, "Can: dolu kalp", tarama("kirmiziKalp", "#ff9c8a", "#e05
 yaz("kalp-bos.svg", 50, 46, "Can: kaybedilmiş kalp", "",
     kalem(KALP.format(dolgu="#e9e4da"), 3.5).replace('stroke="#2b2b2b"', 'stroke="#b8b0a2"'), 80, 2.5)
 
+# Balon: 80x130 (beyaz taranmış; oyunda renk verilir). Balonun ortası (40,42); ip aşağı sarkar.
+yaz("balon.svg", 80, 130, "Harf balonu (oyunda boyanır)", tarama("balonTarama", "#ffffff", "#e3e3e3", -35, 6, 2.5),
+    '    <path d="M40 84 q-8 16 4 26 q10 10 -2 20" fill="none" stroke="#2b2b2b" stroke-width="2.5"/>\n' +
+    kalem("""    <ellipse cx="40" cy="42" rx="34" ry="40" fill="url(#balonTarama)"/>
+    <path d="M34 82 h12 l-6 7z" fill="#ffffff" stroke-width="2.5"/>
+    <path d="M22 22 q6 -10 16 -12" fill="none" stroke="#ffffff" stroke-width="6"/>
+""", 3.5), 81, 2.5)
+
 # ---- Mini harita kartı (sol alt) ----
 # 250x175 kâğıt kart. İçindeki harita alanı (15,15)'ten başlar, 220 px genişliğinde:
 # dünya (6400x4200; altta iskele için geniş deniz) 220/6400 ölçeğiyle küçültülür. Ada şekli oyundaki adaNoktalari()

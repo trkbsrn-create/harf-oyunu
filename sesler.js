@@ -85,6 +85,12 @@ const Sesler = {
     this.nota(1568, 0.3, 0.4, 0.08, "sine");
   },
 
+  // Balon patlarken: kısa, tok bir "pat" ve ince bir çınlama
+  pat() {
+    this.nota(180, 0, 0.06, 0.25, "square");
+    this.nota(1400, 0.02, 0.12, 0.08, "sine");
+  },
+
   // Mini oyunda yanlış seçim: yumuşak, inen iki nota (korkutmasın)
   yanlis() {
     this.nota(330, 0, 0.14, 0.12, "triangle");

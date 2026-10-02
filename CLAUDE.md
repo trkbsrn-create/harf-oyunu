@@ -39,7 +39,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   gelip ünsüzün önüne yerleşir, kapalı hece ("an") okunur (öğretmenin isteği). Benzer harfler `BENZER_HARFLER` (yalnızca öğrenilmiş olanlar kullanılır).
   Mini oyun betikleri index.html'de oyun.js'den önce yüklenir.
   Yapılanlar: damla-yakala (Damla Yakalama: düşen harfli damlalardan doğrulara dokun;
-  seviyeyle hız, benzer harf ve hedef sayısı artar).
+  seviyeyle hız, benzer harf ve hedef sayısı artar); harf-balonlari (Harf Balonları: tur
+  tur, sallanan balonlardan istenen harfin hepsini patlat; seviyeyle balon/tur sayısı,
+  benzer harf artar, 3. seviyede balonlar gezinir). Ortak "Yakala:/Patlat:" paneli
+  `hedefPaneliKur`.
 - `harfler.js` – Harf grupları ve kelimeler (sadece veri).
 - `canta.js` – Karakterin çantası (envanter). Kaydedilmez; sayfa yenilenince oyun baştan başlar.
 - Tarla: karakterin başladığı yerin üstünde çitli tarla, 6 kare yan yana tek sıra
