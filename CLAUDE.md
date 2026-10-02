@@ -47,7 +47,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   azalır: oklar/numaralar → başlangıç noktası → silik iz); resimden-ses (Resimden Sesi
   Bul: ses söylenir ve harf görünür, o sesle başlayan resim seçilir; kart köşesindeki
   hoparlör resmin adını okur; 1. seviyede hep oyunun harfi, sonra öbür harfler de;
-  şimdilik her harfin tek resmi var). Ortak "Yakala:/Patlat:" paneli
+  şimdilik her harfin tek resmi var); hafiza-kartlari (Hafıza Kartları: kartlar kapalı,
+  iki kart açılır, eşleşen açık kalır; 1-2. seviye aynı harfi eşleştir, 3. seviye harf ile
+  resmi eşleştir; her 2 yanlış eşleştirmede 1 can gider). Ortak "Yakala:/Patlat:" paneli
   `hedefPaneliKur`.
 - `harfler.js` – Harf grupları ve kelimeler (sadece veri).
 - `canta.js` – Karakterin çantası (envanter). Kaydedilmez; sayfa yenilenince oyun baştan başlar.
