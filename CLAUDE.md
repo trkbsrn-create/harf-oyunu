@@ -21,6 +21,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   kenar titrer). Harf biçimi her zaman Andika'dır; başka yazı tipi kullanılmaz.
 - `harfler.js` – Harf grupları ve kelimeler (sadece veri).
 - `canta.js` – Karakterin çantası (envanter). Kaydedilmez; sayfa yenilenince oyun baştan başlar.
+- Tarla: karakterin başladığı yerin solunda çitli, 6 kareli tarla (`tarlaKur`, tarla.svg).
+  Çanta açıkken bir tohum tutulunca pencere silikleşir; tohum boş bir kareye bırakılırsa
+  ekilir (ekili-tohum.svg), kare doluysa ya da tarla dışına bırakılırsa çantaya döner.
+  Tarla da kaydedilmez.
 - `dinleyici.js` – Chrome konuşma tanıma (tr-TR), zaman aşımlı; söylenenin doğruluğunu kontrol eder.
   Chrome tek ünlüleri ("a") yazıya çeviremediği için ünlülerde ses yüksekliği ölçülür.
   Harf bir dolum çubuğudur: çocuk sesi uzattıkça (toplam 3 sn) harf dolar; ses kesilince

@@ -28,6 +28,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - "n" sandığı da düşünme ve güç akışında ("a" ile aynı; ipucundan sonra "an" hecesi ve "nar" da kabul): TAMAM.
    - İlk harf grubu tamam: a n e t i l sandıkları adaya dağıldı, hepsi düşünme ve güç akışında. Eşek, tilki, inek, leylek ipucu resimleri. Öğretmenin kararı: bütün ünsüzler önce sadece sesiyle denenir; "t" uzatılamadığı için kısa ses yeter, güç aşamasında her kısa sesle dolar. İpucu heceleri: an, at, al: TAMAM.
    - Oyunun ilk sürümü yalnızca ilk harf grubuyla (a n e t i l) yapılacak. Önce geliştirmeler, diğer harf grupları en sonda.
+   - Tarla: başlangıç yerinin solunda çitli 6 kareli tarla. Çantadan tohum tutulup boş kareye sürüklenince ekilir (tümsek, filiz, harf); dolu kareye ya da tarla dışına bırakılırsa çantaya döner: TAMAM.
    - Sıradaki iş: kullanıcıyla konuşulacak (geliştirmeler).
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.
