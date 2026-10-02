@@ -38,12 +38,16 @@ function ogrenilmisHarfler(harf) {
   return HARFLER.filter((h) => h.grup <= grup).map((h) => h.kucuk);
 }
 
-// Ünlüler tek başına söylenir. Ünsüzün tek başına okunuşu (tarayıcı "ne", "te" der) ses
-// esaslı yönteme uymadığı için ünsüzde kapalı hecesi söylenir ("an", "at", "al").
+// Ünlüler tek başına söylenir. Ünsüz okunmaz (öğretmenin kararı): tarayıcı tek başına "ne",
+// "te" der, hecesi ("at") de resimle ("tilki") karışıyor. Ünsüzde yalnızca harf görünür.
+// (Oyun başındaki tanıtımda kapalı hece bir kez okunur: harfiTanit.)
 function harfiSoyle(harf, bitince) {
   const bilgi = HARFLER.find((h) => h.kucuk === harf);
-  if (!bilgi) return;
-  Sesler.soyle(bilgi.unlu || !bilgi.hece ? harf : bilgi.hece, bitince);
+  if (bilgi && bilgi.unlu) {
+    Sesler.soyle(harf, bitince);
+  } else if (bitince) {
+    setTimeout(bitince, 300);
+  }
 }
 
 const UNSUZ_ACIKLAMASI = "Bu sesi tek başına okumam kolay değil, o yüzden biraz yardım almam gerekiyor.";
@@ -96,7 +100,7 @@ class MiniOyunSahnesi extends Phaser.Scene {
     if (this.canSayisi === 0) this.time.delayedCall(500, () => this.bitir(false));
   }
 
-  // Üstte ortada "Yakala: a" gibi panel; dokununca harf (ünsüzde hece) yeniden söylenir
+  // Üstte ortada "Yakala: a" gibi panel; dokununca harf yeniden söylenir (yalnızca ünlüde)
   hedefPaneliKur(baslik) {
     const panel = this.add.container(640, 50).setDepth(900);
     const zemin = this.add.graphics();

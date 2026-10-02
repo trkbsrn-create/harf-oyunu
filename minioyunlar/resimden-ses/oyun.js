@@ -1,6 +1,5 @@
 // Mini oyun: Resimden Sesi Bul (sesin resmi)
-// Her turda bir ses söylenir (ünlüde harfin kendisi, ünsüzde kapalı hecesi) ve harf ekranda
-// görünür. Çocuk o sesle başlayan resmi kartlar arasından seçer. Kartın köşesindeki
+// Her turda harf ekranda görünür (ünlüyse ayrıca söylenir; ünsüz okunmaz). Çocuk o sesle başlayan resmi kartlar arasından seçer. Kartın köşesindeki
 // hoparlöre dokununca resmin adı okunur. Yanlış resim bir can götürür.
 // Seviye arttıkça: tur sayısı artar, öbür öğrenilmiş harfler de sorulur, kart sayısı artar.
 // Şimdilik her harfin tek resmi var (harfler.js'deki resim); resimler sonra çoğalacak.
