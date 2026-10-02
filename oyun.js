@@ -32,6 +32,9 @@ const HEMEN_BASLA = "harfAvcisiHemenBasla";
 // Uzatılamayan ünsüzler ("t"): ilk aşamada bu kadar net ses yeter (ms);
 // güç aşamasında harf bu kadar ayrı kısa sesle dolar
 const KISA_SES_SURESI = 120;
+// Tohum her damlada bir aşama büyür: 0 ekili tohum, 1 filiz, 2 küçük ağaç, 3 büyük ağaç
+const BUYUME_ASAMASI = 3;
+const BITKI_RESIMLERI = [null, "bitki-filiz", "bitki-fidan", "bitki-agac"];
 const KESIK_SES_ADIMI = 6;
 
 // ---- Doodle yazılar ----
@@ -229,7 +232,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.load.svg("tarla", "gorseller/tarla.svg");
     this.load.svg("harita-karti", "gorseller/harita-karti.svg");
     for (const ad of ["su-tesisi", "tesis-pencere", "damla", "damla-bos", "sise",
-      "incele-dugmesi", "sise-pencere"]) {
+      "incele-dugmesi", "sise-pencere", "bitki-filiz", "bitki-fidan", "bitki-agac", "harf-tabela"]) {
       this.load.svg(ad, `gorseller/${ad}.svg`);
     }
     this.load.svg("ekili-tohum", "gorseller/ekili-tohum.svg");
@@ -313,6 +316,14 @@ class AdaSahnesi extends Phaser.Scene {
       this.hedefBelirle(p.worldX, p.worldY, true);
     });
     this.input.on("pointermove", (p) => {
+      // Şişeye dokunulup parmak kaydırıldıysa şişe taşınmaya başlar
+      if (this.siseBasili && Math.hypot(p.x - this.siseBasili.x, p.y - this.siseBasili.y) > 14) {
+        this.siseyiTasimayaBasla(p);
+      }
+      if (this.siseTasinan) {
+        this.siseyiTasi(p);
+        return;
+      }
       if (this.tasinan) {
         this.tohumuTasi(p);
         return;
@@ -390,7 +401,7 @@ class AdaSahnesi extends Phaser.Scene {
 
   cantayiAcKapat() {
     if (this.donuk) return; // hazine anında çanta açılmaz
-    if (this.tasinan) return; // tohum sürüklenirken çanta kapanmaz
+    if (this.tasinan || this.siseTasinan || this.sulaniyor) return; // sürüklerken çanta kapanmaz
     if (this.siseAcik) { // önce şişenin içi kapanır
       this.siseyiAcKapat();
       return;
@@ -444,6 +455,8 @@ class AdaSahnesi extends Phaser.Scene {
     this.cantaPenceresi.add(this.inceleDugmesi);
     this.inceleAlani = new Phaser.Geom.Rectangle(0, 0, 180, 70);
     this.siseBasili = null; // şişeye dokunuldu, parmak henüz kalkmadı
+    this.siseTasinan = null; // tarlaya sürüklenen şişe
+    this.sulaniyor = false; // şişe eğilmiş, damla dökülüyor
 
     this.siseAcik = false;
     const SX = 390;
@@ -478,12 +491,17 @@ class AdaSahnesi extends Phaser.Scene {
     const sira = this.kutucuklar.findIndex((k, i) => Canta.esyalar[i]
       && Canta.esyalar[i].tur === "sise" && Math.abs(p.x - k.x) < 60 && Math.abs(p.y - k.y) < 60);
     if (sira < 0) return false;
-    this.siseBasili = { sira, x: p.x, y: p.y };
+    if (!this.sulaniyor) this.siseBasili = { sira, x: p.x, y: p.y };
     return true;
   }
 
-  // Parmak kalkınca: şişeye dokunulmuşsa "İncele" düğmesi çıkar; tohum taşınıyorsa bırakılır
+  // Parmak kalkınca: şişeye dokunulmuşsa "İncele" düğmesi çıkar; şişe ya da tohum
+  // taşınıyorsa bırakılır
   birak(p) {
+    if (this.siseTasinan) {
+      this.siseyiBirak(p);
+      return;
+    }
     if (this.siseBasili) {
       const k = this.kutucuklar[this.siseBasili.sira];
       this.siseBasili = null;
@@ -496,6 +514,136 @@ class AdaSahnesi extends Phaser.Scene {
       return;
     }
     this.tohumuBirak(p);
+  }
+
+  // ---- Sulama: şişe tarladaki tohuma sürüklenir, o harfin damlası varsa bir damla dökülür ----
+
+  siseyiTasimayaBasla(p) {
+    const sira = this.siseBasili.sira;
+    this.siseBasili = null;
+    const k = this.kutucuklar[sira];
+    const kap = this.add.container(p.x, p.y, [this.add.image(0, 0, "sise")])
+      .setScrollFactor(0).setDepth(9600).setScale(1.1);
+    this.siseTasinan = { kap, geriX: k.x, geriY: k.y };
+    this.inceleDugmesi.setVisible(false);
+    this.kutucukNesneleri[sira].forEach((n) => n.setAlpha(0.25));
+    this.tweens.add({ targets: this.cantaPenceresi, alpha: 0.12, duration: 200 });
+    Sesler.nota(660, 0, 0.08, 0.12);
+  }
+
+  // Sulanabilecek kare: tohum ekili, henüz büyük ağaç olmamış ve o harfin damlası var
+  sulanabilirKare(x, y) {
+    return this.tarlaKareleri.find((k) => k.ekili && k.asama < BUYUME_ASAMASI
+      && Canta.damlaSayisi(k.ekili.harf) > 0 && k.alan.contains(x, y)) || null;
+  }
+
+  siseyiTasi(p) {
+    this.siseTasinan.kap.setPosition(p.x, p.y);
+    this.kareIsigi.clear();
+    const kare = this.sulanabilirKare(p.worldX, p.worldY);
+    if (kare) {
+      const a = kare.alan;
+      this.kareIsigi.fillStyle(0xc9ecff, 0.5);
+      this.kareIsigi.fillRoundedRect(a.x, a.y, a.width, a.height, 12);
+      this.kareIsigi.lineStyle(6, 0x7cc4ef, 1);
+      this.kareIsigi.strokeRoundedRect(a.x, a.y, a.width, a.height, 12);
+    }
+  }
+
+  // Sulanabilir bir karede bırakılırsa şişe eğilir, damla dökülür, bitki büyür; şişe
+  // sonra çantaya döner. Değilse doğrudan çantaya döner.
+  siseyiBirak(p) {
+    const t = this.siseTasinan;
+    this.siseTasinan = null;
+    this.kareIsigi.clear();
+    const geriDon = () => {
+      this.tweens.add({
+        targets: t.kap, x: t.geriX, y: t.geriY, scale: 1, angle: 0, duration: 280, ease: "Cubic.Out",
+        onComplete: () => {
+          t.kap.destroy();
+          this.sulaniyor = false;
+          this.cantaIceriginiCiz();
+          this.tweens.add({ targets: this.cantaPenceresi, alpha: 1, duration: 250 });
+        },
+      });
+    };
+    const kare = this.sulanabilirKare(p.worldX, p.worldY);
+    if (!kare) {
+      geriDon();
+      return;
+    }
+    this.sulaniyor = true;
+    const kamera = this.cameras.main;
+    // Şişe karenin sağ üstüne gelir ve ağzı bitkiye bakacak şekilde eğilir
+    const sx = kare.alan.centerX + 55 - kamera.scrollX;
+    const sy = kare.alan.y - 10 - kamera.scrollY;
+    this.tweens.chain({
+      targets: t.kap,
+      tweens: [
+        { x: sx, y: sy, scale: 1, duration: 220, ease: "Cubic.Out" },
+        { angle: -110, duration: 260, ease: "Sine.InOut" },
+      ],
+      onComplete: () => {
+        // Şişenin ağzından üç damla toprağa düşer
+        const agizX = t.kap.x + kamera.scrollX - 29;
+        const agizY = t.kap.y + kamera.scrollY + 11;
+        for (let i = 0; i < 3; i++) {
+          const damla = this.add.image(agizX, agizY, "damla").setScale(0.45).setDepth(6000);
+          this.tweens.add({
+            targets: damla, x: kare.alan.centerX + Phaser.Math.Between(-10, 10),
+            y: kare.alan.bottom - 18, duration: 320, delay: i * 140, ease: "Quad.In",
+            onStart: () => Sesler.damla(),
+            onComplete: () => {
+              damla.destroy();
+              const sicrama = this.add.circle(kare.alan.centerX, kare.alan.bottom - 16, 6, 0x7cc4ef).setDepth(6000);
+              this.tweens.add({ targets: sicrama, scale: 3, alpha: 0, duration: 300, onComplete: () => sicrama.destroy() });
+            },
+          });
+        }
+        this.time.delayedCall(800, () => {
+          Canta.damlaKullan(kare.ekili.harf);
+          this.bitkiyiBuyut(kare);
+          this.tweens.add({ targets: t.kap, angle: 0, duration: 200, onComplete: geriDon });
+        });
+      },
+    });
+  }
+
+  // Bitki bir aşama büyür: eskisi küçülüp kaybolur, yenisi topraktan fırlar, yapraklar uçuşur
+  bitkiyiBuyut(kare) {
+    kare.asama++;
+    const eski = kare.nesneler;
+    this.tweens.add({ targets: eski, scale: 0, alpha: 0, duration: 220,
+      onComplete: () => eski.forEach((n) => n.destroy()) });
+    kare.nesneler = this.bitkiCiz(kare);
+    const [bitki, tabela, harf] = kare.nesneler;
+    bitki.setScale(1, 0);
+    tabela.setScale(0);
+    harf.setScale(0);
+    this.tweens.add({ targets: bitki, scaleY: 1, duration: 500, delay: 150, ease: "Back.Out" });
+    this.tweens.add({ targets: [tabela, harf], scale: 1, duration: 350, delay: 350, ease: "Back.Out" });
+    this.add.particles(kare.alan.centerX, kare.alan.bottom - 40, "parilti", {
+      speed: { min: 80, max: 200 }, lifespan: 700, scale: { start: 0.7, end: 0 },
+      tint: [0x8fd16a, 0xc9eba7, 0xfff3b0], emitting: false,
+    }).setDepth(6000).explode(18);
+    Sesler.buyume();
+  }
+
+  // Karenin şu anki aşamasına göre bitkiyi ve harf tabelasını çizer; nesneleri verir.
+  // Bitki karenin dibinde biraz sağda, tabela sol altta durur.
+  bitkiCiz(kare) {
+    const ad = BITKI_RESIMLERI[kare.asama];
+    const taban = kare.alan.bottom - 6;
+    const bitki = this.add.image(kare.alan.centerX + 10, taban, ad).setOrigin(0.5, 1).setDepth(taban);
+    const tabelaX = kare.alan.x + 22;
+    const tabela = this.add.image(tabelaX, taban + 2, "harf-tabela").setOrigin(0.5, 1).setDepth(taban + 0.5);
+    // Levhanın ortası tabelanın alt ortasından 41 px yukarıda (gorseller/harf-tabela.svg)
+    const harf = this.add.text(tabelaX, taban + 2 - 41, kare.ekili.harf, {
+      fontFamily: "Andika", fontSize: "26px", color: "#ffffff",
+      stroke: "#3b2a1a", strokeThickness: 5, padding: { x: 3, y: 3 },
+    }).setDepth(taban + 0.6);
+    boyaliOrtala(titret(harf, 1.2));
+    return [bitki, tabela, harf];
   }
 
   siseyiAcKapat() {
@@ -619,6 +767,8 @@ class AdaSahnesi extends Phaser.Scene {
     }).setDepth(-0.79).setScale(0);
     boyaliOrtala(titret(harf, 1.2));
     this.tweens.add({ targets: [resim, harf], scale: 1, duration: 400, ease: "Back.Out" });
+    kare.asama = 0; // sulandıkça büyür (bitkiyiBuyut)
+    kare.nesneler = [resim, harf];
     for (let i = 0; i < 8; i++) {
       const toz = this.add.circle(x, y + 20, Phaser.Math.Between(5, 9), 0x8e6340).setDepth(-0.78);
       const aci = Phaser.Math.FloatBetween(Math.PI, Math.PI * 2);

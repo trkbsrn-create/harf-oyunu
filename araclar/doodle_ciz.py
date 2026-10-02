@@ -337,6 +337,51 @@ yaz("sise-pencere.svg", 500, 520, "Sihirli su şişesinin içi: her harf için b
 ''', 5) + '''  <path d="M30 40 l5 12 l12 5 l-12 5 l-5 12 l-5 -12 l-12 -5 l12 -5z M440 20 l4 9 l9 4 l-9 4 l-4 9 l-4 -9 l-9 -4 l9 -4z M150 30 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3z" fill="#ffe680" stroke="#2b2b2b" stroke-width="2"/>
 ''', 70, 4)
 
+# ---- Büyüyen bitki (tarlada, sulandıkça) ----
+# Üçü de alt ortasından (tabanından) oyunda karenin dibine konur.
+TUMSEK = '    <path d="M{x1} {y} q{yarim} -22 {tam} 0z" fill="url(#koyuToprak)" stroke-width="3.5"/>\n'
+
+
+def tumsek(orta, taban, en):
+    return TUMSEK.format(x1=orta - en / 2, y=taban, yarim=en / 2, tam=en)
+
+
+# 1) Filiz: 100x110, taban (50,106)
+yaz("bitki-filiz.svg", 100, 110, "Filiz: tohum bir kez sulanınca", KOYU_TOPRAK + YESIL,
+    kalem('''    <path d="M50 100 q-4 -34 2 -66" fill="none" stroke="#6fbf4a" stroke-width="6"/>
+    <path d="M50 100 q-4 -34 2 -66" fill="none" stroke-width="2"/>
+    <path d="M50 66 q-30 -6 -38 -28 q26 -4 38 28z M51 58 q28 -10 36 -32 q-26 -2 -36 32z" fill="url(#yesil)" stroke-width="3"/>
+    <path d="M52 36 q-18 -12 -16 -30 q18 6 16 30z M52 36 q16 -14 14 -32 q-16 8 -14 32z" fill="url(#yesil)" stroke-width="3"/>
+''' + tumsek(50, 106, 70)), 71)
+
+# 2) Küçük ağaç: 130x150, taban (65,146) (çizim 10 px sağa kaydırılır, tepe sığsın)
+yaz("bitki-fidan.svg", 130, 150, "Küçük ağaç: tohum iki kez sulanınca", KOYU_TOPRAK + KOYU_YESIL
+    + tarama("govde", "#c98f4f", "#9a6c43", 80, 6, 2.5),
+    kalem('''    <g transform="translate(10 0)">
+    <path d="M48 140 l2 -62 h10 l2 62z" fill="url(#govde)" stroke-width="3"/>
+    <path d="M55 96 l-14 -12 M56 90 l12 -10" fill="none" stroke-width="3"/>
+    <path d="M24 70 q-18 -6 -12 -26 q-2 -24 22 -26 q10 -16 30 -10 q22 -6 32 12 q20 6 16 28 q8 22 -14 26 q-14 12 -34 4 q-24 10 -40 -8z" fill="url(#koyuYesil)"/>
+    <path d="M38 44 q8 -8 18 -2 M64 56 q8 -6 16 0" fill="none" stroke-width="2.5"/>
+''' + tumsek(55, 146, 80) + '    </g>\n'), 72)
+
+# 3) Büyük ağaç: 140x190, taban (70,186). Tepede küçük pembe çiçekler.
+cicekler = "".join(f'    <circle cx="{x}" cy="{y}" r="6" fill="#ffb3c8" stroke-width="2.5"/>\n    <circle cx="{x}" cy="{y}" r="2" fill="#ffe680" stroke="none"/>\n'
+                   for x, y in [(36, 52), (80, 30), (104, 70), (58, 86), (94, 104), (30, 98)])
+yaz("bitki-agac.svg", 140, 190, "Büyük ağaç: tohum üç kez sulanınca", KOYU_TOPRAK + KOYU_YESIL
+    + tarama("govde", "#c98f4f", "#9a6c43", 80, 6, 2.5),
+    kalem('''    <path d="M58 180 q4 -40 2 -76 h20 q-2 36 4 76z" fill="url(#govde)" stroke-width="3.5"/>
+    <path d="M62 128 l-18 -16 M76 120 l18 -14" fill="none" stroke-width="3.5"/>
+    <path d="M22 108 q-22 -8 -14 -34 q-6 -30 22 -34 q8 -28 40 -26 q30 -6 42 18 q28 6 22 36 q14 28 -12 38 q-12 18 -40 10 q-24 16 -46 2 q-12 4 -14 -10z" fill="url(#koyuYesil)"/>
+    <path d="M40 60 q10 -10 22 -2 M76 52 q10 -8 20 0 M52 100 q10 -8 20 0" fill="none" stroke-width="2.5"/>
+''' + cicekler + tumsek(70, 186, 96)), 73)
+
+# Harf tabelası: 46x60. Tahta levha (3-43, 4-34) ve kazık; harf oyunda levhanın
+# ortasına (23,19) yazılır. Alt ortası karenin dibine konur.
+yaz("harf-tabela.svg", 46, 60, "Bitkinin harf tabelası", TAHTA,
+    kalem('''    <path d="M21 32 v26 h4 v-26z" fill="#c98f4f" stroke-width="2.5"/>
+    <rect x="3" y="4" width="40" height="30" rx="5" fill="url(#tahta)" stroke-width="3"/>
+'''), 74, 2.5)
+
 # ---- Mini harita kartı (sol alt) ----
 # 250x160 kâğıt kart. İçindeki harita alanı (15,15)'ten başlar, 220 px genişliğinde:
 # dünya (6400x3600) 220/6400 ölçeğiyle küçültülür. Ada şekli oyundaki adaNoktalari()

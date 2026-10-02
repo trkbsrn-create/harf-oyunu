@@ -31,6 +31,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   başına en çok 3, `Canta.damlalar`). Şişe ilk damlayla çantaya gelir. Kaydedilmez.
   Çantada şişeye dokununca "İncele" düğmesi çıkar; basınca şişenin içi açılır
   (sise-pencere.svg): her harfin bölmesinde toplanan damlalar görünür (`siseKur`).
+  Şişe sürüklenip tarladaki tohuma bırakılırsa (o harfin damlası varsa) şişe eğilir, bir
+  damla dökülür, bitki bir aşama büyür: 0 ekili tohum, 1 filiz, 2 küçük ağaç, 3 büyük ağaç
+  (`BUYUME_ASAMASI`, `BITKI_RESIMLERI`; bitki-*.svg). 1. aşamadan sonra harf, karenin
+  sol altındaki tahta tabelada (harf-tabela.svg) durur.
 - Mini harita: sol altta kâğıt kart (harita-karti.svg: ada ve tarla, `doodle_ciz.py`
   adayı oyundaki `adaNoktalari` formülüyle çizer; biri değişirse öbürü de değişmeli).
   Üstüne her karede karakter, ekranda görünen bölge ve açılmış sandıklar (kırmızı çarpı)
