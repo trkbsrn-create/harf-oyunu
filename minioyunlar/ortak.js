@@ -265,7 +265,7 @@ class MiniOyunSahnesi extends Phaser.Scene {
   oyunBitti() {}
 
   geriDon() {
-    if (window.speechSynthesis) window.speechSynthesis.cancel();
+    Sesler.sustur();
     this.scene.start(this.donus);
   }
 }
