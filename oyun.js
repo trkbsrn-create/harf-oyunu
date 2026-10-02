@@ -1,5 +1,9 @@
 // Oyunun ana kodu: büyük bir ada ve adada gezen ana karakter.
 
+// Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
+// ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
+const SURUM = 37;
+
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
 // 6400x3600'lük alanın ortasındadır (ADA_YUKSEKLIK).
@@ -2270,6 +2274,7 @@ class KarsilamaSahnesi extends Phaser.Scene {
       this.add.image(0, 0, "baslik-tabela"),
       doodleYazi(this, 0, 4, "Harf Avcısı", 92, "mavi").setOrigin(0.5),
     ]);
+    doodleYazi(this, 1262, 14, `Sürüm ${SURUM}`, 30).setOrigin(1, 0);
     this.tweens.add({ targets: tabela, angle: { from: -1.2, to: 1.2 }, duration: 1800,
       yoyo: true, repeat: -1, ease: "Sine.InOut" });
 

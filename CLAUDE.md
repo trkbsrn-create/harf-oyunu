@@ -75,6 +75,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 - Kullanıcı kodlama bilmiyor. Tüm açıklamaları Türkçe, kısa ve sade yaz.
   İş bitince "Ne yaptım" ve "Nasıl denerim" bölümlerini ekle.
 - Her seferinde tek küçük iş yap. İstenmeyen özellik ekleme. Çalışan bir şeyi bozma.
+- Her güncellemede sürüm numarasını artır: `oyun.js`'deki `SURUM` ve `index.html`'deki
+  betik eklerindeki `?s=` sayısı, o güncellemenin çekme isteği numarası olsun. Sürüm,
+  karşılama ekranının sağ üstünde görünür; öğretmen son güncellemenin geldiğini buradan anlar.
 - GitHub işlerini (kaydetme, gönderme, çekme isteği açma, ana sürüme ekleme/merge)
   Claude yapar. Kullanıcıdan GitHub'da düğmeye basmasını isteme; bu terimleri
   kullanıcıya açıklamak gerekirse sade Türkçe kullan.
