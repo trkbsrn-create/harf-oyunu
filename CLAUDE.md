@@ -53,7 +53,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   hece yazılmaz, yalnızca söylenir (hoparlörle tekrar); çocuk dereki harf taşlarına dokunup
   köprüdeki iki yere sırayla koyar; doğruysa hece okunur, karakter taşlara basarak karşıya
   geçer; yanlışsa taşlar döner, can gider; 1-2. seviye kapalı hece, 3. seviyede açık hece
-  de). Hoparlör çizimi ortak: `hoparlorCiz`. Ortak "Yakala:/Patlat:" paneli
+  de); heceyi-bul (Heceyi Bul: hece söylenir, sırtında hece yazılı balıklar (balik.svg,
+  oyunda boyanır) derede yüzer, doğru heceli balığa dokunulur; yanlış balık bir kez can
+  götürür; seviye 1 çok farklı heceler, 2 tek harfi değişen heceler, 3 ters hece (an/na) ve
+  açık hece). Hoparlör çizimi ortak: `hoparlorCiz`. Ortak "Yakala:/Patlat:" paneli
   `hedefPaneliKur`.
 - `harfler.js` – Harf grupları ve kelimeler (sadece veri).
 - `canta.js` – Karakterin çantası (envanter). Kaydedilmez; sayfa yenilenince oyun baştan başlar.

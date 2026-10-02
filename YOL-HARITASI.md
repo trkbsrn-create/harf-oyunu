@@ -50,7 +50,8 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - Öğretmenin kararı: mini oyunlarda ünsüz okunmaz (yalnızca harf görünür); oyun başındaki tanıtım kalır: TAMAM.
    - Mini oyun 5: Hafıza Kartları (1-2. seviye aynı harf, 4/6 çift; 3. seviye harf–resim, 5 çift; 2 yanlışta 1 can): TAMAM.
    - Mini oyun 6: Hece Köprüsü (hece yalnızca sesli; taşları sırayla köprüye koy; 4/5/6 tur, 3/4/5 taş; 3. seviyede açık hece de): TAMAM.
-   - Sıradaki iş: mini oyunları tek tek yapmak (sıradaki: Heceyi Bul). Ana oyunun geri kalanı mini oyunlar bitince.
+   - Mini oyun 7: Heceyi Bul (hece balıkları; 5/6/7 tur, 3/4/5 balık; seviyeyle heceler birbirine benzer, 3. seviyede ters ve açık hece): TAMAM.
+   - Planlanan mini oyunların hepsi yapıldı. Sıradaki iş: öğretmenin kendi mini oyun fikirleri ya da mini oyunları ana oyuna (tesis, damla parçaları) bağlamak. Ana oyunun geri kalanı mini oyunlar bitince.
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.
 
