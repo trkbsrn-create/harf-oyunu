@@ -46,7 +46,8 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - Mini oyunlarda ünsüz tanıtımı: açıklama yazılır ve söylenir, "a" gelip kapalı heceyi kurar, hece okunur: TAMAM.
    - Mini oyun 2: Harf Balonları (yüzen balonlar, tur tur; seviye 1-3: 7/9/11 balon, 3/3/4 tur, benzer harf, 3. seviyede gezinen balonlar): TAMAM.
    - Mini oyun 3: Harfi Çiz (ipucu resmini yazılış yolunda götür; seviyeyle yardım azalır): TAMAM.
-   - Sıradaki iş: mini oyunları tek tek yapmak (sıradaki: Resimden Sesi Bul). Ana oyunun geri kalanı mini oyunlar bitince.
+   - Mini oyun 4: Resimden Sesi Bul (sesin resmi; 5/6/8 tur, 3/3/4 kart; hoparlörle resim adı): TAMAM. Resimler şimdilik harf başına bir tane; sonra çoğaltılacak.
+   - Sıradaki iş: mini oyunları tek tek yapmak (sıradaki: Hafıza Kartları). Ana oyunun geri kalanı mini oyunlar bitince.
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.
 
