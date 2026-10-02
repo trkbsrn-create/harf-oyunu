@@ -52,6 +52,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - Mini oyun 6: Hece Köprüsü (hece yalnızca sesli; taşları sırayla köprüye koy; 4/5/6 tur, 3/4/5 taş; 3. seviyede açık hece de): TAMAM.
    - Mini oyun 7: Heceyi Bul (hece balıkları; 5/6/7 tur, 3/4/5 balık; seviyeyle heceler birbirine benzer, 3. seviyede ters ve açık hece): TAMAM.
    - Telefonda boyut ayarları (yan çevir uyarısı, tam ekran, büyütme/kaydırma kapalı): TAMAM. Telefonda sesli okumanın gecikmesi/kesilmesi düzeltildi (Sürüm 53). Telefonda mikrofon izni verilmeden hiç ses gelmemesi düzeltildi (Sürüm 54).
+   - Öğretmenin kararı: mini oyunlarda ünsüz harflerin başındaki yardım uyarısı ("Bu sesi tek başına okumam kolay değil...") ve hece tanıtımı kaldırıldı (Sürüm 55): TAMAM.
    - Planlanan mini oyunların hepsi yapıldı. Sıradaki iş: öğretmenin kendi mini oyun fikirleri ya da mini oyunları ana oyuna (tesis, damla parçaları) bağlamak. Ana oyunun geri kalanı mini oyunlar bitince.
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.

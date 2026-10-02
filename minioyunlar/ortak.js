@@ -40,7 +40,6 @@ function ogrenilmisHarfler(harf) {
 
 // Ünlüler tek başına söylenir. Ünsüz okunmaz (öğretmenin kararı): tarayıcı tek başına "ne",
 // "te" der, hecesi ("at") de resimle ("tilki") karışıyor. Ünsüzde yalnızca harf görünür.
-// (Oyun başındaki tanıtımda kapalı hece bir kez okunur: harfiTanit.)
 function harfiSoyle(harf, bitince) {
   const bilgi = HARFLER.find((h) => h.kucuk === harf);
   if (bilgi && bilgi.unlu) {
@@ -49,8 +48,6 @@ function harfiSoyle(harf, bitince) {
     setTimeout(bitince, 300);
   }
 }
-
-const UNSUZ_ACIKLAMASI = "Bu sesi tek başına okumam kolay değil, o yüzden biraz yardım almam gerekiyor.";
 
 // Bütün mini oyunların ortak parçaları: kâğıt zemin, geri düğmesi, canlar (kalpler),
 // ilerleme çubuğu ve bitiş penceresi ("Aferin!" ya da "Bir daha dene").
@@ -176,65 +173,16 @@ class MiniOyunSahnesi extends Phaser.Scene {
     geriAlani.on("pointerdown", () => this.geriDon());
   }
 
-  // Oyunun başında harfi tanıtır, bitince() çağrılır. Ünlüde harf söylenir. Ünsüzde önce
-  // açıklama yazılır ve söylenir; sonra hecenin öbür harfi ("a") yay çizerek gelip ünsüzün
-  // önüne yerleşir ve oluşan kapalı hece söylenir.
+  // Oyunun başında harfi tanıtır, bitince() çağrılır. Ünlü söylenir; ünsüz okunmaz
+  // (öğretmenin kararı: ünsüzde yardım uyarısı ve hece tanıtımı kaldırıldı), oyun hemen başlar.
   harfiTanit(bitince) {
     const bilgi = HARFLER.find((h) => h.kucuk === this.harf);
-    if (!bilgi || bilgi.unlu || !bilgi.hece) {
+    if (bilgi && bilgi.unlu) {
       harfiSoyle(this.harf);
       this.time.delayedCall(900, bitince);
-      return;
+    } else {
+      this.time.delayedCall(300, bitince);
     }
-    const kap = this.add.container(0, 0).setDepth(950);
-    const g = this.add.graphics();
-    g.fillStyle(0x000000, 0.25);
-    g.fillRect(0, 0, 1280, 720);
-    g.fillStyle(0xfffdf6, 1);
-    g.fillRoundedRect(250, 150, 780, 420, 30);
-    g.lineStyle(5, 0x2b2b2b, 1);
-    g.strokeRoundedRect(250, 150, 780, 420, 30);
-    const aciklama = this.add.text(640, 235, UNSUZ_ACIKLAMASI, {
-      fontFamily: "Andika", fontSize: "32px", color: "#2b2b2b", align: "center",
-      wordWrap: { width: 700 },
-    }).setOrigin(0.5);
-    const harfStili = {
-      fontFamily: "Andika", fontSize: "140px", color: "#ffffff",
-      stroke: "#3b2a1a", strokeThickness: 16, padding: { x: 6, y: 6 },
-    };
-    const unsuz = boyaliOrtala(titret(this.add.text(640, 430, this.harf, harfStili), 2.5));
-    kap.add([g, aciklama, unsuz]).setAlpha(0);
-    this.tweens.add({ targets: kap, alpha: 1, duration: 250 });
-
-    // Hecede ünsüzün yanındaki harf (kapalı hecede önde: "a" + "n")
-    const yardimci = bilgi.hece.replace(this.harf, "");
-    const yardimciOnde = bilgi.hece.indexOf(yardimci) === 0;
-    Sesler.soyle(UNSUZ_ACIKLAMASI, () => {
-      if (!kap.active) return;
-      const gelen = boyaliOrtala(titret(this.add.text(yardimciOnde ? 140 : 1140, 300, yardimci, harfStili), 2.5));
-      gelen.setScale(0.4).setAngle(-200);
-      kap.add(gelen);
-      const hedefX = yardimciOnde ? 588 : 692;
-      this.tweens.add({ targets: unsuz, x: yardimciOnde ? 692 : 588, duration: 500, ease: "Cubic.Out" });
-      this.tweens.add({ targets: gelen, x: hedefX, scale: 1, angle: 0, duration: 900, ease: "Back.Out" });
-      this.tweens.add({ targets: gelen, y: 250, duration: 450, ease: "Quad.Out", yoyo: true,
-        onComplete: () => gelen.setY(430) });
-      Sesler.pling();
-      this.time.delayedCall(1000, () => {
-        if (!kap.active) return;
-        // Hece birleşti: ikisi birlikte zıplar, hece söylenir
-        this.tweens.add({ targets: [gelen, unsuz], scale: 1.15, duration: 160, yoyo: true });
-        Sesler.soyle(bilgi.hece, () => {
-          if (!kap.active) return; // bu arada oyundan çıkıldıysa
-          this.time.delayedCall(500, () => {
-            this.tweens.add({ targets: kap, alpha: 0, duration: 300, onComplete: () => {
-              kap.destroy();
-              bitince();
-            } });
-          });
-        });
-      });
-    });
   }
 
   // Basit doodle hoparlör
