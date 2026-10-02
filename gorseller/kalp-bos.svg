@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="50" height="46" viewBox="0 0 50 46">
+  <!-- Can: kaybedilmiş kalp (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="80" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <g filter="url(#titrek)" stroke="#b8b0a2" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M25 42 l-18 -18 q-10 -12 0 -20 q10 -6 18 6 q8 -12 18 -6 q10 8 0 20z" fill="#e9e4da" stroke-width="3.5"/>
+  </g>
+</svg>

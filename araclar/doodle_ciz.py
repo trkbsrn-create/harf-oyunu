@@ -485,6 +485,13 @@ yaz("oyun-karti.svg", 250, 170, "Mini oyun kartı", tarama("kartKagit", "#fffdf6
     kalem("""    <rect x="6" y="6" width="232" height="152" rx="18" fill="url(#kartKagit)" stroke-width="4"/>
 """, 4), 78, 3)
 
+# Can (kalp): 50x46; dolu ve boş (kaybedilmiş)
+KALP = '    <path d="M25 42 l-18 -18 q-10 -12 0 -20 q10 -6 18 6 q8 -12 18 -6 q10 8 0 20z" fill="{dolgu}" stroke-width="3.5"/>\n'
+yaz("kalp.svg", 50, 46, "Can: dolu kalp", tarama("kirmiziKalp", "#ff9c8a", "#e0533d", -35, 6, 2.5),
+    kalem(KALP.format(dolgu="url(#kirmiziKalp)"), 3.5), 79, 2.5)
+yaz("kalp-bos.svg", 50, 46, "Can: kaybedilmiş kalp", "",
+    kalem(KALP.format(dolgu="#e9e4da"), 3.5).replace('stroke="#2b2b2b"', 'stroke="#b8b0a2"'), 80, 2.5)
+
 # ---- Mini harita kartı (sol alt) ----
 # 250x175 kâğıt kart. İçindeki harita alanı (15,15)'ten başlar, 220 px genişliğinde:
 # dünya (6400x4200; altta iskele için geniş deniz) 220/6400 ölçeğiyle küçültülür. Ada şekli oyundaki adaNoktalari()
