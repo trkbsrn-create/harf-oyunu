@@ -42,7 +42,8 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - Mini oyunlar (beyin fırtınası kararları): su damlaları ileride mini oyunlarla kazanılacak; her damla 3 parça, her kazanılan mini oyun 1 parça (bir harf için yaklaşık 9 oyun). Mini oyunlarda kaybetmek var (3 can, "Bir daha dene"). Sesli okuma: tarayıcının Türkçe sesi. Mikrofonlu mini oyun şimdilik yok. Süreler harfe göre (kısa harflerde ~30 sn, uzunlarda 60–90 sn).
      Planlanan oyunlar: Damla Yakalama, Harf Balonları, Harfi Çiz, Resimden Sesi Bul, Hafıza Kartları, Hece Köprüsü, Heceyi Bul (oyun heceyi sesli söyler, çocuk aynı heceyi seçer). Öğretmen kendi fikirlerini de verecek.
    - "Mini Games" düğmesi ve deneme menüsü (harf seçici, oyun kartları, "Yakında"): TAMAM.
-   - Sıradaki iş: mini oyunları tek tek yapmak. Ana oyunun geri kalanı mini oyunlar bitince.
+   - Mini oyun 1: Damla Yakalama (dokunarak yakala; seviye 1-3: hız, benzer harf, 8/10/12 damla; 3 can): TAMAM. Menüye seviye seçici eklendi.
+   - Sıradaki iş: mini oyunları tek tek yapmak (sıradaki: Harf Balonları). Ana oyunun geri kalanı mini oyunlar bitince.
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.
 

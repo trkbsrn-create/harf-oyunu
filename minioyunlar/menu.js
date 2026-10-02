@@ -48,12 +48,30 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
       });
       return { harf: h.kucuk, x, y };
     });
+    // Seviye seçici (1, 2, 3)
+    if (!this.secilenSeviye) this.secilenSeviye = 1;
+    doodleYazi(this, 470, 232, "Seviye:", 30).setOrigin(0.5);
+    this.seviyeDugmeleri = [1, 2, 3].map((seviye, i) => {
+      const x = 580 + i * 80;
+      const y = 232;
+      this.add.text(x, y, String(seviye), {
+        fontFamily: "Andika", fontSize: "34px", color: "#2b2b2b",
+      }).setOrigin(0.5).setDepth(1);
+      const alan = this.add.circle(x, y, 28).setInteractive({ useHandCursor: true });
+      alan.on("pointerdown", () => {
+        Sesler.ac();
+        Sesler.nota(660, 0, 0.08, 0.12);
+        this.secilenSeviye = seviye;
+        this.harfleriCiz();
+      });
+      return { seviye, x, y };
+    });
     this.harfleriCiz();
 
     // Oyun kartları: satırda 4 kart
     PLANLANAN_OYUNLAR.forEach((oyun, i) => {
       const x = 640 + ((i % 4) - 1.5) * 270;
-      const y = 330 + Math.floor(i / 4) * 200;
+      const y = 380 + Math.floor(i / 4) * 190;
       const hazir = Boolean(MINI_OYUNLAR[oyun.ad]);
       const kart = this.add.container(x, y, [
         this.add.image(0, 0, "oyun-karti"),
@@ -82,11 +100,18 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
       g.lineStyle(secili ? 6 : 4, 0x2b2b2b, 1);
       g.strokeCircle(d.x, d.y, 38);
     }
+    for (const d of this.seviyeDugmeleri || []) {
+      const secili = d.seviye === this.secilenSeviye;
+      g.fillStyle(secili ? 0xffe680 : 0xffffff, 1);
+      g.fillCircle(d.x, d.y, 28);
+      g.lineStyle(secili ? 5 : 3, 0x2b2b2b, 1);
+      g.strokeCircle(d.x, d.y, 28);
+    }
   }
 
   oyunuAc(ad) {
     Sesler.ac();
     Sesler.pling();
-    this.scene.start(ad, { harf: this.secilenHarf, seviye: 1, donus: "MiniOyunlarSahnesi" });
+    this.scene.start(ad, { harf: this.secilenHarf, seviye: this.secilenSeviye, donus: "MiniOyunlarSahnesi" });
   }
 }

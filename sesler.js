@@ -85,6 +85,25 @@ const Sesler = {
     this.nota(1568, 0.3, 0.4, 0.08, "sine");
   },
 
+  // Mini oyunda yanlış seçim: yumuşak, inen iki nota (korkutmasın)
+  yanlis() {
+    this.nota(330, 0, 0.14, 0.12, "triangle");
+    this.nota(247, 0.1, 0.22, 0.12, "triangle");
+  },
+
+  // Tarayıcının Türkçe sesiyle bir harfi, heceyi ya da kelimeyi sesli söyler (ses
+  // dosyası yok, kayıt yok). Türkçe ses yoksa ya da tarayıcı desteklemiyorsa sessiz kalır.
+  soyle(metin) {
+    if (!("speechSynthesis" in window)) return;
+    window.speechSynthesis.cancel();
+    const soz = new SpeechSynthesisUtterance(metin);
+    soz.lang = "tr-TR";
+    soz.rate = 0.8;
+    const turkce = window.speechSynthesis.getVoices().find((v) => v.lang && v.lang.startsWith("tr"));
+    if (turkce) soz.voice = turkce;
+    window.speechSynthesis.speak(soz);
+  },
+
   // Çanta açılıp kapanırken: kısa, yumuşak iki nota.
   canta(acik) {
     this.nota(acik ? 330 : 392, 0, 0.1, 0.12, "triangle");

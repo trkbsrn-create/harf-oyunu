@@ -31,6 +31,13 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   daha dene"); her damla 3 parça, her kazanılan mini oyun 1 parça verir; harfler ve
   heceler tarayıcının Türkçe sesiyle sesli okunabilir (ses dosyası yok); mikrofonlu mini
   oyun şimdilik yok. Mini oyunlar bitince ana oyuna (tesis düğmeleri) bağlanacak.
+  Ortak sınıf `MiniOyunSahnesi` (ortak.js): kâğıt zemin, Geri, 3 can (kalp.svg), ilerleme
+  çubuğu, bitiş penceresi ("Aferin!" / "Bir daha dene", Tekrar / Geri). Sesli okuma
+  `Sesler.soyle`; `harfiSoyle` şimdilik yalnızca ünlüleri söyler (tarayıcı ünsüzü "ne",
+  "te" diye okur). Benzer harfler `BENZER_HARFLER` (yalnızca öğrenilmiş olanlar kullanılır).
+  Mini oyun betikleri index.html'de oyun.js'den önce yüklenir.
+  Yapılanlar: damla-yakala (Damla Yakalama: düşen harfli damlalardan doğrulara dokun;
+  seviyeyle hız, benzer harf ve hedef sayısı artar).
 - `harfler.js` – Harf grupları ve kelimeler (sadece veri).
 - `canta.js` – Karakterin çantası (envanter). Kaydedilmez; sayfa yenilenince oyun baştan başlar.
 - Tarla: karakterin başladığı yerin üstünde çitli tarla, 6 kare yan yana tek sıra
