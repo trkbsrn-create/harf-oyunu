@@ -49,7 +49,11 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   hoparlör resmin adını okur; 1. seviyede hep oyunun harfi, sonra öbür harfler de;
   şimdilik her harfin tek resmi var); hafiza-kartlari (Hafıza Kartları: kartlar kapalı,
   iki kart açılır, eşleşen açık kalır; 1-2. seviye aynı harfi eşleştir, 3. seviye harf ile
-  resmi eşleştir; her 2 yanlış eşleştirmede 1 can gider). Ortak "Yakala:/Patlat:" paneli
+  resmi eşleştir; her 2 yanlış eşleştirmede 1 can gider); hece-koprusu (Hece Köprüsü:
+  hece yazılmaz, yalnızca söylenir (hoparlörle tekrar); çocuk dereki harf taşlarına dokunup
+  köprüdeki iki yere sırayla koyar; doğruysa hece okunur, karakter taşlara basarak karşıya
+  geçer; yanlışsa taşlar döner, can gider; 1-2. seviye kapalı hece, 3. seviyede açık hece
+  de). Hoparlör çizimi ortak: `hoparlorCiz`. Ortak "Yakala:/Patlat:" paneli
   `hedefPaneliKur`.
 - `harfler.js` – Harf grupları ve kelimeler (sadece veri).
 - `canta.js` – Karakterin çantası (envanter). Kaydedilmez; sayfa yenilenince oyun baştan başlar.

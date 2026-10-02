@@ -48,31 +48,6 @@ class ResimdenSesSahnesi extends MiniOyunSahnesi {
     this.time.delayedCall(400, () => this.harfiTanit(() => this.yeniTur()));
   }
 
-  // Basit doodle hoparlör
-  hoparlorCiz(x, y, r) {
-    const g = this.add.graphics();
-    g.fillStyle(0xc9ecff, 1);
-    g.fillCircle(x, y, r);
-    g.lineStyle(3.5, 0x2b2b2b, 1);
-    g.strokeCircle(x, y, r);
-    const k = r / 24;
-    g.fillStyle(0xffffff, 1);
-    g.beginPath();
-    g.moveTo(x - 10 * k, y - 6 * k);
-    g.lineTo(x - 4 * k, y - 6 * k);
-    g.lineTo(x + 4 * k, y - 14 * k);
-    g.lineTo(x + 4 * k, y + 14 * k);
-    g.lineTo(x - 4 * k, y + 6 * k);
-    g.lineTo(x - 10 * k, y + 6 * k);
-    g.closePath();
-    g.fillPath();
-    g.strokePath();
-    g.beginPath();
-    g.arc(x + 6 * k, y, 9 * k, -0.9, 0.9);
-    g.strokePath();
-    return g;
-  }
-
   yeniTur() {
     if (this.bitti) return;
     for (const k of this.kartlar) k.destroy();
