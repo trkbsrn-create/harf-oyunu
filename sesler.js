@@ -61,6 +61,24 @@ const Sesler = {
     this.nota(1319, 0.16, 0.3, 0.1, "sine");
   },
 
+  // Su damlası şişeye girerken: yukarı kayan yumuşak bir "blup".
+  damla() {
+    const b = this.baglam;
+    if (!b || b.state !== "running") return;
+    const t = b.currentTime;
+    const osc = b.createOscillator();
+    const kazanc = b.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(500, t);
+    osc.frequency.exponentialRampToValueAtTime(1300, t + 0.12);
+    kazanc.gain.setValueAtTime(0.0001, t);
+    kazanc.gain.exponentialRampToValueAtTime(0.18, t + 0.01);
+    kazanc.gain.exponentialRampToValueAtTime(0.0001, t + 0.18);
+    osc.connect(kazanc).connect(b.destination);
+    osc.start(t);
+    osc.stop(t + 0.2);
+  },
+
   // Çanta açılıp kapanırken: kısa, yumuşak iki nota.
   canta(acik) {
     this.nota(acik ? 330 : 392, 0, 0.1, 0.12, "triangle");

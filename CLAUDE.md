@@ -25,6 +25,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   Çanta açıkken bir tohum tutulunca pencere silikleşir; tohum boş bir kareye bırakılırsa
   ekilir (ekili-tohum.svg), kare doluysa ya da tarla dışına bırakılırsa çantaya döner.
   Tarla da kaydedilmez.
+- Su arıtma tesisi: alt kıyıda, başlangıcın güneyinde (`tesisKur`, su-tesisi.svg); karakter
+  iskelede yürüyebilir. Tesise dokununca karakter iskelenin ucuna yürür, panel açılır
+  (tesis-pencere.svg). Her harf düğmesi o harf için sihirli şişeye bir damla verir (harf
+  başına en çok 3, `Canta.damlalar`). Şişe ilk damlayla çantaya gelir. Kaydedilmez.
 - Mini harita: sol altta kâğıt kart (harita-karti.svg: ada ve tarla, `doodle_ciz.py`
   adayı oyundaki `adaNoktalari` formülüyle çizer; biri değişirse öbürü de değişmeli).
   Üstüne her karede karakter, ekranda görünen bölge ve açılmış sandıklar (kırmızı çarpı)

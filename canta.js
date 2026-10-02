@@ -4,6 +4,10 @@
 const Canta = {
   BOYUT: 8, // çantadaki kutucuk sayısı
   esyalar: [],
+  // Sihirli su şişesindeki damlalar: harf -> damla sayısı. Her harf için en çok
+  // DAMLA_SINIRI damla (bir tohumu büyütmeye yetecek kadar).
+  damlalar: {},
+  DAMLA_SINIRI: 3,
 
   // Aynı harfin tohumu zaten varsa tekrar eklenmez. Eklendiyse true döner.
   // tekrarEdilecek: çocuk harfi söyleyemedi, oyun kendiliğinden onayladı.
@@ -11,6 +15,23 @@ const Canta = {
     if (this.esyalar.some((e) => e.tur === "tohum" && e.harf === harf)) return false;
     if (this.esyalar.length >= this.BOYUT) return false;
     this.esyalar.push({ tur: "tohum", harf, tekrarEdilecek });
+    return true;
+  },
+
+  siseVarMi() {
+    return this.esyalar.some((e) => e.tur === "sise");
+  },
+
+  damlaSayisi(harf) {
+    return this.damlalar[harf] || 0;
+  },
+
+  // Harfin şişesine bir damla ekler. Şişe çantada yoksa ilk damlayla birlikte gelir.
+  // Şişe o harf için doluysa false döner.
+  damlaEkle(harf) {
+    if (this.damlaSayisi(harf) >= this.DAMLA_SINIRI) return false;
+    if (!this.siseVarMi()) this.esyalar.push({ tur: "sise" });
+    this.damlalar[harf] = this.damlaSayisi(harf) + 1;
     return true;
   },
 
