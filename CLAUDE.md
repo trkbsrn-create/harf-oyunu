@@ -39,6 +39,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   uzanan fasulye sırığı (tepesi bulutlarda, rüzgârda hafifçe sallanır)
   (`BUYUME_ASAMASI`, `BITKI_RESIMLERI`; bitki-*.svg). 1. aşamadan sonra harf, karenin
   sol altındaki tahta tabelada (harf-tabela.svg) durur.
+  Büyümüş sırığa dokununca karakter dibine yürür, tırmanır ve bulutların üstüne çıkar
+  (`BulutSahnesi`; ada sahnesi uyutulur, durumu korunur). Her harfin kendi bölgesi var;
+  şimdilik bölgede harfin büyük tabelası durur, içeriği sonra eklenecek. Karakter bulut
+  zemininde gezer; sırığa dokununca aşağı iner ve adada o sırığın dibine döner.
 - Mini harita: sol altta kâğıt kart (harita-karti.svg: ada ve tarla, `doodle_ciz.py`
   adayı oyundaki `adaNoktalari` formülüyle çizer; biri değişirse öbürü de değişmeli).
   Üstüne her karede karakter, ekranda görünen bölge ve açılmış sandıklar (kırmızı çarpı)

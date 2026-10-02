@@ -417,6 +417,30 @@ yaz("harf-tabela.svg", 46, 60, "Bitkinin harf tabelası", TAHTA,
     <rect x="3" y="4" width="40" height="30" rx="5" fill="url(#tahta)" stroke-width="3"/>
 '''), 74, 2.5)
 
+# ---- Bulutların üstü ----
+GOK = tarama("gok", "#ffffff", "#e3f2fc", -30, 8, 2.5)
+
+# Uzaktaki bulut: 220x110
+yaz("bulut.svg", 220, 110, "Gökyüzünde süzülen bulut", GOK,
+    kalem("""    <path d="M30 96 q-26 -2 -22 -26 q2 -22 28 -20 q4 -30 40 -30 q22 -22 54 -6 q30 -10 44 18 q30 0 32 30 q2 32 -30 34z" fill="url(#gok)"/>
+""", 3.5), 76)
+
+# Bulut zemini: 1280x300; üst kenarı kabarık (yaklaşık y 40-90), karakter y 470-640 arasında
+# (oyunda zeminin üst kenarı ekranda 420 civarı) yürür.
+kabarik = "M-20 340 V80 H0"  # kenar çizgileri resmin dışında kalsın
+x = 0
+r = __import__("random").Random(7)
+while x < 1280 + 150:
+    en = r.randint(90, 150)
+    yuk = r.randint(40, 75)
+    kabarik += f" q{en / 2:.0f} -{yuk} {en} 0"
+    x += en
+kabarik += " V340 H-20z"
+yaz("bulut-zemin.svg", 1280 + 150, 300, "Bulutların üstündeki zemin", GOK + tarama("golgeGok", "#eaf5fd", "#d2e9f8", 30, 8, 3),
+    kalem(f"""    <path d="{kabarik}" fill="url(#gok)" stroke-width="4"/>
+    <path d="M0 300 V230 q160 -30 320 0 q160 30 320 0 q160 -30 320 0 q160 30 320 0 q80 -15 150 -5 V300z" fill="url(#golgeGok)" stroke="none"/>
+""", 4), 77)
+
 # ---- Mini harita kartı (sol alt) ----
 # 250x175 kâğıt kart. İçindeki harita alanı (15,15)'ten başlar, 220 px genişliğinde:
 # dünya (6400x4200; altta iskele için geniş deniz) 220/6400 ölçeğiyle küçültülür. Ada şekli oyundaki adaNoktalari()
