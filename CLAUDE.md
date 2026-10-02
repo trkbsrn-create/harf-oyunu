@@ -22,6 +22,15 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   Yazılar da doodle: `doodleYazi` (başlık, düğme, pencere yazıları: boya kalemi taraması,
   kalem çerçevesi, titrek kenar) ve `titret` (öğretilen harfler: biçim aynı, yalnızca
   kenar titrer). Harf biçimi her zaman Andika'dır; başka yazı tipi kullanılmaz.
+- `minioyunlar/` – Mini oyunlar. Her biri kendi klasöründe (`minioyunlar/<ad>/`), ayrı bir
+  Phaser sahnesi; `ortak.js`'deki `miniOyunKaydet(ad, sınıf)` ile kaydolur, `index.html`'e
+  betiği eklenir. Sahne `{ harf, seviye, donus }` bilgisiyle açılır. `PLANLANAN_OYUNLAR`
+  menüdeki sırayı tutar. `menu.js`: karşılama ekranındaki "Mini Games" düğmesiyle açılan
+  deneme menüsü (harf seçici + oyun kartları; hazır olmayanlarda "Yakında").
+  Öğretmenin kararları: mini oyunlarda kaybetmek mümkün (canlar biterse parça yok, "Bir
+  daha dene"); her damla 3 parça, her kazanılan mini oyun 1 parça verir; harfler ve
+  heceler tarayıcının Türkçe sesiyle sesli okunabilir (ses dosyası yok); mikrofonlu mini
+  oyun şimdilik yok. Mini oyunlar bitince ana oyuna (tesis düğmeleri) bağlanacak.
 - `harfler.js` – Harf grupları ve kelimeler (sadece veri).
 - `canta.js` – Karakterin çantası (envanter). Kaydedilmez; sayfa yenilenince oyun baştan başlar.
 - Tarla: karakterin başladığı yerin üstünde çitli tarla, 6 kare yan yana tek sıra
@@ -120,7 +129,7 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 3. Hâlâ olmazsa birkaç saniye sonra oyun kendiliğinden onaylar ve o harf
    "tekrar edilecek" olarak işaretlenir.
 - Tanıma bazen hiç sonuç döndürmez, bu yüzden zaman aşımı mutlaka olsun.
-- Hata mesajı veya başarısızlık ekranı yok.
+- Hata mesajı veya başarısızlık ekranı yok. (Mini oyunlar hariç: orada kaybetmek mümkün.)
 
 ## Gizlilik
 - Ses kaydı tutma, kişisel veri toplama, sunucu kullanma.

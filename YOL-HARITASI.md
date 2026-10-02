@@ -39,7 +39,10 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - Sırıklar üst üste gelince seçilemiyordu: adadaki sırık kısaldı ve yukarı doğru solarak kayboluyor; tırmanmak için sırığın toprak karesine dokunuluyor: TAMAM.
    - Tarla tek sıra (6 kare yan yana); tırmanma/inme gerçekçi (arkası dönük, kollar sırayla, basamak basamak); sırıklar sallanmıyor; God mode altı sırıkla başlıyor: TAMAM.
    - Adada tırmanırken arkadan görünüm düzeltildi; bulutta karakter zeminin arkasından çıkar/iner, zıplayarak buluta basar; sırık tepelerinde silik bulut: TAMAM.
-   - Sıradaki iş: kullanıcıyla konuşulacak (geliştirmeler).
+   - Mini oyunlar (beyin fırtınası kararları): su damlaları ileride mini oyunlarla kazanılacak; her damla 3 parça, her kazanılan mini oyun 1 parça (bir harf için yaklaşık 9 oyun). Mini oyunlarda kaybetmek var (3 can, "Bir daha dene"). Sesli okuma: tarayıcının Türkçe sesi. Mikrofonlu mini oyun şimdilik yok. Süreler harfe göre (kısa harflerde ~30 sn, uzunlarda 60–90 sn).
+     Planlanan oyunlar: Damla Yakalama, Harf Balonları, Harfi Çiz, Resimden Sesi Bul, Hafıza Kartları, Hece Köprüsü, Heceyi Bul (oyun heceyi sesli söyler, çocuk aynı heceyi seçer). Öğretmen kendi fikirlerini de verecek.
+   - "Mini Games" düğmesi ve deneme menüsü (harf seçici, oyun kartları, "Yakında"): TAMAM.
+   - Sıradaki iş: mini oyunları tek tek yapmak. Ana oyunun geri kalanı mini oyunlar bitince.
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.
 
