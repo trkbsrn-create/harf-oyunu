@@ -41,7 +41,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   Yapılanlar: damla-yakala (Damla Yakalama: düşen harfli damlalardan doğrulara dokun;
   seviyeyle hız, benzer harf ve hedef sayısı artar); harf-balonlari (Harf Balonları: tur
   tur, sallanan balonlardan istenen harfin hepsini patlat; seviyeyle balon/tur sayısı,
-  benzer harf artar, 3. seviyede balonlar gezinir). Ortak "Yakala:/Patlat:" paneli
+  benzer harf artar, 3. seviyede balonlar gezinir); harfi-ciz (Harfi Çiz: harfin ipucu
+  resmi yazılış yönünde yol boyunca götürülür, sarı iz kalır; sapınca çizgi baştan, can
+  gider; harf 3 kez; yollar `HARF_YOLLARI` dik temel harf yönüne göre; seviyeyle yardım
+  azalır: oklar/numaralar → başlangıç noktası → silik iz). Ortak "Yakala:/Patlat:" paneli
   `hedefPaneliKur`.
 - `harfler.js` – Harf grupları ve kelimeler (sadece veri).
 - `canta.js` – Karakterin çantası (envanter). Kaydedilmez; sayfa yenilenince oyun baştan başlar.
