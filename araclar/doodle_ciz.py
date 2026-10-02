@@ -478,6 +478,13 @@ yaz("bulut-zemin.svg", 1280 + 150, 300, "Bulutların üstündeki zemin", GOK + t
     <path d="M0 300 V230 q160 -30 320 0 q160 30 320 0 q160 -30 320 0 q160 30 320 0 q80 -15 150 -5 V300z" fill="url(#golgeGok)" stroke="none"/>
 """, 4), 77)
 
+# ---- Mini oyunlar menüsü ----
+# Oyun kartı: 250x170. Başlık oyunda yazılır.
+yaz("oyun-karti.svg", 250, 170, "Mini oyun kartı", tarama("kartKagit", "#fffdf6", "#f1e6c8", 30, 8, 3),
+    '  <rect x="12" y="14" width="232" height="152" rx="18" fill="#000" fill-opacity="0.15"/>\n' +
+    kalem("""    <rect x="6" y="6" width="232" height="152" rx="18" fill="url(#kartKagit)" stroke-width="4"/>
+""", 4), 78, 3)
+
 # ---- Mini harita kartı (sol alt) ----
 # 250x175 kâğıt kart. İçindeki harita alanı (15,15)'ten başlar, 220 px genişliğinde:
 # dünya (6400x4200; altta iskele için geniş deniz) 220/6400 ölçeğiyle küçültülür. Ada şekli oyundaki adaNoktalari()

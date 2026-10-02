@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 41;
+const SURUM = 42;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -2292,6 +2292,7 @@ class KarsilamaSahnesi extends Phaser.Scene {
   }
 
   create() {
+    this.basladi = false; // menüden geri dönülünce düğmeler yeniden çalışsın
     // "Oyunu yeniden başlat"tan geliyorsak doğrudan adaya geç
     let hemen = false;
     try {
@@ -2339,6 +2340,20 @@ class KarsilamaSahnesi extends Phaser.Scene {
       doodleYazi(this, 0, -3, "God mode", 30).setOrigin(0.5),
     ]).setSize(170, 56).setInteractive({ useHandCursor: true });
     tanri.on("pointerdown", () => this.basla(tanri, true));
+
+    // Mini oyunları ayrı ayrı açıp denemek için menü (minioyunlar/menu.js)
+    const mini = this.add.container(110, 116, [
+      this.add.image(0, 0, "incele-dugmesi"),
+      doodleYazi(this, 0, -3, "Mini Games", 28).setOrigin(0.5),
+    ]).setSize(170, 56).setInteractive({ useHandCursor: true });
+    mini.on("pointerdown", () => {
+      if (this.basladi) return;
+      this.basladi = true;
+      Sesler.ac();
+      Sesler.pling();
+      this.cameras.main.fadeOut(300, 251, 247, 236);
+      this.cameras.main.once("camerafadeoutcomplete", () => this.scene.start("MiniOyunlarSahnesi"));
+    });
   }
 
   // Küçük doodle ada: taranmış kum ve çimen, titrek kalem kıyısı
@@ -2548,6 +2563,6 @@ document.fonts.load('72px "Andika"').finally(() => {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [KarsilamaSahnesi, AdaSahnesi, BulutSahnesi],
+    scene: [KarsilamaSahnesi, AdaSahnesi, BulutSahnesi, MiniOyunlarSahnesi, ...Object.values(MINI_OYUNLAR)],
   });
 });
