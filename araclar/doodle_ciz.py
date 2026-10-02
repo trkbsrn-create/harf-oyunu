@@ -154,6 +154,58 @@ yaz("nar.svg", 120, 120, "Nar: n harfinin ipucu resmi", tarama("nar", "#ff9c8a",
     <path d="M34 52 q10 -16 28 -18" fill="none" stroke="#ffffff" stroke-width="5"/>
 '''), 35)
 
+# Eşek: e harfinin ipucu resmi (yandan, sola bakıyor)
+yaz("esek.svg", 150, 120, "Eşek: e harfinin ipucu resmi",
+    tarama("gri", "#d6d3cc", "#a9a59c", 30, 7, 3) + tarama("pembe", "#ffd2c8", "#ff9c8a", -35, 6, 2.5),
+    kalem('''    <path d="M56 84 v28 M70 86 v26 M108 86 v26 M122 82 v30" fill="none" stroke-width="5"/>
+    <path d="M128 52 q16 6 12 32" fill="none"/>
+    <path d="M50 58 q4 -18 40 -18 q38 0 40 22 q2 26 -40 26 q-42 0 -40 -30z" fill="url(#gri)"/>
+    <path d="M26 6 q-6 22 8 30 M44 4 q4 24 -4 32" fill="url(#gri)"/>
+    <path d="M24 10 q2 -8 10 -4 q-2 18 0 28z M42 6 q8 -4 8 6 q-2 14 -8 24z" fill="url(#pembe)" stroke-width="3"/>
+    <path d="M58 52 q-14 -24 -30 -20 q-18 4 -22 26 q-4 18 10 22 q14 2 22 -8 q14 -6 20 -20z" fill="url(#gri)"/>
+    <path d="M6 60 q-2 18 12 20 q14 0 12 -16 q-12 -8 -24 -4z" fill="url(#pembe)" stroke-width="3"/>
+    <path d="M48 30 q10 4 16 16" fill="none" stroke-width="5"/>
+    <circle cx="30" cy="46" r="3.5" fill="#2b2b2b"/>
+    <circle cx="14" cy="68" r="2" fill="#2b2b2b"/>
+'''), 51)
+
+# Tilki: t harfinin ipucu resmi (oturan tilki, kabarık kuyruklu)
+yaz("tilki.svg", 130, 120, "Tilki: t harfinin ipucu resmi", tarama("turuncu", "#ffc58f", "#f08a3c", -35, 7, 3),
+    kalem('''    <path d="M84 104 q40 0 40 -34 q0 -20 -14 -22 q-10 16 -14 40z" fill="url(#turuncu)"/>
+    <path d="M110 48 q14 2 14 22 q-8 -4 -14 -2 q2 -10 0 -20z" fill="#ffffff" stroke-width="3"/>
+    <path d="M40 108 q-6 -46 26 -50 q32 4 26 50z" fill="url(#turuncu)"/>
+    <path d="M54 108 q-2 -26 12 -30 q14 4 12 30z" fill="#ffffff" stroke-width="3"/>
+    <path d="M30 22 l10 -18 l12 16 q14 -6 28 0 l12 -16 l10 18 q6 22 -16 34 l-20 14 l-20 -14 q-22 -12 -16 -34z" fill="url(#turuncu)"/>
+    <path d="M46 52 l20 18 l20 -18 q-20 -6 -40 0z" fill="#ffffff" stroke-width="3"/>
+    <circle cx="66" cy="70" r="4" fill="#2b2b2b"/>
+    <path d="M48 36 q4 -4 8 0 M76 36 q4 -4 8 0" fill="none" stroke-width="3.5"/>
+'''), 52)
+
+# İnek: i harfinin ipucu resmi (önden, benekli)
+yaz("inek.svg", 130, 120, "İnek: i harfinin ipucu resmi", tarama("pembe", "#ffd2c8", "#ff9c8a", -35, 6, 2.5),
+    kalem('''    <path d="M28 20 q-14 -4 -18 -16 q12 0 22 8 M102 20 q14 -4 18 -16 q-12 0 -22 8" fill="#fff6dc"/>
+    <path d="M30 30 q-24 -6 -26 8 q8 10 26 6z M100 30 q24 -6 26 8 q-8 10 -26 6z" fill="#ffffff"/>
+    <path d="M30 22 q35 -16 70 0 q8 30 0 58 q-35 12 -70 0 q-8 -28 0 -58z" fill="#ffffff"/>
+    <path d="M38 26 q12 -4 16 8 q-6 12 -18 6 q-4 -8 2 -14z M84 52 q12 -2 12 10 q-8 8 -16 2 q-2 -8 4 -12z" fill="#2b2b2b" stroke-width="2"/>
+    <path d="M32 72 q33 -14 66 0 q6 36 -33 36 q-39 0 -33 -36z" fill="url(#pembe)"/>
+    <ellipse cx="52" cy="88" rx="5" ry="7" fill="#2b2b2b" stroke-width="2"/>
+    <ellipse cx="78" cy="88" rx="5" ry="7" fill="#2b2b2b" stroke-width="2"/>
+    <circle cx="48" cy="52" r="4" fill="#2b2b2b"/>
+    <circle cx="74" cy="44" r="4" fill="#2b2b2b"/>
+'''), 53)
+
+# Leylek: l harfinin ipucu resmi (yandan, tek ayak üstünde)
+yaz("leylek.svg", 120, 140, "Leylek: l harfinin ipucu resmi", tarama("turuncu", "#ffc58f", "#f08a3c", -35, 6, 2.5),
+    kalem('''    <path d="M62 96 v40 M56 136 h12 M74 96 q8 14 0 24 l-10 -6" fill="none" stroke="#f08a3c" stroke-width="5"/>
+    <path d="M40 56 q30 -6 52 14 q16 16 22 34 q-26 -4 -40 -8 q-34 -4 -34 -40z" fill="#ffffff"/>
+    <path d="M78 64 q18 14 36 40 q-20 -4 -30 -10 q-10 -14 -6 -30z" fill="#2b2b2b" stroke-width="2"/>
+    <path d="M44 62 q-10 -22 -6 -40" fill="none" stroke-width="12"/>
+    <path d="M44 62 q-10 -22 -6 -40" fill="none" stroke="#ffffff" stroke-width="5"/>
+    <circle cx="38" cy="18" r="12" fill="#ffffff"/>
+    <path d="M28 16 l-26 8 l26 -1z" fill="url(#turuncu)" stroke-width="3"/>
+    <circle cx="38" cy="15" r="3" fill="#2b2b2b"/>
+'''), 54)
+
 # ---- Ekran pencereleri ----
 # Çanta penceresi: 700x480, sol üst köşesi oyunda (300,120). İçinde 8 kutucuk ve çarpı.
 kutular = ""

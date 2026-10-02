@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Tilki: t harfinin ipucu resmi (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="52" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="turuncu" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#ffc58f"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#f08a3c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M84 104 q40 0 40 -34 q0 -20 -14 -22 q-10 16 -14 40z" fill="url(#turuncu)"/>
+    <path d="M110 48 q14 2 14 22 q-8 -4 -14 -2 q2 -10 0 -20z" fill="#ffffff" stroke-width="3"/>
+    <path d="M40 108 q-6 -46 26 -50 q32 4 26 50z" fill="url(#turuncu)"/>
+    <path d="M54 108 q-2 -26 12 -30 q14 4 12 30z" fill="#ffffff" stroke-width="3"/>
+    <path d="M30 22 l10 -18 l12 16 q14 -6 28 0 l12 -16 l10 18 q6 22 -16 34 l-20 14 l-20 -14 q-22 -12 -16 -34z" fill="url(#turuncu)"/>
+    <path d="M46 52 l20 18 l20 -18 q-20 -6 -40 0z" fill="#ffffff" stroke-width="3"/>
+    <circle cx="66" cy="70" r="4" fill="#2b2b2b"/>
+    <path d="M48 36 q4 -4 8 0 M76 36 q4 -4 8 0" fill="none" stroke-width="3.5"/>
+  </g>
+</svg>

@@ -11,17 +11,19 @@
 //   resim  : ipucu resmi (gorseller/ içindeki dosya adı); kelimede öğrenilmemiş
 //            harfler olduğu için kelime yazılmaz, resmi gösterilir
 //   hece   : ünsüzlerde ipucu hecesi (önce kapalı hece: "an")
-//   tekBasinaDenenir : öğretmenin kararıyla bu ünsüz önce tek başına, uzatılarak
-//            ("nnnn") denenir; olmazsa hece ipucu gelir
+//   tekBasinaDenenir : öğretmenin kararıyla bu ünsüz önce tek başına (sadece sesi)
+//            denenir; olmazsa hece ipucu gelir. Öğretmen bütün ünsüzlerde böyle istedi.
+//   kisaSes : bu ünsüzün sesi uzatılamaz ("t"); kısa ses yeter, güç aşamasında
+//            harf her kısa sesle biraz dolar
 
 const HARFLER = [
   // Grup 1
   { kucuk: "a", buyuk: "A", unlu: true,  grup: 1, kelime: "arı",      harfKelimeBasinda: true, resim: "ari" },
   { kucuk: "n", buyuk: "N", unlu: false, grup: 1, kelime: "nar",      harfKelimeBasinda: true, resim: "nar", hece: "an", tekBasinaDenenir: true },
-  { kucuk: "e", buyuk: "E", unlu: true,  grup: 1, kelime: "eşek",     harfKelimeBasinda: true },
-  { kucuk: "t", buyuk: "T", unlu: false, grup: 1, kelime: "tilki",    harfKelimeBasinda: true },
-  { kucuk: "i", buyuk: "İ", unlu: true,  grup: 1, kelime: "inek",     harfKelimeBasinda: true },
-  { kucuk: "l", buyuk: "L", unlu: false, grup: 1, kelime: "leylek",   harfKelimeBasinda: true },
+  { kucuk: "e", buyuk: "E", unlu: true,  grup: 1, kelime: "eşek",     harfKelimeBasinda: true, resim: "esek" },
+  { kucuk: "t", buyuk: "T", unlu: false, grup: 1, kelime: "tilki",    harfKelimeBasinda: true, resim: "tilki", hece: "at", tekBasinaDenenir: true, kisaSes: true },
+  { kucuk: "i", buyuk: "İ", unlu: true,  grup: 1, kelime: "inek",     harfKelimeBasinda: true, resim: "inek" },
+  { kucuk: "l", buyuk: "L", unlu: false, grup: 1, kelime: "leylek",   harfKelimeBasinda: true, resim: "leylek", hece: "al", tekBasinaDenenir: true },
 
   // Grup 2
   { kucuk: "o", buyuk: "O", unlu: true,  grup: 2, kelime: "okul",     harfKelimeBasinda: true },

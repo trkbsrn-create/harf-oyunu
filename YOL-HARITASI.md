@@ -26,7 +26,9 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - Oyunun adı "Harf Avcısı". Karşılama ekranı (denizde küçük ada, ad tabelası, "Oyunu başlat" düğmesi) ve sol üstte menü ("Oyunu yeniden başlat", önce "Baştan başlasın mı?" diye sorar): TAMAM.
    - Doodle yazılar: başlık, düğme ve pencere yazıları boya kalemiyle taranmış ve titrek; sandık harfi ve çantadaki harfler aynı biçimde, sadece titrek kalem kenarlı: TAMAM.
    - "n" sandığı da düşünme ve güç akışında ("a" ile aynı; ipucundan sonra "an" hecesi ve "nar" da kabul): TAMAM.
-   - Sıradaki iş: kullanıcıyla konuşulacak.
+   - İlk harf grubu tamam: a n e t i l sandıkları adaya dağıldı, hepsi düşünme ve güç akışında. Eşek, tilki, inek, leylek ipucu resimleri. Öğretmenin kararı: bütün ünsüzler önce sadece sesiyle denenir; "t" uzatılamadığı için kısa ses yeter, güç aşamasında her kısa sesle dolar. İpucu heceleri: an, at, al: TAMAM.
+   - Oyunun ilk sürümü yalnızca ilk harf grubuyla (a n e t i l) yapılacak. Önce geliştirmeler, diğer harf grupları en sonda.
+   - Sıradaki iş: kullanıcıyla konuşulacak (geliştirmeler).
 4. İlk ada (a n e t i l): görünüm stilini seçme, altı harf, kapalı ve açık heceler, kelimeler, sesler.
 5. Tüm ada: kalan dört harf grubu, sınıfta deneme, cilalama.
 
