@@ -63,6 +63,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - 7. oyun: Hece Müziği (1. seviye hece ksilofonu: melodiyi dinle, aynı tuşlara sırayla bas; 2-3. seviye nota akışı: istenen heceli notaya çizgide dokun) (Sürüm 64): TAMAM.
    - 8. oyun: Scrabble (kelime söylenir, resmi varsa görünür; raftaki harf taşlarını sırayla kelimenin yerlerine koy; 4/5/5 kelime, 0/1/2 fazladan taş) (Sürüm 65): TAMAM. Not: öğrenilmiş harflerle yazılan kelimelerin çoğunun resmi yok (yalnızca lale); resimler sonra çizilebilir.
    - 9. oyun: Ördek Vurma (panayır ördekleri; sıra sıra kayan harfli ördeklerden istenen harfi vur; 8/10/12 ördek, 3. seviyede 3 sıra) (Sürüm 66): TAMAM.
+   - 10. oyun: Kazma (tünel kaz; dokunulan yere doğru kare kare kazarak ilerle, doğru harfli taşları topla, kayalar engel; 6/8/10 hazine) (Sürüm 67): TAMAM.
    - Planlanan ilk 7 mini oyunun hepsi yapıldı. Sıradaki iş: öğretmenin kendi mini oyun fikirleri (aşağıdaki listede, sırayla; her biri için önce görsel taslak ve onay). Sonra mini oyunları ana oyuna (tesis, damla parçaları) bağlamak. Ana oyunun geri kalanı mini oyunlar bitince.
 
 ## Öğretmenin mini oyun fikirleri (sırayla yapılacak)
