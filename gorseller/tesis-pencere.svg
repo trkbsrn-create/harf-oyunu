@@ -22,12 +22,23 @@
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
     <path d="M20 66 q0 -36 36 -36 h548 q36 0 36 36 v348 q0 36 -36 36 h-548 q-36 0 -36 -36z" fill="url(#kagit)"/>
     <path d="M20 66 q0 -36 36 -36 h548 q36 0 36 36 v44 h-620z" fill="url(#bant)"/>
-    <circle cx="160" cy="195" r="58" fill="url(#su)"/>
-    <circle cx="350" cy="195" r="58" fill="url(#su)"/>
-    <circle cx="540" cy="195" r="58" fill="url(#su)"/>
-    <circle cx="160" cy="340" r="58" fill="url(#su)"/>
-    <circle cx="350" cy="340" r="58" fill="url(#su)"/>
-    <circle cx="540" cy="340" r="58" fill="url(#su)"/>
+    <path d="M100 185 h500" fill="none" stroke="#8a8a8a" stroke-width="14"/>
+    <path d="M100 185 h500" fill="none" stroke-width="2"/>
+    <path d="M150 185 v26" fill="none" stroke="#8a8a8a" stroke-width="10"/>
+    <circle cx="150" cy="185" r="9" fill="#bdbdbd" stroke-width="2.5"/>
+    <path d="M238 185 v26" fill="none" stroke="#8a8a8a" stroke-width="10"/>
+    <circle cx="238" cy="185" r="9" fill="#bdbdbd" stroke-width="2.5"/>
+    <path d="M326 185 v26" fill="none" stroke="#8a8a8a" stroke-width="10"/>
+    <circle cx="326" cy="185" r="9" fill="#bdbdbd" stroke-width="2.5"/>
+    <path d="M414 185 v26" fill="none" stroke="#8a8a8a" stroke-width="10"/>
+    <circle cx="414" cy="185" r="9" fill="#bdbdbd" stroke-width="2.5"/>
+    <path d="M502 185 v26" fill="none" stroke="#8a8a8a" stroke-width="10"/>
+    <circle cx="502" cy="185" r="9" fill="#bdbdbd" stroke-width="2.5"/>
+    <path d="M590 185 v26" fill="none" stroke="#8a8a8a" stroke-width="10"/>
+    <circle cx="590" cy="185" r="9" fill="#bdbdbd" stroke-width="2.5"/>
+    <path d="M44 165 v260 q30 14 60 0 v-260z" fill="url(#su)"/>
+    <ellipse cx="74" cy="165" rx="30" ry="9" fill="#e6f6ff"/>
+    <path d="M74 255 q-12 17 -12 26 q0 12 12 12 q12 0 12 -12 q0 -9 -12 -26z" fill="#ffffff" stroke-width="3"/>
     <circle cx="625" cy="45" r="31" fill="#ff8a7a"/>
     <path d="M612 32 l26 26 M638 32 l-26 26" fill="none" stroke="#ffffff" stroke-width="7"/>
   </g>

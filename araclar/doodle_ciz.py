@@ -250,34 +250,54 @@ SU = tarama("su", "#c9ecff", "#7cc4ef", 35, 6, 2.5)
 DUVAR = tarama("duvar", "#eef8ff", "#cfe9fb", -30, 7, 2.5)
 KIREMIT = tarama("kiremit", "#ffb3a8", "#e0533d", -35, 6, 2.5)
 
-# Tesis: 240x(300 + ISKELE_EK). Üstte kıyıdan gelen uzun iskele (x 95-145), altında
-# deniz üstünde ayaklı güverte, ev ve su deposu. Oyunda sol üst köşesi
+# Tesis: 240x(364 + ISKELE_EK). Üstte kıyıdan gelen uzun iskele (x 95-145), altında
+# deniz üstünde ayaklı güverte, ev, su deposu ve önde varil borusu. Oyunda sol üst köşesi
 # (TESIS_X - 120, TESIS_Y). ISKELE_EK oyundaki ISKELE_EK ile aynı olmalı.
 ISKELE_EK = 560
 tahtalar = "".join(f'    <path d="M97 {y} h46" fill="none" stroke-width="2.5"/>\n' for y in range(12, ISKELE_EK + 90, 13))
 iskele_ayaklari = "".join(f'    <circle cx="{x}" cy="{y}" r="6" fill="#8e6340" stroke-width="2.5"/>\n'
                           for y in range(120, ISKELE_EK + 80, 110) for x in (93, 147))
-guverte = "".join(f'    <path d="M12 {y} h216" fill="none" stroke-width="2" opacity="0.7"/>\n' for y in range(100, 236, 16))
-yaz("su-tesisi.svg", 240, 300 + ISKELE_EK, "Su arıtma tesisi: uzun iskele, ayaklı güverte, ev ve su deposu",
+guverte = "".join(f'    <path d="M12 {y} h216" fill="none" stroke-width="2" opacity="0.7"/>\n' for y in range(100, 300, 16))
+# Güvertenin önünde varil sırası: tanktan gelen borunun 6 ağzı (x: 36 + 34*i, oyundaki
+# VARIL_YERI ile aynı). Varil yalnızca o harfin tohumu ekilince oyunda belirir (varil.svg).
+varil_agizlari = "".join(f'    <path d="M{36 + 34 * i} 252 v10" fill="none" stroke="#8a8a8a" stroke-width="6"/>\n' for i in range(6))
+yaz("su-tesisi.svg", 240, 364 + ISKELE_EK, "Su arıtma tesisi: uzun iskele, ayaklı güverte, ev, su deposu ve varil borusu",
     TAHTA + SU + DUVAR + KIREMIT,
     kalem(f'''    <rect x="95" y="0" width="50" height="{ISKELE_EK + 20}" fill="url(#tahta)"/>
-''' + tahtalar + iskele_ayaklari) + f'  <g transform="translate(0 {ISKELE_EK})">\n' + kalem('''    <path d="M26 236 v54 M90 236 v54 M150 236 v54 M214 236 v54" fill="none" stroke="#8e6340" stroke-width="7"/>
-    <path d="M6 290 q20 -8 40 0 q20 8 40 0 q20 -8 40 0 q20 8 40 0 q20 -8 40 0 q20 8 30 0" fill="none" stroke="#7cc4ef" stroke-width="3"/>
-    <rect x="10" y="84" width="220" height="152" rx="6" fill="url(#tahta)"/>
-''' + guverte + '''    <path d="M226 160 q14 0 12 30 v100" fill="none" stroke="#8a8a8a" stroke-width="9"/>
-    <path d="M226 160 q14 0 12 30 v100" fill="none" stroke-width="2"/>
+''' + tahtalar + iskele_ayaklari) + f'  <g transform="translate(0 {ISKELE_EK})">\n' + kalem('''    <path d="M26 300 v54 M90 300 v54 M150 300 v54 M214 300 v54" fill="none" stroke="#8e6340" stroke-width="7"/>
+    <path d="M6 354 q20 -8 40 0 q20 8 40 0 q20 -8 40 0 q20 8 40 0 q20 -8 40 0 q20 8 30 0" fill="none" stroke="#7cc4ef" stroke-width="3"/>
+    <rect x="10" y="84" width="220" height="216" rx="6" fill="url(#tahta)"/>
+''' + guverte + '''    <path d="M226 160 q14 0 12 30 v164" fill="none" stroke="#8a8a8a" stroke-width="9"/>
+    <path d="M226 160 q14 0 12 30 v164" fill="none" stroke-width="2"/>
     <rect x="24" y="130" width="122" height="96" fill="url(#duvar)"/>
     <path d="M14 134 l30 -38 h82 l30 38z" fill="url(#kiremit)"/>
     <rect x="72" y="172" width="30" height="54" rx="4" fill="#9be3dc"/>
     <circle cx="96" cy="200" r="2.5" fill="#2b2b2b"/>
     <circle cx="46" cy="166" r="12" fill="#c9ecff"/>
     <path d="M46 154 v24 M34 166 h24" fill="none" stroke-width="2.5"/>
+    <path d="M191 222 v30 h-163" fill="none" stroke="#8a8a8a" stroke-width="8"/>
+''' + varil_agizlari + '''    <path d="M191 222 v30 h-163" fill="none" stroke-width="2"/>
     <path d="M160 120 v100 q31 14 62 0 v-100z" fill="url(#su)"/>
     <ellipse cx="191" cy="120" rx="31" ry="10" fill="#e6f6ff"/>
     <path d="M191 146 q-14 20 -14 30 q0 14 14 14 q14 0 14 -14 q0 -10 -14 -30z" fill="#ffffff" stroke-width="3"/>
 ''') + '''  <path d="M200 70 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4z M222 96 l3 6 l6 3 l-6 3 l-3 6 l-3 -6 l-6 -3 l6 -3z" fill="#ffe680" stroke="#2b2b2b" stroke-width="2"/>
   </g>
 ''', 64)
+
+# Harf varili: 120x150. Gövdenin üst ortası (52, 14); sağda musluk. Harf oyunda etikete yazılır.
+yaz("varil.svg", 120, 150, "Harf varili (musluklu)",
+    tarama("varilTahta", "#d29a5c", "#b07a42", 80, 6, 2.5) + SU,
+    golge(54, 142, 46, 6) + kalem('''    <path d="M14 14 q-14 63 0 126 h76 q14 -63 0 -126z" fill="url(#varilTahta)"/>
+    <path d="M30 14 q-8 63 0 126 M74 14 q8 63 0 126" fill="none" stroke="#9b6a38" stroke-width="2.5"/>
+    <path d="M8 38 q44 9 88 0 M8 116 q44 9 88 0" fill="none" stroke="#8a8a8a" stroke-width="8"/>
+    <path d="M8 38 q44 9 88 0 M8 116 q44 9 88 0" fill="none" stroke-width="2"/>
+    <ellipse cx="52" cy="14" rx="38" ry="10" fill="#c9ecff"/>
+    <ellipse cx="52" cy="15" rx="28" ry="6" fill="url(#su)" stroke="none"/>
+    <rect x="25" y="50" width="54" height="56" rx="8" fill="#fbf4e2" stroke-width="3"/>
+    <path d="M92 96 h16 v10" fill="none" stroke="#8a8a8a" stroke-width="9"/>
+    <path d="M92 96 h16 v10" fill="none" stroke-width="2"/>
+    <path d="M100 86 h16" fill="none" stroke="#ff8a7a" stroke-width="7"/>
+'''), 69, 2.5)
 
 # Su damlası: 40x52
 yaz("damla.svg", 40, 52, "Su damlası", SU,
@@ -300,19 +320,22 @@ yaz("sise.svg", 90, 110, "Sihirli su şişesi", SU + tarama("mantar", "#e3b77e",
   <path d="M38 84 l2 4 l4 2 l-4 2 l-2 4 l-2 -4 l-4 -2 l4 -2z M54 76 l2 4 l4 2 l-4 2 l-2 4 l-2 -4 l-4 -2 l4 -2z" fill="#ffffff"/>
 ''', 67, 3)
 
-# Su arıtma tesisi paneli: 700x480, sol üst köşesi oyunda (290,120).
-# 6 harf düğmesi (2 sıra x 3): ortaları (160|350|540, 195|340), yarıçap 58. Çarpı (625,45).
-dugmeler = ""
-for i in range(6):
-    x = 160 + 190 * (i % 3)
-    y = 195 + 145 * (i // 3)
-    dugmeler += f'    <circle cx="{x}" cy="{y}" r="58" fill="url(#su)"/>\n'
+# Su arıtma tesisi paneli: 700x480, sol üst köşesi oyunda (290,120). Solda su tankı, üstte
+# boru; borunun 6 ağzının altına (x: 150 + 88*i, y: 212) ekilen harflerin varilleri gelir
+# (varil.svg, oyunda). Çarpı (625,45).
+agizlar = "".join(f'    <path d="M{150 + 88 * i} 185 v26" fill="none" stroke="#8a8a8a" stroke-width="10"/>\n'
+                  f'    <circle cx="{150 + 88 * i}" cy="185" r="9" fill="#bdbdbd" stroke-width="2.5"/>\n' for i in range(6))
 yaz("tesis-pencere.svg", 700, 480, "Su arıtma tesisi paneli",
     tarama("kagit", "#fbf4e2", "#f1e6c8", 30, 8, 3) + tarama("bant", "#c9ecff", "#7cc4ef", 35) + SU,
     '  <rect x="30" y="44" width="620" height="420" rx="30" fill="#000" fill-opacity="0.18"/>\n' +
     kalem(f'''    <path d="M20 66 q0 -36 36 -36 h548 q36 0 36 36 v348 q0 36 -36 36 h-548 q-36 0 -36 -36z" fill="url(#kagit)"/>
     <path d="M20 66 q0 -36 36 -36 h548 q36 0 36 36 v44 h-620z" fill="url(#bant)"/>
-{dugmeler}    <circle cx="625" cy="45" r="31" fill="#ff8a7a"/>
+    <path d="M100 185 h500" fill="none" stroke="#8a8a8a" stroke-width="14"/>
+    <path d="M100 185 h500" fill="none" stroke-width="2"/>
+{agizlar}    <path d="M44 165 v260 q30 14 60 0 v-260z" fill="url(#su)"/>
+    <ellipse cx="74" cy="165" rx="30" ry="9" fill="#e6f6ff"/>
+    <path d="M74 255 q-12 17 -12 26 q0 12 12 12 q12 0 12 -12 q0 -9 -12 -26z" fill="#ffffff" stroke-width="3"/>
+    <circle cx="625" cy="45" r="31" fill="#ff8a7a"/>
     <path d="M612 32 l26 26 M638 32 l-26 26" fill="none" stroke="#ffffff" stroke-width="7"/>
 ''', 5), 68, 4)
 
