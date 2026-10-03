@@ -154,6 +154,9 @@ class MiniOyunSahnesi extends Phaser.Scene {
     this.seviye = veri.seviye || 1;
     this.donus = veri.donus || "MiniOyunlarSahnesi";
     this.veri = veri;
+    // Zincir: tesisteki varilden damla almak için oyun 1, 2, 3. düzeyde art arda oynanır;
+    // 3. düzey bitince ana oyuna dönülür ve damla kazanılır (veri.zincir).
+    this.zincir = !!veri.zincir;
     this.bitti = false;
   }
 
@@ -171,6 +174,9 @@ class MiniOyunSahnesi extends Phaser.Scene {
       doodleYazi(this, 0, -3, "Geri", 28).setOrigin(0.5),
     ]).setSize(200, 96).setDepth(900).setInteractive({ useHandCursor: true });
     geri.on("pointerdown", () => this.geriDon());
+    if (this.zincir) {
+      doodleYazi(this, 1176, 112, `Düzey ${this.seviye} / 3`, 24).setOrigin(0.5).setDepth(900);
+    }
     // Uçan yıldız ve parıltı için küçük parçacık
     if (!this.textures.exists("parilti")) {
       const g = this.make.graphics({ add: false });
@@ -371,9 +377,14 @@ class MiniOyunSahnesi extends Phaser.Scene {
     karartma.fillRect(0, 0, 1280, 720);
     // onay-pencere.svg: 540x320, düğmeler (155,240) ve (385,240)
     const kart = this.add.image(370, 200, "onay-pencere").setOrigin(0);
-    const baslik = doodleYazi(this, 640, 300, basarili ? "Aferin!" : "Bir daha dene", 52,
+    // Zincirde kazanınca: "Devam" sıradaki düzeyi açar; 3. düzeyden sonra damla kazanılır
+    const zincirDevam = this.zincir && basarili && this.seviye < 3;
+    const zincirSon = this.zincir && basarili && this.seviye >= 3;
+    const baslikYazi = zincirSon ? "Damla kazandın!" : basarili ? "Aferin!" : "Bir daha dene";
+    const baslik = doodleYazi(this, 640, 300, baslikYazi, zincirSon ? 46 : 52,
       basarili ? "mavi" : "beyaz").setOrigin(0.5);
-    const tekrar = doodleYazi(this, 525, 438, "Tekrar", 38).setOrigin(0.5);
+    const solYazi = zincirDevam ? "Devam" : zincirSon ? "Tamam" : "Tekrar";
+    const tekrar = doodleYazi(this, 525, 438, solYazi, 38).setOrigin(0.5);
     const geri = doodleYazi(this, 755, 438, "Geri", 38).setOrigin(0.5);
     kap.add([karartma, kart, baslik, tekrar, geri]);
     this.tweens.add({ targets: kap, alpha: 1, duration: 250 });
@@ -398,8 +409,14 @@ class MiniOyunSahnesi extends Phaser.Scene {
     }
     const tekrarAlani = this.add.zone(525, 440, 190, 80).setDepth(1001).setInteractive({ useHandCursor: true });
     const geriAlani = this.add.zone(755, 440, 190, 80).setDepth(1001).setInteractive({ useHandCursor: true });
-    tekrarAlani.on("pointerdown", () => this.scene.restart(this.veri));
-    geriAlani.on("pointerdown", () => this.geriDon());
+    if (zincirDevam) {
+      tekrarAlani.on("pointerdown", () => this.scene.restart({ ...this.veri, seviye: this.seviye + 1 }));
+    } else if (zincirSon) {
+      tekrarAlani.on("pointerdown", () => this.geriDon(true));
+    } else {
+      tekrarAlani.on("pointerdown", () => this.scene.restart(this.veri));
+    }
+    geriAlani.on("pointerdown", () => this.geriDon(zincirSon));
   }
 
   // Oyunun başında harfi tanıtır, bitince() çağrılır. Ünlü söylenir; ünsüz okunmaz
@@ -442,8 +459,14 @@ class MiniOyunSahnesi extends Phaser.Scene {
 
   oyunBitti() {}
 
-  geriDon() {
+  // Zincirde ana oyun uyutulmuştur: o uyandırılır, sonuç (damla kazanıldı mı) ona iletilir
+  geriDon(kazandi = false) {
     Sesler.sustur();
+    if (this.zincir) {
+      this.scene.wake(this.donus, { miniOyun: true, harf: this.harf, kazandi });
+      this.scene.stop();
+      return;
+    }
     this.scene.start(this.donus);
   }
 }

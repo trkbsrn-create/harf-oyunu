@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 83;
+const SURUM = 84;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -357,7 +357,10 @@ class AdaSahnesi extends Phaser.Scene {
     this.cameras.main.fadeIn(400, 251, 247, 236);
     this.tirmaniyor = false;
     this.sirigaGidiyor = null;
-    this.events.on("wake", (sys, veri) => this.siriktanIn(veri));
+    this.events.on("wake", (sys, veri) => {
+      if (veri && veri.miniOyun) this.miniOyundanDon(veri);
+      else this.siriktanIn(veri);
+    });
 
     this.input.on("pointerdown", (p) => {
       Sesler.ac();
@@ -924,6 +927,24 @@ class AdaSahnesi extends Phaser.Scene {
     this.guverteVarilleri = {}; // harf -> güvertedeki küçük varil
   }
 
+  // Boş varilin ağzı: içi koyu görünür (suyu tanktan gelince kalkar). s: varilin ölçeği
+  varilKapagi(s) {
+    const g = this.add.graphics();
+    g.fillStyle(0x6b4a2b, 1);
+    g.fillEllipse(0, 0, 76 * s, 20 * s);
+    g.lineStyle(Math.max(1.5, 3 * s), 0x2b2b2b, 1);
+    g.strokeEllipse(0, 0, 76 * s, 20 * s);
+    return g;
+  }
+
+  // Varilin dolu/boş görünümü (güvertede ve panelde)
+  varilDolu(dugme, dolu) {
+    dugme.dolu = dolu;
+    dugme.kapak.setVisible(!dolu);
+    const guverte = this.guverteVarilleri[dugme.harf];
+    if (guverte) guverte.kapak.setVisible(!dolu);
+  }
+
   // Tohum ekilince o harfin varili tesiste belirir: güvertede küçük varil, panelde büyük varil
   // (panel sonraki açılışta varili borudan indirerek gösterir).
   varilGetir(harf, hemen = false) {
@@ -936,7 +957,8 @@ class AdaSahnesi extends Phaser.Scene {
       fontFamily: "Andika", fontSize: "17px", color: "#ffffff",
       stroke: "#3b2a1a", strokeThickness: 4, padding: { x: 2, y: 2 },
     }), 0.8));
-    kap.add([resim, yazi]);
+    kap.kapak = this.varilKapagi(0.3);
+    kap.add([resim, kap.kapak, yazi]);
     this.guverteVarilleri[harf] = kap;
     const panelVarili = this.tesisDugmeleri.find((d) => d.harf === harf);
     panelVarili.aktif = true;
@@ -974,12 +996,13 @@ class AdaSahnesi extends Phaser.Scene {
         fontFamily: "Andika", fontSize: "44px", color: "#ffffff",
         stroke: "#3b2a1a", strokeThickness: 8, padding: { x: 4, y: 4 },
       }), 1.6));
-      kap.add([resim, yazi]);
+      const kapak = this.varilKapagi(PANEL_VARIL_OLCEK);
+      kap.add([resim, kapak, yazi]);
       // Altında üç küçük damla: şişede bu harf için kaç damla var
       const noktalar = [0, 1, 2].map((j) => this.add.image(x - 26 + 26 * j, y + 130, "damla-bos")
         .setScale(0.42).setVisible(false));
       pencere.add([kap, ...noktalar]);
-      return { harf: h, x, y, kap, noktalar, aktif: false, yeni: false,
+      return { harf: h, x, y, kap, kapak, noktalar, aktif: false, yeni: false, dolu: false,
         alan: new Phaser.Geom.Rectangle(x - 42, y - 20, 90, 170) };
     });
     this.tesisIpucu = this.add.text(700, 380, "Tarlaya tohum ekince\nvarili buraya gelir.", {
@@ -1049,19 +1072,83 @@ class AdaSahnesi extends Phaser.Scene {
       return true;
     }
     const dugme = this.tesisDugmeleri.find((d) => d.aktif && d.alan.contains(p.x, p.y));
-    if (dugme) this.damlaAl(dugme);
+    if (dugme) this.varileDokun(dugme);
     return true;
   }
 
-  // Düğmeden bir damla çıkar ve çantaya (şişeye) uçar. Şişe o harf için doluysa
-  // düğme sadece hafifçe sallanır.
-  damlaAl(dugme) {
-    if (dugme.yeni || this.tweens.isTweening(dugme.kap)) return; // varil daha iniyor
-    if (!Canta.damlaEkle(dugme.harf)) {
+  // Varile dokununca iki aşama (öğretmenin tarifi):
+  // 1) Varil boşsa ana tanktan boru boyunca bir damla gelir, varil dolar.
+  // 2) Varil doluysa Şans Çarkı açılır; çıkan mini oyun 1, 2, 3. düzeyde art arda oynanır,
+  //    hepsi bitince varilden şişeye bir damla akar (miniOyundanDon).
+  // Şişede o harf için 3 damla varsa varil yalnızca sallanır.
+  varileDokun(dugme) {
+    if (dugme.yeni || this.tweens.isTweening(dugme.kap) || this.varilDoluyor) return;
+    if (Canta.damlaSayisi(dugme.harf) >= Canta.DAMLA_SINIRI) {
       this.tweens.add({ targets: dugme.kap, angle: { from: -5, to: 5 }, duration: 80,
         yoyo: true, repeat: 2, onComplete: () => dugme.kap.setAngle(0) });
       return;
     }
+    if (!dugme.dolu) this.tanktanVarile(dugme);
+    else this.carkiAc(dugme);
+  }
+
+  // Tankın tepesinden çıkan damla boru boyunca varilin üstüne gider ve içine düşer
+  // (tesis-pencere.svg: tank tepesi (74, 165), boru y=185)
+  tanktanVarile(dugme) {
+    this.varilDoluyor = true;
+    const boruY = 120 + 185;
+    const damla = this.add.image(290 + 74, 120 + 175, "damla").setScrollFactor(0).setDepth(9600).setScale(0.45);
+    Sesler.nota(520, 0, 0.1, 0.1, "sine");
+    this.tweens.chain({
+      targets: damla,
+      tweens: [
+        { y: boruY - 4, duration: 200, ease: "Quad.Out" },
+        { x: dugme.x, duration: 250 + (dugme.x - 364) * 1.2, ease: "Sine.InOut" },
+        { y: dugme.y + 6, scale: 0.3, duration: 260, ease: "Quad.In" },
+      ],
+      onComplete: () => {
+        damla.destroy();
+        this.varilDoluyor = false;
+        this.varilDolu(dugme, true);
+        Sesler.damla();
+        this.tweens.add({ targets: dugme.kap, scaleY: 0.92, duration: 90, yoyo: true });
+        for (let k = 0; k < 6; k++) {
+          const p = this.add.image(dugme.x, dugme.y, "parilti").setScrollFactor(0).setDepth(9600).setTint(0x7cc4ef);
+          const aci = Math.PI + (Math.PI * k) / 5;
+          this.tweens.add({ targets: p, x: dugme.x + Math.cos(aci) * 40, y: dugme.y + Math.sin(aci) * 30,
+            alpha: 0, duration: 450, ease: "Cubic.Out", onComplete: () => p.destroy() });
+        }
+      },
+    });
+  }
+
+  // Şans Çarkı ada sahnesinin üstünde açılır; çıkan oyuna gidilir (ada uyur, durumu korunur)
+  carkiAc(dugme) {
+    this.input.enabled = false;
+    const oyunlar = PLANLANAN_OYUNLAR.filter((o) => MINI_OYUNLAR[o.ad]);
+    this.scene.launch("SansCarkiSahnesi", { harf: dugme.harf, oyunlar, bitince: (ad) => {
+      const kamera = this.cameras.main;
+      kamera.fadeOut(400, 251, 247, 236);
+      kamera.once("camerafadeoutcomplete", () => {
+        this.scene.sleep();
+        this.scene.run(ad, { harf: dugme.harf, seviye: 1, donus: "AdaSahnesi", zincir: true });
+      });
+    } });
+  }
+
+  // Mini oyundan dönüş: üç düzey bittiyse varilden şişeye bir damla akar
+  miniOyundanDon(veri) {
+    this.input.enabled = true;
+    this.cameras.main.fadeIn(400, 251, 247, 236);
+    if (!veri.kazandi) return;
+    const dugme = this.tesisDugmeleri.find((d) => d.harf === veri.harf);
+    this.time.delayedCall(600, () => this.siseyeDamla(dugme));
+  }
+
+  // Varilin musluğundan bir damla çıkar ve çantaya (şişeye) uçar
+  siseyeDamla(dugme) {
+    if (!Canta.damlaEkle(dugme.harf)) return;
+    this.varilDolu(dugme, false);
     Sesler.damla();
     this.tweens.add({ targets: dugme.kap, scaleY: 0.93, duration: 80, yoyo: true });
     this.damlaNoktalariniCiz();
@@ -2636,6 +2723,6 @@ document.fonts.load('72px "Andika"').finally(() => {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [KarsilamaSahnesi, AdaSahnesi, BulutSahnesi, MiniOyunlarSahnesi, ...Object.values(MINI_OYUNLAR)],
+    scene: [KarsilamaSahnesi, AdaSahnesi, BulutSahnesi, MiniOyunlarSahnesi, SansCarkiSahnesi, ...Object.values(MINI_OYUNLAR)],
   });
 });
