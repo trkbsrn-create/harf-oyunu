@@ -120,7 +120,7 @@ const Sesler = {
     const soz = new SpeechSynthesisUtterance(metin);
     this.sonSoz = soz;
     soz.lang = "tr-TR";
-    soz.rate = 0.8;
+    soz.rate = 0.9; // doğal seslerde fazla yavaşlatmak robotik duyuluyor
     const turkce = this.turkceSes();
     if (turkce) soz.voice = turkce;
     soz.onstart = () => {
@@ -159,7 +159,21 @@ const Sesler = {
       window.speechSynthesis.addEventListener?.("voiceschanged", () => { this.turkce = undefined; });
     }
     if (!this.turkce) {
-      this.turkce = window.speechSynthesis.getVoices().find((v) => v.lang && v.lang.replace("_", "-").startsWith("tr"));
+      // En doğal Türkçe ses seçilir: önce yapay zekâ ile üretilen "doğal" sesler (Edge'de
+      // "Microsoft Emel Online (Natural)" gibi), sonra Google'ın sesi, sonra cihazın herhangi bir
+      // Türkçe sesi. Aynı türde kadın sesi (Emel, Seda, Yelda...) önce gelir.
+      const turkceler = window.speechSynthesis.getVoices()
+        .filter((v) => v.lang && v.lang.replace("_", "-").toLowerCase().startsWith("tr"));
+      const puan = (v) => {
+        const ad = v.name.toLowerCase();
+        let p = 0;
+        if (ad.includes("natural") || ad.includes("neural") || ad.includes("doğal")) p += 100;
+        if (ad.includes("online")) p += 40;
+        if (ad.includes("google")) p += 30;
+        if (["emel", "seda", "yelda", "filiz"].some((k) => ad.includes(k))) p += 5;
+        return p;
+      };
+      this.turkce = turkceler.sort((a, b) => puan(b) - puan(a))[0];
     }
     return this.turkce || null;
   },
