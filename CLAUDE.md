@@ -104,6 +104,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   kirik-cam (Kırık Cam: 1. seviye camı kır: buzlu camın üstündeki istenen harflere dokununca
   cam çatlar, hepsi bulununca kırılır, arkadaki resim çıkar ve adı okunur; 2-3. seviye camı onar:
   resmin ilk sesini taşıyan üçgen cam parçası boşluğa sürüklenir ya da dokunulur).
+  bombayi-kurtar (Bombayı Kurtar: sevimli bomba yavaşça geri sayar; harf etiketli kablolardan
+  istenen harfinkine dokununca kesilir, bomba konfetiye döner; yanlış kablo kıvılcım, can gider;
+  süre biterse patlama yok, yalnızca "puf" dumanı ve can gider; korkutucu değil).
   Hecelerine ayrılmış ortak kelime listesi `KELIMELER`, `ogrenilmisKelimeler(harf)` (ortak.js;
   yalnızca öğrenilmiş harflerle yazılabilen kelimeler).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
