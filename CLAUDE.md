@@ -123,6 +123,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   okuma yönünde yan yana gelen ünlü + ünsüz hece olur (ünlü taşlar kırmızı, ünsüzler
   yeşil-mavi, heceler sarı); 3. seviyede heceler kalır, iki hece KELIMELER'deki bir kelimeyi
   kurarsa kelime olur; tahta dolunca en eski taşlar uçar; can yok).
+  harfle-boya (Harfle Boya: `BOYA_RESIMLERI` (ev, çiçek, gemi) basit biçimlerden bölgeler; her
+  bölgede harf; istenen harfli bölgeye dokununca boyanır; doğrular bitince kalan bölgeler sırayla
+  boyanır; üstte kalan bölgenin harfi görünmüyorsa `lx, ly` ile harf yeri verilir).
   Hecelerine ayrılmış ortak kelime listesi `KELIMELER`, `ogrenilmisKelimeler(harf)` (ortak.js;
   yalnızca öğrenilmiş harflerle yazılabilen kelimeler).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
