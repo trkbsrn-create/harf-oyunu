@@ -77,6 +77,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - 21. oyun: Hece Kulesi (öğretmenin tarifi: hece söylenir, üstten doğru heceyi seç; hece vinçte sallanır, dokununca düşer, kuleye oturursa kule büyür; kelime kurulmaz; 5/6/8 kat; 1. seviyede ıskalamak can götürmez) (Sürüm 78): TAMAM.
    - 22. oyun: Birleştir Büyüt (2048 tarzı; tahtayı kaydır, okuma yönünde yan yana gelen ünlü+ünsüz hece olur; 3. seviyede heceler kalır ve kelimeye dönüşebilir (an+ne=anne); can yok; 5/7/8) (Sürüm 79): TAMAM. Ortak düzeltme: ilerleme hedefi aşmaz.
    - 23. oyun: Harfle Boya (ev, çiçek, gemi resimleri bölgelere ayrılmış; istenen harfli bölgelere dokununca boyanır, hepsi bitince resmin kalanı da boyanır; 2/3/3 resim) (Sürüm 80): TAMAM.
+   - 24. oyun: Harf Fırtınası (art arda kısa görevler: dokun, patlat, hece seç, resmin ilk sesi, düşen damlayı yakala; her görevde süre çubuğu; 8/10/12 görev) (Sürüm 81): TAMAM. Öğretmenin 24 taslağının hepsi yapıldı.
    - Planlanan ilk 7 mini oyunun hepsi yapıldı. Sıradaki iş: öğretmenin kendi mini oyun fikirleri (aşağıdaki listede, sırayla; her biri için önce görsel taslak ve onay). Sonra mini oyunları ana oyuna (tesis, damla parçaları) bağlamak. Ana oyunun geri kalanı mini oyunlar bitince.
 
 ## Öğretmenin mini oyun fikirleri (sırayla yapılacak)
