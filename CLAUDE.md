@@ -36,7 +36,7 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   deneme menüsü (harf seçici + oyun kartları; hazır olmayanlarda "Yakında").
   Öğretmenin kararları: mini oyunlarda kaybetmek mümkün (canlar biterse parça yok, "Bir
   daha dene"); her damla 3 parça, her kazanılan mini oyun 1 parça verir; harfler ve
-  heceler tarayıcının Türkçe sesiyle sesli okunabilir (ses dosyası yok); mikrofonlu mini
+  heceler sesli okunur (`Sesler.soyle`: seslendirilmiş dosya, yoksa tarayıcının Türkçe sesi); mikrofonlu mini
   oyun şimdilik yok. Mini oyunlar bitince ana oyuna (tesis düğmeleri) bağlanacak.
   Ortak sınıf `MiniOyunSahnesi` (ortak.js): kâğıt zemin, Geri, 3 can (kalp.svg), ilerleme
   çubuğu, bitiş penceresi ("Aferin!" / "Bir daha dene", Tekrar / Geri). Sesli okuma
@@ -237,8 +237,14 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   oyun sözleri sayfada yazılı: oyuna yeni söz eklenince oraya da eklenmeli). Kayıtlar yalnızca
   o tarayıcıda (IndexedDB) durur; sessizlik kesilir, ses eşitlenir, WAV (24 kHz). "Hepsini
   indir" zip verir (sesler/<anahtar>.wav + liste.json); öğretmen verince sesler oyuna eklenecek.
-- `sesler.js` – Oyun sesleri. Ses dosyası yok; sesler tarayıcıda (Web Audio) üretilir.
-  Sesli okuma `Sesler.soyle`: cihazdaki en doğal Türkçe ses seçilir (`turkceSes`: önce
+- `sesler.js` – Oyun sesleri. Efektler tarayıcıda (Web Audio) üretilir.
+  Sesli okuma `Sesler.soyle`: söz `sesler/liste.js`'de (`SES_DOSYALARI`, söz → dosya) varsa
+  `sesler/<dosya>.mp3` çalınır (Web Audio; dosyalar ilk dokunuştan sonra arka planda yüklenir).
+  Sesler Azure'un yapay zekâ sesleriyle üretildi (öğretmenin seçimi: harf, hece, kelime ve
+  kutlama Elif "heyecanlı"; hikâye, final sözleri ve mini oyun adları Ava). Liste
+  `araclar/ses-listesi.js`, üretim `araclar/seslendir.py` (yalnızca eksikleri üretir; anahtar
+  ortam değişkeniyle verilir, ASLA dosyaya ya da depoya yazılmaz). Oyuna yeni sesli söz
+  eklenince ses-listesi.js'e de eklenmeli. Dosyası olmayan sözde tarayıcı sesi: cihazdaki en doğal Türkçe ses seçilir (`turkceSes`: önce
   "Natural/Online" sesler (Edge), sonra Google, sonra herhangi bir Türkçe ses; hız 0.9).
   Telefonda ilk dokunuşta ses motoru ısıtılır, önceki söz
   susturulunca kısa ara verilir, güvence süresi ses başlayınca yeniden kurulur (yavaş
