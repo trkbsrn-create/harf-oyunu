@@ -126,6 +126,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   harfle-boya (Harfle Boya: `BOYA_RESIMLERI` (ev, çiçek, gemi) basit biçimlerden bölgeler; her
   bölgede harf; istenen harfli bölgeye dokununca boyanır; doğrular bitince kalan bölgeler sırayla
   boyanır; üstte kalan bölgenin harfi görünmüyorsa `lx, ly` ile harf yeri verilir).
+  harf-firtinasi (Harf Fırtınası: art arda kısa görevler; önce görevin adı büyükçe çıkar
+  ("Dokun!", "Patlat!", "Seç!", "Resim!", "Yakala!"), sonra süre çubuğu akar; süre biterse ya da
+  yanlış seçilirse can gider, sıradaki göreve geçilir; seviyeyle görev sayısı artar, süre kısalır,
+  3. seviyede benzer harfler).
   Hecelerine ayrılmış ortak kelime listesi `KELIMELER`, `ogrenilmisKelimeler(harf)` (ortak.js;
   yalnızca öğrenilmiş harflerle yazılabilen kelimeler).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
