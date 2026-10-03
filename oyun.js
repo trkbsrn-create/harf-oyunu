@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 89;
+const SURUM = 90;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -2169,7 +2169,8 @@ class AdaSahnesi extends Phaser.Scene {
   }
 
   // "God mode": bütün sandıklar açılmış (sönük, çalının yanında); altı harfin tohumu
-  // tarlaya ekilmiş ve fasulye sırığına dönüşmüş olarak başlar (a n e t i l sırayla)
+  // tarlaya ekilmiş ve fasulye sırığına dönüşmüş, altı yelkenli parçası çantada olarak
+  // başlar (a n e t i l sırayla)
   hepsiniAc() {
     this.sandiklar.forEach((s, i) => {
       s.acildi = true;
@@ -2182,6 +2183,8 @@ class AdaSahnesi extends Phaser.Scene {
     });
     this.siradakiSira = this.sandiklar.length;
     this.siradakiSandik(); // sandık kalmadı: pusula susar
+    // Altı harfin yelkenli parçası da bulutlardan alınmış, çantada (öğretmenin isteği)
+    for (const p of YELKENLI_PARCALARI) if (!Canta.alinanParcalar[p.harf]) Canta.parcaEkle(p.harf, p.ad);
   }
 
   // Sıradaki sandığı devreye alır (sensör onu gösterir). Sandık kalmadıysa sensör susar.

@@ -24,8 +24,8 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   Sol üstteki menüde "Oyunu yeniden başlat" sayfayı yeniler; karşılama ekranını atlamak
   için tek seferlik bir not (sessionStorage) bırakır, ilerleme saklanmaz.
   Karşılama ekranının sol üstünde öğretmenin deneme düğmesi "God mode" var (öğretmen
-  bu adla istedi): oyun bütün sandıklar açılmış ve altı harf tarlada fasulye sırığına
-  dönüşmüş olarak başlar (`hepsiniAc`).
+  bu adla istedi): oyun bütün sandıklar açılmış, altı harf tarlada fasulye sırığına
+  dönüşmüş ve altı yelkenli parçası çantada olarak başlar (`hepsiniAc`).
   Yazılar da doodle: `doodleYazi` (başlık, düğme, pencere yazıları: boya kalemi taraması,
   kalem çerçevesi, titrek kenar) ve `titret` (öğretilen harfler: biçim aynı, yalnızca
   kenar titrer). Harf biçimi her zaman Andika'dır; başka yazı tipi kullanılmaz.
