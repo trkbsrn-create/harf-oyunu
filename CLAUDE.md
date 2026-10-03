@@ -70,6 +70,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   elektrik-devresi (Elektrik Devresi: kelime söylenir; soldaki ilk heceden sağdaki ikinci heceye
   kablo çekilir (sürükleyerek ya da sırayla dokunarak); doğruysa ampul yanar, kelime yazılır ve
   okunur; yanlışsa kıvılcım, can gider).
+  duvardan-gecme (Duvardan Geçme: karakter (cocuk-tirman.svg, arkadan) yolda koşar; ufuktan üç
+  kapılı tuğla duvarlar yaklaşır; istenen harfin kapısının şeridine geç (dokun ya da sürükle);
+  yanlış kapıya çarpınca can gider).
   Hecelerine ayrılmış ortak kelime listesi `KELIMELER`, `ogrenilmisKelimeler(harf)` (ortak.js;
   yalnızca öğrenilmiş harflerle yazılabilen kelimeler).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).

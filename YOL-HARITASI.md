@@ -58,6 +58,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - 2. oyun: Şeker Patlatma (hece zinciri; söylenen heceyi soldan sağa ya da yukarıdan aşağı yan yana iki şekerle kur; 6/8/10 hece) (Sürüm 59): TAMAM.
    - 3. oyun: Kayak (1. seviye harf topla, 2-3. seviye hece kapıları; üç şerit, dokunarak ya da sürükleyerek şerit değiştir) (Sürüm 60): TAMAM.
    - 4. oyun: Elektrik Devresi (kelime söylenir, soldaki ilk heceyi sağdaki ikinci heceye kabloyla bağla, ampul yanar; 4/5/6 kelime, 2/3/3 hece; 3. seviyede ters hece) (Sürüm 61): TAMAM. Ortak kelime listesi `KELIMELER` eklendi (anne, nane, lale, nine, tane, elle, elli, ana, ata, ilan, inat, anten, atlet, telli, anla, ilet).
+   - 5. oyun: Duvardan Geçme (harfli kapılar; karakter arkadan koşar, üç kapılı duvarlar yaklaşır, doğru harfin kapısının şeridine geç; 6/8/10 duvar) (Sürüm 62): TAMAM.
    - Planlanan ilk 7 mini oyunun hepsi yapıldı. Sıradaki iş: öğretmenin kendi mini oyun fikirleri (aşağıdaki listede, sırayla; her biri için önce görsel taslak ve onay). Sonra mini oyunları ana oyuna (tesis, damla parçaları) bağlamak. Ana oyunun geri kalanı mini oyunlar bitince.
 
 ## Öğretmenin mini oyun fikirleri (sırayla yapılacak)
