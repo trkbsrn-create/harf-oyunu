@@ -73,6 +73,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   duvardan-gecme (Duvardan Geçme: karakter (cocuk-tirman.svg, arkadan) yolda koşar; ufuktan üç
   kapılı tuğla duvarlar yaklaşır; istenen harfin kapısının şeridine geç (dokun ya da sürükle);
   yanlış kapıya çarpınca can gider).
+  sekillerle-yazma (Şekillerle Yazma: içi boş büyük harf (HARF_YOLLARI büyütülür); tepsiden
+  düğme/çiçek/şeker sürüklenir, yazılış sırasındaki sıradaki yere oturur; can yok; 1. seviyede
+  dokunmak da yeter, 3. seviyede harf silik ve sıradaki yere yakın bırakmak gerekir).
   Hecelerine ayrılmış ortak kelime listesi `KELIMELER`, `ogrenilmisKelimeler(harf)` (ortak.js;
   yalnızca öğrenilmiş harflerle yazılabilen kelimeler).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
