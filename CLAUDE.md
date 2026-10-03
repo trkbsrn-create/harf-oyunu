@@ -110,6 +110,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   yilan (Yılan: hece söylenir; yılanın başına göre gidilecek yöne dokunulur; hecenin harfleri
   sırayla yenir, gövdede görünür, hece okunur; duvar/kendine çarpma yok, kenardan öbür kenara
   geçer; 1. seviyede yanlış harf yalnızca uyarı, 2-3. seviyede can götürür).
+  canavari-besle (Canavarı Besle: canavar konuşma balonunda harf ister (ünlü söylenir); masadaki
+  harfli meyve canavara doğru sürüklenip bırakılır (1. seviyede dokunmak yeter), kavisle ağzına
+  uçar; doğruysa yer ve büyür, yanlışsa yüzünü buruşturup tükürür, can gider).
   Hecelerine ayrılmış ortak kelime listesi `KELIMELER`, `ogrenilmisKelimeler(harf)` (ortak.js;
   yalnızca öğrenilmiş harflerle yazılabilen kelimeler).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
