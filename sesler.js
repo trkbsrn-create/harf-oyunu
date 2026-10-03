@@ -1,5 +1,6 @@
-// Oyun sesleri. Ses dosyası yok: bütün sesler tarayıcıda o anda üretilir.
-// (Telif sorunu yok, hiçbir şey kaydedilmez.)
+// Oyun sesleri. Efektler tarayıcıda o anda üretilir (Web Audio). Sözler (harf, hece, kelime,
+// hikâye) Azure'un yapay zekâ sesleriyle önceden seslendirildi: sesler/*.mp3, sesler/liste.js
+// (araclar/seslendir.py). Dosyası olmayan sözü tarayıcının Türkçe sesi okur. Hiçbir şey kaydedilmez.
 
 const Sesler = {
   baglam: null,
@@ -12,6 +13,26 @@ const Sesler = {
       this.baglam = new Baglam();
     }
     if (this.baglam.state === "suspended") this.baglam.resume();
+    this.dosyalariYukle();
+  },
+
+  // Seslendirilmiş sözleri arka planda indirip çözer (ilk dokunuştan sonra, bir kez)
+  dosyalariYukle() {
+    if (this.tamponlar || typeof SES_DOSYALARI === "undefined") return;
+    this.tamponlar = {};
+    for (const dosya of new Set(Object.values(SES_DOSYALARI))) this.tampon(dosya);
+  },
+
+  // Bir ses dosyasının çözülmüş hâli (Promise; bir kez indirilir)
+  tampon(dosya) {
+    this.tamponlar = this.tamponlar || {};
+    if (!this.tamponlar[dosya]) {
+      this.tamponlar[dosya] = fetch(`sesler/${dosya}.mp3`)
+        .then((c) => { if (!c.ok) throw new Error(dosya); return c.arrayBuffer(); })
+        .then((veri) => this.baglam.decodeAudioData(veri));
+      this.tamponlar[dosya].catch(() => { delete this.tamponlar[dosya]; });
+    }
+    return this.tamponlar[dosya];
   },
 
   // Tek bir nota çalar.
@@ -97,8 +118,8 @@ const Sesler = {
     this.nota(247, 0.1, 0.22, 0.12, "triangle");
   },
 
-  // Tarayıcının Türkçe sesiyle bir harfi, heceyi ya da kelimeyi sesli söyler (ses
-  // dosyası yok, kayıt yok). Türkçe ses yoksa ya da tarayıcı desteklemiyorsa sessiz kalır.
+  // Bir harfi, heceyi, kelimeyi ya da sözü sesli söyler: seslendirilmiş dosyası varsa onu çalar,
+  // yoksa tarayıcının Türkçe sesi okur. Türkçe ses yoksa ya da tarayıcı desteklemiyorsa sessiz kalır.
   // bitince: söyleme bitince bir kez çağrılır (ses hiç çıkmasa bile, tahmini süre sonunda).
   //
   // Telefon (Android Chrome) için önlemler: ses motoru ilk dokunuşta ısıtılır (yoksa ilk söz
@@ -107,6 +128,51 @@ const Sesler = {
   // silebilir, söz yarıda kalır). Güvence süresi, ses gerçekten başladığında yeniden
   // kurulur: yavaş telefonda ses geç başlasa da sonraki adım onu kesmez.
   soyle(metin, bitince) {
+    const dosya = typeof SES_DOSYALARI !== "undefined" && SES_DOSYALARI[metin];
+    if (dosya && this.baglam) this.dosyaCal(dosya, metin, bitince);
+    else this.tarayiciylaSoyle(metin, bitince);
+  },
+
+  // Seslendirilmiş sözü çalar; dosya gelmezse ya da ses kapalıysa tarayıcının sesine döner.
+  dosyaCal(dosya, metin, bitince) {
+    this.sustur();
+    const no = this.sozNo;
+    let cagrildi = false;
+    const bitti = () => {
+      if (cagrildi || !bitince) return;
+      cagrildi = true;
+      bitince();
+    };
+    let guvence = setTimeout(bitti, 8000); // dosya hiç gelmezse
+    this.tampon(dosya).then((tampon) => {
+      if (no !== this.sozNo) { clearTimeout(guvence); bitti(); return; } // bu arada yeni söz geldi
+      if (this.baglam.state !== "running") throw new Error("ses kapalı");
+      const kaynak = this.baglam.createBufferSource();
+      kaynak.buffer = tampon;
+      kaynak.connect(this.baglam.destination);
+      kaynak.onended = () => {
+        if (this.calan === kaynak) this.calan = null;
+        clearTimeout(guvence);
+        bitti();
+      };
+      this.calan = kaynak;
+      kaynak.start();
+      clearTimeout(guvence);
+      guvence = setTimeout(bitti, tampon.duration * 1000 + 1500);
+    }).catch(() => {
+      clearTimeout(guvence);
+      if (no === this.sozNo) this.tarayiciylaSoyle(metin, bitince);
+      else bitti();
+    });
+  },
+
+  // Tarayıcının Türkçe sesiyle söyler (seslendirilmiş dosyası olmayan sözler için)
+  tarayiciylaSoyle(metin, bitince) {
+    if (this.calan) {
+      const calan = this.calan;
+      this.calan = null;
+      try { calan.stop(); } catch (e) { /* zaten bitmiş */ }
+    }
     let cagrildi = false;
     const bitti = () => {
       if (cagrildi || !bitince) return;
@@ -148,6 +214,11 @@ const Sesler = {
   // Söyleneni keser (sıradaki söz de söylenmez)
   sustur() {
     this.sozNo = (this.sozNo || 0) + 1;
+    if (this.calan) {
+      const calan = this.calan;
+      this.calan = null;
+      try { calan.stop(); } catch (e) { /* zaten bitmiş */ }
+    }
     if ("speechSynthesis" in window) window.speechSynthesis.cancel();
   },
 
