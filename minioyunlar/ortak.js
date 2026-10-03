@@ -64,6 +64,23 @@ function ogrenilmisHarfler(harf) {
   return HARFLER.filter((h) => h.grup <= grup).map((h) => h.kucuk);
 }
 
+// Hecelerine ayrılmış kelimeler (yalnızca ilk harf grubunun harfleriyle yazılabilenler; yeni
+// harf grupları gelince liste büyüyecek). Elektrik Devresi, Scrabble gibi oyunlar kullanır.
+const KELIMELER = [
+  ["anne", "an", "ne"], ["nane", "na", "ne"], ["lale", "la", "le"], ["nine", "ni", "ne"],
+  ["tane", "ta", "ne"], ["elle", "el", "le"], ["elli", "el", "li"], ["ana", "a", "na"],
+  ["ata", "a", "ta"], ["ilan", "i", "lan"], ["inat", "i", "nat"], ["anten", "an", "ten"],
+  ["atlet", "at", "let"], ["telli", "tel", "li"], ["anla", "an", "la"], ["ilet", "i", "let"],
+].map(([kelime, ...heceler]) => ({ kelime, heceler }));
+
+// Öğrenilmiş harflerle yazılabilen kelimeler; oyunun harfini içerenler önce
+function ogrenilmisKelimeler(harf) {
+  const ogrenilmis = ogrenilmisHarfler(harf);
+  const uygun = KELIMELER.filter((k) => [...k.kelime].every((h) => ogrenilmis.includes(h)));
+  const harfli = uygun.filter((k) => k.kelime.includes(harf));
+  return harfli.length >= 3 ? harfli : uygun;
+}
+
 // Öğrenilmiş harflerle kurulabilecek bütün heceler: kapalı (ünlü+ünsüz: an) ve açık (ünsüz+ünlü: na)
 function heceHavuzu(harf) {
   const ogrenilmis = ogrenilmisHarfler(harf).map((h) => HARFLER.find((x) => x.kucuk === h));
