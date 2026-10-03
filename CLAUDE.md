@@ -101,6 +101,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   yakala-yaz (Yakala ve Yaz: kelime söylenir, çantada harf yerleri boş; uçuşan harf yaratıklarına
   dokununca ağ iner (en yakın yaratık); gereken harf çantadaki yerine uçar, gerekmeyen can götürür;
   uçanlar arasında gereken harf hep bulunur).
+  kirik-cam (Kırık Cam: 1. seviye camı kır: buzlu camın üstündeki istenen harflere dokununca
+  cam çatlar, hepsi bulununca kırılır, arkadaki resim çıkar ve adı okunur; 2-3. seviye camı onar:
+  resmin ilk sesini taşıyan üçgen cam parçası boşluğa sürüklenir ya da dokunulur).
   Hecelerine ayrılmış ortak kelime listesi `KELIMELER`, `ogrenilmisKelimeler(harf)` (ortak.js;
   yalnızca öğrenilmiş harflerle yazılabilen kelimeler).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
