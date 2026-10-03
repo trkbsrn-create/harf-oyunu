@@ -352,7 +352,7 @@ class MiniOyunSahnesi extends Phaser.Scene {
   // Bir doğru daha. Hedefe varınca oyun biter (kazanma).
   // x, y verilirse o yerden ilerleme çubuğuna bir yıldız uçar.
   ilerlemeArtir(x, y) {
-    if (this.bitti) return;
+    if (this.bitti || this.ilerleme >= this.ilerlemeHedef) return;
     this.ilerleme++;
     if (x !== undefined) this.odulUcur(x, y);
     this.ilerlemeyiCiz();
