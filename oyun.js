@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 90;
+const SURUM = 91;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -1027,8 +1027,8 @@ class AdaSahnesi extends Phaser.Scene {
   // Final 1: altı parça takıldı. Kutlama; yelkenlinin üstünde "Yola çık" düğmesi parlar
   // (öğretmenin seçimi B: çocuk basınca yola çıkılır).
   yelkenliHazir(sessiz = false) {
-    const x = YELKENLI_X + 580; // yelkenin sağındaki boşlukta
-    const y = YELKENLI_Y + 130;
+    const x = YELKENLI_X + 300; // yelkenlinin altında, denizde
+    const y = YELKENLI_Y + 490;
     if (!sessiz) {
       Sesler.dogru();
       Sesler.soyle("Yelkenli hazır! Aferin!");
@@ -2838,10 +2838,13 @@ class FinalSahnesi extends Phaser.Scene {
   }
 
   create() {
+    this.onDalga = null;
     this.cameras.main.fadeIn(500, 251, 247, 236);
     // 2) Kumsal: çocuk biner, yelkenli suya kayar
     const kumsal = this.add.image(0, 0, "hikaye-kumsal").setOrigin(0);
     const tekne = this.yelkenliYap(330, 150, 0.85);
+    // Denizin ön kısmı teknenin önünde: gövdenin altı suyun içinde kalır (yüzüyor görünsün)
+    const onSu = this.add.image(0, 0, "hikaye-kumsal").setOrigin(0).setCrop(0, 580, 1280, 140).setDepth(2);
     const cocuk = this.add.image(250, 480, "cocuk").setOrigin(0.5, 1);
     Sesler.soyle("Haydi, yola çıkalım!");
     this.tweens.chain({ targets: cocuk, tweens: [
@@ -2849,23 +2852,33 @@ class FinalSahnesi extends Phaser.Scene {
       { y: 390, scale: 0.85, duration: 200 },
     ], onComplete: () => {
       tekne.add(cocuk.setPosition(250, 290).setScale(1));
-      this.tweens.add({ targets: tekne, x: 900, y: 420, duration: 2600, ease: "Sine.In" });
-      this.tweens.add({ targets: tekne, angle: { from: -3, to: 3 }, duration: 600, yoyo: true, repeat: -1 });
+      // Kızaktan suya kayar; gövdenin altı (tuvalde y 365) su çizgisinin altına iner
+      this.tweens.add({ targets: tekne, x: 760, y: 598 - 365 * 0.85, duration: 2600, ease: "Sine.In",
+        onComplete: () => this.tweens.add({ targets: tekne, y: tekne.y + 8, duration: 700, yoyo: true, repeat: -1, ease: "Sine.InOut" }) });
     } });
     // 3) Gün batımı: ada uzakta kalır
     this.time.delayedCall(4500, () => {
       this.cameras.main.flash(500, 255, 233, 194);
       kumsal.destroy();
       tekne.destroy();
+      onSu.destroy();
       this.add.image(0, 0, "hikaye-gunbatimi").setOrigin(0);
-      const kucuk = this.yelkenliYap(420, 270, 0.22);
-      this.tweens.add({ targets: kucuk, x: 900, y: 300, scale: 0.12, duration: 3800, ease: "Linear" });
-      this.tweens.add({ targets: kucuk, angle: { from: -3, to: 3 }, duration: 600, yoyo: true, repeat: -1 });
+      // Tekne ufukta yüzer: gövdenin altı hep su çizgisinin (y 380) biraz altında, önündeki
+      // dalgalar gövdeyi örter; uzaklaştıkça küçülür
+      const kucuk = this.yelkenliYap(420, 0, 0.22);
+      this.onDalga = this.add.image(0, 0, "hikaye-gunbatimi").setOrigin(0).setCrop(0, 388, 1280, 332).setDepth(2);
+      const yol = { t: 0 };
+      this.tweens.add({ targets: yol, t: 1, duration: 3800, onUpdate: () => {
+        const olcek = 0.22 - 0.1 * yol.t;
+        const dalga = Math.sin(this.time.now / 300) * 2;
+        kucuk.setScale(olcek).setPosition(420 + 480 * yol.t, 396 - 365 * olcek + dalga);
+      } });
       Sesler.soyle("Hoşça kal, ilk ada!");
     });
     // 4) Harita: "2. ada yakında"
     this.time.delayedCall(8800, () => {
       this.cameras.main.flash(500, 251, 244, 226);
+      if (this.onDalga) this.onDalga.destroy();
       this.add.image(0, 0, "hikaye-harita").setOrigin(0);
       doodleYazi(this, 310, 400, "1", 60).setOrigin(0.5);
       const soru = doodleYazi(this, 980, 320, "?", 70).setOrigin(0.5);
