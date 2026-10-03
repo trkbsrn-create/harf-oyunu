@@ -306,6 +306,17 @@ for ad, yol, desen in YELKENLI_PARCALARI:
     yaz(f"yelkenli-{ad}-silik.svg", 680, 440, f"Yelkenli parçasının silik yeri: {ad}", "",
         f'  <path d="{yol}" fill="#ffffff" fill-opacity="0.25" stroke="#8a8a8a" stroke-width="3.5" '
         'stroke-dasharray="10 8" stroke-linecap="round" stroke-linejoin="round"/>\n', 70)
+# Parçanın çanta simgesi (120x120): parça kutucuğa sığacak kadar küçültülüp ortalanır
+YELKENLI_KUTU = {"govde": (70, 285, 360, 80), "direk": (246, 55, 10, 230), "bayrak": (256, 21, 46, 48),
+                 "dumen": (428, 300, 30, 70), "kurek": (26, 260, 96, 128), "yelken": (262, 70, 100, 200)}
+for ad, yol, desen in YELKENLI_PARCALARI:
+    x, y, en, boy = YELKENLI_KUTU[ad]
+    olcek = 96 / max(en, boy)
+    tx = 60 - (x + en / 2) * olcek
+    ty = 60 - (y + boy / 2) * olcek
+    yaz(f"yelkenli-{ad}-simge.svg", 120, 120, f"Yelkenli parçasının çanta simgesi: {ad}", YELKENLI_DESEN,
+        kalem(f'    <path d="{yol}" fill="url(#{desen})" transform="translate({tx:.1f} {ty:.1f}) scale({olcek:.3f})" '
+              'vector-effect="non-scaling-stroke"/>\n', 3.5), 72, 2.5)
 # Kızak: tahta raylar (sağda denize iner) ve üç destek takozu
 yaz("yelkenli-kizak.svg", 680, 440, "Yelkenli kızağı", TAHTA + tarama("koyuTahta", "#b07a42", "#8e6340", 80, 7, 2.5),
     golge(260, 392, 250, 8) + kalem('''    <path d="M20 375 l520 -12 l120 60" fill="none" stroke="#8e6340" stroke-width="12"/>

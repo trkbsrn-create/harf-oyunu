@@ -195,7 +195,12 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   t dümen, i kürek, l yelken (öğretmenin kararı). Bütün yelkenli resimleri aynı 680x440 tuvalde
   (yelkenli-kizak.svg, yelkenli-<parça>.svg ve kesik çizgili yelkenli-<parça>-silik.svg;
   doodle_ciz.py). Başta bütün parçalar silik, yanlarında harfi silik bir yuvarlakta. Parça
-  bulutlarda alınıp takılınca dolu hâli görünecek (sonraki adım). `YELKENLI_ALANI`nda süs yok.
+  takılınca dolu hâli görünecek (sonraki adım). `YELKENLI_ALANI`nda süs yok.
+  Parça bulutların üstünde alınır (`BulutSahnesi`): tabelanın üstünde köpük balonun içinde
+  süzülür (`balonKur`); karakter tabelaya yaklaşınca mikrofon çıkar, tek aşama: harf sesle
+  dolar ("Parçayı almak için gücünü göster!"; Ada'daki `harfiDoldur` aynen kullanılır, 30 sn'de
+  kendiliğinden onay), balon patlar, parça çantaya girer (`Canta.parcaEkle`, çantada
+  yelkenli-<parça>-simge.svg; `Canta.alinanParcalar` ile balon bir daha çıkmaz).
 - Mini harita: sol altta kâğıt kart (harita-karti.svg: ada ve tarla, `doodle_ciz.py`
   adayı oyundaki `adaNoktalari` formülüyle çizer; biri değişirse öbürü de değişmeli).
   Üstüne her karede karakter, ekranda görünen bölge ve açılmış sandıklar (kırmızı çarpı)

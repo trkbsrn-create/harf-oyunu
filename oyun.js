@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 85;
+const SURUM = 86;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -309,6 +309,7 @@ class AdaSahnesi extends Phaser.Scene {
     for (const p of YELKENLI_PARCALARI) {
       this.load.svg(`yelkenli-${p.ad}`, `gorseller/yelkenli-${p.ad}.svg`);
       this.load.svg(`yelkenli-${p.ad}-silik`, `gorseller/yelkenli-${p.ad}-silik.svg`);
+      this.load.svg(`yelkenli-${p.ad}-simge`, `gorseller/yelkenli-${p.ad}-simge.svg`);
     }
     for (const ad of ["esek", "tilki", "inek", "leylek"]) this.load.svg(ad, `gorseller/${ad}.svg`);
     for (const ad of ["cicek-kirmizi", "cicek-mor", "cicek-beyaz", "ot", "kelebek", "kus"]) {
@@ -523,6 +524,12 @@ class AdaSahnesi extends Phaser.Scene {
         const sise = this.add.image(k.x, k.y, "sise");
         this.cantaIcerigi.add(sise);
         this.kutucukNesneleri[i] = [sise];
+        return;
+      }
+      if (esya.tur === "parca") {
+        const parca = this.add.image(k.x, k.y, `yelkenli-${esya.ad}-simge`).setScale(0.85);
+        this.cantaIcerigi.add(parca);
+        this.kutucukNesneleri[i] = [parca];
         return;
       }
       if (esya.tur !== "tohum") return;
@@ -1570,7 +1577,7 @@ class AdaSahnesi extends Phaser.Scene {
     const dolgu = this.add.text(yazi.x, yazi.y, yazi.text, {
       fontFamily: "Andika", fontSize: "180px", color: "#ffcf3f",
       stroke: "#3b2a1a", strokeThickness: 14, padding: { x: 4, y: 4 },
-    }).setOrigin(0.5).setDepth(6001.5).setScale(yazi.scale);
+    }).setOrigin(yazi.originX, yazi.originY).setDepth(6001.5).setScale(yazi.scale);
     titret(dolgu, 3); // altındaki harfle aynı titreme, tam üstüne oturur
     const genislik = dolgu.width;
     const yukseklik = dolgu.height;
@@ -2612,6 +2619,7 @@ class KarsilamaSahnesi extends Phaser.Scene {
 // (şimdilik bölgede harfin büyük tabelası duruyor; içeriği sonra eklenecek). Karakter bulut
 // zemininde gezer; sırığa dokununca aşağı iner ve adaya döner.
 class BulutSahnesi extends Phaser.Scene {
+  // harfiDoldur ve bekle, AdaSahnesi'ndekiyle aynıdır (sınıf tanımının altında aktarılır)
   constructor() {
     super("BulutSahnesi");
   }
@@ -2647,11 +2655,20 @@ class BulutSahnesi extends Phaser.Scene {
     const tabelaY = 560;
     this.add.image(tabelaX, tabelaY, "harf-tabela").setOrigin(0.5, 1).setScale(2.6).setDepth(3);
     // Levhanın ortası tabelanın alt ortasından 41 px yukarıda (2.6 kat büyütüldü)
+    // Harf 180 px yazılıp küçültülür: harfiDoldur'daki altın dolgu aynı boyda üstüne oturur
     const yazi = this.add.text(tabelaX, tabelaY - 41 * 2.6, this.harf, {
-      fontFamily: "Andika", fontSize: "64px", color: "#ffffff",
-      stroke: "#3b2a1a", strokeThickness: 10, padding: { x: 4, y: 4 },
-    }).setDepth(3.1);
-    boyaliOrtala(titret(yazi, 2));
+      fontFamily: "Andika", fontSize: "180px", color: "#ffffff",
+      stroke: "#3b2a1a", strokeThickness: 14, padding: { x: 4, y: 4 },
+    }).setDepth(3.1).setScale(64 / 180);
+    boyaliOrtala(titret(yazi, 3));
+    this.harfYazi = yazi;
+    this.tabelaX = tabelaX;
+
+    // Yelkenli parçası: tabelanın üstünde köpük balonun içinde süzülür (alınmadıysa)
+    this.parca = YELKENLI_PARCALARI.find((p) => p.harf === this.harf);
+    this.balon = null;
+    this.dinliyor = false;
+    if (this.parca && !Canta.alinanParcalar[this.harf]) this.balonKur(tabelaX, 240);
 
     // Karakter bulutun altından, görünmeden sırığa tırmanır (zeminin arkasında); bulutun
     // üstüne çıkınca zıplayıp buluta basar
@@ -2689,6 +2706,10 @@ class BulutSahnesi extends Phaser.Scene {
       if (b.nesne.x > 1400) b.nesne.x = -120;
     }
     if (!this.hazir) return;
+    if (this.balon && !this.dinliyor && Math.abs(this.cocuk.x - this.tabelaX) < 170) {
+      this.parcayiAl();
+      return;
+    }
 
     let dx = 0;
     let dy = 0;
@@ -2720,6 +2741,81 @@ class BulutSahnesi extends Phaser.Scene {
     this.cocuk.y = Phaser.Math.Clamp(this.cocuk.y + (dy / uzunluk) * adim, BULUT_YURUME.y, BULUT_YURUME.bottom);
     if (dx) this.cocuk.setFlipX(dx < 0);
     this.cocuk.setTexture(Math.floor(zaman / 230) % 2 ? "cocuk-adim1" : "cocuk-adim2");
+  }
+
+  // Köpük balonu: yarı saydam mavi daire, parlaklık, içinde parçanın simgesi; hafifçe süzülür
+  balonKur(x, y) {
+    const kap = this.add.container(x, y).setDepth(3.5);
+    const ic = this.add.graphics();
+    ic.fillStyle(0xd8f0ff, 0.45);
+    ic.fillCircle(0, 0, 110);
+    const g = this.add.graphics();
+    g.lineStyle(4, 0x7cc4ef, 1);
+    g.strokeCircle(0, 0, 110);
+    g.lineStyle(10, 0xffffff, 0.9);
+    g.beginPath();
+    g.arc(0, 0, 84, Math.PI * 1.1, Math.PI * 1.45);
+    g.strokePath();
+    const parca = this.add.image(0, 0, `yelkenli-${this.parca.ad}-simge`).setScale(1.5);
+    kap.add([ic, parca, g]);
+    kap.parca = parca;
+    this.tweens.add({ targets: kap, y: y - 14, duration: 1400, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+    this.tweens.add({ targets: parca, angle: { from: -6, to: 6 }, duration: 1800, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+    this.balon = kap;
+  }
+
+  // Karakter tabelaya gelince mikrofon çıkar; harf sesle dolar (tek aşama: sandıktaki
+  // "gücünü göster" gibi). Dolunca balon patlar, parça çantaya girer. Mikrofon yoksa ya da
+  // 30 sn'de dolmazsa oyun kendiliğinden onaylar (başarısızlık yok).
+  async parcayiAl() {
+    this.dinliyor = true;
+    this.hazir = false;
+    this.hedef = null;
+    this.cocuk.setTexture("cocuk").setScale(1).setFlipX(false);
+    const yazi = this.harfYazi;
+    const mikrofon = this.add.image(yazi.x - 200, yazi.y - 120, "mikrofon").setDepth(6002).setScale(0);
+    this.tweens.add({ targets: mikrofon, scale: 1, duration: 300, ease: "Back.Out" });
+    const bant = this.add.container(640, 150).setDepth(9050).setScale(0);
+    bant.add([this.add.image(0, 0, "guc-bandi").setOrigin(0.5, 62 / 120),
+      doodleYazi(this, 40, 0, "Parçayı almak için gücünü göster!", 40).setOrigin(0.5)]);
+    this.tweens.add({ targets: bant, scale: 1, duration: 350, ease: "Back.Out" });
+    const bilgi = HARFLER.find((h) => h.kucuk === this.harf);
+    if (await Dinleyici.olcerHazirla()) {
+      await this.harfiDoldur(bilgi, yazi, mikrofon,
+        { ipucuYok: true, onaySuresi: 30000, otomatikDogru: true, kesikSes: bilgi.kisaSes });
+    } else {
+      await this.bekle(1500);
+    }
+    this.tweens.add({ targets: [mikrofon, bant], scale: 0, alpha: 0, duration: 250,
+      onComplete: () => { mikrofon.destroy(); bant.destroy(); } });
+    this.balonuPatlat();
+  }
+
+  // Balon "pat" diye patlar; parça parıldayarak sağ üst köşeye (çantaya) uçar
+  balonuPatlat() {
+    const b = this.balon;
+    this.balon = null;
+    this.tweens.killTweensOf(b);
+    this.tweens.killTweensOf(b.parca);
+    Sesler.pat();
+    this.add.particles(b.x, b.y, "parilti", {
+      speed: { min: 120, max: 320 }, lifespan: 700, scale: { start: 1.2, end: 0 },
+      tint: [0xffffff, 0xc9ecff, 0xffe680], emitting: false,
+    }).setDepth(6005).explode(30);
+    const parca = b.parca;
+    b.remove(parca);
+    parca.setPosition(b.x, b.y).setDepth(6006);
+    b.destroy();
+    Canta.parcaEkle(this.parca.harf, this.parca.ad);
+    this.tweens.chain({ targets: parca, tweens: [
+      { scale: 2, duration: 350, ease: "Back.Out" },
+      { x: 1200, y: 70, scale: 0.6, angle: 360, duration: 800, delay: 400, ease: "Cubic.In" },
+    ], onComplete: () => {
+      parca.destroy();
+      Sesler.tohum();
+      this.dinliyor = false;
+      this.hazir = true;
+    } });
   }
 
   // Karakter yay çizerek zıplar: önden resim, zeminin önünde (buluta basma)
@@ -2756,6 +2852,8 @@ class BulutSahnesi extends Phaser.Scene {
     });
   }
 }
+BulutSahnesi.prototype.harfiDoldur = AdaSahnesi.prototype.harfiDoldur;
+BulutSahnesi.prototype.bekle = AdaSahnesi.prototype.bekle;
 
 // Yazı tipi yüklendikten sonra oyunu başlat (yoksa yazı yanlış görünür).
 document.fonts.load('72px "Andika"').finally(() => {
