@@ -68,6 +68,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - 12. oyun: Kazı Kazan (gümüş kartı parmakla kazı, altından resim çıkar; yarısı kazınınca resmin ilk sesini seç; 4/5/6 kart, 2/3/3 seçenek) (Sürüm 69): TAMAM.
    - 13. oyun: Tombala (resimli tombala; torbadan çıkan harfle başlayan resmi kapat; üst seviyede "Kartımda yok" düğmesi, satır dolunca "Çinko!", kart dolunca "Tombala!"; 4/4/6 resim) (Sürüm 70): TAMAM.
    - 14. oyun: Arabayı Ulaştır (arabadan bitişe yol çiz; yol istenen harfin bütün duraklarından geçmeli, başka harfli duraklara değmemeli; 3/4/5 tur) (Sürüm 71): TAMAM.
+   - 15. oyun: Yakala ve Yaz (kelime söylenir, çantada boş harf yerleri; uçuşan harf yaratıklarını ağla yakala, harf çantadaki yerine uçar; gerekmeyen harf can götürür; 3/4/4 kelime) (Sürüm 72): TAMAM.
    - Planlanan ilk 7 mini oyunun hepsi yapıldı. Sıradaki iş: öğretmenin kendi mini oyun fikirleri (aşağıdaki listede, sırayla; her biri için önce görsel taslak ve onay). Sonra mini oyunları ana oyuna (tesis, damla parçaları) bağlamak. Ana oyunun geri kalanı mini oyunlar bitince.
 
 ## Öğretmenin mini oyun fikirleri (sırayla yapılacak)
