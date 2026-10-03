@@ -54,6 +54,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - Telefonda boyut ayarları (yan çevir uyarısı, tam ekran, büyütme/kaydırma kapalı): TAMAM. Telefonda sesli okumanın gecikmesi/kesilmesi düzeltildi (Sürüm 53). Telefonda mikrofon izni verilmeden hiç ses gelmemesi düzeltildi (Sürüm 54).
    - Öğretmenin kararı: mini oyunlarda ünsüz harflerin başındaki yardım uyarısı ("Bu sesi tek başına okumam kolay değil...") ve hece tanıtımı kaldırıldı (Sürüm 55): TAMAM.
    - Mini oyun araştırması (öğretmenin isteği) ilk 7 oyuna uygulandı: gösteren el, uçan yıldız ve parıltı, yanlışta nazik ipucu, bitişte 1–3 yıldız ve konfeti, büyük dokunma alanları, Damla'da kolay başlangıç. Menü sayfalı oldu, bütün fikirler "Yakında" kartı olarak görünüyor (Sürüm 57): TAMAM.
+   - Öğretmenin fikirlerinden 1. oyun: Labirent (hece kapıları; 4/5/6 kavşak, 2/3/3 kapı; sonunda hazine) (Sürüm 58): TAMAM.
    - Planlanan ilk 7 mini oyunun hepsi yapıldı. Sıradaki iş: öğretmenin kendi mini oyun fikirleri (aşağıdaki listede, sırayla; her biri için önce görsel taslak ve onay). Sonra mini oyunları ana oyuna (tesis, damla parçaları) bağlamak. Ana oyunun geri kalanı mini oyunlar bitince.
 
 ## Öğretmenin mini oyun fikirleri (sırayla yapılacak)
@@ -87,6 +88,23 @@ hepsi "Yakında" kartı olarak görünür.
 22. Birleştir Büyüt (Suika / 2048 tarzı): aynı harfler birleşip heceye, heceler kelimeye ve resme dönüşür.
 23. Harfle Boya: gizli resmin parçalarındaki harflerden doğrusuna dokununca o parça boyanır.
 24. Harf Fırtınası (WarioWare tarzı): art arda 5'er saniyelik minik görevler.
+
+### Öğretmenin taslak seçimleri (taslaklar: her oyunda A ve B)
+1 Labirent: A (hece kapıları). 2 Şeker Patlatma: B (hece zinciri). 3 Kayak: ikisi de (B basit
+düzey: harf topla, A üst düzey: hece kapıları). 4 Elektrik Devresi: A (heceleri kabloyla bağla).
+5 Duvardan Geçme: B (harfli kapılar). 6 Şekillerle Yazma: B (malzemeyle doldur). 7 Hece Müziği:
+ikisi de, farklı düzeylerde (ksilofon ve nota akışı). 8 Scrabble: A (resmin kelimesini diz).
+9 Ördek Vurma: A (panayır ördekleri). 10 Kazma: A (tünel kaz). 11 Altın Madencisi: A (kanca).
+12 Kazı Kazan: A (resmi kazı). 13 Tombala: B (resimli tombala). 14 Arabayı Ulaştır: A (yolu çiz).
+15 Yakala ve Yaz: A (ağla yakala). 16 Kırık Cam: ikisi de (camı onar ve camı kır). 17 Bombayı
+Kurtar: A (doğru kabloyu kes). 18 Yılan: B (heceyi ye). 19 Canavarı Besle: A (fırlat).
+20 Harf Kesme: A (meyve kes); B'deki "seri kesim" oyunun içinde ek özellik (zorunlu değil).
+21 Hece Kulesi: A ama kelime kurulmaz: oyun sırayla bir hece söyler, çocuk üstten doğru heceyi
+seçer, o hece vinçte sallanmaya başlar; doğru yere bıraktıkça kule büyür (önce doğru hece, sonra
+kuleyi büyütmek). 22 Birleştir Büyüt: B (kaydır birleştir, 2048). 23 Harfle Boya: A (doğru
+bölgeyi boya). 24 Harf Fırtınası: A (art arda görevler).
+Şans Çarkı (24'ün B taslağı): unutulmayacak; ileride bütün mini oyunlar arasından oyun seçmek
+için kullanılacak (çark döner, çıkan oyun oynanır).
 
 ### Bilmeceler (öğretmenin; nerede kullanılacağı sonra kararlaştırılacak)
 - "Hızlı koşar, yeleleri var." → at

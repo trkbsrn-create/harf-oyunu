@@ -58,7 +58,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   de); heceyi-bul (Heceyi Bul: hece söylenir, sırtında hece yazılı balıklar (balik.svg,
   oyunda boyanır) derede yüzer, doğru heceli balığa dokunulur; yanlış balık bir kez can
   götürür; seviye 1 çok farklı heceler, 2 tek harfi değişen heceler, 3 ters hece (an/na) ve
-  açık hece). Hoparlör çizimi ortak: `hoparlorCiz`. Ortak "Yakala:/Patlat:" paneli
+  açık hece); labirent (Labirent: bütün labirent ekranda; her kavşakta heceli kapılar, söylenen
+  hecenin kapısına dokununca karakter o yoldan yürür, öbürleri çıkmaz sokak; sonda hazine).
+  Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
+  Hoparlör çizimi ortak: `hoparlorCiz`. Ortak "Yakala:/Patlat:" paneli
   `hedefPaneliKur`.
   Menü sayfalıdır (sayfada 8 kart, oklar ya da parmak kaydırma); listede öğretmenin
   fikirleri ve araştırmadan gelen fikirler "Yakında" olarak durur, sırayla yapılır.

@@ -64,6 +64,57 @@ function ogrenilmisHarfler(harf) {
   return HARFLER.filter((h) => h.grup <= grup).map((h) => h.kucuk);
 }
 
+// Öğrenilmiş harflerle kurulabilecek bütün heceler: kapalı (ünlü+ünsüz: an) ve açık (ünsüz+ünlü: na)
+function heceHavuzu(harf) {
+  const ogrenilmis = ogrenilmisHarfler(harf).map((h) => HARFLER.find((x) => x.kucuk === h));
+  const unluler = ogrenilmis.filter((h) => h.unlu).map((h) => h.kucuk);
+  const unsuzler = ogrenilmis.filter((h) => !h.unlu).map((h) => h.kucuk);
+  const heceler = [];
+  for (const u of unluler) {
+    for (const s of unsuzler) {
+      heceler.push({ hece: u + s, u, s, acik: false });
+      heceler.push({ hece: s + u, u, s, acik: true });
+    }
+  }
+  return heceler;
+}
+
+// Hece sorusu: oyunun harfini içeren bir hece ve seviyeye göre yanlış seçenekler.
+//   1: hiç ortak harfi olmayan kapalı heceler (an / el / it)
+//   2: tek harfi değişen kapalı heceler (an / en / at)
+//   3: ters hece de (an / na); açık hece de sorulabilir (acikOrani)
+// secenekSayisi: doğru dahil kaç seçenek; onceki: üst üste aynı hece sorulmasın.
+function heceSorusu(hepsi, harf, seviye, secenekSayisi, acikOrani, onceki) {
+  const adaylar = hepsi.filter((h) => (h.u === harf || h.s === harf)
+    && (Math.random() < acikOrani ? h.acik : !h.acik) && h.hece !== onceki);
+  const hedef = Phaser.Utils.Array.GetRandom(adaylar.length ? adaylar
+    : hepsi.filter((h) => h.u === harf || h.s === harf));
+  const digerleri = hepsi.filter((h) => h.hece !== hedef.hece);
+  const karistir = (dizi) => Phaser.Utils.Array.Shuffle(dizi.slice());
+  let oncelikli = [];
+  if (seviye <= 1) {
+    oncelikli = karistir(digerleri.filter((h) => !h.acik && h.u !== hedef.u && h.s !== hedef.s));
+  } else if (seviye === 2) {
+    const kapali = digerleri.filter((h) => !h.acik);
+    oncelikli = [
+      ...karistir(kapali.filter((h) => h.s === hedef.s)),
+      ...karistir(kapali.filter((h) => h.u === hedef.u)),
+    ];
+  } else {
+    const ters = digerleri.filter((h) => h.u === hedef.u && h.s === hedef.s);
+    oncelikli = [
+      ...ters,
+      ...karistir(digerleri.filter((h) => h.acik === hedef.acik && (h.s === hedef.s || h.u === hedef.u))),
+    ];
+  }
+  const secenekler = [];
+  for (const h of [...oncelikli, ...karistir(digerleri)]) {
+    if (secenekler.length >= secenekSayisi - 1) break;
+    if (!secenekler.includes(h.hece)) secenekler.push(h.hece);
+  }
+  return { hedef: hedef.hece, secenekler: karistir([hedef.hece, ...secenekler]) };
+}
+
 // Ünlüler tek başına söylenir. Ünsüz okunmaz (öğretmenin kararı): tarayıcı tek başına "ne",
 // "te" der, hecesi ("at") de resimle ("tilki") karışıyor. Ünsüzde yalnızca harf görünür.
 function harfiSoyle(harf, bitince) {

@@ -41,16 +41,7 @@ class HeceyiBulSahnesi extends MiniOyunSahnesi {
     this.hoparlor = hoparlor;
 
     // Bu oyunda kurulabilecek bütün heceler (öğrenilmiş harflerle)
-    const ogrenilmis = ogrenilmisHarfler(this.harf).map((h) => HARFLER.find((x) => x.kucuk === h));
-    const unluler = ogrenilmis.filter((h) => h.unlu).map((h) => h.kucuk);
-    const unsuzler = ogrenilmis.filter((h) => !h.unlu).map((h) => h.kucuk);
-    this.heceler = [];
-    for (const u of unluler) {
-      for (const s of unsuzler) {
-        this.heceler.push({ hece: u + s, u, s, acik: false });
-        this.heceler.push({ hece: s + u, u, s, acik: true });
-      }
-    }
+    this.heceler = heceHavuzu(this.harf);
 
     this.input.on("gameobjectdown", (p, nesne) => {
       if (nesne.balik) this.baligaDokun(nesne);
@@ -79,40 +70,9 @@ class HeceyiBulSahnesi extends MiniOyunSahnesi {
     }
   }
 
-  // Sorulacak hece ve seçenekler (seviyeye göre)
+  // Sorulacak hece ve seçenekler (seviyeye göre; ortak.js'deki heceSorusu)
   heceleriSec() {
-    const hepsi = this.heceler;
-    const adaylar = hepsi.filter((h) => (h.u === this.harf || h.s === this.harf)
-      && (Math.random() < this.ayar.acikOrani ? h.acik : !h.acik) && h.hece !== this.hece);
-    const hedef = Phaser.Utils.Array.GetRandom(adaylar.length ? adaylar
-      : hepsi.filter((h) => h.u === this.harf || h.s === this.harf));
-    const digerleri = hepsi.filter((h) => h.hece !== hedef.hece);
-    const karistir = (dizi) => Phaser.Utils.Array.Shuffle(dizi.slice());
-    let oncelikli = [];
-    if (this.seviye <= 1) {
-      // Hiç ortak harfi olmayan kapalı heceler
-      oncelikli = karistir(digerleri.filter((h) => !h.acik && h.u !== hedef.u && h.s !== hedef.s));
-    } else if (this.seviye === 2) {
-      // Tek harfi değişen kapalı heceler (önce ünsüzü aynı olanlar)
-      const kapali = digerleri.filter((h) => !h.acik);
-      oncelikli = [
-        ...karistir(kapali.filter((h) => h.s === hedef.s)),
-        ...karistir(kapali.filter((h) => h.u === hedef.u)),
-      ];
-    } else {
-      // Ters hece önce, sonra tek harfi değişenler
-      const ters = digerleri.filter((h) => h.u === hedef.u && h.s === hedef.s);
-      oncelikli = [
-        ...ters,
-        ...karistir(digerleri.filter((h) => h.acik === hedef.acik && (h.s === hedef.s || h.u === hedef.u))),
-      ];
-    }
-    const secenekler = [];
-    for (const h of [...oncelikli, ...karistir(digerleri)]) {
-      if (secenekler.length >= this.ayar.balik - 1) break;
-      if (!secenekler.includes(h.hece)) secenekler.push(h.hece);
-    }
-    return { hedef: hedef.hece, secenekler: karistir([hedef.hece, ...secenekler]) };
+    return heceSorusu(this.heceler, this.harf, this.seviye, this.ayar.balik, this.ayar.acikOrani, this.hece);
   }
 
   yeniTur() {
