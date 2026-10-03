@@ -355,6 +355,23 @@ yaz("hikaye-tahta.svg", 160, 44, "Açılış hikâyesi: kırık sal tahtası", T
 yaz("hikaye-simsek.svg", 120, 200, "Açılış hikâyesi: şimşek", "",
     kalem('    <path d="M70 6 l-50 100 h40 l-36 88 l84 -120 h-44 l38 -68z" fill="#ffe680"/>\n', 4), 77)
 
+# ---- Final (FinalSahnesi): gün batımında deniz ve adalar haritası ----
+yaz("hikaye-gunbatimi.svg", 1280, 720, "Final: gün batımında deniz, uzakta ilk ada",
+    tarama("aksam", "#ffe9c2", "#ffdca6", 35, 10, 3) + tarama("cimen", "#d8f0c0", "#bfe39f", 35, 8, 3) + SU,
+    '  <rect width="1280" height="720" fill="url(#aksam)"/>\n'
+    '  <circle cx="1000" cy="300" r="110" fill="#ffc58f"/>\n'
+    '  <rect y="380" width="1280" height="340" fill="url(#su)"/>\n'
+    + kalem('    <path d="M40 382 q120 -90 260 0z" fill="url(#cimen)" stroke-width="3"/>\n'
+            '    <path d="M0 382 h1280" fill="none" stroke-width="3"/>\n', 3)
+    + dalgalar(390, 70, 5, "#ffffff", 4), 78)
+yaz("hikaye-harita.svg", 1280, 720, "Final: adalar haritası (1. ada yeşil, 2. ada kesik çizgili)",
+    tarama("kagit", "#fbf4e2", "#f1e6c8", 30, 8, 3) + tarama("cimen", "#d8f0c0", "#bfe39f", 35, 8, 3) + SU,
+    '  <rect width="1280" height="720" fill="url(#kagit)"/>\n'
+    '  <rect x="60" y="60" width="1160" height="600" rx="30" fill="url(#su)" opacity="0.6"/>\n'
+    + kalem('    <path d="M160 400 q120 -150 300 -20 q-120 120 -300 20z" fill="url(#cimen)"/>\n'
+            '    <path d="M820 330 q140 -160 320 -10 q-150 110 -320 10z" fill="#eeeeee" stroke="#8a8a8a" stroke-dasharray="14 10"/>\n'
+            '    <path d="M470 380 q170 -160 340 -60" fill="none" stroke="#e0533d" stroke-dasharray="16 12"/>\n', 4), 79)
+
 # Harf varili: 120x150. Gövdenin üst ortası (52, 14); sağda musluk. Harf oyunda etikete yazılır.
 yaz("varil.svg", 120, 150, "Harf varili (musluklu)",
     tarama("varilTahta", "#d29a5c", "#b07a42", 80, 6, 2.5) + SU,

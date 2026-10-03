@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <!-- Final: adalar haritası (1. ada yeşil, 2. ada kesik çizgili) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="79" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kagit" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="8" height="8" fill="#fbf4e2"/>
+      <line x1="0" y1="4.0" x2="8" y2="4.0" stroke="#f1e6c8" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="cimen" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="8" height="8" fill="#d8f0c0"/>
+      <line x1="0" y1="4.0" x2="8" y2="4.0" stroke="#bfe39f" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="su" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9ecff"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#7cc4ef" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="720" fill="url(#kagit)"/>
+  <rect x="60" y="60" width="1160" height="600" rx="30" fill="url(#su)" opacity="0.6"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M160 400 q120 -150 300 -20 q-120 120 -300 20z" fill="url(#cimen)"/>
+    <path d="M820 330 q140 -160 320 -10 q-150 110 -320 10z" fill="#eeeeee" stroke="#8a8a8a" stroke-dasharray="14 10"/>
+    <path d="M470 380 q170 -160 340 -60" fill="none" stroke="#e0533d" stroke-dasharray="16 12"/>
+  </g>
+</svg>

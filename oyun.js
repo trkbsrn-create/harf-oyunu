@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 88;
+const SURUM = 89;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -386,7 +386,10 @@ class AdaSahnesi extends Phaser.Scene {
     this.sirigaGidiyor = null;
     this.events.on("wake", (sys, veri) => {
       if (veri && veri.miniOyun) this.miniOyundanDon(veri);
-      else this.siriktanIn(veri);
+      else if (veri && veri.final) {
+        this.input.enabled = true;
+        this.cameras.main.fadeIn(500, 251, 247, 236);
+      } else this.siriktanIn(veri);
     });
 
     this.input.on("pointerdown", (p) => {
@@ -394,6 +397,10 @@ class AdaSahnesi extends Phaser.Scene {
       if (this.tirmaniyor) return; // sırıkta tırmanırken dokunuş beklenmez
       if (this.menuTiklamasi(p)) return;
       if (this.tesisTiklamasi(p)) return;
+      if (!this.cantaAcik && this.yolaCikAlani && this.yolaCikAlani.contains(p.worldX, p.worldY)) {
+        this.yolaCik();
+        return;
+      }
       if (!this.cantaAcik && this.yelkenliKartAlani.contains(p.x, p.y)) {
         this.tweens.add({ targets: this.yelkenliKarti, scale: 0.92, duration: 90, yoyo: true });
         this.hedefBelirle(YELKENLI_DURAK.x, YELKENLI_DURAK.y, true);
@@ -967,6 +974,7 @@ class AdaSahnesi extends Phaser.Scene {
   // harfi silik bir yuvarlakta. (Parçayı bulutlardan getirip takmak sonraki adım.)
   yelkenliKur() {
     this.parcaTasinan = null; // çantadan yelkenliye sürüklenen parça
+    this.yolaCikAlani = null; // yelkenli tamamlanınca "Yola çık" düğmesi
     const derinlik = YELKENLI_Y + 380; // kızağın alt kenarı: önünden geçen karakter önde görünür
     this.add.image(YELKENLI_X, YELKENLI_Y, "yelkenli-kizak").setOrigin(0).setDepth(derinlik - 1);
     this.yelkenliParcalari = YELKENLI_PARCALARI.map((p) => {
@@ -1013,6 +1021,44 @@ class AdaSahnesi extends Phaser.Scene {
     }).setDepth(YELKENLI_Y + 400).explode(30);
     Sesler.buyume();
     this.yelkenliKartiniCiz();
+    if (this.yelkenliParcalari.every((y) => y.takildi)) this.time.delayedCall(900, () => this.yelkenliHazir());
+  }
+
+  // Final 1: altı parça takıldı. Kutlama; yelkenlinin üstünde "Yola çık" düğmesi parlar
+  // (öğretmenin seçimi B: çocuk basınca yola çıkılır).
+  yelkenliHazir(sessiz = false) {
+    const x = YELKENLI_X + 580; // yelkenin sağındaki boşlukta
+    const y = YELKENLI_Y + 130;
+    if (!sessiz) {
+      Sesler.dogru();
+      Sesler.soyle("Yelkenli hazır! Aferin!");
+      this.add.particles(x, YELKENLI_Y + 150, "parilti", {
+        speed: { min: 200, max: 520 }, angle: { min: 200, max: 340 }, gravityY: 700, lifespan: 1600,
+        scale: { start: 1.3, end: 0.4 }, tint: [0xff9c8a, 0xffe680, 0x9be3dc, 0xc8a2ff, 0xb5e48c],
+        emitting: false,
+      }).setDepth(YELKENLI_Y + 500).explode(70);
+    }
+    const dugme = this.add.container(x, y, [
+      this.add.image(0, 0, "incele-dugmesi"),
+      doodleYazi(this, 0, -3, "Yola çık", 34).setOrigin(0.5),
+    ]).setDepth(YELKENLI_Y + 500).setScale(0);
+    this.tweens.add({ targets: dugme, scale: 1, duration: 400, ease: "Back.Out", onComplete: () => {
+      this.tweens.add({ targets: dugme, scale: 1.12, duration: 600, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+    } });
+    this.yolaCikDugmesi = dugme;
+    this.yolaCikAlani = new Phaser.Geom.Rectangle(x - 100, y - 45, 200, 90);
+  }
+
+  // "Yola çık": ada uyur, final sahnesi açılır (dönünce ada kaldığı gibi uyanır)
+  yolaCik() {
+    this.hedef = null;
+    this.input.enabled = false;
+    Sesler.pling();
+    this.cameras.main.fadeOut(500, 251, 247, 236);
+    this.cameras.main.once("camerafadeoutcomplete", () => {
+      this.scene.sleep();
+      this.scene.run("FinalSahnesi");
+    });
   }
 
   // ---- Yelkenli kartı (sağ üstte, çantanın altında): takılan parçalar renkli, "2 / 6" ----
@@ -2767,6 +2813,87 @@ const HIKAYE_KARELERI = [
   { soz: "Yelkenliyi tamamla, adadan kurtul!", sure: 4800 },
 ];
 
+// Final (öğretmenin seçimi B): "Yola çık"a basınca. 2) çocuk biner, yelkenli suya kayar,
+// 3) gün batımında ada uzakta kalır, 4) adalar haritası: "2. ada yakında". Sözler sesli.
+// Sonunda "Adaya dön" ile uyuyan ada sahnesi kaldığı gibi uyanır.
+class FinalSahnesi extends Phaser.Scene {
+  constructor() {
+    super("FinalSahnesi");
+  }
+
+  preload() {
+    for (const ad of ["hikaye-kumsal", "hikaye-gunbatimi", "hikaye-harita", "cocuk", "incele-dugmesi"]) {
+      this.load.svg(ad, `gorseller/${ad}.svg`);
+    }
+  }
+
+  // Tam yelkenli: altı parçanın dolu resimleri üst üste (tuval 680x440)
+  yelkenliYap(x, y, olcek) {
+    const kap = this.add.container(x, y);
+    for (const p of YELKENLI_PARCALARI) kap.add(this.add.image(0, 0, `yelkenli-${p.ad}`).setOrigin(0));
+    return kap.setScale(olcek);
+  }
+
+  create() {
+    this.cameras.main.fadeIn(500, 251, 247, 236);
+    // 2) Kumsal: çocuk biner, yelkenli suya kayar
+    const kumsal = this.add.image(0, 0, "hikaye-kumsal").setOrigin(0);
+    const tekne = this.yelkenliYap(330, 150, 0.85);
+    const cocuk = this.add.image(250, 480, "cocuk").setOrigin(0.5, 1);
+    Sesler.soyle("Haydi, yola çıkalım!");
+    this.tweens.chain({ targets: cocuk, tweens: [
+      { x: 520, y: 400, duration: 700, ease: "Quad.Out" },
+      { y: 390, scale: 0.85, duration: 200 },
+    ], onComplete: () => {
+      tekne.add(cocuk.setPosition(250, 290).setScale(1));
+      this.tweens.add({ targets: tekne, x: 900, y: 420, duration: 2600, ease: "Sine.In" });
+      this.tweens.add({ targets: tekne, angle: { from: -3, to: 3 }, duration: 600, yoyo: true, repeat: -1 });
+    } });
+    // 3) Gün batımı: ada uzakta kalır
+    this.time.delayedCall(4500, () => {
+      this.cameras.main.flash(500, 255, 233, 194);
+      kumsal.destroy();
+      tekne.destroy();
+      this.add.image(0, 0, "hikaye-gunbatimi").setOrigin(0);
+      const kucuk = this.yelkenliYap(420, 270, 0.22);
+      this.tweens.add({ targets: kucuk, x: 900, y: 300, scale: 0.12, duration: 3800, ease: "Linear" });
+      this.tweens.add({ targets: kucuk, angle: { from: -3, to: 3 }, duration: 600, yoyo: true, repeat: -1 });
+      Sesler.soyle("Hoşça kal, ilk ada!");
+    });
+    // 4) Harita: "2. ada yakında"
+    this.time.delayedCall(8800, () => {
+      this.cameras.main.flash(500, 251, 244, 226);
+      this.add.image(0, 0, "hikaye-harita").setOrigin(0);
+      doodleYazi(this, 310, 400, "1", 60).setOrigin(0.5);
+      const soru = doodleYazi(this, 980, 320, "?", 70).setOrigin(0.5);
+      this.tweens.add({ targets: soru, scale: 1.2, duration: 600, yoyo: true, repeat: -1 });
+      const kucuk = this.yelkenliYap(470, 340, 0.1);
+      this.tweens.add({ targets: kucuk, x: 760, y: 250, duration: 2500, ease: "Sine.InOut" });
+      doodleYazi(this, 640, 560, "2. ada yakında", 56, "mavi").setOrigin(0.5);
+      Sesler.soyle("2. ada seni bekliyor!");
+      this.add.particles(640, 160, "parilti", {
+        speed: { min: 200, max: 520 }, angle: { min: 200, max: 340 }, gravityY: 700, lifespan: 1600,
+        scale: { start: 1.2, end: 0.4 }, tint: [0xff9c8a, 0xffe680, 0x9be3dc, 0xc8a2ff, 0xb5e48c],
+        emitting: false,
+      }).explode(60);
+      Sesler.dogru();
+      const don = this.add.container(1140, 660, [
+        this.add.image(0, 0, "incele-dugmesi"),
+        doodleYazi(this, 0, -3, "Adaya dön", 30).setOrigin(0.5),
+      ]).setSize(200, 90).setInteractive({ useHandCursor: true }).setAlpha(0);
+      this.tweens.add({ targets: don, alpha: 1, duration: 500, delay: 1500 });
+      don.on("pointerdown", () => {
+        Sesler.sustur();
+        this.cameras.main.fadeOut(400, 251, 247, 236);
+        this.cameras.main.once("camerafadeoutcomplete", () => {
+          this.scene.wake("AdaSahnesi", { final: true });
+          this.scene.stop();
+        });
+      });
+    });
+  }
+}
+
 class HikayeSahnesi extends Phaser.Scene {
   constructor() {
     super("HikayeSahnesi");
@@ -3162,6 +3289,6 @@ document.fonts.load('72px "Andika"').finally(() => {
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [KarsilamaSahnesi, HikayeSahnesi, AdaSahnesi, BulutSahnesi, MiniOyunlarSahnesi, SansCarkiSahnesi, ...Object.values(MINI_OYUNLAR)],
+    scene: [KarsilamaSahnesi, HikayeSahnesi, AdaSahnesi, FinalSahnesi, BulutSahnesi, MiniOyunlarSahnesi, SansCarkiSahnesi, ...Object.values(MINI_OYUNLAR)],
   });
 });
