@@ -60,6 +60,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   götürür; seviye 1 çok farklı heceler, 2 tek harfi değişen heceler, 3 ters hece (an/na) ve
   açık hece); labirent (Labirent: bütün labirent ekranda; her kavşakta heceli kapılar, söylenen
   hecenin kapısına dokununca karakter o yoldan yürür, öbürleri çıkmaz sokak; sonda hazine).
+  seker-patlatma (Şeker Patlatma: harfli şeker tahtası; söylenen heceyi okuma yönünde
+  (soldan sağa / yukarıdan aşağı) yan yana iki şekeri kaydırarak ya da sırayla dokunarak
+  kur; şekerler patlar, yenileri düşer; hece tahtada hep bulunur, bir harften en çok 5 şeker).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
   Hoparlör çizimi ortak: `hoparlorCiz`. Ortak "Yakala:/Patlat:" paneli
   `hedefPaneliKur`.
