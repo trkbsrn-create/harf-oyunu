@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Ses Kayıtları</title>
+  <!-- Öğretmenin kendi sesiyle oyunun sözlerini kaydettiği sayfa. Kayıtlar yalnızca bu
+       tarayıcıda (IndexedDB) durur; hiçbir yere gönderilmez. "Hepsini indir" bir zip dosyası
+       verir; öğretmen bu dosyayı Claude'a verince sesler oyuna eklenir. -->
+  <style>
+    @font-face { font-family: "Andika"; src: url("yazitipi/Andika-Regular.ttf") format("truetype"); }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #f8f4ea; font-family: "Andika", sans-serif; color: #3b2a1a; }
+    header { position: sticky; top: 0; z-index: 2; background: #bfe8f5; border-bottom: 4px solid #3b2a1a;
+      padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+    h1 { margin: 0; font-size: 30px; }
+    #sayac { font-size: 22px; }
+    main { max-width: 900px; margin: 0 auto; padding: 16px; }
+    .bilgi { background: #fffdf6; border: 3px solid #3b2a1a; border-radius: 18px; padding: 12px 18px; font-size: 19px; line-height: 1.45; }
+    h2 { font-size: 26px; margin: 28px 0 10px; }
+    .satir { display: flex; align-items: center; gap: 10px; background: #fffdf6; border: 3px solid #3b2a1a;
+      border-radius: 16px; padding: 8px 12px; margin-bottom: 8px; }
+    .satir.kayitli { background: #e7f6d9; }
+    .satir.kaydediyor { background: #ffe1dc; }
+    .metin { flex: 1; min-width: 0; }
+    .metin b { font-size: 30px; font-weight: normal; }
+    .metin small { display: block; font-size: 16px; color: #7a6a58; }
+    button { font-family: inherit; font-size: 20px; border: 3px solid #3b2a1a; border-radius: 14px;
+      padding: 8px 14px; cursor: pointer; background: #ffcf3f; color: #3b2a1a; min-width: 52px; }
+    button.kaydet { background: #ff9c8a; }
+    button.dinle { background: #9be3dc; }
+    button.sil { background: #eee; }
+    button:disabled { opacity: 0.35; cursor: default; }
+    .tik { font-size: 26px; width: 30px; text-align: center; }
+    #indir { font-size: 22px; background: #b5e48c; }
+    @media (max-width: 560px) { .metin b { font-size: 24px; } button { padding: 8px 10px; font-size: 18px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Ses Kayıtları</h1>
+    <span id="sayac"></span>
+    <button id="indir">Hepsini indir</button>
+  </header>
+  <main>
+    <div class="bilgi">
+      Her satırda <b>●</b> ile kayda başlayın, söyleyince <b>■</b> ile durdurun. <b>▶</b> ile dinleyin;
+      beğenmezseniz yeniden kaydedin. Baştaki ve sondaki sessizlik kendiliğinden kesilir, ses
+      yüksekliği eşitlenir.<br>
+      Kayıtlar yalnızca bu tarayıcıda durur, bir yere gönderilmez; sayfayı kapatıp sonra devam
+      edebilirsiniz (aynı cihaz ve tarayıcıyla). İşiniz bitince <b>Hepsini indir</b> deyin ve
+      inen zip dosyasını bana verin.<br>
+      Sessiz bir odada, mikrofona bir karış uzaktan, sakin ve neşeli bir sesle okuyun.
+    </div>
+    <div id="liste"></div>
+  </main>
+
+  <script>window.Phaser = { Scene: class {} }; // ortak.js yalnızca listeler için yükleniyor</script>
+  <script src="harfler.js"></script>
+  <script src="minioyunlar/ortak.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
+  <script>
+    // ---- Kaydedilecek sözler (oyunda sesli okunanlar) ----
+    const TR = { ç: "c", ğ: "g", ı: "i", ö: "o", ş: "s", ü: "u", â: "a", î: "i", û: "u" };
+    const kisalt = (m) => m.toLocaleLowerCase("tr-TR").replace(/[çğıöşüâîû]/g, (h) => TR[h])
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+
+    const grup1 = HARFLER.filter((h) => h.grup === 1);
+    const BOLUMLER = [
+      { baslik: "Harf sesleri", oge: grup1.map((h) => ({
+        anahtar: `harf-${kisalt(h.kucuk)}`, metin: h.kucuk,
+        not: h.unlu ? `Ünlü: uzatmadan, net (“${h.kucuk}”)`
+          : h.kisaSes ? `Ünsüz: yalnızca sesi, kısa ve net (“${h.kucuk}” – “te” değil)`
+          : `Ünsüz: yalnızca sesi, biraz uzatarak (“${h.kucuk}${h.kucuk}${h.kucuk}” – “${h.kucuk}e” değil)`,
+      })) },
+      { baslik: "Heceler", oge: heceHavuzu("a").map((h) => ({
+        anahtar: `hece-${kisalt(h.hece)}`, metin: h.hece, not: h.acik ? "Açık hece" : "Kapalı hece",
+      })) },
+      { baslik: "Kelimeler", oge: [...new Set([...grup1.map((h) => h.kelime), ...KELIMELER.map((k) => k.kelime)])]
+        .map((k) => ({ anahtar: `kelime-${kisalt(k)}`, metin: k, not: "" })) },
+      { baslik: "Oyun sözleri", oge: [
+        "Büyük bir fırtına çıktı!", "Salın kırıldı...", "Bir adaya düştün.", "Yelkenliyi tamamla, adadan kurtul!",
+        "Yelkenli hazır! Aferin!", "Haydi, yola çıkalım!", "Hoşça kal, ilk ada!", "2. ada seni bekliyor!",
+      ].map((m) => ({ anahtar: `soz-${kisalt(m)}`, metin: m, not: "" })) },
+      { baslik: "Mini oyun adları (Şans Çarkı okur)", oge: PLANLANAN_OYUNLAR
+        .map((o) => ({ anahtar: `oyun-${o.ad}`, metin: o.baslik, not: "" })) },
+    ];
+    const HEPSI = BOLUMLER.flatMap((b) => b.oge);
+
+    // ---- Tarayıcı içi depo (IndexedDB) ----
+    const DB = new Promise((tamam, hata) => {
+      const istek = indexedDB.open("harf-oyunu-kayitlar", 1);
+      istek.onupgradeneeded = () => istek.result.createObjectStore("sesler");
+      istek.onsuccess = () => tamam(istek.result);
+      istek.onerror = () => hata(istek.error);
+    });
+    const depo = async (kip, is) => {
+      const db = await DB;
+      return new Promise((tamam, hata) => {
+        const t = db.transaction("sesler", kip);
+        const r = is(t.objectStore("sesler"));
+        t.oncomplete = () => tamam(r && r.result);
+        t.onerror = () => hata(t.error);
+      });
+    };
+    const kaydiAl = (k) => depo("readonly", (s) => s.get(k));
+    const kaydiYaz = (k, blob) => depo("readwrite", (s) => s.put(blob, k));
+    const kaydiSil = (k) => depo("readwrite", (s) => s.delete(k));
+    const anahtarlar = () => depo("readonly", (s) => s.getAllKeys());
+
+    // ---- Kayıt: sessizliği kes, sesi eşitle, WAV (tek kanal, 24 kHz) yap ----
+    async function temizle(blob) {
+      const ham = await new AudioContext().decodeAudioData(await blob.arrayBuffer());
+      const veri = ham.getChannelData(0);
+      let tepe = 0;
+      for (const v of veri) tepe = Math.max(tepe, Math.abs(v));
+      const esik = Math.max(0.02, tepe * 0.08);
+      let bas = veri.findIndex((v) => Math.abs(v) > esik);
+      let son = veri.length - 1;
+      while (son > 0 && Math.abs(veri[son]) <= esik) son--;
+      if (bas < 0) { bas = 0; son = veri.length - 1; }
+      const pay = Math.round(ham.sampleRate * 0.08);
+      bas = Math.max(0, bas - pay);
+      son = Math.min(veri.length - 1, son + pay * 2);
+      const HIZ = 24000;
+      const uzunluk = Math.ceil(((son - bas) / ham.sampleRate) * HIZ);
+      const oc = new OfflineAudioContext(1, uzunluk, HIZ);
+      const parca = oc.createBuffer(1, son - bas, ham.sampleRate);
+      parca.copyToChannel(veri.slice(bas, son), 0);
+      const kaynak = oc.createBufferSource();
+      kaynak.buffer = parca;
+      const kazanc = oc.createGain();
+      kazanc.gain.value = tepe > 0 ? 0.9 / tepe : 1;
+      kaynak.connect(kazanc).connect(oc.destination);
+      kaynak.start();
+      const sonuc = (await oc.startRendering()).getChannelData(0);
+      // WAV
+      const tampon = new ArrayBuffer(44 + sonuc.length * 2);
+      const g = new DataView(tampon);
+      const yazi = (o, m) => [...m].forEach((c, i) => g.setUint8(o + i, c.charCodeAt(0)));
+      yazi(0, "RIFF"); g.setUint32(4, 36 + sonuc.length * 2, true); yazi(8, "WAVE");
+      yazi(12, "fmt "); g.setUint32(16, 16, true); g.setUint16(20, 1, true); g.setUint16(22, 1, true);
+      g.setUint32(24, HIZ, true); g.setUint32(28, HIZ * 2, true); g.setUint16(32, 2, true); g.setUint16(34, 16, true);
+      yazi(36, "data"); g.setUint32(40, sonuc.length * 2, true);
+      sonuc.forEach((v, i) => g.setInt16(44 + i * 2, Math.max(-1, Math.min(1, v)) * 0x7fff, true));
+      return new Blob([tampon], { type: "audio/wav" });
+    }
+
+    let akis = null;
+    let kaydedici = null;
+    let kaydedilen = null; // { oge, satir }
+    async function mikrofon() {
+      if (!akis) akis = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+      return akis;
+    }
+
+    async function kaydaBasla(oge, satir) {
+      if (kaydedilen) await kaydiBitir();
+      const parcalar = [];
+      kaydedici = new MediaRecorder(await mikrofon());
+      kaydedici.ondataavailable = (e) => parcalar.push(e.data);
+      kaydedici.durdu = new Promise((tamam) => { kaydedici.onstop = () => tamam(new Blob(parcalar)); });
+      kaydedici.start();
+      kaydedilen = { oge, satir };
+      satir.classList.add("kaydediyor");
+      satir.querySelector(".kaydet").textContent = "■";
+    }
+
+    async function kaydiBitir() {
+      const { oge, satir } = kaydedilen;
+      kaydedilen = null;
+      kaydedici.stop();
+      const ham = await kaydedici.durdu;
+      satir.classList.remove("kaydediyor");
+      satir.querySelector(".kaydet").textContent = "●";
+      await kaydiYaz(oge.anahtar, await temizle(ham));
+      await guncelle();
+      dinle(oge.anahtar);
+    }
+
+    let calan = null;
+    async function dinle(anahtar) {
+      const blob = await kaydiAl(anahtar);
+      if (!blob) return;
+      if (calan) calan.pause();
+      calan = new Audio(URL.createObjectURL(blob));
+      calan.play();
+    }
+
+    // ---- Liste ----
+    const satirlar = {};
+    const liste = document.getElementById("liste");
+    for (const b of BOLUMLER) {
+      const h = document.createElement("h2");
+      h.textContent = b.baslik;
+      liste.append(h);
+      for (const oge of b.oge) {
+        const satir = document.createElement("div");
+        satir.className = "satir";
+        satir.innerHTML = `<span class="tik"></span><div class="metin"><b></b><small></small></div>
+          <button class="kaydet" title="Kaydet">●</button><button class="dinle" title="Dinle">▶</button>
+          <button class="sil" title="Sil">✕</button>`;
+        satir.querySelector("b").textContent = oge.metin;
+        satir.querySelector("small").textContent = oge.not;
+        satir.querySelector(".kaydet").onclick = () =>
+          (kaydedilen && kaydedilen.oge === oge ? kaydiBitir() : kaydaBasla(oge, satir)).catch((e) => alert("Mikrofon açılamadı: " + e.message));
+        satir.querySelector(".dinle").onclick = () => dinle(oge.anahtar);
+        satir.querySelector(".sil").onclick = async () => {
+          if (confirm(`"${oge.metin}" kaydı silinsin mi?`)) { await kaydiSil(oge.anahtar); guncelle(); }
+        };
+        satirlar[oge.anahtar] = satir;
+        liste.append(satir);
+      }
+    }
+
+    async function guncelle() {
+      const var_ = new Set(await anahtarlar());
+      for (const [k, satir] of Object.entries(satirlar)) {
+        const kayitli = var_.has(k);
+        satir.classList.toggle("kayitli", kayitli);
+        satir.querySelector(".tik").textContent = kayitli ? "✓" : "";
+        satir.querySelector(".dinle").disabled = !kayitli;
+        satir.querySelector(".sil").disabled = !kayitli;
+      }
+      const sayi = HEPSI.filter((o) => var_.has(o.anahtar)).length;
+      document.getElementById("sayac").textContent = `${sayi} / ${HEPSI.length} kaydedildi`;
+    }
+
+    document.getElementById("indir").onclick = async () => {
+      const zip = new JSZip();
+      const dizin = {};
+      for (const oge of HEPSI) {
+        const blob = await kaydiAl(oge.anahtar);
+        if (!blob) continue;
+        zip.file(`sesler/${oge.anahtar}.wav`, blob);
+        dizin[oge.anahtar] = oge.metin;
+      }
+      if (!Object.keys(dizin).length) { alert("Henüz kayıt yok."); return; }
+      zip.file("sesler/liste.json", JSON.stringify(dizin, null, 2));
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(await zip.generateAsync({ type: "blob" }));
+      a.download = "harf-oyunu-sesler.zip";
+      a.click();
+    };
+
+    guncelle();
+  </script>
+</body>
+</html>

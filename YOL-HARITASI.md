@@ -103,6 +103,10 @@ Yapılacaklar (bu sırayla, her biri için önce görsel taslak ve onay):
 5. Final: altı parça takılınca kutlama ve "Yola çık" düğmesi (öğretmenin seçimi B); basınca
    çocuk biner, yelkenli açılır, gün batımı, adalar haritası "2. ada yakında", "Adaya dön"
    (Sürüm 89): TAMAM. 1. adanın hikâyesi baştan sona oynanabilir.
+Seslendirme (öğretmen robotik buldu): 1) cihazdaki en doğal Türkçe ses seçiliyor (Sürüm 92):
+TAMAM. 2) Yapay zekâ seslendirme siteleri öğretmene önerildi, inceleyecek. 3) Öğretmenin kendi
+sesiyle kayıt sayfası kayit.html (Sürüm 93): TAMAM; öğretmen kaydedip zip'i verince sesler
+oyuna eklenecek (ünsüzler de saf sesle okunabilecek).
 Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı
 fikirleri var).
 

@@ -232,6 +232,11 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   Tını tanıma (LPC ile F1/F2, `UNLU_KURALLARI`) kodda duruyor ama gerçek seste "a"yı
   reddettiği için oyunda kullanılmıyor; yalnızca mikrofon.html'de ölçüm gösteriyor.
 - `mikrofon.html` – Öğretmen için mikrofon testi sayfası (Chrome'un ne duyduğunu gösterir).
+- `kayit.html` – Öğretmenin kendi sesiyle oyunun sözlerini kaydettiği sayfa (harf sesleri,
+  heceler, kelimeler, oyun sözleri, mini oyun adları; listeler harfler.js ve ortak.js'den,
+  oyun sözleri sayfada yazılı: oyuna yeni söz eklenince oraya da eklenmeli). Kayıtlar yalnızca
+  o tarayıcıda (IndexedDB) durur; sessizlik kesilir, ses eşitlenir, WAV (24 kHz). "Hepsini
+  indir" zip verir (sesler/<anahtar>.wav + liste.json); öğretmen verince sesler oyuna eklenecek.
 - `sesler.js` – Oyun sesleri. Ses dosyası yok; sesler tarayıcıda (Web Audio) üretilir.
   Sesli okuma `Sesler.soyle`: cihazdaki en doğal Türkçe ses seçilir (`turkceSes`: önce
   "Natural/Online" sesler (Edge), sonra Google, sonra herhangi bir Türkçe ses; hız 0.9).
