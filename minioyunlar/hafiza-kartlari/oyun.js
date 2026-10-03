@@ -53,7 +53,11 @@ class HafizaKartlariSahnesi extends MiniOyunSahnesi {
     this.input.on("gameobjectdown", (p, nesne) => {
       if (nesne.kart) this.kartaDokun(nesne);
     });
-    this.time.delayedCall(400, () => this.harfiTanit(() => { this.kilitli = false; }));
+    this.time.delayedCall(400, () => this.harfiTanit(() => {
+      this.kilitli = false;
+      // Gösteren el iki karta sırayla dokunur (bir kez); eşleşeni göstermez
+      this.elGoster([this.kartlar[0], this.kartlar[1]]);
+    }));
   }
 
   // Aynı harf çiftleri: oyunun harfi birkaç çift, kalanı öbür öğrenilmiş harfler
@@ -174,7 +178,7 @@ class HafizaKartlariSahnesi extends MiniOyunSahnesi {
         Sesler.pling();
         const resimli = [k1, k2].find((k) => k.kart.kelime);
         if (resimli) this.time.delayedCall(300, () => Sesler.soyle(resimli.kart.kelime));
-        this.ilerlemeArtir();
+        this.ilerlemeArtir((k1.x + k2.x) / 2, (k1.y + k2.y) / 2);
       });
     } else {
       // Eşleşmedi: kartlar sallanır ve kapanır; her 2 yanlışta bir can gider

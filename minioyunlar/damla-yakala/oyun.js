@@ -58,6 +58,7 @@ class DamlaYakalaSahnesi extends MiniOyunSahnesi {
 
     this.damlalar = [];
     this.sonXler = [];
+    this.uretilen = 0;
     // Önce harf tanıtılır (ünsüzde kapalı hece kurulur), sonra damlalar düşmeye başlar
     this.uretici = null;
     this.time.delayedCall(400, () => this.harfiTanit(() => {
@@ -75,7 +76,9 @@ class DamlaYakalaSahnesi extends MiniOyunSahnesi {
   damlaUret() {
     if (this.bitti) return;
     let harf;
-    if (Math.random() < this.ayar.dogruOrani || !this.yanlislar.length) {
+    // Kolay başlangıç: ilk iki damla hep doğru harf
+    this.uretilen++;
+    if (this.uretilen <= 2 || Math.random() < this.ayar.dogruOrani || !this.yanlislar.length) {
       harf = this.harf;
     } else if (this.benzerler.length && Math.random() < this.ayar.benzerOrani) {
       harf = Phaser.Utils.Array.GetRandom(this.benzerler);
@@ -98,11 +101,12 @@ class DamlaYakalaSahnesi extends MiniOyunSahnesi {
     });
     boyaliOrtala(titret(yazi, 1.2));
     kap.add([resim, yazi]);
-    kap.setSize(76, 96).setInteractive({ useHandCursor: true });
+    kap.setSize(110, 130).setInteractive({ useHandCursor: true }); // dokunma alanı damladan geniş
     kap.damla = { harf, dogru: harf === this.harf };
     kap.setScale(0);
     this.tweens.add({ targets: kap, scale: 1, duration: 250, ease: "Back.Out" });
     this.damlalar.push(kap);
+    if (kap.damla.dogru) this.elGoster(kap); // ilk turda gösteren el (bir kez)
   }
 
   damlayaDokun(kap) {
@@ -115,7 +119,7 @@ class DamlaYakalaSahnesi extends MiniOyunSahnesi {
         tint: [0x7cc4ef, 0xc9ecff, 0xffffff], emitting: false,
       }).setDepth(20).explode(14);
       this.damlayiKaldir(kap);
-      this.ilerlemeArtir();
+      this.ilerlemeArtir(kap.x, kap.y);
     } else {
       // Yanlış harf: damla sallanır, kızarır ve kaybolur
       kap.list[0].setTint(0xff9c8a);

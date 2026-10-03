@@ -134,6 +134,8 @@ class HeceyiBulSahnesi extends MiniOyunSahnesi {
       this.tweens.add({ targets: this.hoparlor, scale: 1.2, duration: 160, yoyo: true });
       Sesler.soyle(hedef);
       this.kilitli = false;
+      // İlk turda gösteren el doğru balığı izler (bir kez)
+      this.elGoster(this.baliklar.find((b) => b.balik.hece === hedef));
     });
   }
 
@@ -173,7 +175,7 @@ class HeceyiBulSahnesi extends MiniOyunSahnesi {
       this.kilitli = true;
       kap.balik.durdu = true;
       Sesler.pling();
-      this.ilerlemeArtir();
+      this.ilerlemeArtir(kap.x, kap.y);
       // Doğru balık sudan zıplar, dönerek geri dalar; öbürleri kaybolur
       kap.setDepth(20);
       this.tweens.add({ targets: kap, y: kap.y - 150, duration: 450, ease: "Quad.Out", yoyo: true });
@@ -199,6 +201,7 @@ class HeceyiBulSahnesi extends MiniOyunSahnesi {
         onComplete: () => kap.setAngle(0) });
       this.kalpEksilt();
       this.time.delayedCall(700, () => { if (!this.bitti) Sesler.soyle(this.hece); });
+      this.ipucuGoster(this.baliklar.find((b) => b.balik.hece === this.hece));
     }
   }
 

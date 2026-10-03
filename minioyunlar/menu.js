@@ -3,6 +3,8 @@
 // kartına dokununca o oyun seçilen harfle açılır; hazır olmayanlarda "Yakında" yazar.
 // Mini oyunları ayrı ayrı geliştirip denemek için.
 
+const MENU_SAYFA_KART = 8;
+
 class MiniOyunlarSahnesi extends Phaser.Scene {
   constructor() {
     super("MiniOyunlarSahnesi");
@@ -39,7 +41,7 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
         stroke: "#3b2a1a", strokeThickness: 8, padding: { x: 4, y: 4 },
       }).setDepth(1);
       boyaliOrtala(titret(yazi, 1.5));
-      const alan = this.add.circle(x, y, 38).setInteractive({ useHandCursor: true });
+      const alan = this.add.circle(x, y, 48).setInteractive({ useHandCursor: true });
       alan.on("pointerdown", () => {
         Sesler.ac();
         Sesler.nota(660, 0, 0.08, 0.12);
@@ -57,7 +59,7 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
       this.add.text(x, y, String(seviye), {
         fontFamily: "Andika", fontSize: "34px", color: "#2b2b2b",
       }).setOrigin(0.5).setDepth(1);
-      const alan = this.add.circle(x, y, 28).setInteractive({ useHandCursor: true });
+      const alan = this.add.circle(x, y, 40).setInteractive({ useHandCursor: true });
       alan.on("pointerdown", () => {
         Sesler.ac();
         Sesler.nota(660, 0, 0.08, 0.12);
@@ -68,8 +70,50 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
     });
     this.harfleriCiz();
 
-    // Oyun kartları: satırda 4 kart
-    PLANLANAN_OYUNLAR.forEach((oyun, i) => {
+    // Oyun kartları: sayfada 8 kart (4'erli iki sıra). Sayfalar oklarla ya da parmağı
+    // sağa/sola kaydırarak değişir. Hazır oyunlar önce, "Yakında" olanlar sonra gelir.
+    this.sayfaSayisi = Math.ceil(PLANLANAN_OYUNLAR.length / MENU_SAYFA_KART);
+    if (this.sayfa === undefined || this.sayfa >= this.sayfaSayisi) this.sayfa = 0;
+    this.kartlar = this.add.container(0, 0);
+    this.solOk = this.okYap(52, -1);
+    this.sagOk = this.okYap(1228, 1);
+    this.sayfaYazisi = this.add.text(640, 690, "", {
+      fontFamily: "Andika", fontSize: "22px", color: "#6b6b6b",
+    }).setOrigin(0.5);
+    this.input.on("pointerup", (p) => {
+      const dx = p.upX - p.downX;
+      if (Math.abs(dx) > 90 && Math.abs(p.upY - p.downY) < 80 && p.downY > 290) this.sayfaDegistir(dx < 0 ? 1 : -1);
+    });
+    this.sayfayiKur();
+  }
+
+  // Sol/sağ ok düğmesi (büyük dokunma alanı)
+  okYap(x, yon) {
+    const g = this.add.graphics();
+    g.fillStyle(0xffe680, 1);
+    g.fillCircle(0, 0, 32);
+    g.lineStyle(4, 0x2b2b2b, 1);
+    g.strokeCircle(0, 0, 32);
+    g.fillStyle(0x2b2b2b, 1);
+    g.fillTriangle(yon * 14, 0, -yon * 9, -14, -yon * 9, 14);
+    const ok = this.add.container(x, 475, [g]).setSize(96, 150).setInteractive({ useHandCursor: true });
+    ok.on("pointerdown", () => this.sayfaDegistir(yon));
+    return ok;
+  }
+
+  sayfaDegistir(yon) {
+    const yeni = Phaser.Math.Clamp(this.sayfa + yon, 0, this.sayfaSayisi - 1);
+    if (yeni === this.sayfa) return;
+    Sesler.ac();
+    Sesler.nota(yon > 0 ? 700 : 560, 0, 0.08, 0.1);
+    this.sayfa = yeni;
+    this.sayfayiKur(yon);
+  }
+
+  sayfayiKur(yon = 0) {
+    this.kartlar.removeAll(true);
+    const ilk = this.sayfa * MENU_SAYFA_KART;
+    PLANLANAN_OYUNLAR.slice(ilk, ilk + MENU_SAYFA_KART).forEach((oyun, i) => {
       const x = 640 + ((i % 4) - 1.5) * 270;
       const y = 380 + Math.floor(i / 4) * 190;
       const hazir = Boolean(MINI_OYUNLAR[oyun.ad]);
@@ -86,7 +130,16 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
         }).setOrigin(0.5));
         kart.setAlpha(0.6);
       }
+      this.kartlar.add(kart);
     });
+    // Sayfa değişince kartlar kayarak gelir
+    if (yon) {
+      this.kartlar.setX(yon * 160).setAlpha(0);
+      this.tweens.add({ targets: this.kartlar, x: 0, alpha: 1, duration: 220, ease: "Cubic.Out" });
+    }
+    this.solOk.setAlpha(this.sayfa > 0 ? 1 : 0.25);
+    this.sagOk.setAlpha(this.sayfa < this.sayfaSayisi - 1 ? 1 : 0.25);
+    this.sayfaYazisi.setText(`${this.sayfa + 1} / ${this.sayfaSayisi}`);
   }
 
   // Seçilen harfin dairesi sarı, öbürleri soluk mavi

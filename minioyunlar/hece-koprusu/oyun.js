@@ -153,7 +153,11 @@ class HeceKoprusuSahnesi extends MiniOyunSahnesi {
     this.time.delayedCall(450, () => {
       if (this.bitti) return;
       this.tweens.add({ targets: this.hoparlor, scale: 1.2, duration: 160, yoyo: true });
-      Sesler.soyle(hece, () => { this.kilitli = false; });
+      Sesler.soyle(hece, () => {
+        this.kilitli = false;
+        // Gösteren el hecenin ilk taşını gösterir (bir kez)
+        this.elGoster(this.taslar.find((t) => t.tas.harf === hece[0]));
+      });
     });
   }
 
@@ -223,7 +227,7 @@ class HeceKoprusuSahnesi extends MiniOyunSahnesi {
         this.tweens.add({ targets: k, scale: 1.12, duration: 160, yoyo: true });
       }
       Sesler.pling();
-      this.ilerlemeArtir();
+      this.ilerlemeArtir(640, KOPRU_YERLERI[0].y);
       Sesler.soyle(this.hece);
       this.karsiyaGec(() => this.yeniTur());
     } else {
@@ -241,7 +245,11 @@ class HeceKoprusuSahnesi extends MiniOyunSahnesi {
       this.time.delayedCall(800, () => {
         this.yerler = [null, null];
         if (this.bitti) return;
-        Sesler.soyle(this.hece, () => { this.kilitli = false; });
+        Sesler.soyle(this.hece, () => {
+          this.kilitli = false;
+          // Nazik ipucu: hecenin ilk taşı hafifçe büyüyüp küçülür
+          this.ipucuGoster(this.taslar.find((t) => t.tas.harf === this.hece[0]));
+        });
       });
     }
   }
