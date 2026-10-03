@@ -29,6 +29,7 @@ class SekerPatlatmaSahnesi extends MiniOyunSahnesi {
 
   create() {
     this.ortakKur();
+    this.heceOyunu = true; // ünlü tek başına okunmaz, yalnızca hece duyulur
     this.ayar = SEKER_SEVIYELERI[this.seviye] || SEKER_SEVIYELERI[1];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.tur);
@@ -226,7 +227,6 @@ class SekerPatlatmaSahnesi extends MiniOyunSahnesi {
     this.zincir.push(s);
     Sesler.nota(this.zincir.length === 1 ? 620 : 780, 0, 0.06, 0.1);
     this.tweens.add({ targets: s, scale: 1.15, duration: 120 });
-    harfiSoyle(s.seker.harf);
     this.zincirCiz();
   }
 

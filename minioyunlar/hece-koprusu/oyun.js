@@ -28,6 +28,7 @@ class HeceKoprusuSahnesi extends MiniOyunSahnesi {
 
   create() {
     this.ortakKur();
+    this.heceOyunu = true; // ünlü tek başına okunmaz, yalnızca hece duyulur
     this.ayar = HECE_KOPRUSU_SEVIYELERI[this.seviye] || HECE_KOPRUSU_SEVIYELERI[1];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.tur);
@@ -211,7 +212,6 @@ class HeceKoprusuSahnesi extends MiniOyunSahnesi {
     Sesler.nota(620, 0, 0.06, 0.1);
     const yer = KOPRU_YERLERI[bos];
     this.tweens.add({ targets: kap, x: yer.x, y: yer.y, duration: 350, ease: "Back.Out" });
-    harfiSoyle(tas.harf);
     if (this.yerler.every(Boolean)) {
       this.kilitli = true;
       this.time.delayedCall(550, () => this.kontrolEt());

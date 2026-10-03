@@ -28,6 +28,7 @@ class HeceyiBulSahnesi extends MiniOyunSahnesi {
 
   create() {
     this.ortakKur();
+    this.heceOyunu = true; // ünlü tek başına okunmaz, yalnızca hece duyulur
     this.ayar = HECEYI_BUL_SEVIYELERI[this.seviye] || HECEYI_BUL_SEVIYELERI[1];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.tur);

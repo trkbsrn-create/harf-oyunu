@@ -38,7 +38,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   çubuğu, bitiş penceresi ("Aferin!" / "Bir daha dene", Tekrar / Geri). Sesli okuma
   `Sesler.soyle`. Ünlü kendisi okunur; ünsüz oyun içinde hiç okunmaz (öğretmenin kararı:
   tarayıcı "ne", "te" der, hece de resimle karışıyor), yalnızca harf görünür. Oyun başında `harfiTanit`: ünlü söylenir;
-  ünsüzde oyun hemen başlar (yardım uyarısı ve hece tanıtımı öğretmenin kararıyla kaldırıldı). Benzer harfler `BENZER_HARFLER` (yalnızca öğrenilmiş olanlar kullanılır).
+  ünsüzde oyun hemen başlar (yardım uyarısı ve hece tanıtımı öğretmenin kararıyla kaldırıldı).
+  Hece oyunlarında (`this.heceOyunu = true`; Kayak'ta 2-3. seviye) ünlü de tek başına okunmaz,
+  taşa/harfe dokununca harf okunmaz; yalnızca hece ya da kelime duyulur (öğretmenin kararı). Benzer harfler `BENZER_HARFLER` (yalnızca öğrenilmiş olanlar kullanılır).
   Mini oyun betikleri index.html'de oyun.js'den önce yüklenir.
   Yapılanlar: damla-yakala (Damla Yakalama: düşen harfli damlalardan doğrulara dokun;
   seviyeyle hız, benzer harf ve hedef sayısı artar); harf-balonlari (Harf Balonları: tur

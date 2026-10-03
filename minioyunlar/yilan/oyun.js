@@ -26,6 +26,7 @@ class YilanSahnesi extends MiniOyunSahnesi {
 
   create() {
     this.ortakKur();
+    this.heceOyunu = true; // ünlü tek başına okunmaz, yalnızca hece duyulur
     this.ayar = YILAN_SEVIYELERI[this.seviye] || YILAN_SEVIYELERI[1];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.tur);
@@ -161,7 +162,6 @@ class YilanSahnesi extends MiniOyunSahnesi {
       bas.harf = harf;
       this.yenen++;
       Sesler.nota(600 + this.yenen * 150, 0, 0.12, 0.12, "triangle");
-      harfiSoyle(harf);
       if (this.yenen >= this.hece.length) {
         this.oynuyor = false;
         this.time.delayedCall(300, () => {

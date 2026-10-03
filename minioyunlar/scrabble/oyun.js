@@ -31,6 +31,7 @@ class ScrabbleSahnesi extends MiniOyunSahnesi {
 
   create() {
     this.ortakKur();
+    this.heceOyunu = true; // ünlü tek başına okunmaz, yalnızca hece duyulur
     this.ayar = SCRABBLE_SEVIYELERI[this.seviye] || SCRABBLE_SEVIYELERI[1];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.tur);
@@ -176,7 +177,6 @@ class ScrabbleSahnesi extends MiniOyunSahnesi {
     this.yerler[bos].tas = kap;
     t.yer = bos;
     Sesler.nota(560 + bos * 60, 0, 0.06, 0.1);
-    harfiSoyle(t.harf);
     this.tweens.add({ targets: kap, x: this.yerler[bos].x, y: YER_Y, duration: 260, ease: "Back.Out" });
     if (this.yerler.every((y) => y.tas)) {
       this.kilitli = true;

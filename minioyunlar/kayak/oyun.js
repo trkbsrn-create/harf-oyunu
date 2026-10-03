@@ -30,6 +30,7 @@ class KayakSahnesi extends MiniOyunSahnesi {
 
   create() {
     this.ortakKur();
+    this.heceOyunu = this.seviye >= 2; // ünlü tek başına okunmaz, yalnızca hece duyulur
     this.ayar = KAYAK_SEVIYELERI[this.seviye] || KAYAK_SEVIYELERI[1];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.hedef);
