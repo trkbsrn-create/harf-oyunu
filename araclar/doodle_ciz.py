@@ -326,6 +326,35 @@ yaz("yelkenli-kizak.svg", 680, 440, "Yelkenli kızağı", TAHTA + tarama("koyuTa
     <rect x="390" y="354" width="18" height="30" rx="3" fill="url(#koyuTahta)" stroke-width="3"/>
 '''), 71)
 
+# ---- Açılış hikâyesi (HikayeSahnesi): fırtınalı deniz, kumsal, sal, tahta, şimşek ----
+def dalgalar(y0, adim, sayi, renk, kalinlik=5):
+    return "".join(f'  <path d="M-20 {y0 + i * adim} ' + " ".join("q40 -22 80 0 q40 22 80 0" for _ in range(9))
+                   + f'" fill="none" stroke="{renk}" stroke-width="{kalinlik}" stroke-linecap="round"/>\n'
+                   for i in range(sayi))
+yaz("hikaye-firtina.svg", 1280, 720, "Açılış hikâyesi: fırtınalı gökyüzü ve deniz",
+    tarama("gok", "#9aa7b4", "#8796a5", 45, 10, 3) + tarama("koyuDeniz", "#7fa9c4", "#5f8aa6", 45, 10, 3),
+    '  <rect width="1280" height="720" fill="url(#gok)"/>\n  <rect y="400" width="1280" height="320" fill="url(#koyuDeniz)"/>\n'
+    + dalgalar(405, 70, 5, "#ffffff"), 73)
+yaz("hikaye-kumsal.svg", 1280, 720, "Açılış hikâyesi: kumsal (üstte çimen, altta deniz)",
+    tarama("cimen", "#d8f0c0", "#bfe39f", 35, 8, 3) + tarama("kum", "#fbe7b0", "#f3d68a", 35, 8, 3) + SU,
+    '  <rect width="1280" height="330" fill="url(#cimen)"/>\n'
+    '  <path d="M0 250 q320 50 640 20 q320 -30 640 10 v300 h-1280z" fill="url(#kum)"/>\n'
+    '  <rect y="560" width="1280" height="160" fill="url(#su)"/>\n'
+    + kalem('    <path d="M0 250 q320 50 640 20 q320 -30 640 10" fill="none" stroke-width="3"/>\n'
+            '    <path d="M0 560 h1280" fill="none" stroke-width="3"/>\n', 3)
+    + dalgalar(566, 60, 3, "#ffffff", 4), 74)
+yaz("hikaye-sal.svg", 300, 230, "Açılış hikâyesi: küçük sal (tahta, direk, yelken); alt ortası (150, 215)",
+    TAHTA, kalem('''    <path d="M150 190 v-170" fill="none" stroke="#8e6340" stroke-width="9"/>
+    <path d="M150 190 v-170" fill="none" stroke-width="2"/>
+    <path d="M156 28 q70 50 80 130 h-80z" fill="#ffffff"/>
+    <rect x="20" y="188" width="260" height="30" rx="6" fill="url(#tahta)"/>
+    <path d="M85 190 v28 M150 190 v28 M215 190 v28" fill="none" stroke-width="2.5"/>
+'''), 75)
+yaz("hikaye-tahta.svg", 160, 44, "Açılış hikâyesi: kırık sal tahtası", TAHTA,
+    kalem('    <path d="M8 10 h120 l12 6 l-6 6 l14 4 l-8 10 h-132z" fill="url(#tahta)"/>\n'), 76)
+yaz("hikaye-simsek.svg", 120, 200, "Açılış hikâyesi: şimşek", "",
+    kalem('    <path d="M70 6 l-50 100 h40 l-36 88 l84 -120 h-44 l38 -68z" fill="#ffe680"/>\n', 4), 77)
+
 # Harf varili: 120x150. Gövdenin üst ortası (52, 14); sağda musluk. Harf oyunda etikete yazılır.
 yaz("varil.svg", 120, 150, "Harf varili (musluklu)",
     tarama("varilTahta", "#d29a5c", "#b07a42", 80, 6, 2.5) + SU,

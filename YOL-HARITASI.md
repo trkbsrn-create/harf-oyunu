@@ -98,7 +98,8 @@ Yapılacaklar (bu sırayla, her biri için önce görsel taslak ve onay):
    (Sürüm 86): TAMAM.
 3. Parçayı tekneye takma: çantadan sürükle, yeri sarı parlar, yerine oturur (öğretmenin seçimi
    A); sağ üstte yelkenli kartı ("2 / 6"), dokununca karakter yelkenliye yürür (Sürüm 87): TAMAM.
-4. Açılış hikâyesi (okuma gerektirmeyen kısa sahne: fırtına, kırık sal, kumsalda uyanma).
+4. Açılış hikâyesi: kendiliğinden akan kısa canlı sahne, sesli sözler, "Geç" düğmesi (öğretmenin
+   seçimi A): fırtına, sal kırılır, kumsalda uyanma, silik yelkenli (Sürüm 88): TAMAM.
 5. Final: yelkenli tamamlanınca kutlama, binip açılma, "2. ada yakında".
 Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı
 fikirleri var).
