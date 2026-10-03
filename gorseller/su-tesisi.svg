@@ -1,5 +1,5 @@
-<svg xmlns="http://www.w3.org/2000/svg" width="240" height="860" viewBox="0 0 240 860">
-  <!-- Su arıtma tesisi: uzun iskele, ayaklı güverte, ev ve su deposu (doodle tarzı, kendi çizimimiz) -->
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="924" viewBox="0 0 240 924">
+  <!-- Su arıtma tesisi: uzun iskele, ayaklı güverte, ev, su deposu ve varil borusu (doodle tarzı, kendi çizimimiz) -->
   <defs>
     <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
       <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="64" result="g"/>
@@ -87,9 +87,9 @@
   </g>
   <g transform="translate(0 560)">
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M26 236 v54 M90 236 v54 M150 236 v54 M214 236 v54" fill="none" stroke="#8e6340" stroke-width="7"/>
-    <path d="M6 290 q20 -8 40 0 q20 8 40 0 q20 -8 40 0 q20 8 40 0 q20 -8 40 0 q20 8 30 0" fill="none" stroke="#7cc4ef" stroke-width="3"/>
-    <rect x="10" y="84" width="220" height="152" rx="6" fill="url(#tahta)"/>
+    <path d="M26 300 v54 M90 300 v54 M150 300 v54 M214 300 v54" fill="none" stroke="#8e6340" stroke-width="7"/>
+    <path d="M6 354 q20 -8 40 0 q20 8 40 0 q20 -8 40 0 q20 8 40 0 q20 -8 40 0 q20 8 30 0" fill="none" stroke="#7cc4ef" stroke-width="3"/>
+    <rect x="10" y="84" width="220" height="216" rx="6" fill="url(#tahta)"/>
     <path d="M12 100 h216" fill="none" stroke-width="2" opacity="0.7"/>
     <path d="M12 116 h216" fill="none" stroke-width="2" opacity="0.7"/>
     <path d="M12 132 h216" fill="none" stroke-width="2" opacity="0.7"/>
@@ -99,14 +99,26 @@
     <path d="M12 196 h216" fill="none" stroke-width="2" opacity="0.7"/>
     <path d="M12 212 h216" fill="none" stroke-width="2" opacity="0.7"/>
     <path d="M12 228 h216" fill="none" stroke-width="2" opacity="0.7"/>
-    <path d="M226 160 q14 0 12 30 v100" fill="none" stroke="#8a8a8a" stroke-width="9"/>
-    <path d="M226 160 q14 0 12 30 v100" fill="none" stroke-width="2"/>
+    <path d="M12 244 h216" fill="none" stroke-width="2" opacity="0.7"/>
+    <path d="M12 260 h216" fill="none" stroke-width="2" opacity="0.7"/>
+    <path d="M12 276 h216" fill="none" stroke-width="2" opacity="0.7"/>
+    <path d="M12 292 h216" fill="none" stroke-width="2" opacity="0.7"/>
+    <path d="M226 160 q14 0 12 30 v164" fill="none" stroke="#8a8a8a" stroke-width="9"/>
+    <path d="M226 160 q14 0 12 30 v164" fill="none" stroke-width="2"/>
     <rect x="24" y="130" width="122" height="96" fill="url(#duvar)"/>
     <path d="M14 134 l30 -38 h82 l30 38z" fill="url(#kiremit)"/>
     <rect x="72" y="172" width="30" height="54" rx="4" fill="#9be3dc"/>
     <circle cx="96" cy="200" r="2.5" fill="#2b2b2b"/>
     <circle cx="46" cy="166" r="12" fill="#c9ecff"/>
     <path d="M46 154 v24 M34 166 h24" fill="none" stroke-width="2.5"/>
+    <path d="M191 222 v30 h-163" fill="none" stroke="#8a8a8a" stroke-width="8"/>
+    <path d="M36 252 v10" fill="none" stroke="#8a8a8a" stroke-width="6"/>
+    <path d="M70 252 v10" fill="none" stroke="#8a8a8a" stroke-width="6"/>
+    <path d="M104 252 v10" fill="none" stroke="#8a8a8a" stroke-width="6"/>
+    <path d="M138 252 v10" fill="none" stroke="#8a8a8a" stroke-width="6"/>
+    <path d="M172 252 v10" fill="none" stroke="#8a8a8a" stroke-width="6"/>
+    <path d="M206 252 v10" fill="none" stroke="#8a8a8a" stroke-width="6"/>
+    <path d="M191 222 v30 h-163" fill="none" stroke-width="2"/>
     <path d="M160 120 v100 q31 14 62 0 v-100z" fill="url(#su)"/>
     <ellipse cx="191" cy="120" rx="31" ry="10" fill="#e6f6ff"/>
     <path d="M191 146 q-14 20 -14 30 q0 14 14 14 q14 0 14 -14 q0 -10 -14 -30z" fill="#ffffff" stroke-width="3"/>

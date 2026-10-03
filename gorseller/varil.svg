@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="150" viewBox="0 0 120 150">
+  <!-- Harf varili (musluklu) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="69" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="varilTahta" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(80)">
+      <rect width="6" height="6" fill="#d29a5c"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#b07a42" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="su" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9ecff"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#7cc4ef" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="54" cy="142" rx="46" ry="6" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 14 q-14 63 0 126 h76 q14 -63 0 -126z" fill="url(#varilTahta)"/>
+    <path d="M30 14 q-8 63 0 126 M74 14 q8 63 0 126" fill="none" stroke="#9b6a38" stroke-width="2.5"/>
+    <path d="M8 38 q44 9 88 0 M8 116 q44 9 88 0" fill="none" stroke="#8a8a8a" stroke-width="8"/>
+    <path d="M8 38 q44 9 88 0 M8 116 q44 9 88 0" fill="none" stroke-width="2"/>
+    <ellipse cx="52" cy="14" rx="38" ry="10" fill="#c9ecff"/>
+    <ellipse cx="52" cy="15" rx="28" ry="6" fill="url(#su)" stroke="none"/>
+    <rect x="25" y="50" width="54" height="56" rx="8" fill="#fbf4e2" stroke-width="3"/>
+    <path d="M92 96 h16 v10" fill="none" stroke="#8a8a8a" stroke-width="9"/>
+    <path d="M92 96 h16 v10" fill="none" stroke-width="2"/>
+    <path d="M100 86 h16" fill="none" stroke="#ff8a7a" stroke-width="7"/>
+  </g>
+</svg>

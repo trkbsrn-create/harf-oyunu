@@ -162,8 +162,11 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 - Su arıtma tesisi: alt kıyıda, başlangıcın güneyinde (`tesisKur`, su-tesisi.svg); kıyıdan
   uzun bir iskeleyle (`ISKELE_EK`, doodle_ciz.py'de de aynı) ulaşılır, karakter iskelede
   yürüyebilir. Tesise dokununca karakter iskelenin ucuna yürür, panel açılır
-  (tesis-pencere.svg). Her harf düğmesi o harf için sihirli şişeye bir damla verir (harf
-  başına en çok 3, `Canta.damlalar`). Şişe ilk damlayla çantaya gelir. Kaydedilmez.
+  (tesis-pencere.svg: solda su tankı, üstte boru). Her harfin bir varili var (varil.svg,
+  musluklu): varil, o harfin tohumu tarlaya ekilince belirir (`varilGetir`); güvertede küçük
+  varil (su-tesisi.svg'deki boru ağızlarının altında, `VARIL_YERI`), panelde borunun altında
+  büyük varil (`PANEL_VARIL_YERI`; yeni varil panel açılınca borudan iner). Harf düğmesi yok;
+  varile dokununca şişeye o harf için bir damla gider (harf başına en çok 3, `Canta.damlalar`). Şişe ilk damlayla çantaya gelir. Kaydedilmez.
   Çantada şişeye dokununca "İncele" düğmesi çıkar; basınca şişenin içi açılır
   (sise-pencere.svg): her harfin bölmesinde toplanan damlalar görünür (`siseKur`).
   Şişe sürüklenip tarladaki tohuma bırakılırsa (o harfin damlası varsa) şişe eğilir, bir
