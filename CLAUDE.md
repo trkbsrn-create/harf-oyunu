@@ -17,6 +17,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   ekran ve (Android'de) yatay kilit. Bilgisayarda bunların etkisi yok.
 - `oyun.js` – Phaser sahneleri ve oyun kodu. Oyunun adı "Harf Avcısı". Önce karşılama
   sahnesi (`KarsilamaSahnesi`), "Oyunu başlat" ile ada sahnesi (`AdaSahnesi`) açılır.
+  "Oyunu başlat"tan sonra önce açılış hikâyesi (`HikayeSahnesi`, `HIKAYE_KARELERI`; öğretmenin
+  seçimi A: kendiliğinden akan ~15 sn'lik canlı sahne, sözleri tarayıcı sesli okur, sağ üstte
+  "Geç"): fırtına, sal kırılır, kumsalda uyanma, silik yelkenliyi görme (hikaye-*.svg). God
+  mode ve "Oyunu yeniden başlat" hikâyeyi atlar.
   Sol üstteki menüde "Oyunu yeniden başlat" sayfayı yeniler; karşılama ekranını atlamak
   için tek seferlik bir not (sessionStorage) bırakır, ilerleme saklanmaz.
   Karşılama ekranının sol üstünde öğretmenin deneme düğmesi "God mode" var (öğretmen

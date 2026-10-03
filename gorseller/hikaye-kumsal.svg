@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <!-- Açılış hikâyesi: kumsal (üstte çimen, altta deniz) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="74" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="cimen" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="8" height="8" fill="#d8f0c0"/>
+      <line x1="0" y1="4.0" x2="8" y2="4.0" stroke="#bfe39f" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="kum" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="8" height="8" fill="#fbe7b0"/>
+      <line x1="0" y1="4.0" x2="8" y2="4.0" stroke="#f3d68a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="su" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9ecff"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#7cc4ef" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="330" fill="url(#cimen)"/>
+  <path d="M0 250 q320 50 640 20 q320 -30 640 10 v300 h-1280z" fill="url(#kum)"/>
+  <rect y="560" width="1280" height="160" fill="url(#su)"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M0 250 q320 50 640 20 q320 -30 640 10" fill="none" stroke-width="3"/>
+    <path d="M0 560 h1280" fill="none" stroke-width="3"/>
+  </g>
+  <path d="M-20 566 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <path d="M-20 626 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+  <path d="M-20 686 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0 q40 -22 80 0 q40 22 80 0" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round"/>
+</svg>
