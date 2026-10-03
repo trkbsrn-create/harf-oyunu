@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 84;
+const SURUM = 85;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -61,6 +61,21 @@ const TESIS_ALANI = new Phaser.Geom.Rectangle(TESIS_X - 160, TESIS_Y - 260, 320,
 // Harf varilleri (gorseller/varil.svg; gövdenin üst ortası resimde (52, 14)). Her harfin
 // varili, o harfin tohumu tarlaya ekilince belirir. Güvertedeki küçük varillerin yerleri
 // su-tesisi.svg'deki boru ağızlarıyla, paneldekiler tesis-pencere.svg'dekilerle aynı.
+// Yelkenli: iskelenin sağındaki kumsalda kızakta durur; adadan kurtulmak için parçaları
+// toplanır. Bütün yelkenli resimleri aynı 680x440 tuvalde (araclar/doodle_ciz.py), sol üst
+// köşeleri (YELKENLI_X, YELKENLI_Y). Her harfin parçası (öğretmenin kararı) ve harf
+// yuvarlağının tuvaldeki yeri. Parça takılmadan önce silik (kesik çizgili) görünür.
+const YELKENLI_X = TESIS_X + 460;
+const YELKENLI_Y = 2910;
+const YELKENLI_PARCALARI = [
+  { harf: "a", ad: "govde", x: 250, y: 325 },
+  { harf: "n", ad: "direk", x: 295, y: 130 },
+  { harf: "e", ad: "bayrak", x: 320, y: 20 },
+  { harf: "t", ad: "dumen", x: 490, y: 335 },
+  { harf: "i", ad: "kurek", x: 20, y: 310 },
+  { harf: "l", ad: "yelken", x: 320, y: 230 },
+];
+const YELKENLI_ALANI = new Phaser.Geom.Rectangle(YELKENLI_X - 60, YELKENLI_Y - 60, 800, 520); // süs yok
 const VARIL_HARFLERI = HARFLER.filter((h) => h.grup === 1).map((h) => h.kucuk);
 const VARIL_ORTA = { x: 52 / 120, y: 14 / 150 };
 const VARIL_YERI = (i) => ({ x: TESIS_X - 120 + 36 + 34 * i, y: TESIS_Y + ISKELE_EK + 262 });
@@ -252,7 +267,8 @@ function suslerUret() {
     susler.push({ tur: rastgele.pick(turler), x, y });
   }
   // Tarlanın üstünde ağaç, çalı, kaya olmasın
-  return susler.filter((s) => !TARLA_ALANI.contains(s.x, s.y) && !TESIS_ALANI.contains(s.x, s.y));
+  return susler.filter((s) => !TARLA_ALANI.contains(s.x, s.y) && !TESIS_ALANI.contains(s.x, s.y)
+    && !YELKENLI_ALANI.contains(s.x, s.y));
 }
 
 class AdaSahnesi extends Phaser.Scene {
@@ -289,6 +305,11 @@ class AdaSahnesi extends Phaser.Scene {
       this.load.svg(ad, `gorseller/${ad}.svg`);
     }
     this.load.svg("ekili-tohum", "gorseller/ekili-tohum.svg");
+    this.load.svg("yelkenli-kizak", "gorseller/yelkenli-kizak.svg");
+    for (const p of YELKENLI_PARCALARI) {
+      this.load.svg(`yelkenli-${p.ad}`, `gorseller/yelkenli-${p.ad}.svg`);
+      this.load.svg(`yelkenli-${p.ad}-silik`, `gorseller/yelkenli-${p.ad}-silik.svg`);
+    }
     for (const ad of ["esek", "tilki", "inek", "leylek"]) this.load.svg(ad, `gorseller/${ad}.svg`);
     for (const ad of ["cicek-kirmizi", "cicek-mor", "cicek-beyaz", "ot", "kelebek", "kus"]) {
       this.load.svg(ad, `gorseller/${ad}.svg`);
@@ -303,6 +324,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.adayiCiz();
     this.tarlaKur();
     this.tesisKur();
+    this.yelkenliKur();
 
     // Karakterin yürüyebildiği alan (kumsal dahil, denize girmeden)
     this.yuruyusAlani = new Phaser.Geom.Polygon(adaNoktalari(0.95));
@@ -913,6 +935,30 @@ class AdaSahnesi extends Phaser.Scene {
       });
     }
     Sesler.tohum();
+  }
+
+  // ---- Yelkenli (sahilde kızakta) ----
+  // Adadan kurtulmanın hedefi baştan görünsün: bütün parçalar silik, her parçanın yanında
+  // harfi silik bir yuvarlakta. (Parçayı bulutlardan getirip takmak sonraki adım.)
+  yelkenliKur() {
+    const derinlik = YELKENLI_Y + 380; // kızağın alt kenarı: önünden geçen karakter önde görünür
+    this.add.image(YELKENLI_X, YELKENLI_Y, "yelkenli-kizak").setOrigin(0).setDepth(derinlik - 1);
+    this.yelkenliParcalari = YELKENLI_PARCALARI.map((p) => {
+      const silik = this.add.image(YELKENLI_X, YELKENLI_Y, `yelkenli-${p.ad}-silik`).setOrigin(0).setDepth(derinlik);
+      const dolu = this.add.image(YELKENLI_X, YELKENLI_Y, `yelkenli-${p.ad}`).setOrigin(0).setDepth(derinlik)
+        .setVisible(false);
+      const x = YELKENLI_X + p.x;
+      const y = YELKENLI_Y + p.y;
+      const yuvarlak = this.add.graphics().setDepth(derinlik + 1);
+      yuvarlak.fillStyle(0xffffff, 0.55);
+      yuvarlak.fillCircle(x, y, 22);
+      yuvarlak.lineStyle(2.5, 0x9a9a9a, 1);
+      yuvarlak.strokeCircle(x, y, 22);
+      const yazi = boyaliOrtala(this.add.text(x, y, p.harf, {
+        fontFamily: "Andika", fontSize: "32px", color: "#b5b5b5", padding: { x: 3, y: 3 },
+      })).setDepth(derinlik + 2);
+      return { ...p, silik, dolu, yuvarlak, yazi, takildi: false };
+    });
   }
 
   // ---- Su arıtma tesisi ----
@@ -2121,7 +2167,7 @@ class AdaSahnesi extends Phaser.Scene {
       if (!cimen.contains(x, y)) continue;
       const tur = rastgele.pick(turler);
       const faz = rastgele.frac() * Math.PI * 2;
-      if (TARLA_ALANI.contains(x, y) || TESIS_ALANI.contains(x, y)) continue; // tarlada, tesiste yok
+      if (TARLA_ALANI.contains(x, y) || TESIS_ALANI.contains(x, y) || YELKENLI_ALANI.contains(x, y)) continue; // tarlada, tesiste, yelkenlide yok
       const nesne = this.add.image(x, y, tur).setOrigin(0.5, 1).setDepth(y);
       this.sallananlar.push({ nesne, tur: "cicek", faz });
       eklenen++;

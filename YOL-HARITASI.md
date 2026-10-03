@@ -82,6 +82,26 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - Varilden damla iki aşamalı (öğretmenin tarifi): 1) ana tanktan harf varile damla gelir; 2) Şans Çarkı çıkar, gelen mini oyun 1-2-3. düzeyde art arda oynanır, bitince şişeye 1 damla (Sürüm 84): TAMAM. Şans Çarkı ileride bütün oyun seçimlerinde de kullanılacak.
    - Planlanan ilk 7 mini oyunun hepsi yapıldı. Sıradaki iş: öğretmenin kendi mini oyun fikirleri (aşağıdaki listede, sırayla; her biri için önce görsel taslak ve onay). Sonra mini oyunları ana oyuna (tesis, damla parçaları) bağlamak. Ana oyunun geri kalanı mini oyunlar bitince.
 
+## Oyunun hikâyesi (öğretmenin fikri, beyin fırtınası kararları)
+Karakter adaya düşmüştür, elinde hiçbir şey yoktur; amaç adadan kurtulmaktır. Her harf grubu
+ayrı bir adadır (1. ada: a n e t i l). Şimdilik yalnızca 1. adaya odaklanılıyor.
+Akış: sandıkta harf tohumu bul → tarlaya ek → varil/Şans Çarkı/mini oyunlarla damla kazan →
+sula, fasulye sırığına dönüşsün → sırıktan bulutların üstüne çık → orada o harfin yelkenli
+parçasını al → parçaları sahildeki yelkenliye tak → altı parça tamamlanınca yelkenliye bin,
+2. adaya geç.
+Yapılacaklar (bu sırayla, her biri için önce görsel taslak ve onay):
+1. Sahilde yarım yelkenli: iskelenin sağındaki kumsalda kızak, bütün parçalar kesik çizgiyle
+   silik, yanlarında harfleri (öğretmenin seçimi A). Parçalar: a gövde, n direk, e bayrak,
+   t dümen, i kürek, l yelken (Sürüm 85): TAMAM.
+2. Bulutta parçayı alma: harfin büyük tabelası önünde harfin sesi mikrofona söylenir, parça
+   iner (öğretmen onayladı: mikrofonlu).
+3. Parçayı tekneye takma (çantadan sürükle, yerine oturur) ve köşede ilerleme gösteren küçük
+   yelkenli simgesi.
+4. Açılış hikâyesi (okuma gerektirmeyen kısa sahne: fırtına, kırık sal, kumsalda uyanma).
+5. Final: yelkenli tamamlanınca kutlama, binip açılma, "2. ada yakında".
+Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı
+fikirleri var).
+
 ## Öğretmenin mini oyun fikirleri (sırayla yapılacak)
 Her biri için önce görsel taslak gösterilir, öğretmen seçer, sonra yapılır. Yalnızca öğrenilmiş
 harfler kullanılır; öğrenilmemiş harfli sözcük yazılmaz, yerine resim konur. Menü sayfalıdır;

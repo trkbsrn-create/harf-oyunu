@@ -1,0 +1,10 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="440" viewBox="0 0 680 440">
+  <!-- Yelkenli parçasının silik yeri: bayrak (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="70" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <path d="M256 55 v-34 l46 12 l-46 14z" fill="#ffffff" fill-opacity="0.25" stroke="#8a8a8a" stroke-width="3.5" stroke-dasharray="10 8" stroke-linecap="round" stroke-linejoin="round"/>
+</svg>

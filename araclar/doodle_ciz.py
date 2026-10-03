@@ -284,6 +284,37 @@ yaz("su-tesisi.svg", 240, 364 + ISKELE_EK, "Su arıtma tesisi: uzun iskele, ayak
   </g>
 ''', 64)
 
+# ---- Yelkenli (sahildeki kızakta; adadan kurtulmak için) ----
+# Bütün yelkenli resimleri aynı 680x440 tuvalde: oyunda hepsi aynı sol üst köşeye konur
+# (YELKENLI_X, YELKENLI_Y). Her harfin bir parçası var: a gövde, n direk, e bayrak, t dümen,
+# i kürek, l yelken (öğretmenin kararı). Parça takılmadan önce kesik çizgili silik hâli görünür
+# (yelkenli-<parça>-silik.svg), takılınca dolu hâli (yelkenli-<parça>.svg). Harfler oyunda yazılır.
+YELKENLI_PARCALARI = [
+    ("govde", "M70 285 h360 q-20 70 -70 80 h-220 q-50 -10 -70 -80z", "tahta"),
+    ("direk", "M246 285 v-230 h10 v230z", "koyuTahta"),
+    ("bayrak", "M256 55 v-34 l46 12 l-46 14z", "kirmiziKumas"),
+    ("dumen", "M428 300 l30 0 l-6 70 l-24 -10z", "koyuTahta"),
+    ("kurek", "M110 260 l-70 100 l-14 22 l10 6 l16 -18 l70 -104z", "tahta"),
+    ("yelken", "M262 70 q70 90 100 200 h-100z", "yelkenBezi"),
+]
+YELKENLI_DESEN = (TAHTA + tarama("koyuTahta", "#b07a42", "#8e6340", 80, 7, 2.5)
+                  + tarama("kirmiziKumas", "#ff9c8a", "#e0533d", -35, 6, 2.5)
+                  + tarama("yelkenBezi", "#ffffff", "#e6eef3", 35, 7, 2.5))
+for ad, yol, desen in YELKENLI_PARCALARI:
+    yaz(f"yelkenli-{ad}.svg", 680, 440, f"Yelkenli parçası: {ad}", YELKENLI_DESEN,
+        kalem(f'    <path d="{yol}" fill="url(#{desen})"/>\n'), 70)
+    yaz(f"yelkenli-{ad}-silik.svg", 680, 440, f"Yelkenli parçasının silik yeri: {ad}", "",
+        f'  <path d="{yol}" fill="#ffffff" fill-opacity="0.25" stroke="#8a8a8a" stroke-width="3.5" '
+        'stroke-dasharray="10 8" stroke-linecap="round" stroke-linejoin="round"/>\n', 70)
+# Kızak: tahta raylar (sağda denize iner) ve üç destek takozu
+yaz("yelkenli-kizak.svg", 680, 440, "Yelkenli kızağı", TAHTA + tarama("koyuTahta", "#b07a42", "#8e6340", 80, 7, 2.5),
+    golge(260, 392, 250, 8) + kalem('''    <path d="M20 375 l520 -12 l120 60" fill="none" stroke="#8e6340" stroke-width="12"/>
+    <path d="M20 375 l520 -12 l120 60" fill="none" stroke-width="2"/>
+    <rect x="110" y="360" width="18" height="30" rx="3" fill="url(#koyuTahta)" stroke-width="3"/>
+    <rect x="250" y="357" width="18" height="30" rx="3" fill="url(#koyuTahta)" stroke-width="3"/>
+    <rect x="390" y="354" width="18" height="30" rx="3" fill="url(#koyuTahta)" stroke-width="3"/>
+'''), 71)
+
 # Harf varili: 120x150. Gövdenin üst ortası (52, 14); sağda musluk. Harf oyunda etikete yazılır.
 yaz("varil.svg", 120, 150, "Harf varili (musluklu)",
     tarama("varilTahta", "#d29a5c", "#b07a42", 80, 6, 2.5) + SU,

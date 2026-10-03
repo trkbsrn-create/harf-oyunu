@@ -190,6 +190,12 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   (`BulutSahnesi`; ada sahnesi uyutulur, durumu korunur). Her harfin kendi bölgesi var;
   şimdilik bölgede harfin büyük tabelası durur, içeriği sonra eklenecek. Karakter bulut
   zemininde gezer; sırığa dokununca aşağı iner ve adada o sırığın dibine döner.
+- Yelkenli (adadan kurtulma hedefi): iskelenin sağındaki kumsalda kızakta (`yelkenliKur`,
+  `YELKENLI_X/Y`, `YELKENLI_PARCALARI`). Her harfin bir parçası: a gövde, n direk, e bayrak,
+  t dümen, i kürek, l yelken (öğretmenin kararı). Bütün yelkenli resimleri aynı 680x440 tuvalde
+  (yelkenli-kizak.svg, yelkenli-<parça>.svg ve kesik çizgili yelkenli-<parça>-silik.svg;
+  doodle_ciz.py). Başta bütün parçalar silik, yanlarında harfi silik bir yuvarlakta. Parça
+  bulutlarda alınıp takılınca dolu hâli görünecek (sonraki adım). `YELKENLI_ALANI`nda süs yok.
 - Mini harita: sol altta kâğıt kart (harita-karti.svg: ada ve tarla, `doodle_ciz.py`
   adayı oyundaki `adaNoktalari` formülüyle çizer; biri değişirse öbürü de değişmeli).
   Üstüne her karede karakter, ekranda görünen bölge ve açılmış sandıklar (kırmızı çarpı)
