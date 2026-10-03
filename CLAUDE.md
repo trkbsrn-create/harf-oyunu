@@ -263,7 +263,8 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   (`python3 araclar/doodle_ciz.py`). Görsel değişikliği bu betikte yapılıp yeniden üretilir.
 - Phaser 3, sabit sürümle (3.90.0) jsDelivr CDN'den yüklenir. Sürüm numarası
   rastgele değiştirilmez.
-- Yayın: GitHub Pages (kök klasörden).
+- Yayın: GitHub Pages (kök klasörden). Kökteki `.nojekyll` Jekyll derlemesini kapatır (dosyalar olduğu gibi
+  yayınlanır; Jekyll adımı GitHub'da zaman aşımına düşüp yayını durdurmuştu).
 
 ## Çalışma şekli
 - Kullanıcı kodlama bilmiyor. Tüm açıklamaları Türkçe, kısa ve sade yaz.
