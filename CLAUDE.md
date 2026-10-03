@@ -107,6 +107,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   bombayi-kurtar (Bombayı Kurtar: sevimli bomba yavaşça geri sayar; harf etiketli kablolardan
   istenen harfinkine dokununca kesilir, bomba konfetiye döner; yanlış kablo kıvılcım, can gider;
   süre biterse patlama yok, yalnızca "puf" dumanı ve can gider; korkutucu değil).
+  yilan (Yılan: hece söylenir; yılanın başına göre gidilecek yöne dokunulur; hecenin harfleri
+  sırayla yenir, gövdede görünür, hece okunur; duvar/kendine çarpma yok, kenardan öbür kenara
+  geçer; 1. seviyede yanlış harf yalnızca uyarı, 2-3. seviyede can götürür).
   Hecelerine ayrılmış ortak kelime listesi `KELIMELER`, `ogrenilmisKelimeler(harf)` (ortak.js;
   yalnızca öğrenilmiş harflerle yazılabilen kelimeler).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
