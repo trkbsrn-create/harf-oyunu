@@ -237,6 +237,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   oyun sözleri sayfada yazılı: oyuna yeni söz eklenince oraya da eklenmeli). Kayıtlar yalnızca
   o tarayıcıda (IndexedDB) durur; sessizlik kesilir, ses eşitlenir, WAV (24 kHz). "Hepsini
   indir" zip verir (sesler/<anahtar>.wav + liste.json); öğretmen verince sesler oyuna eklenecek.
+  Heceler: heceHavuzu + kelimelerin üç harfli heceleri (lan, nat...). Üstteki "Yalnızca
+  beğenmediklerim" kutusu (açık gelir) yalnızca `BEGENILMEYENLER`i gösterir (öğretmenin
+  dinle.html'den verdiği 34 söz; yapay zekâ sesi kalanlar oyunda öyle kalır).
 - `dinle.html` – Öğretmenin oyundaki yapay zekâ seslerini dinlediği sayfa (sesler/liste.js'den;
   bölüm bölüm ▶ ve "Beğenmedim"; işaretler localStorage'da; "Listeyi kopyala" Claude'a verilir,
   beğenilmeyenler öğretmenin kendi sesiyle kayit.html'de kaydedilir).

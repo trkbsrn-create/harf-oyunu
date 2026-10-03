@@ -33,6 +33,8 @@
     button:disabled { opacity: 0.35; cursor: default; }
     .tik { font-size: 26px; width: 30px; text-align: center; }
     #indir { font-size: 22px; background: #b5e48c; }
+    #suzgecKutu { font-size: 20px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
+    #suzgec { width: 26px; height: 26px; }
     @media (max-width: 560px) { .metin b { font-size: 24px; } button { padding: 8px 10px; font-size: 18px; } }
   </style>
 </head>
@@ -40,6 +42,7 @@
   <header>
     <h1>Ses Kayıtları</h1>
     <span id="sayac"></span>
+    <label id="suzgecKutu"><input type="checkbox" id="suzgec" checked> Yalnızca beğenmediklerim</label>
     <button id="indir">Hepsini indir</button>
   </header>
   <main>
@@ -50,6 +53,8 @@
       Kayıtlar yalnızca bu tarayıcıda durur, bir yere gönderilmez; sayfayı kapatıp sonra devam
       edebilirsiniz (aynı cihaz ve tarayıcıyla). İşiniz bitince <b>Hepsini indir</b> deyin ve
       inen zip dosyasını bana verin.<br>
+      Şimdilik yalnızca <b>beğenmediğiniz</b> yapay zekâ sesleri görünüyor; hepsini görmek için üstteki
+      kutunun işaretini kaldırın.<br>
       Sessiz bir odada, mikrofona bir karış uzaktan, sakin ve neşeli bir sesle okuyun.
     </div>
     <div id="liste"></div>
@@ -73,9 +78,12 @@
           : h.kisaSes ? `Ünsüz: yalnızca sesi, kısa ve net (“${h.kucuk}” – “te” değil)`
           : `Ünsüz: yalnızca sesi, biraz uzatarak (“${h.kucuk}${h.kucuk}${h.kucuk}” – “${h.kucuk}e” değil)`,
       })) },
-      { baslik: "Heceler", oge: heceHavuzu("a").map((h) => ({
-        anahtar: `hece-${kisalt(h.hece)}`, metin: h.hece, not: h.acik ? "Açık hece" : "Kapalı hece",
-      })) },
+      { baslik: "Heceler", oge: [
+        ...heceHavuzu("a").map((h) => ({ hece: h.hece, not: h.acik ? "Açık hece" : "Kapalı hece" })),
+        // Kelimelerin üç harfli heceleri (lan, nat...); tek ünlü heceler harf sesinde var
+        ...[...new Set(KELIMELER.flatMap((k) => k.heceler))].filter((h) => h.length === 3)
+          .map((h) => ({ hece: h, not: "Kelime hecesi" })),
+      ].map((h) => ({ anahtar: `hece-${kisalt(h.hece)}`, metin: h.hece, not: h.not })) },
       { baslik: "Kelimeler", oge: [...new Set([...grup1.map((h) => h.kelime), ...KELIMELER.map((k) => k.kelime)])]
         .map((k) => ({ anahtar: `kelime-${kisalt(k)}`, metin: k, not: "" })) },
       { baslik: "Oyun sözleri", oge: [
@@ -86,6 +94,13 @@
         .map((o) => ({ anahtar: `oyun-${o.ad}`, metin: o.baslik, not: "" })) },
     ];
     const HEPSI = BOLUMLER.flatMap((b) => b.oge);
+
+    // Öğretmenin dinle.html'de beğenmediği yapay zekâ sesleri: önce bunlar kaydedilecek
+    const BEGENILMEYENLER = new Set(["a", "e", "an", "na", "at", "ta", "al", "la", "en", "ne", "et",
+      "te", "el", "le", "in", "ni", "it", "ti", "il", "li", "lan", "nat", "ten", "let", "tel", "anne",
+      "nine", "elle", "ana", "ata", "ilan", "inat", "atlet", "ilet"]);
+    const suzgecAcik = () => document.getElementById("suzgec").checked;
+    const gorunenler = () => HEPSI.filter((o) => !suzgecAcik() || BEGENILMEYENLER.has(o.metin));
 
     // ---- Tarayıcı içi depo (IndexedDB) ----
     const DB = new Promise((tamam, hata) => {
@@ -190,9 +205,11 @@
     // ---- Liste ----
     const satirlar = {};
     const liste = document.getElementById("liste");
+    const basliklar = [];
     for (const b of BOLUMLER) {
       const h = document.createElement("h2");
       h.textContent = b.baslik;
+      basliklar.push([h, b]);
       liste.append(h);
       for (const oge of b.oge) {
         const satir = document.createElement("div");
@@ -222,9 +239,15 @@
         satir.querySelector(".dinle").disabled = !kayitli;
         satir.querySelector(".sil").disabled = !kayitli;
       }
-      const sayi = HEPSI.filter((o) => var_.has(o.anahtar)).length;
-      document.getElementById("sayac").textContent = `${sayi} / ${HEPSI.length} kaydedildi`;
+      // Süzgeç: yalnızca beğenilmeyenler görünür; içi boş kalan bölümün başlığı da gizlenir
+      const gorunen = gorunenler();
+      const goster = new Set(gorunen.map((o) => o.anahtar));
+      for (const [k, satir] of Object.entries(satirlar)) satir.style.display = goster.has(k) ? "" : "none";
+      for (const [h, b] of basliklar) h.style.display = b.oge.some((o) => goster.has(o.anahtar)) ? "" : "none";
+      const sayi = gorunen.filter((o) => var_.has(o.anahtar)).length;
+      document.getElementById("sayac").textContent = `${sayi} / ${gorunen.length} kaydedildi`;
     }
+    document.getElementById("suzgec").onchange = () => guncelle();
 
     document.getElementById("indir").onclick = async () => {
       const zip = new JSZip();
