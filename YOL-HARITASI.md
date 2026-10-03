@@ -53,12 +53,13 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - Mini oyun 7: Heceyi Bul (hece balıkları; 5/6/7 tur, 3/4/5 balık; seviyeyle heceler birbirine benzer, 3. seviyede ters ve açık hece): TAMAM.
    - Telefonda boyut ayarları (yan çevir uyarısı, tam ekran, büyütme/kaydırma kapalı): TAMAM. Telefonda sesli okumanın gecikmesi/kesilmesi düzeltildi (Sürüm 53). Telefonda mikrofon izni verilmeden hiç ses gelmemesi düzeltildi (Sürüm 54).
    - Öğretmenin kararı: mini oyunlarda ünsüz harflerin başındaki yardım uyarısı ("Bu sesi tek başına okumam kolay değil...") ve hece tanıtımı kaldırıldı (Sürüm 55): TAMAM.
+   - Mini oyun araştırması (öğretmenin isteği) ilk 7 oyuna uygulandı: gösteren el, uçan yıldız ve parıltı, yanlışta nazik ipucu, bitişte 1–3 yıldız ve konfeti, büyük dokunma alanları, Damla'da kolay başlangıç. Menü sayfalı oldu, bütün fikirler "Yakında" kartı olarak görünüyor (Sürüm 57): TAMAM.
    - Planlanan ilk 7 mini oyunun hepsi yapıldı. Sıradaki iş: öğretmenin kendi mini oyun fikirleri (aşağıdaki listede, sırayla; her biri için önce görsel taslak ve onay). Sonra mini oyunları ana oyuna (tesis, damla parçaları) bağlamak. Ana oyunun geri kalanı mini oyunlar bitince.
 
 ## Öğretmenin mini oyun fikirleri (sırayla yapılacak)
 Her biri için önce görsel taslak gösterilir, öğretmen seçer, sonra yapılır. Yalnızca öğrenilmiş
-harfler kullanılır; öğrenilmemiş harfli sözcük yazılmaz, yerine resim konur. Menü 7 karttan
-fazlasını sığdırmadığı için yeni oyunlar eklenirken menüye sayfa/kaydırma gerekecek.
+harfler kullanılır; öğrenilmemiş harfli sözcük yazılmaz, yerine resim konur. Menü sayfalıdır;
+hepsi "Yakında" kartı olarak görünür.
 
 1. Labirent: çıkmak için doğru kelimeleri (harfleri/heceleri) takip et.
 2. Şeker patlatma (Candy Crush tarzı).
@@ -78,6 +79,14 @@ fazlasını sığdırmadığı için yeni oyunlar eklenirken menüye sayfa/kayd�
 16. Kırık cam.
 17. Bomba patlamadan kurtar.
 18. Yılan.
+
+### Araştırmadan gelen yeni fikirler (taslak; öğretmenin listesinden sonra)
+19. Canavarı Besle (Teach Your Monster tarzı): canavar bir ses ister, doğru harfli yiyeceği ağzına at; doydukça büyür.
+20. Harf Kesme (Fruit Ninja tarzı): havaya fırlayan meyvelerde harfler; doğru harflileri parmakla kes.
+21. Hece Kulesi (Stack tarzı): sallanan hece blokları doğru anda dokununca üst üste konur, kelime kulesi olur.
+22. Birleştir Büyüt (Suika / 2048 tarzı): aynı harfler birleşip heceye, heceler kelimeye ve resme dönüşür.
+23. Harfle Boya: gizli resmin parçalarındaki harflerden doğrusuna dokununca o parça boyanır.
+24. Harf Fırtınası (WarioWare tarzı): art arda 5'er saniyelik minik görevler.
 
 ### Bilmeceler (öğretmenin; nerede kullanılacağı sonra kararlaştırılacak)
 - "Hızlı koşar, yeleleri var." → at

@@ -23,6 +23,7 @@ class ResimdenSesSahnesi extends MiniOyunSahnesi {
   create() {
     this.ortakKur();
     this.ayar = RESIMDEN_SES_SEVIYELERI[this.seviye] || RESIMDEN_SES_SEVIYELERI[1];
+    this.cevaplandi = false; // "Tekrar" ile yeniden açılınca eski turdan kalmasın
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.tur);
     // Resmi olan öğrenilmiş harfler (sorulabilecek ve yanlış seçenek olabilecekler)
@@ -75,6 +76,8 @@ class ResimdenSesSahnesi extends MiniOyunSahnesi {
       const x = 640 + (i - (secenekler.length - 1) / 2) * aralik;
       this.kartlar.push(this.kartYap(x, 470, h, h === dogru, i * 90));
     });
+    // İlk turda gösteren el doğru kartı gösterir (bir kez)
+    this.time.delayedCall(secenekler.length * 90 + 500, () => this.elGoster(this.kartlar.find((k) => k.kart.dogru)));
   }
 
   kartYap(x, y, bilgi, dogru, gecikme) {
@@ -88,7 +91,7 @@ class ResimdenSesSahnesi extends MiniOyunSahnesi {
     g.strokeRoundedRect(-110, -104, 216, 204, 22);
     const resim = this.add.image(-2, -8, bilgi.resim);
     resim.setScale(Math.min(150 / resim.width, 150 / resim.height));
-    const hoparlor = this.add.container(78, 72, [this.hoparlorCiz(0, 0, 20)]).setSize(48, 48)
+    const hoparlor = this.add.container(78, 72, [this.hoparlorCiz(0, 0, 20)]).setSize(72, 72)
       .setInteractive({ useHandCursor: true });
     hoparlor.hoparlor = bilgi.kelime;
     kap.add([g, resim, hoparlor]);
@@ -111,7 +114,7 @@ class ResimdenSesSahnesi extends MiniOyunSahnesi {
       Sesler.pling();
       this.tweens.add({ targets: kap, scale: 1.1, duration: 160, yoyo: true });
       this.time.delayedCall(500, () => Sesler.soyle(kap.kart.kelime));
-      this.ilerlemeArtir();
+      this.ilerlemeArtir(kap.x, kap.y);
       this.time.delayedCall(1700, () => {
         this.cevaplandi = false;
         this.yeniTur();
@@ -123,6 +126,7 @@ class ResimdenSesSahnesi extends MiniOyunSahnesi {
         onComplete: () => kap.setAngle(0) });
       kap.setAlpha(0.55);
       this.kalpEksilt();
+      this.ipucuGoster(this.kartlar.find((k) => k.kart.dogru));
     }
   }
 

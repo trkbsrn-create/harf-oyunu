@@ -101,6 +101,12 @@ class HarfiCizSahnesi extends MiniOyunSahnesi {
     this.yolCiz();
     this.izCiz();
     this.tasiyiciyiKoy();
+    // İlk seferde gösteren el ilk çizgi boyunca sürükler (bir kez)
+    const ilk = this.yollar[0];
+    if (ilk.length > 4) {
+      const adim = Math.max(1, Math.floor(ilk.length / 12));
+      this.elSurukleGoster(ilk.filter((n, i) => i % adim === 0 || i === ilk.length - 1));
+    }
   }
 
   // Silik yol, oklar, numaralar, başlangıç noktası (seviyeye göre)
@@ -194,6 +200,12 @@ class HarfiCizSahnesi extends MiniOyunSahnesi {
 
   cizgiBitti() {
     this.surukleniyor = false;
+    // Çizginin bittiği yerde küçük parıltı
+    const son = this.yollar[this.cizgiNo][this.yollar[this.cizgiNo].length - 1];
+    this.add.particles(son.x, son.y, "parilti", {
+      speed: { min: 60, max: 160 }, lifespan: 380, scale: { start: 0.9, end: 0 },
+      tint: [0xffe680, 0xffffff], emitting: false,
+    }).setDepth(20).explode(8);
     this.nokta = 0;
     this.cizgiNo++;
     this.izCiz();
@@ -209,7 +221,7 @@ class HarfiCizSahnesi extends MiniOyunSahnesi {
     Sesler.pling();
     harfiSoyle(this.harf);
     this.tweens.add({ targets: this.izCizim, alpha: 0.4, duration: 150, yoyo: true, repeat: 2 });
-    this.ilerlemeArtir();
+    this.ilerlemeArtir(640, 360);
     if (!this.bitti) this.time.delayedCall(1200, () => this.harfiBaslat());
   }
 

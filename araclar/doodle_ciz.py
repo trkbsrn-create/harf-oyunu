@@ -500,6 +500,32 @@ yaz("balon.svg", 80, 130, "Harf balonu (oyunda boyanır)", tarama("balonTarama",
     <path d="M22 22 q6 -10 16 -12" fill="none" stroke="#ffffff" stroke-width="6"/>
 """, 3.5), 81, 2.5)
 
+# Yıldız: 80x78 (mini oyun bitişinde 1-3 yıldız; uçan ödül yıldızı). Ortası (40,41).
+def _yildiz_noktalari(cx, cy, dis, ic):
+    nok = []
+    for i in range(10):
+        r = dis if i % 2 == 0 else ic
+        a = -math.pi / 2 + i * math.pi / 5
+        nok.append(f"{cx + r * math.cos(a):.1f},{cy + r * math.sin(a):.1f}")
+    return " ".join(nok)
+
+
+YILDIZ = '    <polygon points="' + _yildiz_noktalari(40, 42, 36, 16) + '" fill="{dolgu}" stroke-width="3.5"/>\n'
+yaz("yildiz.svg", 80, 78, "Ödül yıldızı", tarama("sariYildiz", "#ffe680", "#ffc928", -40, 6, 3),
+    kalem(YILDIZ.format(dolgu="url(#sariYildiz)") +
+          '    <path d="M30 30 l6 -10" fill="none" stroke="#ffffff" stroke-width="4"/>\n', 3.5), 83, 2.5)
+yaz("yildiz-bos.svg", 80, 78, "Kazanılmamış yıldız", "",
+    kalem(YILDIZ.format(dolgu="#e9e4da"), 3.5).replace('stroke="#2b2b2b"', 'stroke="#b8b0a2"'), 84, 2.5)
+
+# Gösteren el: 90x110, işaret parmağı yukarıda; parmak ucu (32,8). Mini oyunların ilk
+# turunda nereye dokunulacağını gösterir.
+yaz("el.svg", 90, 110, "Gösteren el", tarama("ten", "#ffe2c6", "#f5c9a0", -35, 6, 2.5),
+    kalem('''    <path d="M22 50 V18 q0 -12 10 -12 q10 0 10 12 V46
+      q4 -8 11 -6 q7 2 6 10 q5 -7 11 -4 q6 3 5 11 q6 -4 10 1 q4 5 2 14 V78
+      q0 26 -28 28 h-10 q-20 0 -28 -18 l-14 -28 q-4 -10 4 -13 q8 -3 13 6 z" fill="url(#ten)"/>
+    <path d="M53 50 v10 M70 58 v8" fill="none" stroke-width="2.5"/>
+''', 3.5), 85, 2.5)
+
 # Balık: 200x110 (beyaz taranmış; oyunda renk verilir). Başı solda; gövdenin ortası (88,55).
 yaz("balik.svg", 200, 110, "Hece balığı (oyunda boyanır)", tarama("balikTarama", "#ffffff", "#e3e3e3", -35, 6, 2.5),
     kalem("""    <path d="M160 55 L196 22 Q186 55 196 88 Z" fill="url(#balikTarama)"/>

@@ -60,6 +60,19 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   götürür; seviye 1 çok farklı heceler, 2 tek harfi değişen heceler, 3 ters hece (an/na) ve
   açık hece). Hoparlör çizimi ortak: `hoparlorCiz`. Ortak "Yakala:/Patlat:" paneli
   `hedefPaneliKur`.
+  Menü sayfalıdır (sayfada 8 kart, oklar ya da parmak kaydırma); listede öğretmenin
+  fikirleri ve araştırmadan gelen fikirler "Yakında" olarak durur, sırayla yapılır.
+- Mini oyun ilkeleri (öğretmenin isteğiyle yapılan araştırmadan; her yeni mini oyunda uygulanır):
+  1. Göster, anlatma: ilk turda gösteren el (el.svg) nereye dokunulacağını gösterir
+     (`elGoster`, sürüklemede `elSurukleGoster`; sayfa açık kaldıkça her oyunda bir kez).
+  2. Her doğruya anında tepki: ses + parıltı + ilerleme çubuğuna uçan yıldız
+     (`ilerlemeArtir(x, y)`).
+  3. Nazik hata: yanlıştan sonra doğru nesne hafifçe büyüyüp küçülür (`ipucuGoster`).
+  4. Kolay başlangıç, kademeli zorluk; oyun 1–2 dakika sürer.
+  5. Büyük dokunma alanları (çocuk parmağı; telefonda en az ~2 cm): dokunma alanı
+     görselden geniş tutulur.
+  6. Dürüst ödül: bitişte kalan cana göre 1–3 yıldız ve konfeti; sonsuz puan yok.
+  7. Öğretime bağlı: yalnızca öğrenilmiş harfler; ses ve resimle desteklenir.
 - `harfler.js` – Harf grupları ve kelimeler (sadece veri).
 - `canta.js` – Karakterin çantası (envanter). Kaydedilmez; sayfa yenilenince oyun baştan başlar.
 - Tarla: karakterin başladığı yerin üstünde çitli tarla, 6 kare yan yana tek sıra

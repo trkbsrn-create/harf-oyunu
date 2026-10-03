@@ -81,6 +81,8 @@ class HarfBalonlariSahnesi extends MiniOyunSahnesi {
       yerler.push({ x, y });
       this.balonYap(x, y, harf, yerler.length * 70);
     }
+    // İlk turda gösteren el: doğru balonlardan biri (bir kez)
+    this.time.delayedCall(yerler.length * 70 + 400, () => this.elGoster(this.balonlar.find((b) => b.balon.dogru)));
   }
 
   balonYap(x, y, harf, gecikme) {
@@ -93,7 +95,7 @@ class HarfBalonlariSahnesi extends MiniOyunSahnesi {
     });
     boyaliOrtala(titret(yazi, 1.2));
     kap.add([resim, yazi]);
-    kap.setSize(70, 84).setInteractive({ useHandCursor: true }); // dokunma alanı: balonun kendisi
+    kap.setSize(100, 116).setInteractive({ useHandCursor: true }); // dokunma alanı balondan biraz geniş
     kap.balon = { harf, dogru: harf === this.harf };
     kap.setScale(0);
     this.tweens.add({ targets: kap, scale: 1, duration: 300, delay: gecikme, ease: "Back.Out" });
@@ -119,7 +121,7 @@ class HarfBalonlariSahnesi extends MiniOyunSahnesi {
       this.tweens.killTweensOf(kap);
       kap.destroy();
       this.balonlar = this.balonlar.filter((b) => b !== kap);
-      this.ilerlemeArtir();
+      this.ilerlemeArtir(kap.x, kap.y);
       // Bu turdaki doğru balonlar bitti mi?
       if (!this.bitti && !this.balonlar.some((b) => b.balon.dogru)) this.turuBitir();
     } else {
@@ -128,6 +130,8 @@ class HarfBalonlariSahnesi extends MiniOyunSahnesi {
       this.tweens.add({ targets: kap.list, x: { from: -8, to: 8 }, duration: 60, yoyo: true, repeat: 2,
         onComplete: () => kap.list.forEach((n) => n.setX(0)) });
       this.kalpEksilt();
+      // Nazik ipucu: doğru balonlardan biri hafifçe büyüyüp küçülür
+      this.ipucuGoster(this.balonlar.find((b) => b.balon.dogru && !b.balon.patladi));
     }
   }
 

@@ -16,6 +16,32 @@ const PLANLANAN_OYUNLAR = [
   { ad: "hafiza-kartlari", baslik: "Hafıza Kartları" },
   { ad: "hece-koprusu", baslik: "Hece Köprüsü" },
   { ad: "heceyi-bul", baslik: "Heceyi Bul" },
+  // Öğretmenin fikirleri (sırayla yapılacak)
+  { ad: "labirent", baslik: "Labirent" },
+  { ad: "seker-patlatma", baslik: "Şeker Patlatma" },
+  { ad: "kayak", baslik: "Kayak" },
+  { ad: "elektrik-devresi", baslik: "Elektrik Devresi" },
+  { ad: "duvardan-gecme", baslik: "Duvardan Geçme" },
+  { ad: "sekillerle-yazma", baslik: "Şekillerle Yazma" },
+  { ad: "hece-muzigi", baslik: "Hece Müziği" },
+  { ad: "scrabble", baslik: "Scrabble" },
+  { ad: "ordek-vurma", baslik: "Ördek Vurma" },
+  { ad: "kazma", baslik: "Kazma" },
+  { ad: "altin-madencisi", baslik: "Altın Madencisi" },
+  { ad: "kazi-kazan", baslik: "Kazı Kazan" },
+  { ad: "tombala", baslik: "Tombala" },
+  { ad: "arabayi-ulastir", baslik: "Arabayı Ulaştır" },
+  { ad: "yakala-yaz", baslik: "Yakala ve Yaz" },
+  { ad: "kirik-cam", baslik: "Kırık Cam" },
+  { ad: "bombayi-kurtar", baslik: "Bombayı Kurtar" },
+  { ad: "yilan", baslik: "Yılan" },
+  // Araştırmadan gelen yeni fikirler (taslak)
+  { ad: "canavari-besle", baslik: "Canavarı Besle" },
+  { ad: "harf-kesme", baslik: "Harf Kesme" },
+  { ad: "hece-kulesi", baslik: "Hece Kulesi" },
+  { ad: "birlestir-buyut", baslik: "Birleştir Büyüt" },
+  { ad: "harfle-boya", baslik: "Harfle Boya" },
+  { ad: "harf-firtinasi", baslik: "Harf Fırtınası" },
 ];
 
 // Yapılmış mini oyunlar: ad -> sahne sınıfı
@@ -49,6 +75,9 @@ function harfiSoyle(harf, bitince) {
   }
 }
 
+// Gösteren el her mini oyunda (sayfa açık kaldıkça) bir kez çıkar
+const MINI_OYUN_ELI_GOSTERILDI = {};
+
 // Bütün mini oyunların ortak parçaları: kâğıt zemin, geri düğmesi, canlar (kalpler),
 // ilerleme çubuğu ve bitiş penceresi ("Aferin!" ya da "Bir daha dene").
 class MiniOyunSahnesi extends Phaser.Scene {
@@ -61,7 +90,7 @@ class MiniOyunSahnesi extends Phaser.Scene {
   }
 
   preload() {
-    for (const ad of ["kalp", "kalp-bos", "onay-pencere", "incele-dugmesi", "doku-kagit"]) {
+    for (const ad of ["kalp", "kalp-bos", "onay-pencere", "incele-dugmesi", "doku-kagit", "el", "yildiz", "yildiz-bos"]) {
       this.load.svg(ad, `gorseller/${ad}.svg`);
     }
   }
@@ -69,11 +98,122 @@ class MiniOyunSahnesi extends Phaser.Scene {
   ortakKur() {
     this.cameras.main.fadeIn(300, 251, 247, 236);
     this.add.tileSprite(0, 0, 1280, 720, "doku-kagit").setOrigin(0).setDepth(-10);
-    const geri = this.add.container(1180, 46, [
-      this.add.image(0, 0, "incele-dugmesi").setScale(0.8),
-      doodleYazi(this, 0, -3, "Geri", 26).setOrigin(0.5),
-    ]).setSize(140, 46).setDepth(900).setInteractive({ useHandCursor: true });
+    const geri = this.add.container(1176, 48, [
+      this.add.image(0, 0, "incele-dugmesi").setScale(0.9),
+      doodleYazi(this, 0, -3, "Geri", 28).setOrigin(0.5),
+    ]).setSize(200, 96).setDepth(900).setInteractive({ useHandCursor: true });
     geri.on("pointerdown", () => this.geriDon());
+    // Uçan yıldız ve parıltı için küçük parçacık
+    if (!this.textures.exists("parilti")) {
+      const g = this.make.graphics({ add: false });
+      g.fillStyle(0xffffff);
+      g.fillCircle(5, 5, 5);
+      g.generateTexture("parilti", 10, 10);
+      g.destroy();
+    }
+  }
+
+  // ---- Araştırmadan gelen ortak ilkeler ----
+  // "Göster, anlatma": her mini oyunun ilk turunda bir el nereye dokunulacağını gösterir
+  // (sayfa açık kaldıkça her oyunda bir kez). hedefler: dokunulacak nesneler/noktalar
+  // (sırayla gösterilir; hareket eden nesneyi izler). Çocuk ekrana dokununca el kaybolur.
+  elGoster(hedefler) {
+    if (MINI_OYUN_ELI_GOSTERILDI[this.sys.settings.key] || this.bitti) return;
+    hedefler = (Array.isArray(hedefler) ? hedefler : [hedefler]).filter(Boolean);
+    if (!hedefler.length) return;
+    MINI_OYUN_ELI_GOSTERILDI[this.sys.settings.key] = true;
+    const el = this.add.image(0, 0, "el").setOrigin(32 / 90, 8 / 110).setDepth(950).setAlpha(0);
+    const halka = this.add.graphics().setDepth(949);
+    let sira = 0;
+    let basma = 0; // 0..1 basma hareketi
+    const konum = (h) => (h.active === false ? null : { x: h.x, y: h.y + (h.elKaydir || 0) });
+    const izle = () => {
+      const h = hedefler[sira % hedefler.length];
+      const k = konum(h);
+      if (!k) { bitir(); return; }
+      el.setPosition(k.x + 14, k.y + 30 - basma * 10).setScale(1 - basma * 0.08); // harfi kapatmasın
+    };
+    const dongu = this.tweens.addCounter({
+      from: 0, to: 1, duration: 1100, repeat: -1,
+      onUpdate: (t) => {
+        const v = t.getValue();
+        basma = v < 0.35 ? 0 : v < 0.55 ? (v - 0.35) / 0.2 : v < 0.75 ? 1 - (v - 0.55) / 0.2 : 0;
+        halka.clear();
+        if (v > 0.5 && v < 0.95) {
+          const h = konum(hedefler[sira % hedefler.length]);
+          if (h) {
+            halka.lineStyle(5, 0xffffff, 1 - (v - 0.5) / 0.45);
+            halka.strokeCircle(h.x, h.y + 0, 20 + (v - 0.5) * 120);
+          }
+        }
+      },
+      onRepeat: () => { sira++; },
+    });
+    this.tweens.add({ targets: el, alpha: 1, duration: 300 });
+    this.events.on("update", izle);
+    const bitir = () => {
+      this.events.off("update", izle);
+      dongu.remove();
+      halka.destroy();
+      this.tweens.add({ targets: el, alpha: 0, duration: 200, onComplete: () => el.destroy() });
+      this.input.off("pointerdown", bitir);
+    };
+    this.input.once("pointerdown", bitir);
+    this.time.delayedCall(9000, () => { if (el.active) bitir(); });
+  }
+
+  // Sürükleme gösteren el (Harfi Çiz gibi): el noktalar boyunca gider, birkaç kez tekrarlar
+  elSurukleGoster(noktalar) {
+    if (MINI_OYUN_ELI_GOSTERILDI[this.sys.settings.key] || this.bitti || noktalar.length < 2) return;
+    MINI_OYUN_ELI_GOSTERILDI[this.sys.settings.key] = true;
+    const el = this.add.image(noktalar[0].x, noktalar[0].y, "el").setOrigin(32 / 90, 8 / 110)
+      .setDepth(950).setAlpha(0);
+    const yol = new Phaser.Curves.Spline(noktalar.map((n) => new Phaser.Math.Vector2(n.x, n.y)));
+    const sayac = this.tweens.addCounter({
+      from: 0, to: 1, duration: 1800, repeat: -1, repeatDelay: 500,
+      onUpdate: (t) => {
+        const n = yol.getPoint(t.getValue());
+        el.setPosition(n.x, n.y);
+        el.setAlpha(t.getValue() < 0.1 ? t.getValue() * 10 : t.getValue() > 0.9 ? (1 - t.getValue()) * 10 : 1);
+      },
+    });
+    const bitir = () => {
+      sayac.remove();
+      this.tweens.add({ targets: el, alpha: 0, duration: 200, onComplete: () => el.destroy() });
+    };
+    this.input.once("pointerdown", bitir);
+    this.time.delayedCall(9000, () => { if (el.active) bitir(); });
+  }
+
+  // Doğru yapılan yerde parıltı ve ilerleme çubuğuna uçan bir yıldız ("juice")
+  odulUcur(x, y) {
+    this.add.particles(x, y, "parilti", {
+      speed: { min: 80, max: 220 }, lifespan: 450, scale: { start: 1, end: 0 },
+      tint: [0xffe680, 0xffffff, 0xffc928], emitting: false,
+    }).setDepth(940).explode(12);
+    const yildiz = this.add.image(x, y, "yildiz").setScale(0.5).setDepth(941);
+    const hedefX = 862 + Math.max(26, (196 * Math.min(this.ilerleme, this.ilerlemeHedef)) / this.ilerlemeHedef);
+    this.tweens.add({
+      targets: yildiz, x: hedefX, y: 45, scale: 0.3, angle: 200, duration: 550, ease: "Cubic.In",
+      onComplete: () => {
+        yildiz.destroy();
+        Sesler.nota(1320, 0, 0.08, 0.06, "sine");
+        if (this.ilerlemeCizim) {
+          this.tweens.add({ targets: [this.ilerlemeCizim], y: -3, duration: 90, yoyo: true });
+        }
+      },
+    });
+  }
+
+  // Yanlıştan sonra nazik ipucu: doğru nesne hafifçe büyüyüp küçülür (2 kez)
+  ipucuGoster(nesne) {
+    if (!nesne || !nesne.active || this.bitti) return;
+    const olcek = nesne.scaleX || 1;
+    this.time.delayedCall(700, () => {
+      if (!nesne.active || this.bitti) return;
+      this.tweens.add({ targets: nesne, scale: olcek * 1.12, duration: 260, yoyo: true, repeat: 1,
+        ease: "Sine.InOut", onComplete: () => { if (nesne.active) nesne.setScale(olcek); } });
+    });
   }
 
   // Sol üstte canlar
@@ -142,9 +282,11 @@ class MiniOyunSahnesi extends Phaser.Scene {
   }
 
   // Bir doğru daha. Hedefe varınca oyun biter (kazanma).
-  ilerlemeArtir() {
+  // x, y verilirse o yerden ilerleme çubuğuna bir yıldız uçar.
+  ilerlemeArtir(x, y) {
     if (this.bitti) return;
     this.ilerleme++;
+    if (x !== undefined) this.odulUcur(x, y);
     this.ilerlemeyiCiz();
     if (this.ilerleme >= this.ilerlemeHedef) this.time.delayedCall(400, () => this.bitir(true));
   }
@@ -167,6 +309,25 @@ class MiniOyunSahnesi extends Phaser.Scene {
     const geri = doodleYazi(this, 755, 438, "Geri", 38).setOrigin(0.5);
     kap.add([karartma, kart, baslik, tekrar, geri]);
     this.tweens.add({ targets: kap, alpha: 1, duration: 250 });
+    if (basarili) {
+      // Kalan can kadar yıldız (3 can = 3 yıldız); yıldızlar sırayla zıplayarak gelir
+      const kazanilan = Math.max(1, this.canSayisi === undefined ? 3 : this.canSayisi);
+      [[560, 214], [640, 196], [720, 214]].forEach(([x, y], i) => {
+        const dolu = i < kazanilan;
+        const yildiz = this.add.image(x, y, dolu ? "yildiz" : "yildiz-bos").setDepth(1002)
+          .setScale(0).setAngle(i === 0 ? -12 : i === 2 ? 12 : 0);
+        this.tweens.add({
+          targets: yildiz, scale: i === 1 ? 1.15 : 0.95, duration: 380, delay: 350 + i * 280, ease: "Back.Out",
+          onStart: () => { if (dolu) Sesler.nota(880 + i * 220, 0, 0.18, 0.12, "triangle"); },
+        });
+      });
+      // Konfeti
+      this.add.particles(640, 160, "parilti", {
+        speed: { min: 200, max: 520 }, angle: { min: 200, max: 340 }, gravityY: 700, lifespan: 1600,
+        scale: { start: 1.2, end: 0.4 }, tint: [0xff9c8a, 0xffe680, 0x9be3dc, 0xc8a2ff, 0xb5e48c],
+        emitting: false,
+      }).setDepth(1003).explode(60);
+    }
     const tekrarAlani = this.add.zone(525, 440, 190, 80).setDepth(1001).setInteractive({ useHandCursor: true });
     const geriAlani = this.add.zone(755, 440, 190, 80).setDepth(1001).setInteractive({ useHandCursor: true });
     tekrarAlani.on("pointerdown", () => this.scene.restart(this.veri));
