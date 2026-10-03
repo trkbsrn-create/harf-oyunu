@@ -76,6 +76,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   sekillerle-yazma (Şekillerle Yazma: içi boş büyük harf (HARF_YOLLARI büyütülür); tepsiden
   düğme/çiçek/şeker sürüklenir, yazılış sırasındaki sıradaki yere oturur; can yok; 1. seviyede
   dokunmak da yeter, 3. seviyede harf silik ve sıradaki yere yakın bırakmak gerekir).
+  hece-muzigi (Hece Müziği: 1. seviye ksilofon: heceli tuşlar, oyun melodi çalar (tuş parlar,
+  hece okunur), çocuk aynı sırayla basar; 2-3. seviye nota akışı: heceli notalar sağdan sola
+  akar, istenen heceli notaya kırmızı çizgide dokunulur; notalar beşli (pentatonik) dizide).
   Hecelerine ayrılmış ortak kelime listesi `KELIMELER`, `ogrenilmisKelimeler(harf)` (ortak.js;
   yalnızca öğrenilmiş harflerle yazılabilen kelimeler).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
@@ -229,3 +232,6 @@ Her hatadan sonra buraya yeni bir kural ekle.
   ve hiç varamaz. Testleri yavaş tarayıcıda da çalıştır.
 - Telefonda sesi parmak ekrana değdiği an (pointerdown/touchstart) açmaya çalışma; tarayıcı
   izin vermez, ses mikrofon iznine kadar hiç gelmez. Ses parmak kalkınca açılmalı.
+- Phaser sahnesi yeniden açılınca (Tekrar, başka seviye) aynı nesne kullanılır; önceki turdan
+  kalan alanlar (`this.tuslar`, `this.cevaplandi` gibi) silinmez. Mini oyunun `create`'inde
+  bütün durum alanlarını sıfırla.

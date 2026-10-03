@@ -30,6 +30,8 @@ class ElektrikDevresiSahnesi extends MiniOyunSahnesi {
     this.turNo = 0;
     this.prizler = [];
     this.secili = null;
+    this.kelime = null;
+    this.kelimeYazisi = null; // önceki turdan kalan (silinmiş) yazı yeniden silinmesin
     this.kilitli = true;
 
     const hoparlor = this.add.container(640, 60, [this.hoparlorCiz(0, 0, 38)]).setDepth(900)

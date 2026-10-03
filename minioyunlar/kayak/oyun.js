@@ -35,6 +35,7 @@ class KayakSahnesi extends MiniOyunSahnesi {
     this.ilerlemeKur(this.ayar.hedef);
     this.nesneler = [];
     this.uretilen = 0;
+    this.uretici = null;
     this.hece = null;
     this.basladi = false;
 
