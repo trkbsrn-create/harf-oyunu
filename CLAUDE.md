@@ -63,6 +63,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   seker-patlatma (Şeker Patlatma: harfli şeker tahtası; söylenen heceyi okuma yönünde
   (soldan sağa / yukarıdan aşağı) yan yana iki şekeri kaydırarak ya da sırayla dokunarak
   kur; şekerler patlar, yenileri düşer; hece tahtada hep bulunur, bir harften en çok 5 şeker).
+  kayak (Kayak: pist yukarı akar, üç şerit; kayakçının sağına/soluna dokunarak ya da
+  sürükleyerek şerit değiştir. 1. seviye harf topla (doğru harfli kar topları, yanlış harf ve
+  kaya can götürür); 2-3. seviye hece kapıları (hece söylenir, doğru kapıdan geç; yeni sıra
+  önceki geçilince gelir)).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
   Hoparlör çizimi ortak: `hoparlorCiz`. Ortak "Yakala:/Patlat:" paneli
   `hedefPaneliKur`.
