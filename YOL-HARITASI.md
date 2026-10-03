@@ -56,6 +56,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - Mini oyun araştırması (öğretmenin isteği) ilk 7 oyuna uygulandı: gösteren el, uçan yıldız ve parıltı, yanlışta nazik ipucu, bitişte 1–3 yıldız ve konfeti, büyük dokunma alanları, Damla'da kolay başlangıç. Menü sayfalı oldu, bütün fikirler "Yakında" kartı olarak görünüyor (Sürüm 57): TAMAM.
    - Öğretmenin fikirlerinden 1. oyun: Labirent (hece kapıları; 4/5/6 kavşak, 2/3/3 kapı; sonunda hazine) (Sürüm 58): TAMAM.
    - 2. oyun: Şeker Patlatma (hece zinciri; söylenen heceyi soldan sağa ya da yukarıdan aşağı yan yana iki şekerle kur; 6/8/10 hece) (Sürüm 59): TAMAM.
+   - 3. oyun: Kayak (1. seviye harf topla, 2-3. seviye hece kapıları; üç şerit, dokunarak ya da sürükleyerek şerit değiştir) (Sürüm 60): TAMAM.
    - Planlanan ilk 7 mini oyunun hepsi yapıldı. Sıradaki iş: öğretmenin kendi mini oyun fikirleri (aşağıdaki listede, sırayla; her biri için önce görsel taslak ve onay). Sonra mini oyunları ana oyuna (tesis, damla parçaları) bağlamak. Ana oyunun geri kalanı mini oyunlar bitince.
 
 ## Öğretmenin mini oyun fikirleri (sırayla yapılacak)
