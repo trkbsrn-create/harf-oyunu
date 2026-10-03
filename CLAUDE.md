@@ -95,6 +95,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   tombala (Tombala: resimli kart; torbadan harf topu çıkar (ünlü söylenir), o sesle başlayan
   resme pul konur; 2-3. seviyede kartta olmayan ya da zaten kapatılmış harf de çıkar, "Kartımda
   yok" düğmesine basılır; satır dolunca "Çinko!", kart dolunca "Tombala!").
+  arabayi-ulastir (Arabayı Ulaştır: arabadan başlayıp bitiş bayrağına parmakla yol çizilir;
+  araba yolu izler, doğru harfli durakları toplar; yanlış durakta durur, can gider; bitişe varıp
+  durak eksikse eksikler parlar, araba başa döner (can gitmez)).
   Hecelerine ayrılmış ortak kelime listesi `KELIMELER`, `ogrenilmisKelimeler(harf)` (ortak.js;
   yalnızca öğrenilmiş harflerle yazılabilen kelimeler).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
