@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 86;
+const SURUM = 87;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -67,14 +67,17 @@ const TESIS_ALANI = new Phaser.Geom.Rectangle(TESIS_X - 160, TESIS_Y - 260, 320,
 // yuvarlağının tuvaldeki yeri. Parça takılmadan önce silik (kesik çizgili) görünür.
 const YELKENLI_X = TESIS_X + 460;
 const YELKENLI_Y = 2910;
+// kutu: parçanın tuvaldeki yeri (x, y, en, boy; doodle_ciz.py'deki YELKENLI_KUTU ile aynı)
 const YELKENLI_PARCALARI = [
-  { harf: "a", ad: "govde", x: 250, y: 325 },
-  { harf: "n", ad: "direk", x: 295, y: 130 },
-  { harf: "e", ad: "bayrak", x: 320, y: 20 },
-  { harf: "t", ad: "dumen", x: 490, y: 335 },
-  { harf: "i", ad: "kurek", x: 20, y: 310 },
-  { harf: "l", ad: "yelken", x: 320, y: 230 },
+  { harf: "a", ad: "govde", x: 250, y: 325, kutu: [70, 285, 360, 80] },
+  { harf: "n", ad: "direk", x: 295, y: 130, kutu: [246, 55, 10, 230] },
+  { harf: "e", ad: "bayrak", x: 320, y: 20, kutu: [256, 21, 46, 48] },
+  { harf: "t", ad: "dumen", x: 490, y: 335, kutu: [428, 300, 30, 70] },
+  { harf: "i", ad: "kurek", x: 20, y: 310, kutu: [26, 260, 96, 128] },
+  { harf: "l", ad: "yelken", x: 320, y: 230, kutu: [262, 70, 100, 200] },
 ];
+// Yelkenli kartına dokununca karakter buraya (kızağın soluna, kumsala) yürür
+const YELKENLI_DURAK = { x: YELKENLI_X - 30, y: YELKENLI_Y + 310 };
 const YELKENLI_ALANI = new Phaser.Geom.Rectangle(YELKENLI_X - 60, YELKENLI_Y - 60, 800, 520); // süs yok
 const VARIL_HARFLERI = HARFLER.filter((h) => h.grup === 1).map((h) => h.kucuk);
 const VARIL_ORTA = { x: 52 / 120, y: 14 / 150 };
@@ -373,6 +376,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.cantaKur();
     this.menuKur();
     this.haritaKur();
+    this.yelkenliKartiKur();
     this.tesisPaneliKur();
     // God mode: ekili harflerin varilleri tesiste hazır durur
     for (const k of this.tarlaKareleri) if (k.ekili) this.varilGetir(k.ekili.harf, true);
@@ -390,6 +394,11 @@ class AdaSahnesi extends Phaser.Scene {
       if (this.tirmaniyor) return; // sırıkta tırmanırken dokunuş beklenmez
       if (this.menuTiklamasi(p)) return;
       if (this.tesisTiklamasi(p)) return;
+      if (!this.cantaAcik && this.yelkenliKartAlani.contains(p.x, p.y)) {
+        this.tweens.add({ targets: this.yelkenliKarti, scale: 0.92, duration: 90, yoyo: true });
+        this.hedefBelirle(YELKENLI_DURAK.x, YELKENLI_DURAK.y, true);
+        return;
+      }
       if (!this.cantaAcik && this.haritaAlani.contains(p.x, p.y)) return; // haritaya dokununca yürümez
       if (this.cantaTiklamasi(p)) return;
       if (this.tesis.getBounds().contains(p.worldX, p.worldY)) {
@@ -422,6 +431,10 @@ class AdaSahnesi extends Phaser.Scene {
       }
       if (this.tasinan) {
         this.tohumuTasi(p);
+        return;
+      }
+      if (this.parcaTasinan) {
+        this.parcayiTasi(p);
         return;
       }
       if (p.isDown && !this.cantaAcik && !this.menuAcik && !this.tesisAcik) this.hedefBelirle(p.worldX, p.worldY, false);
@@ -481,6 +494,7 @@ class AdaSahnesi extends Phaser.Scene {
       this.inceleDugmesi.setVisible(false);
       if (this.siseyiTut(p)) return true; // şişeye dokunuldu (bırakınca "İncele" çıkar)
       if (this.tohumuTut(p)) return true; // tohum tarlaya sürüklenmeye başladı
+      if (this.parcayiTut(p)) return true; // yelkenli parçası yelkenliye sürüklenmeye başladı
       if (this.kapatmaAlani.contains(p.x, p.y) || !this.pencereAlani.contains(p.x, p.y)
           || this.cantaDugmesi.getBounds().contains(p.x, p.y)) {
         this.cantayiAcKapat();
@@ -613,6 +627,10 @@ class AdaSahnesi extends Phaser.Scene {
       this.inceleAlani.setPosition(k.x - 90, y - 35);
       this.tweens.add({ targets: this.inceleDugmesi, scale: 1, duration: 200, ease: "Back.Out" });
       Sesler.nota(660, 0, 0.08, 0.12);
+      return;
+    }
+    if (this.parcaTasinan) {
+      this.parcayiBirak(p);
       return;
     }
     this.tohumuBirak(p);
@@ -948,6 +966,7 @@ class AdaSahnesi extends Phaser.Scene {
   // Adadan kurtulmanın hedefi baştan görünsün: bütün parçalar silik, her parçanın yanında
   // harfi silik bir yuvarlakta. (Parçayı bulutlardan getirip takmak sonraki adım.)
   yelkenliKur() {
+    this.parcaTasinan = null; // çantadan yelkenliye sürüklenen parça
     const derinlik = YELKENLI_Y + 380; // kızağın alt kenarı: önünden geçen karakter önde görünür
     this.add.image(YELKENLI_X, YELKENLI_Y, "yelkenli-kizak").setOrigin(0).setDepth(derinlik - 1);
     this.yelkenliParcalari = YELKENLI_PARCALARI.map((p) => {
@@ -964,7 +983,126 @@ class AdaSahnesi extends Phaser.Scene {
       const yazi = boyaliOrtala(this.add.text(x, y, p.harf, {
         fontFamily: "Andika", fontSize: "32px", color: "#b5b5b5", padding: { x: 3, y: 3 },
       })).setDepth(derinlik + 2);
-      return { ...p, silik, dolu, yuvarlak, yazi, takildi: false };
+      // Parça bu alana bırakılınca takılır (yerinin çevresi, parmak için geniş)
+      const [kx, ky, ken, kboy] = p.kutu;
+      const alan = new Phaser.Geom.Rectangle(YELKENLI_X + kx - 80, YELKENLI_Y + ky - 80, ken + 160, kboy + 160);
+      return { ...p, silik, dolu, yuvarlak, yazi, alan, takildi: false };
+    });
+  }
+
+  // Parça yerine oturur: dolu hâli görünür, harf yuvarlağı koyulaşır, parıltı
+  parcayiTak(parca) {
+    parca.takildi = true;
+    parca.silik.setVisible(false);
+    parca.dolu.setVisible(true).setAlpha(0);
+    this.tweens.add({ targets: parca.dolu, alpha: 1, duration: 400 });
+    const x = YELKENLI_X + parca.x;
+    const y = YELKENLI_Y + parca.y;
+    parca.yuvarlak.clear();
+    parca.yuvarlak.fillStyle(0xfbf4e2, 1);
+    parca.yuvarlak.fillCircle(x, y, 22);
+    parca.yuvarlak.lineStyle(3, 0x2b2b2b, 1);
+    parca.yuvarlak.strokeCircle(x, y, 22);
+    parca.yazi.setColor("#ffffff").setStroke("#3b2a1a", 6);
+    boyaliOrtala(titret(parca.yazi, 1.2));
+    this.tweens.add({ targets: parca.yazi, scale: 1.5, duration: 200, yoyo: true });
+    const [kx, ky, ken, kboy] = parca.kutu;
+    this.add.particles(YELKENLI_X + kx + ken / 2, YELKENLI_Y + ky + kboy / 2, "parilti", {
+      speed: { min: 80, max: 260 }, lifespan: 800, scale: { start: 1.3, end: 0 },
+      tint: [0xffe680, 0xffffff, 0xffc928], emitting: false,
+    }).setDepth(YELKENLI_Y + 400).explode(30);
+    Sesler.buyume();
+    this.yelkenliKartiniCiz();
+  }
+
+  // ---- Yelkenli kartı (sağ üstte, çantanın altında): takılan parçalar renkli, "2 / 6" ----
+  // Karta dokununca karakter yelkenliye yürür.
+  yelkenliKartiKur() {
+    const X = 1280 - 160;
+    const Y = 160;
+    const kap = this.add.container(X, Y).setScrollFactor(0).setDepth(8900);
+    const g = this.add.graphics();
+    g.fillStyle(0x000000, 0.15);
+    g.fillRoundedRect(6, 8, 150, 130, 16);
+    g.fillStyle(0xfbf4e2, 1);
+    g.fillRoundedRect(0, 0, 150, 130, 16);
+    g.lineStyle(4, 0x2b2b2b, 1);
+    g.strokeRoundedRect(0, 0, 150, 130, 16);
+    kap.add(g);
+    // Küçük yelkenli: aynı resimler 0.2 ölçekte (tuval 680x440 -> 136x88)
+    this.kartParcalari = YELKENLI_PARCALARI.map((p) => {
+      const silik = this.add.image(7, 4, `yelkenli-${p.ad}-silik`).setOrigin(0).setScale(0.2);
+      const dolu = this.add.image(7, 4, `yelkenli-${p.ad}`).setOrigin(0).setScale(0.2).setVisible(false);
+      kap.add([silik, dolu]);
+      return { silik, dolu };
+    });
+    this.kartSayi = this.add.text(75, 112, "0 / 6", {
+      fontFamily: "Andika", fontSize: "22px", color: "#555555",
+    }).setOrigin(0.5);
+    kap.add(this.kartSayi);
+    this.yelkenliKarti = kap;
+    this.yelkenliKartAlani = new Phaser.Geom.Rectangle(X, Y, 150, 130);
+  }
+
+  yelkenliKartiniCiz() {
+    let sayi = 0;
+    this.yelkenliParcalari.forEach((p, i) => {
+      this.kartParcalari[i].silik.setVisible(!p.takildi);
+      this.kartParcalari[i].dolu.setVisible(p.takildi);
+      if (p.takildi) sayi++;
+    });
+    this.kartSayi.setText(`${sayi} / 6`);
+    this.tweens.add({ targets: this.yelkenliKarti, scale: 1.1, duration: 150, yoyo: true });
+  }
+
+  // ---- Parçayı çantadan yelkenliye sürükleme (tohum eker gibi) ----
+  parcayiTut(p) {
+    const sira = this.kutucuklar.findIndex((k, i) => Canta.esyalar[i]
+      && Canta.esyalar[i].tur === "parca" && Math.abs(p.x - k.x) < 60 && Math.abs(p.y - k.y) < 60);
+    if (sira < 0) return false;
+    const esya = Canta.esyalar[sira];
+    const k = this.kutucuklar[sira];
+    const kap = this.add.container(p.x, p.y, [this.add.image(0, 0, `yelkenli-${esya.ad}-simge`)])
+      .setScrollFactor(0).setDepth(9600).setScale(1.2);
+    const parca = this.yelkenliParcalari.find((y) => y.ad === esya.ad);
+    this.parcaTasinan = { kap, sira, esya, parca, geriX: k.x, geriY: k.y };
+    this.kutucukNesneleri[sira].forEach((n) => n.setAlpha(0.25));
+    this.tweens.add({ targets: this.cantaPenceresi, alpha: 0.12, duration: 200 });
+    // Yelkenlide parçanın yeri sarı parlar
+    parca.silik.setTintFill(0xffcf3f);
+    this.tweens.add({ targets: parca.silik, alpha: 0.4, duration: 400, yoyo: true, repeat: -1 });
+    Sesler.nota(660, 0, 0.08, 0.12);
+    return true;
+  }
+
+  parcayiTasi(p) {
+    const t = this.parcaTasinan;
+    t.kap.setPosition(p.x, p.y);
+    t.kap.setScale(t.parca.alan.contains(p.worldX, p.worldY) ? 1.45 : 1.2);
+  }
+
+  // Yerinin üstüne bırakılırsa takılır; değilse çantadaki yerine döner
+  parcayiBirak(p) {
+    const t = this.parcaTasinan;
+    this.parcaTasinan = null;
+    this.tweens.killTweensOf(t.parca.silik);
+    t.parca.silik.clearTint().setAlpha(1);
+    this.tweens.add({ targets: this.cantaPenceresi, alpha: 1, duration: 250 });
+    if (!t.parca.alan.contains(p.worldX, p.worldY)) {
+      this.tweens.add({
+        targets: t.kap, x: t.geriX, y: t.geriY, scale: 1, duration: 250, ease: "Cubic.Out",
+        onComplete: () => { t.kap.destroy(); this.cantaIceriginiCiz(); },
+      });
+      return;
+    }
+    Canta.cikar(t.sira);
+    this.cantaIceriginiCiz();
+    const [kx, ky, ken, kboy] = t.parca.kutu;
+    const kamera = this.cameras.main;
+    this.tweens.add({
+      targets: t.kap, x: YELKENLI_X + kx + ken / 2 - kamera.scrollX, y: YELKENLI_Y + ky + kboy / 2 - kamera.scrollY,
+      scale: 0.6, alpha: 0.3, duration: 220, ease: "Cubic.In",
+      onComplete: () => { t.kap.destroy(); this.parcayiTak(t.parca); },
     });
   }
 
