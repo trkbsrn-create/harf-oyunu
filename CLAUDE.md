@@ -119,6 +119,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   hece-kulesi (Hece Kulesi: önce söylenen hece üstteki üç karttan seçilir; sonra hece bloğu
   vinçte sallanır, dokununca düşer; kulenin üstüne oturursa kule büyür, ıskalarsa aynı hece
   yeniden vince gelir (1. seviyede can gitmez); kule yükseldikçe aşağı kayar; kelime kurulmaz).
+  birlestir-buyut (Birleştir Büyüt: 4x4 tahta, 2048 gibi kaydırılır (parmak ya da ok tuşları);
+  okuma yönünde yan yana gelen ünlü + ünsüz hece olur (ünlü taşlar kırmızı, ünsüzler
+  yeşil-mavi, heceler sarı); 3. seviyede heceler kalır, iki hece KELIMELER'deki bir kelimeyi
+  kurarsa kelime olur; tahta dolunca en eski taşlar uçar; can yok).
   Hecelerine ayrılmış ortak kelime listesi `KELIMELER`, `ogrenilmisKelimeler(harf)` (ortak.js;
   yalnızca öğrenilmiş harflerle yazılabilen kelimeler).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).

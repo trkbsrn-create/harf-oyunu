@@ -75,6 +75,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - 19. oyun: Canavarı Besle (canavar balonda bir harf ister; doğru harfli meyveyi canavara fırlat, yer ve büyür; yanlışı tükürür; 1. seviyede dokunmak yeter; 5/6/8 lokma) (Sürüm 76): TAMAM.
    - 20. oyun: Harf Kesme (meyveler havaya fırlar; doğru harfli meyveleri parmakla kaydırarak kes; ek özellik seri kesim: tek kaydırışta birden çok doğru meyve "2'li kesim!"; 8/10/12 meyve) (Sürüm 77): TAMAM.
    - 21. oyun: Hece Kulesi (öğretmenin tarifi: hece söylenir, üstten doğru heceyi seç; hece vinçte sallanır, dokununca düşer, kuleye oturursa kule büyür; kelime kurulmaz; 5/6/8 kat; 1. seviyede ıskalamak can götürmez) (Sürüm 78): TAMAM.
+   - 22. oyun: Birleştir Büyüt (2048 tarzı; tahtayı kaydır, okuma yönünde yan yana gelen ünlü+ünsüz hece olur; 3. seviyede heceler kalır ve kelimeye dönüşebilir (an+ne=anne); can yok; 5/7/8) (Sürüm 79): TAMAM. Ortak düzeltme: ilerleme hedefi aşmaz.
    - Planlanan ilk 7 mini oyunun hepsi yapıldı. Sıradaki iş: öğretmenin kendi mini oyun fikirleri (aşağıdaki listede, sırayla; her biri için önce görsel taslak ve onay). Sonra mini oyunları ana oyuna (tesis, damla parçaları) bağlamak. Ana oyunun geri kalanı mini oyunlar bitince.
 
 ## Öğretmenin mini oyun fikirleri (sırayla yapılacak)
