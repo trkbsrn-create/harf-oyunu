@@ -90,6 +90,8 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   altin-madencisi (Altın Madencisi: kanca sağa sola sallanır, dokununca iner ve ilk külçeyi çeker;
   bütün külçeler aynı görünür; istenen harf altın (ilerleme), başka harf taşa döner ve yavaş
   çekilir; can yok, kaybetmek yok).
+  kazi-kazan (Kazı Kazan: gümüş kaplama RenderTexture'dan parmakla silinir, altından resim çıkar;
+  yaklaşık yarısı kazınınca harf seçenekleri belirir, resmin ilk sesi seçilir).
   Hecelerine ayrılmış ortak kelime listesi `KELIMELER`, `ogrenilmisKelimeler(harf)` (ortak.js;
   yalnızca öğrenilmiş harflerle yazılabilen kelimeler).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
