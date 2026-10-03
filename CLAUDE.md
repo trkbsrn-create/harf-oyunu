@@ -67,6 +67,11 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   sürükleyerek şerit değiştir. 1. seviye harf topla (doğru harfli kar topları, yanlış harf ve
   kaya can götürür); 2-3. seviye hece kapıları (hece söylenir, doğru kapıdan geç; yeni sıra
   önceki geçilince gelir)).
+  elektrik-devresi (Elektrik Devresi: kelime söylenir; soldaki ilk heceden sağdaki ikinci heceye
+  kablo çekilir (sürükleyerek ya da sırayla dokunarak); doğruysa ampul yanar, kelime yazılır ve
+  okunur; yanlışsa kıvılcım, can gider).
+  Hecelerine ayrılmış ortak kelime listesi `KELIMELER`, `ogrenilmisKelimeler(harf)` (ortak.js;
+  yalnızca öğrenilmiş harflerle yazılabilen kelimeler).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
   Hoparlör çizimi ortak: `hoparlorCiz`. Ortak "Yakala:/Patlat:" paneli
   `hedefPaneliKur`.
