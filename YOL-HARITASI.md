@@ -79,6 +79,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - 23. oyun: Harfle Boya (ev, çiçek, gemi resimleri bölgelere ayrılmış; istenen harfli bölgelere dokununca boyanır, hepsi bitince resmin kalanı da boyanır; 2/3/3 resim) (Sürüm 80): TAMAM.
    - 24. oyun: Harf Fırtınası (art arda kısa görevler: dokun, patlat, hece seç, resmin ilk sesi, düşen damlayı yakala; her görevde süre çubuğu; 8/10/12 görev) (Sürüm 81): TAMAM. Öğretmenin 24 taslağının hepsi yapıldı.
    - Su arıtma tesisinde harf varilleri (öğretmenin seçimi B+C): harf düğmeleri kalktı; her harfin musluklu varili, tohumu tarlaya ekilince güvertede ve panelde (borunun altında) belirir; varile dokununca damla (Sürüm 83): TAMAM.
+   - Varilden damla iki aşamalı (öğretmenin tarifi): 1) ana tanktan harf varile damla gelir; 2) Şans Çarkı çıkar, gelen mini oyun 1-2-3. düzeyde art arda oynanır, bitince şişeye 1 damla (Sürüm 84): TAMAM. Şans Çarkı ileride bütün oyun seçimlerinde de kullanılacak.
    - Planlanan ilk 7 mini oyunun hepsi yapıldı. Sıradaki iş: öğretmenin kendi mini oyun fikirleri (aşağıdaki listede, sırayla; her biri için önce görsel taslak ve onay). Sonra mini oyunları ana oyuna (tesis, damla parçaları) bağlamak. Ana oyunun geri kalanı mini oyunlar bitince.
 
 ## Öğretmenin mini oyun fikirleri (sırayla yapılacak)

@@ -165,8 +165,14 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   (tesis-pencere.svg: solda su tankı, üstte boru). Her harfin bir varili var (varil.svg,
   musluklu): varil, o harfin tohumu tarlaya ekilince belirir (`varilGetir`); güvertede küçük
   varil (su-tesisi.svg'deki boru ağızlarının altında, `VARIL_YERI`), panelde borunun altında
-  büyük varil (`PANEL_VARIL_YERI`; yeni varil panel açılınca borudan iner). Harf düğmesi yok;
-  varile dokununca şişeye o harf için bir damla gider (harf başına en çok 3, `Canta.damlalar`). Şişe ilk damlayla çantaya gelir. Kaydedilmez.
+  büyük varil (`PANEL_VARIL_YERI`; yeni varil panel açılınca borudan iner). Harf düğmesi yok.
+  Varilden damla iki aşamada alınır (`varileDokun`): 1) varil boşsa (ağzı koyu) ana tanktan boru
+  boyunca bir damla gelir, varil dolar (`tanktanVarile`); 2) varil doluysa Şans Çarkı açılır
+  (`minioyunlar/sans-carki.js`, `SansCarkiSahnesi`: en çok 8 oyunluk çark, "Çevir"), çıkan mini
+  oyun o harfle 1, 2, 3. düzeyde art arda oynanır (`zincir`: kazanınca "Devam", sağ üstte
+  "Düzey 1 / 3"; ada sahnesi uyur), 3. düzey bitince ada uyanır ve varilden şişeye bir damla
+  akar (`miniOyundanDon`, `siseyeDamla`). Yarıda "Geri" denirse damla yok, varil dolu kalır.
+  Şişede o harften 3 damla varsa (harf başına en çok 3, `Canta.damlalar`) varil yalnızca sallanır. Şişe ilk damlayla çantaya gelir. Kaydedilmez.
   Çantada şişeye dokununca "İncele" düğmesi çıkar; basınca şişenin içi açılır
   (sise-pencere.svg): her harfin bölmesinde toplanan damlalar görünür (`siseKur`).
   Şişe sürüklenip tarladaki tohuma bırakılırsa (o harfin damlası varsa) şişe eğilir, bir
