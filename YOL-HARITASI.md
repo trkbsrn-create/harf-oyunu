@@ -93,8 +93,9 @@ Yapılacaklar (bu sırayla, her biri için önce görsel taslak ve onay):
 1. Sahilde yarım yelkenli: iskelenin sağındaki kumsalda kızak, bütün parçalar kesik çizgiyle
    silik, yanlarında harfleri (öğretmenin seçimi A). Parçalar: a gövde, n direk, e bayrak,
    t dümen, i kürek, l yelken (Sürüm 85): TAMAM.
-2. Bulutta parçayı alma: harfin büyük tabelası önünde harfin sesi mikrofona söylenir, parça
-   iner (öğretmen onayladı: mikrofonlu).
+2. Bulutta parçayı alma: tabelanın üstünde köpük balonda parça; karakter yaklaşınca mikrofon,
+   harf sesle dolar (tek aşama), balon patlar, parça çantaya girer (öğretmenin seçimi A)
+   (Sürüm 86): TAMAM.
 3. Parçayı tekneye takma (çantadan sürükle, yerine oturur) ve köşede ilerleme gösteren küçük
    yelkenli simgesi.
 4. Açılış hikâyesi (okuma gerektirmeyen kısa sahne: fırtına, kırık sal, kumsalda uyanma).

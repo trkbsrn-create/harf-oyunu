@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+  <!-- Yelkenli parçasının çanta simgesi: dumen (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="72" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="tahta" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(80)">
+      <rect width="7" height="7" fill="#e3b77e"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#c98f4f" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="koyuTahta" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(80)">
+      <rect width="7" height="7" fill="#b07a42"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#8e6340" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="kirmiziKumas" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="6" height="6" fill="#ff9c8a"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#e0533d" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="yelkenBezi" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="7" height="7" fill="#ffffff"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#e6eef3" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M428 300 l30 0 l-6 70 l-24 -10z" fill="url(#koyuTahta)" transform="translate(-547.5 -399.4) scale(1.371)" vector-effect="non-scaling-stroke"/>
+  </g>
+</svg>

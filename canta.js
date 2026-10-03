@@ -42,6 +42,14 @@ const Canta = {
     return true;
   },
 
+  // Yelkenli parçaları: bulutların üstünde alınınca çantaya girer (ad: govde, direk ...).
+  // alinanParcalar: o harfin parçası alındı mı (bulutta balon bir daha çıkmasın).
+  alinanParcalar: {},
+  parcaEkle(harf, ad) {
+    this.alinanParcalar[harf] = true;
+    this.esyalar.push({ tur: "parca", harf, ad });
+  },
+
   // Sıradaki eşyayı çantadan çıkarır ve verir (ör. tohum tarlaya ekilince).
   cikar(sira) {
     return this.esyalar.splice(sira, 1)[0];
