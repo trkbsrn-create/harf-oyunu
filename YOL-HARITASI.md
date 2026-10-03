@@ -100,7 +100,9 @@ Yapılacaklar (bu sırayla, her biri için önce görsel taslak ve onay):
    A); sağ üstte yelkenli kartı ("2 / 6"), dokununca karakter yelkenliye yürür (Sürüm 87): TAMAM.
 4. Açılış hikâyesi: kendiliğinden akan kısa canlı sahne, sesli sözler, "Geç" düğmesi (öğretmenin
    seçimi A): fırtına, sal kırılır, kumsalda uyanma, silik yelkenli (Sürüm 88): TAMAM.
-5. Final: yelkenli tamamlanınca kutlama, binip açılma, "2. ada yakında".
+5. Final: altı parça takılınca kutlama ve "Yola çık" düğmesi (öğretmenin seçimi B); basınca
+   çocuk biner, yelkenli açılır, gün batımı, adalar haritası "2. ada yakında", "Adaya dön"
+   (Sürüm 89): TAMAM. 1. adanın hikâyesi baştan sona oynanabilir.
 Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı
 fikirleri var).
 
