@@ -90,9 +90,9 @@ sula, fasulye sırığına dönüşsün → sırıktan bulutların üstüne çı
 parçasını al → parçaları sahildeki yelkenliye tak → altı parça tamamlanınca yelkenliye bin,
 2. adaya geç.
 Yapılacaklar (bu sırayla, her biri için önce görsel taslak ve onay):
-1. Sahilde yarım yelkenli (kızakta tekne iskeleti, eksik parçaların yerleri silik ve kesik
-   çizgili; hedef baştan görünsün). Önerilen parçalar: a gövde, n direk, e yelken, t dümen,
-   i kürek, l bayrak (onaylanacak).
+1. Sahilde yarım yelkenli: iskelenin sağındaki kumsalda kızak, bütün parçalar kesik çizgiyle
+   silik, yanlarında harfleri (öğretmenin seçimi A). Parçalar: a gövde, n direk, e bayrak,
+   t dümen, i kürek, l yelken (Sürüm 85): TAMAM.
 2. Bulutta parçayı alma: harfin büyük tabelası önünde harfin sesi mikrofona söylenir, parça
    iner (öğretmen onayladı: mikrofonlu).
 3. Parçayı tekneye takma (çantadan sürükle, yerine oturur) ve köşede ilerleme gösteren küçük
