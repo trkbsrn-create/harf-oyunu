@@ -237,6 +237,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   oyun sözleri sayfada yazılı: oyuna yeni söz eklenince oraya da eklenmeli). Kayıtlar yalnızca
   o tarayıcıda (IndexedDB) durur; sessizlik kesilir, ses eşitlenir, WAV (24 kHz). "Hepsini
   indir" zip verir (sesler/<anahtar>.wav + liste.json); öğretmen verince sesler oyuna eklenecek.
+- `dinle.html` – Öğretmenin oyundaki yapay zekâ seslerini dinlediği sayfa (sesler/liste.js'den;
+  bölüm bölüm ▶ ve "Beğenmedim"; işaretler localStorage'da; "Listeyi kopyala" Claude'a verilir,
+  beğenilmeyenler öğretmenin kendi sesiyle kayit.html'de kaydedilir).
 - `sesler.js` – Oyun sesleri. Efektler tarayıcıda (Web Audio) üretilir.
   Sesli okuma `Sesler.soyle`: söz `sesler/liste.js`'de (`SES_DOSYALARI`, söz → dosya) varsa
   `sesler/<dosya>.mp3` çalınır (Web Audio; dosyalar ilk dokunuştan sonra arka planda yüklenir).
