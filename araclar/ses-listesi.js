@@ -1,6 +1,6 @@
 // Oyunda sesli okunan bütün sözlerin listesi (seslendir.py kullanır).
 // Çalıştırma: node araclar/ses-listesi.js  → JSON yazar: [{ dosya, metin, ses }]
-// ses: "elif" (harf, hece, kelime, kutlama) ya da "ava" (hikâye ve genel sözler) – öğretmenin seçimi.
+// ses: "harper" (harf, hece, kelime), "elif" (kutlama) ya da "ava" (hikâye ve genel sözler) – öğretmenin seçimi.
 
 const fs = require("fs");
 const vm = require("vm");
@@ -36,11 +36,11 @@ const ekle = (tur, metin, ses) => {
 
 const grup1 = HARFLER.filter((h) => h.grup === 1);
 // Ünsüzler oyunda okunmaz (öğretmenin kararı); yalnızca ünlüler
-grup1.filter((h) => h.unlu).forEach((h) => ekle("harf", h.kucuk, "elif"));
-heceHavuzu("a").forEach((h) => ekle("hece", h.hece, "elif"));
-KELIMELER.forEach((k) => k.heceler.forEach((h) => ekle("hece", h, "elif")));
-grup1.forEach((h) => ekle("kelime", h.kelime, "elif"));
-KELIMELER.forEach((k) => ekle("kelime", k.kelime, "elif"));
+grup1.filter((h) => h.unlu).forEach((h) => ekle("harf", h.kucuk, "harper"));
+heceHavuzu("a").forEach((h) => ekle("hece", h.hece, "harper"));
+KELIMELER.forEach((k) => k.heceler.forEach((h) => ekle("hece", h, "harper")));
+grup1.forEach((h) => ekle("kelime", h.kelime, "harper"));
+KELIMELER.forEach((k) => ekle("kelime", k.kelime, "harper"));
 kutlamalar.forEach((m) => ekle("soz", m, "elif"));
 hikaye.forEach((m) => ekle("soz", m, "ava"));
 finalSozleri.forEach((m) => ekle("soz", m, "ava"));

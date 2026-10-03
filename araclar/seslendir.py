@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """Oyunun sözlerini Azure'un yapay zekâ sesleriyle seslendirir (sesler/*.mp3 ve sesler/liste.js).
 
-Öğretmenin seçimi: harf, hece, kelime ve kutlamalar Elif (heyecanlı); hikâye ve genel sözler Ava.
+Öğretmenin seçimi: harf, hece ve kelime Harper; kutlamalar Elif (heyecanlı); hikâye ve genel sözler Ava.
 Söz listesi araclar/ses-listesi.js'den gelir. Yalnızca eksik dosyalar üretilir (--hepsi: hepsi).
 
 Anahtar dosyaya yazılmaz, depoya konmaz; çalıştırırken ortam değişkeniyle verilir:
@@ -20,6 +20,7 @@ KOK = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..")
 KLASOR = os.path.join(KOK, "sesler")
 
 SESLER = {
+    "harper": ("tr-TR-Harper:MAI-Voice-2.1", None, False),
     "elif": ("tr-TR-Elif:MAI-Voice-2.1", "excited", False),
     "ava": ("en-US-AvaMultilingualNeural", None, True),
 }
