@@ -116,6 +116,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   harf-kesme (Harf Kesme: meyveler aşağıdan havaya fırlar (yerçekimi); parmağın kaydığı çizgiye
   değen meyve kesilir (dokunmak da keser); doğru harf ikiye ayrılır, yanlış harf can götürür,
   kaçan meyve ceza değil; seri kesim: tek kaydırışta 2+ doğru meyve "2'li kesim!" yazısı).
+  hece-kulesi (Hece Kulesi: önce söylenen hece üstteki üç karttan seçilir; sonra hece bloğu
+  vinçte sallanır, dokununca düşer; kulenin üstüne oturursa kule büyür, ıskalarsa aynı hece
+  yeniden vince gelir (1. seviyede can gitmez); kule yükseldikçe aşağı kayar; kelime kurulmaz).
   Hecelerine ayrılmış ortak kelime listesi `KELIMELER`, `ogrenilmisKelimeler(harf)` (ortak.js;
   yalnızca öğrenilmiş harflerle yazılabilen kelimeler).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
