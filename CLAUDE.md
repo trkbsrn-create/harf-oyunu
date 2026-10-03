@@ -92,6 +92,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   çekilir; can yok, kaybetmek yok).
   kazi-kazan (Kazı Kazan: gümüş kaplama RenderTexture'dan parmakla silinir, altından resim çıkar;
   yaklaşık yarısı kazınınca harf seçenekleri belirir, resmin ilk sesi seçilir).
+  tombala (Tombala: resimli kart; torbadan harf topu çıkar (ünlü söylenir), o sesle başlayan
+  resme pul konur; 2-3. seviyede kartta olmayan ya da zaten kapatılmış harf de çıkar, "Kartımda
+  yok" düğmesine basılır; satır dolunca "Çinko!", kart dolunca "Tombala!").
   Hecelerine ayrılmış ortak kelime listesi `KELIMELER`, `ogrenilmisKelimeler(harf)` (ortak.js;
   yalnızca öğrenilmiş harflerle yazılabilen kelimeler).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
