@@ -240,8 +240,8 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 - `sesler.js` – Oyun sesleri. Efektler tarayıcıda (Web Audio) üretilir.
   Sesli okuma `Sesler.soyle`: söz `sesler/liste.js`'de (`SES_DOSYALARI`, söz → dosya) varsa
   `sesler/<dosya>.mp3` çalınır (Web Audio; dosyalar ilk dokunuştan sonra arka planda yüklenir).
-  Sesler Azure'un yapay zekâ sesleriyle üretildi (öğretmenin seçimi: harf, hece, kelime ve
-  kutlama Elif "heyecanlı"; hikâye, final sözleri ve mini oyun adları Ava). Liste
+  Sesler Azure'un yapay zekâ sesleriyle üretildi (öğretmenin seçimi: harf, hece ve kelime
+  Harper; kutlama Elif "heyecanlı"; hikâye, final sözleri ve mini oyun adları Ava). Liste
   `araclar/ses-listesi.js`, üretim `araclar/seslendir.py` (yalnızca eksikleri üretir; anahtar
   ortam değişkeniyle verilir, ASLA dosyaya ya da depoya yazılmaz). Oyuna yeni sesli söz
   eklenince ses-listesi.js'e de eklenmeli. Dosyası olmayan sözde tarayıcı sesi: cihazdaki en doğal Türkçe ses seçilir (`turkceSes`: önce

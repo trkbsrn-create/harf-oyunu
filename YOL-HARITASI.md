@@ -107,7 +107,8 @@ Seslendirme (öğretmen robotik buldu): 1) cihazdaki en doğal Türkçe ses seç
 TAMAM. 2) Yapay zekâ seslendirme siteleri öğretmene önerildi, inceleyecek. 3) Öğretmenin kendi
 sesiyle kayıt sayfası kayit.html (Sürüm 93): TAMAM; öğretmen kaydedip zip'i verince sesler
 oyuna eklenecek (ünsüzler de saf sesle okunabilecek). 4) Azure yapay zekâ sesleri (Sürüm 94):
-TAMAM; harf, hece, kelime, kutlama Elif (heyecanlı), hikâye ve genel sözler Ava.
+TAMAM; harf, hece, kelime Harper (Sürüm 95; Elif kötü duruyordu), kutlama Elif (heyecanlı),
+hikâye ve genel sözler Ava.
 Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı
 fikirleri var).
 
