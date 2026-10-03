@@ -70,6 +70,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - 14. oyun: Arabayı Ulaştır (arabadan bitişe yol çiz; yol istenen harfin bütün duraklarından geçmeli, başka harfli duraklara değmemeli; 3/4/5 tur) (Sürüm 71): TAMAM.
    - 15. oyun: Yakala ve Yaz (kelime söylenir, çantada boş harf yerleri; uçuşan harf yaratıklarını ağla yakala, harf çantadaki yerine uçar; gerekmeyen harf can götürür; 3/4/4 kelime) (Sürüm 72): TAMAM.
    - 16. oyun: Kırık Cam (1. seviye camı kır: buzlu camdaki doğru harflere dokun, cam kırılır, resim çıkar; 2-3. seviye camı onar: resmin ilk sesini taşıyan cam parçasını boşluğa koy) (Sürüm 73): TAMAM.
+   - 17. oyun: Bombayı Kurtar (sevimli bomba yavaşça geri sayar; istenen harfin kablosunu kes, bomba konfetiye döner; süre biterse yalnızca "puf" dumanı; 4/5/6 bomba, 20/16/13 sn) (Sürüm 74): TAMAM.
    - Planlanan ilk 7 mini oyunun hepsi yapıldı. Sıradaki iş: öğretmenin kendi mini oyun fikirleri (aşağıdaki listede, sırayla; her biri için önce görsel taslak ve onay). Sonra mini oyunları ana oyuna (tesis, damla parçaları) bağlamak. Ana oyunun geri kalanı mini oyunlar bitince.
 
 ## Öğretmenin mini oyun fikirleri (sırayla yapılacak)
