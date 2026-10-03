@@ -404,9 +404,10 @@ class MiniOyunSahnesi extends Phaser.Scene {
 
   // Oyunun başında harfi tanıtır, bitince() çağrılır. Ünlü söylenir; ünsüz okunmaz
   // (öğretmenin kararı: ünsüzde yardım uyarısı ve hece tanıtımı kaldırıldı), oyun hemen başlar.
+  // Hece oyunlarında (heceOyunu) ünlü de okunmaz; yalnızca hece duyulur (öğretmenin kararı).
   harfiTanit(bitince) {
     const bilgi = HARFLER.find((h) => h.kucuk === this.harf);
-    if (bilgi && bilgi.unlu) {
+    if (bilgi && bilgi.unlu && !this.heceOyunu) {
       harfiSoyle(this.harf);
       this.time.delayedCall(900, bitince);
     } else {

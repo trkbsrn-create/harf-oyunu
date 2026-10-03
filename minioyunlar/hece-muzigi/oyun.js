@@ -27,6 +27,7 @@ class HeceMuzigiSahnesi extends MiniOyunSahnesi {
 
   create() {
     this.ortakKur();
+    this.heceOyunu = true; // ünlü tek başına okunmaz, yalnızca hece duyulur
     this.ayar = HECE_MUZIGI_SEVIYELERI[this.seviye] || HECE_MUZIGI_SEVIYELERI[1];
     this.kalpleriKur(3);
     this.heceler = heceHavuzu(this.harf);

@@ -25,6 +25,7 @@ class BirlestirBuyutSahnesi extends MiniOyunSahnesi {
 
   create() {
     this.ortakKur();
+    this.heceOyunu = true; // ünlü tek başına okunmaz, yalnızca hece duyulur
     this.ayar = BIRLESTIR_SEVIYELERI[this.seviye] || BIRLESTIR_SEVIYELERI[1];
     this.ilerlemeKur(this.ayar.hedef);
     const bilgi = (h) => HARFLER.find((x) => x.kucuk === h);

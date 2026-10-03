@@ -23,6 +23,7 @@ class ElektrikDevresiSahnesi extends MiniOyunSahnesi {
 
   create() {
     this.ortakKur();
+    this.heceOyunu = true; // ünlü tek başına okunmaz, yalnızca hece duyulur
     this.ayar = ELEKTRIK_SEVIYELERI[this.seviye] || ELEKTRIK_SEVIYELERI[1];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.tur);

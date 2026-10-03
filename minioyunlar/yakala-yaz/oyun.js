@@ -21,6 +21,7 @@ class YakalaYazSahnesi extends MiniOyunSahnesi {
 
   create() {
     this.ortakKur();
+    this.heceOyunu = true; // ünlü tek başına okunmaz, yalnızca hece duyulur
     this.ayar = YAKALA_SEVIYELERI[this.seviye] || YAKALA_SEVIYELERI[1];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.tur);
@@ -194,7 +195,6 @@ class YakalaYazSahnesi extends MiniOyunSahnesi {
       const yer = this.yerler.find((x) => !x.dolu && x.harf === harf);
       yer.dolu = true;
       Sesler.pling();
-      harfiSoyle(harf);
       // Yaratık çantaya uçar, yerine harf oturur
       this.tweens.add({ targets: y, x: yer.x, y: yer.y, scale: 0.4, alpha: 0, duration: 500, ease: "Cubic.In", onComplete: () => {
         const h = boyaliOrtala(titret(this.add.text(yer.x, yer.y, harf, {

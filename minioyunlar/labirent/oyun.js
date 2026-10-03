@@ -30,6 +30,7 @@ class LabirentSahnesi extends MiniOyunSahnesi {
 
   create() {
     this.ortakKur();
+    this.heceOyunu = true; // ünlü tek başına okunmaz, yalnızca hece duyulur
     this.ayar = LABIRENT_SEVIYELERI[this.seviye] || LABIRENT_SEVIYELERI[1];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.kavsak);
