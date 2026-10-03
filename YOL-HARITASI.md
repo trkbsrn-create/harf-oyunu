@@ -96,8 +96,8 @@ Yapılacaklar (bu sırayla, her biri için önce görsel taslak ve onay):
 2. Bulutta parçayı alma: tabelanın üstünde köpük balonda parça; karakter yaklaşınca mikrofon,
    harf sesle dolar (tek aşama), balon patlar, parça çantaya girer (öğretmenin seçimi A)
    (Sürüm 86): TAMAM.
-3. Parçayı tekneye takma (çantadan sürükle, yerine oturur) ve köşede ilerleme gösteren küçük
-   yelkenli simgesi.
+3. Parçayı tekneye takma: çantadan sürükle, yeri sarı parlar, yerine oturur (öğretmenin seçimi
+   A); sağ üstte yelkenli kartı ("2 / 6"), dokununca karakter yelkenliye yürür (Sürüm 87): TAMAM.
 4. Açılış hikâyesi (okuma gerektirmeyen kısa sahne: fırtına, kırık sal, kumsalda uyanma).
 5. Final: yelkenli tamamlanınca kutlama, binip açılma, "2. ada yakında".
 Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı

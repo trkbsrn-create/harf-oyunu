@@ -194,8 +194,13 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   `YELKENLI_X/Y`, `YELKENLI_PARCALARI`). Her harfin bir parçası: a gövde, n direk, e bayrak,
   t dümen, i kürek, l yelken (öğretmenin kararı). Bütün yelkenli resimleri aynı 680x440 tuvalde
   (yelkenli-kizak.svg, yelkenli-<parça>.svg ve kesik çizgili yelkenli-<parça>-silik.svg;
-  doodle_ciz.py). Başta bütün parçalar silik, yanlarında harfi silik bir yuvarlakta. Parça
-  takılınca dolu hâli görünecek (sonraki adım). `YELKENLI_ALANI`nda süs yok.
+  doodle_ciz.py). Başta bütün parçalar silik, yanlarında harfi silik bir yuvarlakta.
+  `YELKENLI_ALANI`nda süs yok. Parça takma: çanta açıkken parça tutulur (`parcayiTut`; pencere
+  silikleşir, yelkenlide parçanın yeri sarı parlar), yerinin üstüne (`alan`, parçanın kutusu +
+  80 px) bırakılınca takılır (`parcayiTak`: dolu hâli, koyu harf, parıltı); başka yere
+  bırakılırsa çantaya döner. Sağ üstte, çantanın altında yelkenli kartı (`yelkenliKartiKur`):
+  aynı resimler 0.2 ölçekte, takılanlar renkli, "2 / 6"; karta dokununca karakter yelkenliye
+  yürür (`YELKENLI_DURAK`).
   Parça bulutların üstünde alınır (`BulutSahnesi`): tabelanın üstünde köpük balonun içinde
   süzülür (`balonKur`); karakter tabelaya yaklaşınca mikrofon çıkar, tek aşama: harf sesle
   dolar ("Parçayı almak için gücünü göster!"; Ada'daki `harfiDoldur` aynen kullanılır, 30 sn'de
