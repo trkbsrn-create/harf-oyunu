@@ -205,10 +205,12 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   bırakılırsa çantaya döner. Sağ üstte, çantanın altında yelkenli kartı (`yelkenliKartiKur`):
   aynı resimler 0.2 ölçekte, takılanlar renkli, "2 / 6"; karta dokununca karakter yelkenliye
   yürür (`YELKENLI_DURAK`). Altı parça takılınca kutlama ("Yelkenli hazır! Aferin!") ve
-  yelkenlinin yanında parlayan "Yola çık" düğmesi (`yelkenliHazir`; öğretmenin seçimi B).
+  yelkenlinin altında, denizde parlayan "Yola çık" düğmesi (`yelkenliHazir`; öğretmenin seçimi B).
   Basınca ada uyur, final sahnesi açılır (`FinalSahnesi`: çocuk biner, yelkenli suya kayar;
   gün batımı; adalar haritası "2. ada yakında"; sözler sesli; hikaye-gunbatimi.svg,
-  hikaye-harita.svg). "Adaya dön" ile ada kaldığı gibi uyanır.
+  hikaye-harita.svg). Tekne suda yüzer görünsün diye denizin ön kısmı (aynı arka plan resmi,
+  `setCrop` ile yalnızca su) teknenin önüne konur, gövdenin altı suda kalır. "Adaya dön" ile
+  ada kaldığı gibi uyanır.
   Parça bulutların üstünde alınır (`BulutSahnesi`): tabelanın üstünde köpük balonun içinde
   süzülür (`balonKur`); karakter tabelaya yaklaşınca mikrofon çıkar, tek aşama: harf sesle
   dolar ("Parçayı almak için gücünü göster!"; Ada'daki `harfiDoldur` aynen kullanılır, 30 sn'de
