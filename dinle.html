@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sesleri Dinle</title>
+  <!-- Öğretmenin oyundaki yapay zekâ seslerini (sesler/*.mp3) tek tek dinlediği sayfa.
+       Beğenilmeyenler işaretlenir; "Listeyi kopyala" ile Claude'a verilir, öğretmen onları
+       kayit.html'de kendi sesiyle kaydeder. İşaretler yalnızca bu tarayıcıda durur. -->
+  <style>
+    @font-face { font-family: "Andika"; src: url("yazitipi/Andika-Regular.ttf") format("truetype"); }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: #f8f4ea; font-family: "Andika", sans-serif; color: #3b2a1a; }
+    header { position: sticky; top: 0; z-index: 2; background: #bfe8f5; border-bottom: 4px solid #3b2a1a;
+      padding: 12px 16px; display: flex; flex-wrap: wrap; gap: 12px; align-items: center; justify-content: space-between; }
+    h1 { margin: 0; font-size: 30px; }
+    #sayac { font-size: 22px; }
+    main { max-width: 900px; margin: 0 auto; padding: 16px; }
+    .bilgi { background: #fffdf6; border: 3px solid #3b2a1a; border-radius: 18px; padding: 12px 18px; font-size: 19px; line-height: 1.45; }
+    h2 { font-size: 26px; margin: 28px 0 10px; }
+    h2 small { font-size: 17px; color: #7a6a58; font-weight: normal; }
+    .satir { display: flex; align-items: center; gap: 10px; background: #fffdf6; border: 3px solid #3b2a1a;
+      border-radius: 16px; padding: 8px 12px; margin-bottom: 8px; }
+    .satir.kotu { background: #ffe1dc; }
+    .satir.caliyor { outline: 4px solid #ffcf3f; }
+    .metin { flex: 1; min-width: 0; font-size: 30px; }
+    button { font-family: inherit; font-size: 20px; border: 3px solid #3b2a1a; border-radius: 14px;
+      padding: 8px 14px; cursor: pointer; background: #ffcf3f; color: #3b2a1a; min-width: 52px; }
+    button.dinle { background: #9be3dc; }
+    button.isaret { background: #eee; }
+    .kotu button.isaret { background: #ff9c8a; }
+    #kopyala { font-size: 22px; background: #b5e48c; }
+    @media (max-width: 560px) { .metin { font-size: 24px; } button { padding: 8px 10px; font-size: 18px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>Sesleri Dinle</h1>
+    <span id="sayac"></span>
+    <button id="kopyala">Listeyi kopyala</button>
+  </header>
+  <main>
+    <div class="bilgi">
+      Her satırda <b>▶</b> ile sesi dinleyin. Beğenmediğiniz seste <b>Beğenmedim</b>'e basın (satır kırmızı olur;
+      yeniden basınca geri alınır). Bitince <b>Listeyi kopyala</b> deyin ve kopyalanan listeyi bana yapıştırın.
+      İşaretleriniz bu tarayıcıda kalır, sayfayı kapatıp sonra devam edebilirsiniz.
+    </div>
+    <div id="liste"></div>
+  </main>
+
+  <script src="sesler/liste.js"></script>
+  <script>
+    const BOLUMLER = [
+      { on: "harf-", baslik: "Harf sesleri", ses: "Harper" },
+      { on: "hece-", baslik: "Heceler", ses: "Harper" },
+      { on: "kelime-", baslik: "Kelimeler", ses: "Harper" },
+      { on: "soz-", baslik: "Oyun sözleri", ses: "Elif ve Ava" },
+      { on: "oyun-", baslik: "Mini oyun adları", ses: "Ava" },
+    ];
+    const ANAHTAR = "dinle-begenilmeyenler";
+    let kotuler = new Set();
+    try { kotuler = new Set(JSON.parse(localStorage.getItem(ANAHTAR) || "[]")); } catch (e) { /* depo kapalı */ }
+    const sakla = () => { try { localStorage.setItem(ANAHTAR, JSON.stringify([...kotuler])); } catch (e) { /* depo kapalı */ } };
+
+    const sozler = Object.entries(SES_DOSYALARI); // [metin, dosya]
+    const ses = new Audio();
+    let calanSatir = null;
+    ses.onended = ses.onpause = () => { if (calanSatir) calanSatir.classList.remove("caliyor"); };
+
+    const kutu = document.getElementById("liste");
+    for (const b of BOLUMLER) {
+      const h2 = document.createElement("h2");
+      h2.innerHTML = `${b.baslik} <small>(${b.ses})</small>`;
+      kutu.appendChild(h2);
+      for (const [metin, dosya] of sozler.filter(([, d]) => d.startsWith(b.on))) {
+        const satir = document.createElement("div");
+        satir.className = "satir" + (kotuler.has(metin) ? " kotu" : "");
+        satir.innerHTML = `<button class="dinle">▶</button><span class="metin"></span><button class="isaret">Beğenmedim</button>`;
+        satir.querySelector(".metin").textContent = metin;
+        satir.querySelector(".dinle").onclick = () => {
+          if (calanSatir) calanSatir.classList.remove("caliyor");
+          calanSatir = satir;
+          satir.classList.add("caliyor");
+          ses.src = `sesler/${dosya}.mp3`;
+          ses.play();
+        };
+        satir.querySelector(".isaret").onclick = () => {
+          if (kotuler.has(metin)) kotuler.delete(metin); else kotuler.add(metin);
+          satir.classList.toggle("kotu", kotuler.has(metin));
+          sakla();
+          guncelle();
+        };
+        kutu.appendChild(satir);
+      }
+    }
+
+    function guncelle() {
+      document.getElementById("sayac").textContent = `${kotuler.size} / ${sozler.length} beğenilmedi`;
+    }
+    guncelle();
+
+    document.getElementById("kopyala").onclick = async () => {
+      // Sayfadaki sırayla
+      const liste = sozler.map(([m]) => m).filter((m) => kotuler.has(m));
+      const yazi = liste.length ? "Beğenmediğim sesler: " + liste.join(", ") : "Hepsini beğendim.";
+      try {
+        await navigator.clipboard.writeText(yazi);
+        alert("Kopyalandı. Bana yapıştırabilirsiniz:\n\n" + yazi);
+      } catch (e) {
+        prompt("Bu yazıyı kopyalayıp bana yapıştırın:", yazi);
+      }
+    };
+  </script>
+</body>
+</html>

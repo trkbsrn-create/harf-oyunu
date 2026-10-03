@@ -108,7 +108,8 @@ TAMAM. 2) Yapay zekâ seslendirme siteleri öğretmene önerildi, inceleyecek. 3
 sesiyle kayıt sayfası kayit.html (Sürüm 93): TAMAM; öğretmen kaydedip zip'i verince sesler
 oyuna eklenecek (ünsüzler de saf sesle okunabilecek). 4) Azure yapay zekâ sesleri (Sürüm 94):
 TAMAM; harf, hece, kelime Harper (Sürüm 95; Elif kötü duruyordu), kutlama Elif (heyecanlı),
-hikâye ve genel sözler Ava.
+hikâye ve genel sözler Ava. 5) Öğretmen harf ve heceleri yine beğenmedi; dinleme sayfası
+dinle.html (Sürüm 96): beğenmediklerini işaretleyip söyleyecek, onları kendi sesiyle kaydedecek.
 Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı
 fikirleri var).
 
