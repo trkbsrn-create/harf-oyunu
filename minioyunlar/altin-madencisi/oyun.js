@@ -93,7 +93,7 @@ class AltinMadencisiSahnesi extends MiniOyunSahnesi {
       if (i >= 0) yerde.splice(i, 1);
       else this.kulceKoy(false, p);
     }
-    for (let i = 0; this.kulceler.length < 8 && this.siraliYanlislar.length; i++) {
+    for (let i = 0; i < 20 && this.kulceler.length < 8 && this.siraliYanlislar.length; i++) {
       this.kulceKoy(false, this.siraliYanlislar[i % this.siraliYanlislar.length]);
     }
   }
@@ -104,14 +104,32 @@ class AltinMadencisiSahnesi extends MiniOyunSahnesi {
     const dogru = dogruZorunlu || dogruSayisi < 3 || Math.random() < 0.45;
     const harf = metin || (dogru ? this.harf : Phaser.Utils.Array.GetRandom(this.yanlislar));
     const r = harf.length > 1 ? Phaser.Math.Between(44, 50) : Phaser.Math.Between(32, 44);
+    // Gereken külçe: oyunun harfi ya da hecenin/kelimenin bir parçası
+    const gerekli = this.tur === "harf" ? harf === this.harf : this.soru.parcalar.includes(harf);
+    // Öğretmenin isteği: gereken külçenin önü hep açık. Kancadan her gereken külçeye giden yolda
+    // başka külçe olmaz; külçeler kancanın sallanma açısı içinde durur (köşelere ulaşılamıyordu).
+    const yoldaMi = (engel, er, hx, hy) => {
+      const dx = hx - KANCA_MERKEZ.x;
+      const dy = hy - KANCA_MERKEZ.y;
+      const t = Phaser.Math.Clamp(((engel.x - KANCA_MERKEZ.x) * dx + (engel.y - KANCA_MERKEZ.y) * dy) / (dx * dx + dy * dy), 0, 1);
+      return Math.hypot(KANCA_MERKEZ.x + dx * t - engel.x, KANCA_MERKEZ.y + dy * t - engel.y) < er + 26;
+    };
+    const uygun = (x, y) => {
+      if (Math.hypot(x - KANCA_MERKEZ.x, y - KANCA_MERKEZ.y) < 170) return false;
+      if (Math.abs(Math.atan2(x - KANCA_MERKEZ.x, y - KANCA_MERKEZ.y)) > 1.12) return false;
+      return this.kulceler.every((k) => Math.hypot(k.x - x, k.y - y) > k.kulce.r + r + 26
+        && !(k.kulce.gerekli && yoldaMi({ x, y }, r, k.x, k.y))
+        && !(gerekli && yoldaMi(k, k.kulce.r, x, y)));
+    };
     let x = 0;
     let y = 0;
-    for (let d = 0; d < 80; d++) {
+    let bulundu = false;
+    for (let d = 0; d < 200 && !bulundu; d++) {
       x = Phaser.Math.Between(80, 1200);
       y = Phaser.Math.Between(MADEN_UST + 70, 670);
-      if (Math.hypot(x - KANCA_MERKEZ.x, y - KANCA_MERKEZ.y) < 170) continue;
-      if (this.kulceler.every((k) => Math.hypot(k.x - x, k.y - y) > k.kulce.r + r + 26)) break;
+      bulundu = uygun(x, y);
     }
+    if (!bulundu && !gerekli) return; // yer yoksa yanlış külçe konmaz
     const kap = this.add.container(x, y).setDepth(10);
     const g = this.add.graphics();
     this.kulceCiz(g, r, 0xffd34d);
@@ -121,7 +139,7 @@ class AltinMadencisiSahnesi extends MiniOyunSahnesi {
     }), 1.3));
     kap.add([g, yazi]);
     kap.cizim = g;
-    kap.kulce = { harf, dogru: harf === this.harf, r };
+    kap.kulce = { harf, dogru: harf === this.harf, r, gerekli };
     kap.setScale(0);
     this.tweens.add({ targets: kap, scale: 1, duration: 260, ease: "Back.Out" });
     this.kulceler.push(kap);
