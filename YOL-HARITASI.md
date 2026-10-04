@@ -140,6 +140,8 @@ en az 5/7/9 yol ayrımı).
 Şeker Patlatma (Sürüm 113): harfler doğru sıradaysa yön serbest (kıvrılarak da); daha canlı
 görseller (sargılı şekerler, parıltılar, patlama efektleri, övgü yazısı, lolipoplar).
 Kayak (Sürüm 114): doğru cevap art arda aynı şeritte gelmiyor.
+Elektrik Devresi (Sürüm 115): 1. seviye harflerden hece, 3. seviye üç heceli anlamlı kelimeler
+(yanlış yollar anlamlı kelime oluşturmaz). Yeni harf gruplarıyla 4-5 heceli kelimeler eklenecek.
 Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı
 fikirleri var).
 
