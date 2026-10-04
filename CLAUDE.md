@@ -111,9 +111,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   hece okunur), çocuk aynı sırayla basar; 2-3. seviye nota akışı: heceli notalar sağdan sola
   akar, istenen heceli notaya kırmızı çizgide dokunulur; notalar beşli (pentatonik) dizide;
   öğretmenin isteği: aranan hece her 2 doğru notada değişir (`yeniHedef`, `HEDEF_DEGISIM`: kart döner,
-  ses, yeni hece söylenir, eski notalar uçar, notalar kısa süre yavaşlar); 2-3. seviye bitince yakalanan
-  notalar porteye dizilip sırayla melodi olarak çalar, her notada hecesi okunur ("Senin şarkın!",
-  `finalMelodi`, sonda akor), sonra "Aferin!"; görsel: süzülen renkli nota
+  ses, yeni hece söylenir, eski notalar uçar, nota üretimi baştan kurulur; aynı anda iki nota gelmez);
+  2-3. seviye bitince yakalanan notalar porteye dizilip hızlıca melodi olarak çalar (yalnızca melodi,
+  hece okunmaz; "Senin şarkın!", `finalMelodi`, `SARKI_ADIMI`, sonda akor), sonra "Aferin!"; görsel: süzülen renkli nota
   işaretleri, renkli porte şeritleri, nabız gibi atan çizgi, `notaPatlat` halka + nota parçacıkları).
   scrabble (Scrabble: kelime söylenir, resmi varsa (`KELIME_RESIMLERI`) yanında; raftaki harf
   taşlarına dokununca sıradaki boş yere geçer; yanlış yerdeki taşlar rafa döner, can gider).
