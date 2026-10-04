@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Altın (külçe ve paralar) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="119" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="sari" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+      <rect width="6" height="6" fill="#ffe680"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffc928" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="112" rx="50" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 100 l12 -30 h46 l12 30z" fill="url(#sari)"/>
+    <path d="M34 70 l6 -8 h46 l-6 8z" fill="#fff1a8"/>
+    <path d="M80 70 l6 -8 l12 30 l-6 8z" fill="#ffc928"/>
+    <ellipse cx="100" cy="102" rx="16" ry="6" fill="#ffc928"/>
+    <ellipse cx="100" cy="96" rx="16" ry="6" fill="url(#sari)"/>
+    <ellipse cx="104" cy="88" rx="16" ry="6" fill="url(#sari)"/>
+    <path d="M40 84 q6 -6 14 -6" fill="none" stroke="#ffffff" stroke-width="4"/>
+    <path d="M30 34 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4z M96 30 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3z" fill="#fff1a8" stroke-width="2.5"/>
+  </g>
+</svg>
