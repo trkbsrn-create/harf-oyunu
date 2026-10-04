@@ -4,6 +4,9 @@
 // külçesi altın çıkar (ilerleme); başka harfli külçe taş çıkar ve kanca onu yavaş çeker (zaman
 // kaybı, can gitmez; öğretmenin seçtiği taslaktaki gibi). Kaybetmek yok.
 // Seviyeler: 1: 5 altın, yavaş sallanma; 2: 7 altın, benzer harfler; 3: 9 altın, hızlı sallanma.
+// Öğretmenin isteği (Kazma gibi): 2. seviye harflerle hece (hece söylenir, harf külçeleri sırayla
+// çekilir, üstteki yerlere uçar; 4 hece), 3. seviye hecelerle kelime (3 kelime). Sırası gelmemiş
+// doğru külçe yukarı gelince yerine geri gömülür; başka parça taşa döner. a/n'de harf toplama.
 
 const MADEN_SEVIYELERI = {
   1: { hedef: 5, salinim: 1.4, benzer: false, kulce: 10 },
@@ -27,8 +30,11 @@ class AltinMadencisiSahnesi extends MiniOyunSahnesi {
   create() {
     this.ortakKur();
     this.ayar = MADEN_SEVIYELERI[this.seviye] || MADEN_SEVIYELERI[1];
-    this.ilerlemeKur(this.ayar.hedef);
-    this.hedefPaneliKur("Altın:");
+    this.siraliKur();
+    this.ilerlemeKur(this.tur === "harf" ? this.ayar.hedef : this.tur === "hece" ? 4 : 3);
+    if (this.tur === "harf") this.hedefPaneliKur("Altın:");
+    else this.siraliPanelKur();
+    this.siraliYanlislar = [];
     this.kulceler = [];
     this.durum = "bekle"; // salla, in, cek
     this.zaman = 0;
@@ -59,20 +65,45 @@ class AltinMadencisiSahnesi extends MiniOyunSahnesi {
     m.strokeCircle(KANCA_MERKEZ.x, KANCA_MERKEZ.y, 16);
     this.ip = this.add.graphics().setDepth(15);
 
-    for (let i = 0; i < this.ayar.kulce; i++) this.kulceKoy(i < 3);
-    this.input.on("pointerdown", () => this.indir());
+    if (this.tur === "harf") for (let i = 0; i < this.ayar.kulce; i++) this.kulceKoy(i < 3);
+    this.input.on("pointerdown", (p) => { if (p.y > 110) this.indir(); });
     this.time.delayedCall(400, () => this.harfiTanit(() => {
       this.durum = "salla";
-      this.elGoster({ x: 640, y: 470 });
+      if (this.tur === "harf") this.elGoster({ x: 640, y: 470 });
+      else this.yeniSoru();
     }));
   }
 
-  // Yeni külçe: öbürleriyle çakışmayan rastgele yere
-  kulceKoy(dogruZorunlu) {
+  // Sıralı oyun: yeni hece ya da kelime; eski külçeler kalkar, yenileri gömülür
+  yeniSoru() {
+    for (const k of this.kulceler) this.tweens.add({ targets: k, alpha: 0, scale: 0.5, duration: 250, onComplete: () => k.destroy() });
+    this.kulceler = [];
+    this.siraliYanlislar = this.siraliSoruSec();
+    this.kulceTamamla();
+    this.siraliSoyle();
+    this.time.delayedCall(700, () => this.elGoster(this.kulceler.find((k) => k.kulce.harf === this.soru.parcalar[this.sira])));
+  }
+
+  // Sıralı oyun: kalan parçaların her biri yerde olsun, gerisi yanlış parça (en çok 8 külçe)
+  kulceTamamla() {
+    const gereken = this.soru.parcalar.slice(this.sira);
+    const yerde = this.kulceler.map((k) => k.kulce.harf);
+    for (const p of gereken) {
+      const i = yerde.indexOf(p);
+      if (i >= 0) yerde.splice(i, 1);
+      else this.kulceKoy(false, p);
+    }
+    for (let i = 0; this.kulceler.length < 8 && this.siraliYanlislar.length; i++) {
+      this.kulceKoy(false, this.siraliYanlislar[i % this.siraliYanlislar.length]);
+    }
+  }
+
+  // Yeni külçe: öbürleriyle çakışmayan rastgele yere (metin verilirse o parça)
+  kulceKoy(dogruZorunlu, metin) {
     const dogruSayisi = this.kulceler.filter((k) => k.kulce.dogru).length;
     const dogru = dogruZorunlu || dogruSayisi < 3 || Math.random() < 0.45;
-    const harf = dogru ? this.harf : Phaser.Utils.Array.GetRandom(this.yanlislar);
-    const r = Phaser.Math.Between(32, 44);
+    const harf = metin || (dogru ? this.harf : Phaser.Utils.Array.GetRandom(this.yanlislar));
+    const r = harf.length > 1 ? Phaser.Math.Between(44, 50) : Phaser.Math.Between(32, 44);
     let x = 0;
     let y = 0;
     for (let d = 0; d < 80; d++) {
@@ -85,7 +116,7 @@ class AltinMadencisiSahnesi extends MiniOyunSahnesi {
     const g = this.add.graphics();
     this.kulceCiz(g, r, 0xffd34d);
     const yazi = boyaliOrtala(titret(this.add.text(0, 0, harf, {
-      fontFamily: "Andika", fontSize: `${Math.round(r * 1.05)}px`, color: "#ffffff",
+      fontFamily: "Andika", fontSize: `${Math.round(r * [1.05, 1.05, 0.78, 0.6][Math.min(harf.length, 3)])}px`, color: "#ffffff",
       stroke: "#3b2a1a", strokeThickness: 7, padding: { x: 3, y: 3 },
     }), 1.3));
     kap.add([g, yazi]);
@@ -176,6 +207,8 @@ class AltinMadencisiSahnesi extends MiniOyunSahnesi {
     this.tutulan = k;
     this.durum = "cek";
     this.kulceler = this.kulceler.filter((x) => x !== k);
+    // Sıralı oyunda: sıradaki ya da sırası gelmemiş doğru parça altın kalır
+    if (this.tur !== "harf") k.kulce.dogru = this.siraliDurum(k.kulce.harf) !== "yanlis";
     if (k.kulce.dogru) {
       Sesler.pling();
     } else {
@@ -190,12 +223,32 @@ class AltinMadencisiSahnesi extends MiniOyunSahnesi {
     this.tutulan = null;
     this.durum = "salla";
     if (!k) return;
+    if (this.tur !== "harf") { this.siraliGeldi(k); return; }
     if (k.kulce.dogru) {
       harfiSoyle(this.harf);
       this.ilerlemeArtir(k.x, k.y);
     }
     this.tweens.add({ targets: k, scale: 0, alpha: 0, duration: 250, onComplete: () => k.destroy() });
     if (!this.bitti) this.time.delayedCall(400, () => this.kulceKoy(false));
+  }
+
+  // Sıralı oyun: sıradaki parça yerine uçar; sırası gelmemiş doğru parça yerine geri gömülür
+  siraliGeldi(k) {
+    const durum = this.siraliDurum(k.kulce.harf);
+    this.tweens.add({ targets: k, scale: 0, alpha: 0, duration: 250, onComplete: () => k.destroy() });
+    if (durum === "sirada") {
+      if (this.siraliParcaAl(k.x, k.y)) {
+        this.siraliTamam(() => this.yeniSoru());
+        return;
+      }
+    } else if (durum === "sonra") {
+      Sesler.nota(330, 0, 0.1, 0.1, "sine");
+    }
+    this.time.delayedCall(400, () => {
+      if (this.bitti) return;
+      this.kulceTamamla();
+      if (durum !== "sirada") this.ipucuGoster(this.kulceler.find((x) => x.kulce.harf === this.soru.parcalar[this.sira]));
+    });
   }
 
   oyunBitti() {

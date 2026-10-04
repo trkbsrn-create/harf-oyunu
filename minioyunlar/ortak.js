@@ -35,7 +35,7 @@ const PLANLANAN_OYUNLAR = [
   { ad: "yakala-yaz", baslik: "Yakala ve Yaz", etiketler: ["hece"], gereken: "kelime" },
   { ad: "kirik-cam", baslik: "Kırık Cam", etiketler: ["harf"] },
   { ad: "bombayi-kurtar", baslik: "Bombayı Kurtar", etiketler: ["harf", "hece"] },
-  { ad: "yilan", baslik: "Yılan", etiketler: ["harf", "hece"], gereken: "hece" },
+  { ad: "yilan", baslik: "Yılan", etiketler: ["harf", "hece"] },
   // Araştırmadan gelen yeni fikirler (taslak)
   { ad: "canavari-besle", baslik: "Canavarı Besle", etiketler: ["harf", "hece"] },
   { ad: "harf-kesme", baslik: "Harf Kesme", etiketler: ["harf"] },
@@ -505,6 +505,115 @@ class MiniOyunSahnesi extends Phaser.Scene {
     g.arc(x + 6 * k, y, 9 * k, -0.9, 0.9);
     g.strokePath();
     return g;
+  }
+
+  // ---- Sıralı oyun (Kazma düzeni; öğretmenin isteği) ----
+  // 1. seviye harf; 2. seviye harflerle hece yaz (hece söylenir, harfleri sırayla); 3. seviye
+  // hecelerle kelime yaz (heceleri sırayla). Bu harfte hece/kelime yoksa (a, n) harfe döner.
+  // Kazma, Altın Madencisi, Arabayı Ulaştır, Bombayı Kurtar ve Yılan kullanır.
+  siraliKur() {
+    this.tur = "harf";
+    if (this.seviye >= 3 && kelimeOyunuOlur(this.harf)) this.tur = "kelime";
+    else if (this.seviye >= 2 && heceOyunuOlur(this.harf)) this.tur = "hece";
+    this.heceOyunu = this.tur !== "harf"; // harfler tek başına okunmaz, yalnızca hece/kelime
+    this.soru = null;
+    this.sira = 0;
+    this.kelimeSirasi = [];
+    this.heceler = heceHavuzu(this.harf);
+    return this.tur;
+  }
+
+  // Yeni hece ya da kelime: this.soru = { metin, parcalar }; karışık yanlış parçaları döndürür
+  siraliSoruSec() {
+    let yanlislar;
+    if (this.tur === "hece") {
+      const metin = heceSorusu(this.heceler, this.harf, this.seviye, 1, 0.4, this.soru && this.soru.metin).hedef;
+      this.soru = { metin, parcalar: [...metin] };
+      yanlislar = bilinenHarfler(this.harf).filter((h) => !metin.includes(h));
+    } else {
+      if (!this.kelimeSirasi.length) this.kelimeSirasi = Phaser.Utils.Array.Shuffle(ogrenilmisKelimeler(this.harf).slice());
+      const k = this.kelimeSirasi.pop();
+      this.soru = { metin: k.kelime, parcalar: k.heceler };
+      yanlislar = [...new Set(this.heceler.map((h) => h.hece))].filter((h) => !k.heceler.includes(h));
+    }
+    this.sira = 0;
+    return Phaser.Utils.Array.Shuffle(yanlislar);
+  }
+
+  // Parça şimdi alınabilir mi: "sirada", "sonra" (doğru ama sırası gelmedi) ya da "yanlis"
+  siraliDurum(metin) {
+    const { parcalar } = this.soru;
+    if (metin === parcalar[this.sira]) return "sirada";
+    return parcalar.slice(this.sira).includes(metin) ? "sonra" : "yanlis";
+  }
+
+  // Üstte hoparlör (dokununca yeniden söylenir) ve toplanacak parçaların boş yerleri
+  siraliPanelKur(x = 660, y = 55) {
+    this.hoparlor = this.add.container(x - 190, y, [this.hoparlorCiz(0, 0, 32)]).setDepth(900)
+      .setSize(84, 84).setInteractive({ useHandCursor: true });
+    this.hoparlor.on("pointerdown", () => { if (this.soru) Sesler.soyle(this.soru.metin); });
+    this.yuvalar = this.add.container(x, y).setDepth(900);
+  }
+
+  siraliYuvaX(i) {
+    const en = this.tur === "hece" ? 64 : 96;
+    return this.yuvalar.x + (i - (this.soru.parcalar.length - 1) / 2) * (en + 12);
+  }
+
+  // Boş yerler: toplananlar yazılı, sıradaki sarı
+  siraliYuvaCiz() {
+    this.yuvalar.removeAll(true);
+    const { parcalar } = this.soru;
+    const en = this.tur === "hece" ? 64 : 96;
+    parcalar.forEach((metin, i) => {
+      const x = this.siraliYuvaX(i) - this.yuvalar.x;
+      const g = this.add.graphics();
+      const dolu = i < this.sira;
+      g.fillStyle(dolu ? 0xffd34d : i === this.sira ? 0xfff3b0 : 0xfffdf6, 1);
+      g.fillRoundedRect(x - en / 2, -32, en, 64, 14);
+      g.lineStyle(4, 0x2b2b2b, 1);
+      g.strokeRoundedRect(x - en / 2, -32, en, 64, 14);
+      this.yuvalar.add(g);
+      if (dolu) this.yuvalar.add(this.siraliYazi(x, 0, metin));
+    });
+  }
+
+  siraliYazi(x, y, metin) {
+    return boyaliOrtala(titret(this.add.text(x, y, metin, {
+      fontFamily: "Andika", fontSize: "38px", color: "#ffffff",
+      stroke: "#3b2a1a", strokeThickness: 7, padding: { x: 3, y: 3 },
+    }), 1.2));
+  }
+
+  // Yeni soru söylenir, yerler çizilir
+  siraliSoyle() {
+    this.siraliYuvaCiz();
+    this.tweens.add({ targets: this.hoparlor, scale: 1.2, duration: 160, yoyo: true });
+    Sesler.soyle(this.soru.metin);
+  }
+
+  // Sıradaki parça alındı: (x, y)'den üstteki yerine uçar. Hece/kelime tamamlandıysa true.
+  siraliParcaAl(x, y) {
+    const metin = this.soru.parcalar[this.sira];
+    Sesler.damla();
+    if (this.tur === "kelime") Sesler.soyle(metin); // hece okunur (tek harf okunmaz)
+    const ucan = this.siraliYazi(x, y, metin).setDepth(950);
+    this.tweens.add({ targets: ucan, x: this.siraliYuvaX(this.sira), y: this.yuvalar.y, duration: 450, ease: "Cubic.InOut",
+      onComplete: () => { ucan.destroy(); if (this.soru) this.siraliYuvaCiz(); } });
+    this.sira++;
+    return this.sira >= this.soru.parcalar.length;
+  }
+
+  // Hece/kelime tamam: okunur, ilerleme artar, sonra (oyun bitmediyse) sonraki çağrılır
+  siraliTamam(sonraki) {
+    this.time.delayedCall(700, () => {
+      if (this.bitti) return;
+      Sesler.pling();
+      Sesler.soyle(this.soru.metin);
+      this.tweens.add({ targets: this.yuvalar, scale: 1.15, duration: 180, yoyo: true, repeat: 1 });
+      this.ilerlemeArtir(this.yuvalar.x, this.yuvalar.y + 40);
+      this.time.delayedCall(1600, () => { if (!this.bitti) sonraki(); });
+    });
   }
 
   oyunBitti() {}

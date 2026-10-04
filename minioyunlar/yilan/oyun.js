@@ -1,16 +1,17 @@
-// Mini oyun: Yılan (heceyi ye)
-// Bir hece söylenir (hoparlörle tekrar). Yılan kareli tarlada yavaşça ilerler; çocuk yılanın
-// başına göre gitmek istediği yöne dokunur (ya da kaydırır), yılan o yöne döner. Hecenin
-// harflerini sırayla yemek gerekir (önce "a", sonra "n"). Yenen harf yılanın gövdesinde görünür;
-// hece tamamlanınca okunur. Sırası gelmeyen ya da hecede olmayan harf bir can götürür.
+// Mini oyun: Yılan (harfi, heceyi ye)
+// Yılan kareli tarlada yavaşça ilerler; çocuk yılanın başına göre gitmek istediği yöne dokunur,
+// yılan o yöne döner. Yenen harf yılanın gövdesinde görünür.
+// Öğretmenin isteği (Kazma gibi): 1. seviye harf (istenen harfi ye; yanlış harf yalnızca uyarı);
+// 2. seviye harflerle hece (hece söylenir, harfleri sırayla yenir, üstteki yerlere uçar); 3. seviye
+// hecelerle kelime (heceleri sırayla). Sırası gelmemiş doğru parça can götürmez, başka yere kaçar;
+// başka parça can götürür. a/n'de her seviyede harf.
 // Duvar ve kendine çarpma yok (çocuklar için): yılan kenardan çıkınca öbür kenardan girer.
-// Seviyeler (bütün hece oyunlarında olduğu gibi): 1: 4 hece, yavaş, iki harfli (an, na), yanlış
-// harf can götürmez (yalnızca uyarı); 2: 5 hece, üç harfli (tat); 3: 6 hece, hızlı, üç harfli.
+// Seviyeler: 1: 6 harf, yavaş; 2: 4 hece; 3: 3 kelime, hızlı.
 
 const YILAN_SEVIYELERI = {
-  1: { tur: 4, adim: 380, yem: 4, acikOrani: 0, affet: true },
-  2: { tur: 5, adim: 310, yem: 5, acikOrani: 0 },
-  3: { tur: 6, adim: 250, yem: 6, acikOrani: 0.4 },
+  1: { harf: 6, hece: 4, kelime: 3, adim: 380, yem: 4, affet: true },
+  2: { harf: 7, hece: 4, kelime: 3, adim: 310, yem: 5 },
+  3: { harf: 8, hece: 4, kelime: 3, adim: 250, yem: 6 },
 };
 
 const YILAN_SUTUN = 18;
@@ -26,21 +27,16 @@ class YilanSahnesi extends MiniOyunSahnesi {
 
   create() {
     this.ortakKur();
-    this.heceOyunu = true; // ünlü tek başına okunmaz, yalnızca hece duyulur
     this.ayar = YILAN_SEVIYELERI[this.seviye] || YILAN_SEVIYELERI[1];
     this.kalpleriKur(3);
-    this.ilerlemeKur(this.ayar.tur);
-    this.heceler = heceHavuzu(this.harf);
-    this.hece = null;
+    this.siraliKur();
+    this.ilerlemeKur(this.ayar[this.tur]);
+    if (this.tur === "harf") this.hedefPaneliKur("Ye:");
+    else this.siraliPanelKur();
+    this.yanlislar = [];
     this.yemler = [];
-    this.yenen = 0;
     this.oynuyor = false;
     this.zaman = 0;
-
-    const hoparlor = this.add.container(640, 60, [this.hoparlorCiz(0, 0, 38)]).setDepth(900)
-      .setSize(96, 96).setInteractive({ useHandCursor: true });
-    hoparlor.on("pointerdown", () => { if (this.hece) Sesler.soyle(this.hece); });
-    this.hoparlor = hoparlor;
 
     // Tarla
     const g = this.add.graphics().setDepth(0);
@@ -63,29 +59,37 @@ class YilanSahnesi extends MiniOyunSahnesi {
 
     this.input.on("pointerdown", (p) => this.yonVer(p));
     this.time.delayedCall(400, () => this.harfiTanit(() => this.yeniHece()));
+    if (this.tur === "harf") this.yanlislar = ogrenilmisHarfler(this.harf).filter((h) => h !== this.harf);
   }
 
   konum(c, r) {
     return { x: YILAN_SOL + c * YILAN_KARE + YILAN_KARE / 2, y: YILAN_UST + r * YILAN_KARE + YILAN_KARE / 2 };
   }
 
+  // Yeni tur: harf oyununda yeni yemler; sıralı oyunda yeni hece ya da kelime
   yeniHece() {
     if (this.bitti) return;
-    const { hedef } = heceSorusu(this.heceler, this.harf, this.seviye, 2, this.ayar.acikOrani, this.hece);
-    this.hece = hedef;
-    this.yenen = 0;
     for (const y of this.yemler) y.destroy();
     this.yemler = [];
     for (const parca of this.yilan) parca.harf = null;
     this.yilanCiz();
-    // Hecenin harfleri + şaşırtma harfleri
-    for (const h of this.hece) this.yemKoy(h);
-    const ogrenilmis = bilinenHarfler(this.harf).filter((h) => !this.hece.includes(h));
-    for (let i = 0; i < this.ayar.yem - 2; i++) this.yemKoy(Phaser.Utils.Array.GetRandom(ogrenilmis));
-    this.tweens.add({ targets: this.hoparlor, scale: 1.2, duration: 160, yoyo: true });
-    Sesler.soyle(this.hece);
+    if (this.tur === "harf") {
+      this.yemKoy(this.harf);
+      this.yemKoy(this.harf);
+    } else {
+      this.yanlislar = this.siraliSoruSec();
+      for (const p of this.soru.parcalar) this.yemKoy(p);
+      this.siraliSoyle();
+    }
+    // Şaşırtma yemleri
+    for (let i = 0; i < this.ayar.yem - 2 && this.yanlislar.length; i++) this.yemKoy(this.yanlislar[i % this.yanlislar.length]);
     this.oynuyor = true;
-    this.elGoster(this.yemler.find((y) => y.yem.harf === this.hece[0]));
+    this.elGoster(this.siradakiYem());
+  }
+
+  siradakiYem() {
+    const aranan = this.tur === "harf" ? this.harf : this.soru.parcalar[this.sira];
+    return this.yemler.find((y) => y.yem.harf === aranan);
   }
 
   // Boş bir kareye harfli yem (yılanın başına çok yakın olmasın)
@@ -102,6 +106,7 @@ class YilanSahnesi extends MiniOyunSahnesi {
     const { x, y } = this.konum(c, r);
     const kap = this.add.container(x, y).setDepth(4);
     const g = this.add.graphics();
+    if (harf.length > 1) g.setScale(1.3, 1); // hece yemi biraz geniş
     g.fillStyle(0xff9c8a, 1);
     g.fillCircle(0, 2, 27);
     g.lineStyle(3, 0x2b2b2b, 1);
@@ -109,7 +114,7 @@ class YilanSahnesi extends MiniOyunSahnesi {
     g.lineStyle(4, 0x6fbf4a, 1);
     g.lineBetween(0, -24, 6, -34);
     const yazi = boyaliOrtala(titret(this.add.text(0, 2, harf, {
-      fontFamily: "Andika", fontSize: "36px", color: "#ffffff",
+      fontFamily: "Andika", fontSize: harf.length > 2 ? "24px" : harf.length > 1 ? "30px" : "36px", color: "#ffffff",
       stroke: "#3b2a1a", strokeThickness: 7, padding: { x: 3, y: 3 },
     }), 1.3));
     kap.add([g, yazi]);
@@ -157,32 +162,34 @@ class YilanSahnesi extends MiniOyunSahnesi {
     this.yemler = this.yemler.filter((y) => y !== yem);
     yem.destroy();
     const harf = yem.yem.harf;
-    if (harf === this.hece[this.yenen]) {
-      // Doğru sıradaki harf: yılan uzar, harf gövdede görünür
+    const durum = this.tur === "harf" ? (harf === this.harf ? "sirada" : "yanlis") : this.siraliDurum(harf);
+    const p = this.konum(bas.c, bas.r);
+    if (durum === "sirada") {
+      // Doğru (sıradaki) parça: yılan uzar, parça gövdede görünür
       bas.harf = harf;
-      this.yenen++;
-      Sesler.nota(600 + this.yenen * 150, 0, 0.12, 0.12, "triangle");
-      if (this.yenen >= this.hece.length) {
+      if (this.tur === "harf") {
+        Sesler.nota(600 + this.ilerleme * 100, 0, 0.12, 0.12, "triangle");
+        harfiSoyle(this.harf);
+        this.ilerlemeArtir(p.x, p.y);
+        this.yemKoy(this.harf);
+      } else if (this.siraliParcaAl(p.x, p.y)) {
         this.oynuyor = false;
-        this.time.delayedCall(300, () => {
-          Sesler.pling();
-          Sesler.soyle(this.hece);
-          const p = this.konum(bas.c, bas.r);
-          this.ilerlemeArtir(p.x, p.y);
-          if (!this.bitti) this.time.delayedCall(1600, () => this.yeniHece());
-        });
+        this.siraliTamam(() => this.yeniHece());
       }
+      return;
+    }
+    // Yanlış ya da sırası gelmemiş: yılan uzamaz, yem başka yere kaçar ya da yenisi gelir
+    this.yilan.pop();
+    if (durum === "sonra") {
+      Sesler.nota(330, 0, 0.1, 0.1, "sine");
+      this.yemKoy(harf);
     } else {
-      // Yanlış harf: yılan uzamaz, bir can gider, yerine yeni şaşırtma yemi
-      this.yilan.pop();
       if (this.ayar.affet) Sesler.yanlis();
       else this.kalpEksilt();
       this.cameras.main.flash(150, 255, 160, 140);
-      const ogrenilmis = bilinenHarfler(this.harf).filter((h) => !this.hece.includes(h));
-      if (this.hece.slice(this.yenen).includes(harf)) this.yemKoy(harf); // hecede lazımsa geri gelir
-      else this.yemKoy(Phaser.Utils.Array.GetRandom(ogrenilmis));
-      this.ipucuGoster(this.yemler.find((y) => y.yem.harf === this.hece[this.yenen]));
+      if (this.yanlislar.length) this.yemKoy(Phaser.Utils.Array.GetRandom(this.yanlislar));
     }
+    this.ipucuGoster(this.siradakiYem());
   }
 
   yilanCiz() {
@@ -209,7 +216,7 @@ class YilanSahnesi extends MiniOyunSahnesi {
       }
       if (parca.harf) {
         this.govdeYazilari.add(boyaliOrtala(titret(this.add.text(x, y, parca.harf, {
-          fontFamily: "Andika", fontSize: "34px", color: "#ffffff",
+          fontFamily: "Andika", fontSize: parca.harf.length > 2 ? "20px" : parca.harf.length > 1 ? "26px" : "34px", color: "#ffffff",
           stroke: "#3b2a1a", strokeThickness: 6, padding: { x: 3, y: 3 },
         }), 1.2)));
       }
