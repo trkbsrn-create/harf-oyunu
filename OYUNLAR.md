@@ -127,8 +127,10 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   bütün külçeler aynı görünür; istenen harf altın (ilerleme), başka harf taşa döner ve yavaş
   çekilir; can yok, kaybetmek yok; Kazma gibi 2. seviye harflerle hece, 3. seviye hecelerle kelime:
   sırası gelmemiş doğru külçe geri gömülür; gereken külçelerin önü hep açık ve kanca açısı içinde).
-  kazi-kazan (Kazı Kazan: gümüş kaplama RenderTexture'dan parmakla silinir, altından resim çıkar;
-  yaklaşık yarısı kazınınca harf seçenekleri belirir, resmin ilk sesi seçilir).
+  kazi-kazan (Kazı Kazan: gümüş kaplama RenderTexture'dan parmakla silinir, altından harfin geçtiği
+  resim çıkar (KONUMLU_KELIMELER); yarısı kazınınca ad okunur, üç kutulu seçeneklerden harfin yeri
+  seçilir (Resimden Sesi Bul'un tersi; 1. seviye başında/sonunda, 2-3. seviye üçü; `harfinYeri`:
+  harf birden çok yerde geçen kelime sorulmaz)).
   tombala (Tombala: resimli kart; torbadan harf topu çıkar (ünlü söylenir), o sesle başlayan
   resme pul konur; 2-3. seviyede kartta olmayan ya da zaten kapatılmış harf de çıkar, "Kartımda
   yok" düğmesine basılır; satır dolunca "Çinko!", kart dolunca "Tombala!").
