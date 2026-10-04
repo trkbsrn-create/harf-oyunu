@@ -141,9 +141,9 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   yakala-yaz (Yakala ve Yaz: kelime söylenir, çantada harf yerleri boş; uçuşan harf yaratıklarına
   dokununca ağ iner (en yakın yaratık); gereken harf çantadaki yerine uçar, gerekmeyen can götürür;
   uçanlar arasında gereken harf hep bulunur).
-  kirik-cam (Kırık Cam: 1. seviye camı kır: buzlu camın üstündeki istenen harflere dokununca
-  cam çatlar, hepsi bulununca kırılır, arkadaki resim çıkar ve adı okunur; 2-3. seviye camı onar:
-  resmin ilk sesini taşıyan üçgen cam parçası boşluğa sürüklenir ya da dokunulur).
+  kirik-cam (Kırık Cam: her seviyede camı kır: buzlu camın üstündeki oyunun harflerine dokununca
+  cam çatlar, hepsi bulununca kırılır, arkadaki resim (harfle başlayan kelime, KONUMLU_KELIMELER bas)
+  çıkar ve adı okunur; seviyeyle resim ve yanlış harf sayısı artar, 2-3. seviyede benzer harfler).
   bombayi-kurtar (Bombayı Kurtar: sevimli bomba yavaşça geri sayar; harf etiketli kablolardan
   istenen harfinkine dokununca kesilir, bomba konfetiye döner; yanlış kablo kıvılcım, can gider;
   süre biterse patlama yok, yalnızca "puf" dumanı ve can gider; korkutucu değil; Kazma gibi 2. seviye
