@@ -140,6 +140,7 @@ en az 5/7/9 yol ayrımı).
 Şeker Patlatma (Sürüm 113): harfler doğru sıradaysa yön serbest (kıvrılarak da); daha canlı
 görseller (sargılı şekerler, parıltılar, patlama efektleri, övgü yazısı, lolipoplar).
 Kayak (Sürüm 114): doğru cevap art arda aynı şeritte gelmiyor.
+Etiketler (Sürüm 117): öğretmen 11 harf oyununa "hece", Yılan'a "harf" etiketi ekletti.
 Yazı tipi (Sürüm 116): cihazda kuruluysa TTKB Dik Temel Abece, değilse Andika (TTKB dosyası depoda yok,
 yazardan izin bekleniyor).
 Elektrik Devresi (Sürüm 115): 1. seviye harflerden hece, 3. seviye üç heceli anlamlı kelimeler
