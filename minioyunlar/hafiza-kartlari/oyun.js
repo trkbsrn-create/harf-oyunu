@@ -1,13 +1,15 @@
 // Mini oyun: Hafıza Kartları
 // Kartlar kapalı durur; çocuk iki kart açar, eşleşirlerse açık kalır, eşleşmezlerse kapanır.
-// 1. ve 2. seviye: aynı harfi eşleştir (oyunun harfi daha çok çiftte çıkar).
-// 3. seviye: harf ile resmi eşleştir ("a" kartı ↔ arı kartı).
+// Öğretmenin kararı: yalnızca oyunun harfiyle ilgili kartlar gelir. Her çift aynı resmin iki
+// kartıdır; resimler o harfin kelimelerinden (Resimden Sesi Bul'un KONUMLU_KELIMELER'i) seçilir.
+// Eşleşince kelime okunur. Seviye arttıkça çift çoğalır ve harfin yeri çeşitlenir:
+// 1: 4 çift, harf başında; 2: 5 çift, başında ve sonunda; 3: 6 çift, başında, sonunda, ortasında.
 // Her 2 yanlış eşleştirmede 1 can gider (öğretmenin kararı). Bütün çiftler bulununca kazanılır.
 
 const HAFIZA_SEVIYELERI = {
-  1: { tur: "ayni", cift: 4, kendi: 2, benzer: false },
-  2: { tur: "ayni", cift: 6, kendi: 3, benzer: true },
-  3: { tur: "resim", cift: 5 },
+  1: { cift: 4, konumlar: ["bas"] },
+  2: { cift: 5, konumlar: ["bas", "son"] },
+  3: { cift: 6, konumlar: ["bas", "son", "orta"] },
 };
 
 const HAFIZA_KART_EN = 150;
@@ -20,7 +22,11 @@ class HafizaKartlariSahnesi extends MiniOyunSahnesi {
 
   preload() {
     super.preload();
-    for (const h of HARFLER) if (h.resim) this.load.svg(h.resim, `gorseller/${h.resim}.svg`);
+    const kelimeler = KONUMLU_KELIMELER[this.harf] || KONUMLU_KELIMELER.a;
+    for (const k of new Set([...kelimeler.bas, ...kelimeler.son, ...kelimeler.orta])) {
+      const ad = kelimeResmi(k);
+      this.load.svg(ad, `gorseller/${ad}.svg`);
+    }
   }
 
   create() {
@@ -32,7 +38,7 @@ class HafizaKartlariSahnesi extends MiniOyunSahnesi {
     this.kilitli = true;
     doodleYazi(this, 640, 50, "Eşini bul", 40).setOrigin(0.5).setDepth(900);
 
-    const ciftler = this.ayar.tur === "resim" ? this.resimCiftleri() : this.harfCiftleri();
+    const ciftler = this.resimCiftleri();
     this.ilerlemeKur(ciftler.length);
     // Her çift iki kart olur; kartlar karışık dizilir
     const kartlar = [];
@@ -40,7 +46,7 @@ class HafizaKartlariSahnesi extends MiniOyunSahnesi {
       kartlar.push({ ...cift[0], cift: i }, { ...cift[1], cift: i });
     });
     Phaser.Utils.Array.Shuffle(kartlar);
-    const sutun = kartlar.length === 10 ? 5 : 4;
+    const sutun = kartlar.length === 8 ? 4 : kartlar.length === 10 ? 5 : 6;
     const satir = Math.ceil(kartlar.length / sutun);
     const aralikX = 186;
     const aralikY = 192;
@@ -60,30 +66,20 @@ class HafizaKartlariSahnesi extends MiniOyunSahnesi {
     }));
   }
 
-  // Aynı harf çiftleri: oyunun harfi birkaç çift, kalanı öbür öğrenilmiş harfler
-  harfCiftleri() {
-    const ogrenilmis = ogrenilmisHarfler(this.harf).filter((h) => h !== this.harf);
-    let digerleri = [];
-    if (this.ayar.benzer) {
-      digerleri = (BENZER_HARFLER[this.harf] || []).filter((h) => ogrenilmis.includes(h));
-    }
-    for (const h of Phaser.Utils.Array.Shuffle(ogrenilmis.slice())) {
-      if (!digerleri.includes(h)) digerleri.push(h);
-    }
-    const harfler = [];
-    for (let i = 0; i < this.ayar.kendi; i++) harfler.push(this.harf);
-    const kalan = this.ayar.cift - this.ayar.kendi;
-    for (let i = 0; i < kalan; i++) harfler.push(digerleri[i % digerleri.length]);
-    return harfler.map((h) => [{ harf: h }, { harf: h }]);
-  }
-
-  // Harf ve resim çiftleri: oyunun harfi her zaman var
+  // Aynı resim çiftleri: oyunun harfinin kelimelerinden, seviyenin konumlarından dengeli seçilir
   resimCiftleri() {
-    const ogrenilmis = ogrenilmisHarfler(this.harf);
-    const resimliler = HARFLER.filter((h) => h.resim && ogrenilmis.includes(h.kucuk) && h.kucuk !== this.harf);
-    const secilen = Phaser.Utils.Array.Shuffle(resimliler).slice(0, this.ayar.cift - 1);
-    const kendi = HARFLER.find((h) => h.kucuk === this.harf);
-    return [kendi, ...secilen].map((h) => [{ harf: h.kucuk }, { resim: h.resim, kelime: h.kelime }]);
+    const kelimeler = KONUMLU_KELIMELER[this.harf] || KONUMLU_KELIMELER.a;
+    const havuzlar = this.ayar.konumlar.map((k) => Phaser.Utils.Array.Shuffle(kelimeler[k].slice()));
+    const secilen = [];
+    for (let i = 0; secilen.length < this.ayar.cift && i < 50; i++) {
+      const havuz = havuzlar[i % havuzlar.length];
+      const k = havuz.shift();
+      if (k && !secilen.includes(k)) secilen.push(k);
+    }
+    return secilen.map((k) => {
+      const kart = { resim: kelimeResmi(k), kelime: k };
+      return [kart, kart];
+    });
   }
 
   kartYap(x, y, bilgi, gecikme) {
@@ -162,11 +158,10 @@ class HafizaKartlariSahnesi extends MiniOyunSahnesi {
     this.acik.push(kap);
     Sesler.nota(620, 0, 0.06, 0.1);
     this.cevir(kap, true);
-    if (kap.kart.harf) harfiSoyle(kap.kart.harf);
     if (this.acik.length < 2) return;
 
     const [k1, k2] = this.acik;
-    if (k1.kart.cift === k2.kart.cift || (k1.kart.harf && k1.kart.harf === k2.kart.harf)) {
+    if (k1.kart.cift === k2.kart.cift) {
       // Eşleşti
       this.time.delayedCall(450, () => {
         this.acik = [];
