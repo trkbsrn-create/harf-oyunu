@@ -174,7 +174,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   neyin öğretimine uygun olduğu). İlk dağılımı Claude yaptı, öğretmen değiştirir. Menü kartının
   altında rozet olarak görünür (`ETIKET_RENKLERI`: harf kırmızımsı, hece sarı).
   Öğretmenin isteği: menüde seviye seçicinin sağında etiket süzgeci (hepsi / harf / hece;
-  `secilenEtiket`, `oyunListesi`); seçilen etiketi taşıyan oyunlar sayfalanır.
+  `secilenEtiketler`, `oyunListesi`): harf ve hece birlikte seçilebilir; oyunun etiketleri seçilenlerle
+  tam aynı olmalı ("harf" yalnızca harf etiketliler, ikisi birden yalnızca iki etiketliler); hiçbiri
+  seçili değilse "hepsi".
   Menü sayfalıdır (sayfada 8 kart, oklar ya da parmak kaydırma); listede öğretmenin
   fikirleri ve araştırmadan gelen fikirler "Yakında" olarak durur, sırayla yapılır.
 - Mini oyun ilkeleri (öğretmenin isteğiyle yapılan araştırmadan; her yeni mini oyunda uygulanır):
