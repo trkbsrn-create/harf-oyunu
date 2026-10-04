@@ -28,7 +28,8 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
   öğrenilmiş harfler (`bilinenHarfler`, `heceHavuzu`, `ogrenilmisKelimeler`). Yeterli hece/kelime
   yoksa oyun o harfte kapalı (`gereken`, `miniOyunOlur`; a ve n'de hece yok) ya da harfe döner.
 - Hem "harf" hem "hece" etiketli oyunlar Kazma düzeniyle işler (ortak.js `siraliKur` vb.): 1. seviye
-  harf, 2. seviye harflerle hece (hece söylenir, harfleri sırayla), 3. seviye hecelerle kelime; sırası
+  harf, 2. seviye harflerle hece (hece söylenir, harfleri sırayla; önce kapalı hece, sonra açık hece,
+  sonra üç harfli: `siraliHeceSec`), 3. seviye hecelerle kelime; sırası
   gelmemiş doğru parça can götürmez; hece/kelime yoksa harf. İstisna: Tombala, Birleştir Büyüt, Harf Fırtınası.
 - Seviyeyle hece uzar: 1. seviye iki harfli, 2-3. seviye üç harfli (`heceUzunlugu`, `heceSorusu`).
 - Hece oyunlarında (`heceOyunu`) tek harf okunmaz; yalnızca hece ya da kelime söylenir.

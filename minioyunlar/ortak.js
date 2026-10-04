@@ -519,15 +519,31 @@ class MiniOyunSahnesi extends Phaser.Scene {
     this.soru = null;
     this.sira = 0;
     this.kelimeSirasi = [];
+    this.heceSayisi = 0;
     this.heceler = heceHavuzu(this.harf);
     return this.tur;
+  }
+
+  // Öğretmenin kuralı: önce kapalı hece (an), sonra açık hece (na), sonra üç harfli heceler (tat).
+  // Bu harfte o türde hece yoksa bir sonrakine geçilir. Mümkünse oyunun harfi hecede olur.
+  siraliHeceSec() {
+    this.heceSayisi++;
+    const onceki = this.soru && this.soru.metin;
+    if (this.heceSayisi <= 2) {
+      const acik = this.heceSayisi === 2;
+      const havuz = this.heceler.filter((h) => h.hece.length === 2 && h.acik === acik && h.hece !== onceki);
+      const harfli = havuz.filter((h) => h.hece.includes(this.harf));
+      const secilen = harfli.length ? harfli : havuz;
+      if (secilen.length) return Phaser.Utils.Array.GetRandom(secilen).hece;
+    }
+    return heceSorusu(this.heceler, this.harf, 2, 1, 0.4, onceki).hedef;
   }
 
   // Yeni hece ya da kelime: this.soru = { metin, parcalar }; karışık yanlış parçaları döndürür
   siraliSoruSec() {
     let yanlislar;
     if (this.tur === "hece") {
-      const metin = heceSorusu(this.heceler, this.harf, this.seviye, 1, 0.4, this.soru && this.soru.metin).hedef;
+      const metin = this.siraliHeceSec();
       this.soru = { metin, parcalar: [...metin] };
       yanlislar = bilinenHarfler(this.harf).filter((h) => !metin.includes(h));
     } else {
