@@ -5,6 +5,9 @@
 // bomba patlamaz, yalnızca "puf" diye duman çıkar (korkutucu değil); bir can gider, yeni bomba.
 // Seviyeler: 1: 4 bomba, 3 kablo, 20 sn; 2: 5 bomba, 4 kablo, 16 sn; 3: 6 bomba, 4 kablo,
 // benzer harfler, 13 sn.
+// Öğretmenin isteği (Kazma gibi): 2. seviye harflerle hece (hece söylenir; hecenin harflerinin
+// kabloları sırayla kesilir; 4 hece), 3. seviye hecelerle kelime (3 kelime). Her parça için süre
+// biraz uzar. Sırası gelmemiş doğru kablo kesilmez, yalnızca sallanır (can gitmez). a/n'de harf.
 
 const BOMBA_SEVIYELERI = {
   1: { tur: 4, kablo: 3, sure: 20, benzer: false },
@@ -25,8 +28,10 @@ class BombayiKurtarSahnesi extends MiniOyunSahnesi {
     this.ortakKur();
     this.ayar = BOMBA_SEVIYELERI[this.seviye] || BOMBA_SEVIYELERI[1];
     this.kalpleriKur(3);
-    this.ilerlemeKur(this.ayar.tur);
-    this.hedefPaneliKur("Kes:");
+    this.siraliKur();
+    this.ilerlemeKur(this.tur === "harf" ? this.ayar.tur : this.tur === "hece" ? 4 : 3);
+    if (this.tur === "harf") this.hedefPaneliKur("Kes:");
+    else this.siraliPanelKur();
     this.kablolar = [];
     this.kalan = 0;
     this.sayiyor = false;
@@ -101,23 +106,29 @@ class BombayiKurtarSahnesi extends MiniOyunSahnesi {
     this.tweens.add({ targets: b, scale: 1, duration: 350, ease: "Back.Out" });
     this.bombaKap = b;
 
-    // Kablolar: biri doğru harf, öbürleri farklı yanlış harfler
-    const n = this.ayar.kablo;
-    const yanlislar = Phaser.Utils.Array.Shuffle(this.yanlisHavuz.slice());
-    while (yanlislar.length < n - 1) yanlislar.push(Phaser.Utils.Array.GetRandom(this.yanlisHavuz));
-    const harfler = Phaser.Utils.Array.Shuffle([this.harf, ...yanlislar.slice(0, n - 1)]);
+    // Kablolar: biri doğru harf, öbürleri farklı yanlış harfler (sıralı oyunda hecenin harfleri ya
+    // da kelimenin heceleri ve iki yanlış parça)
+    const dogrular = this.tur === "harf" ? [this.harf] : null;
+    const havuz = this.tur === "harf" ? this.yanlisHavuz : this.siraliSoruSec();
+    const parcalar = dogrular || this.soru.parcalar;
+    const n = this.tur === "harf" ? this.ayar.kablo : Math.min(5, parcalar.length + Math.min(2, havuz.length));
+    const yanlislar = Phaser.Utils.Array.Shuffle(havuz.slice());
+    while (yanlislar.length && yanlislar.length < n - parcalar.length) yanlislar.push(Phaser.Utils.Array.GetRandom(havuz));
+    const harfler = Phaser.Utils.Array.Shuffle([...parcalar, ...yanlislar.slice(0, n - parcalar.length)]);
     const renkler = Phaser.Utils.Array.Shuffle(KABLO_RENKLERI.slice());
     harfler.forEach((h, i) => {
-      const y = 260 + (i - (n - 1) / 2) * 0 + i * (360 / Math.max(1, n - 1)) - (n === 1 ? 0 : 0);
-      this.kablolar.push(this.kabloYap(y, h, renkler[i % renkler.length], i * 120));
+      // Beş kabloda aralık açılır, etiketler sırayla ileri-geri durur (üst üste binmesin)
+      const y = (n > 4 ? 230 : 260) + i * ((n > 4 ? 400 : 360) / Math.max(1, n - 1));
+      this.kablolar.push(this.kabloYap(y, h, renkler[i % renkler.length], i * 120, n > 4 ? (i % 2 ? 0.45 : 0.72) : 0.62));
     });
-    this.kalan = this.ayar.sure;
+    this.kalan = this.ayar.sure + (parcalar.length - 1) * 6;
     this.sayacYaz();
     this.sayiyor = true;
-    this.time.delayedCall(700, () => this.elGoster(this.kablolar.find((k) => k.kablo.dogru)));
+    if (this.tur !== "harf") this.siraliSoyle();
+    this.time.delayedCall(700, () => this.elGoster(this.siradakiKablo()));
   }
 
-  kabloYap(y, harf, renk, gecikme) {
+  kabloYap(y, harf, renk, gecikme, nokta = 0.62) {
     const bas = { x: BOMBA.x + 100, y: BOMBA.y + (y - BOMBA.y) * 0.25 };
     const son = { x: KUTU_X - 40, y };
     const egri = new Phaser.Curves.CubicBezier(
@@ -129,7 +140,7 @@ class BombayiKurtarSahnesi extends MiniOyunSahnesi {
     cizim.lineStyle(12, renk, 1);
     egri.draw(cizim, 40);
     // Harf etiketi kablonun ortasında
-    const orta = egri.getPoint(0.62);
+    const orta = egri.getPoint(nokta);
     const kap = this.add.container(orta.x, orta.y).setDepth(6);
     const g = this.add.graphics();
     g.fillStyle(0xfffdf6, 1);
@@ -137,17 +148,23 @@ class BombayiKurtarSahnesi extends MiniOyunSahnesi {
     g.lineStyle(4, 0x2b2b2b, 1);
     g.strokeRoundedRect(-42, -36, 84, 72, 14);
     const yazi = boyaliOrtala(titret(this.add.text(0, 0, harf, {
-      fontFamily: "Andika", fontSize: "50px", color: "#ffffff",
+      fontFamily: "Andika", fontSize: harf.length > 2 ? "32px" : harf.length > 1 ? "40px" : "50px", color: "#ffffff",
       stroke: "#3b2a1a", strokeThickness: 8, padding: { x: 4, y: 4 },
     }), 1.5));
     kap.add([g, yazi]);
     kap.cizim = cizim;
-    kap.kablo = { harf, dogru: harf === this.harf };
+    kap.kablo = { harf, dogru: this.tur === "harf" ? harf === this.harf : this.soru.parcalar.includes(harf) };
     kap.setSize(140, 100).setInteractive({ useHandCursor: true });
     kap.setAlpha(0);
     cizim.setAlpha(0);
     this.tweens.add({ targets: [kap, cizim], alpha: 1, duration: 300, delay: gecikme });
     return kap;
+  }
+
+  // Sıradaki kesilecek kablo
+  siradakiKablo() {
+    const aranan = this.tur === "harf" ? this.harf : this.soru.parcalar[this.sira];
+    return this.kablolar.find((k) => !k.kablo.kesildi && k.kablo.harf === aranan);
   }
 
   sayacYaz() {
@@ -168,14 +185,29 @@ class BombayiKurtarSahnesi extends MiniOyunSahnesi {
 
   kes(kap) {
     if (this.bitti || !this.sayiyor || kap.kablo.kesildi) return;
+    const durum = this.tur === "harf" ? (kap.kablo.dogru ? "sirada" : "yanlis") : this.siraliDurum(kap.kablo.harf);
+    if (durum === "sonra") {
+      // Sırası gelmedi: kesilmez, yalnızca sallanır; sıradaki kablo gösterilir
+      Sesler.nota(330, 0, 0.1, 0.1, "sine");
+      this.tweens.add({ targets: kap, angle: { from: -12, to: 12 }, duration: 70, yoyo: true, repeat: 2, onComplete: () => kap.setAngle(0) });
+      this.ipucuGoster(this.siradakiKablo());
+      return;
+    }
     kap.kablo.kesildi = true;
     // Makas: kablo ortadan kopar
     Sesler.nota(1200, 0, 0.05, 0.12, "square");
     this.tweens.add({ targets: kap.cizim, alpha: 0.25, duration: 200 });
-    if (kap.kablo.dogru) {
+    if (durum === "sirada" && this.tur !== "harf" && !this.siraliParcaAl(kap.x, kap.y)) {
+      // Hecenin sıradaki parçası kesildi; bomba hâlâ sayıyor
+      this.tweens.add({ targets: kap, y: kap.y + 60, angle: 25, alpha: 0, duration: 400 });
+      this.time.delayedCall(500, () => { if (this.sayiyor) this.elGoster(this.siradakiKablo()); });
+      return;
+    }
+    if (durum === "sirada") {
       this.sayiyor = false;
       Sesler.pling();
-      harfiSoyle(this.harf);
+      if (this.tur === "harf") harfiSoyle(this.harf);
+      else this.time.delayedCall(500, () => Sesler.soyle(this.soru.metin));
       this.tweens.add({ targets: kap, y: kap.y + 60, angle: 25, alpha: 0, duration: 400 });
       // Bomba konfetiye döner
       this.tweens.add({ targets: this.bombaKap, scale: 0, angle: 180, duration: 400, delay: 300 });
@@ -195,7 +227,7 @@ class BombayiKurtarSahnesi extends MiniOyunSahnesi {
       kap.setAlpha(0.5);
       this.tweens.add({ targets: this.bombaKap, angle: { from: -5, to: 5 }, duration: 60, yoyo: true, repeat: 2, onComplete: () => this.bombaKap.setAngle(0) });
       this.kalpEksilt();
-      this.ipucuGoster(this.kablolar.find((k) => k.kablo.dogru));
+      this.ipucuGoster(this.siradakiKablo());
     }
   }
 

@@ -5,6 +5,9 @@
 // durağa gelirse durur ve bir can gider; bitişe varır ama durak eksikse eksik duraklar parlar,
 // araba başa döner (can gitmez).
 // Seviyeler: 1: 3 tur, 2 doğru + 2 yanlış durak; 2: 4 tur, 3 + 3; 3: 5 tur, 3 + 4, benzer harfler.
+// Öğretmenin isteği (Kazma gibi): 2. seviye harflerle hece (hece söylenir; yol hecenin harf
+// duraklarından sırayla geçer; 4 hece), 3. seviye hecelerle kelime (3 kelime). Sırası gelmemiş doğru
+// durakta araba durur, başa döner (can gitmez); başka durak can götürür. a/n'de harf.
 
 const ARABA_SEVIYELERI = {
   1: { tur: 3, dogru: 2, yanlis: 2, benzer: false },
@@ -25,8 +28,10 @@ class ArabayiUlastirSahnesi extends MiniOyunSahnesi {
     this.ortakKur();
     this.ayar = ARABA_SEVIYELERI[this.seviye] || ARABA_SEVIYELERI[1];
     this.kalpleriKur(3);
-    this.ilerlemeKur(this.ayar.tur);
-    this.hedefPaneliKur("Geç:");
+    this.siraliKur();
+    this.ilerlemeKur(this.tur === "harf" ? this.ayar.tur : this.tur === "hece" ? 4 : 3);
+    if (this.tur === "harf") this.hedefPaneliKur("Geç:");
+    else this.siraliPanelKur();
     this.duraklar = [];
     this.yol = [];
     this.ciziyor = false;
@@ -98,17 +103,23 @@ class ArabayiUlastirSahnesi extends MiniOyunSahnesi {
       yerler.push({ x, y });
       this.duraklar.push(this.durakYap(x, y, harf));
     };
-    const n = this.ayar.dogru;
-    for (let i = 0; i < n; i++) {
+    // Sıralı oyunda doğru duraklar hecenin harfleri (kelimenin heceleri), soldan sağa sırayla
+    const yanlislar = this.tur === "harf" ? this.yanlisHavuz : this.siraliSoruSec();
+    const dogrular = this.tur === "harf" ? Array(this.ayar.dogru).fill(this.harf) : this.soru.parcalar;
+    const n = dogrular.length;
+    dogrular.forEach((metin, i) => {
       const xMin = 300 + (i * 700) / n;
-      koy(this.harf, xMin, xMin + 700 / n - 40);
+      koy(metin, xMin, xMin + 700 / n - 40);
+    });
+    if (yanlislar.length) {
+      for (let i = 0; i < this.ayar.yanlis; i++) koy(this.tur === "harf" ? Phaser.Utils.Array.GetRandom(yanlislar) : yanlislar[i % yanlislar.length], 280, 1060);
     }
-    for (let i = 0; i < this.ayar.yanlis; i++) koy(Phaser.Utils.Array.GetRandom(this.yanlisHavuz), 280, 1060);
+    if (this.tur !== "harf") this.siraliSoyle();
 
     // Gösteren el: arabadan doğru duraklardan geçip bitişe
-    const dogrular = this.duraklar.filter((d) => d.durak.dogru).sort((a, b) => a.x - b.x);
+    const yol = this.duraklar.filter((d) => d.durak.dogru).sort((a, b) => a.x - b.x);
     this.time.delayedCall(500, () => this.elSurukleGoster([
-      { x: ARABA_BASI.x, y: this.basY }, ...dogrular.map((d) => ({ x: d.x, y: d.y })), { x: BITIS.x + 20, y: this.bitisY }]));
+      { x: ARABA_BASI.x, y: this.basY }, ...yol.map((d) => ({ x: d.x, y: d.y })), { x: BITIS.x + 20, y: this.bitisY }]));
   }
 
   durakYap(x, y, harf) {
@@ -116,10 +127,11 @@ class ArabayiUlastirSahnesi extends MiniOyunSahnesi {
     const g = this.add.graphics();
     kap.add(g);
     kap.cizim = g;
-    kap.durak = { harf, dogru: harf === this.harf, alindi: false };
+    const dogru = this.tur === "harf" ? harf === this.harf : this.soru.parcalar.includes(harf);
+    kap.durak = { harf, dogru, alindi: false };
     this.durakCiz(kap, 0xfffdf6);
     kap.add(boyaliOrtala(titret(this.add.text(0, 0, harf, {
-      fontFamily: "Andika", fontSize: "46px", color: "#ffffff",
+      fontFamily: "Andika", fontSize: harf.length > 2 ? "30px" : harf.length > 1 ? "38px" : "46px", color: "#ffffff",
       stroke: "#3b2a1a", strokeThickness: 8, padding: { x: 4, y: 4 },
     }), 1.5)));
     return kap;
@@ -139,6 +151,7 @@ class ArabayiUlastirSahnesi extends MiniOyunSahnesi {
   yolTemizle() {
     this.yol = [];
     this.yolCizim.clear();
+    if (this.soru && this.sira) { this.sira = 0; this.siraliYuvaCiz(); }
     for (const d of this.duraklar) {
       if (!d.durak.alindi) continue;
       d.durak.alindi = false;
@@ -186,12 +199,15 @@ class ArabayiUlastirSahnesi extends MiniOyunSahnesi {
       targets: a, x: n.x, y: n.y, duration: Math.max(16, mesafe * 2.6),
       onComplete: () => {
         const d = this.duraklar.find((x) => !x.durak.alindi && Math.hypot(x.x - n.x, x.y - n.y) < DURAK_R + 8);
-        if (d && !d.durak.dogru) { this.yanlisDurak(d); return; }
+        const durum = !d ? null : this.tur === "harf" ? (d.durak.dogru ? "sirada" : "yanlis") : this.siraliDurum(d.durak.harf);
+        if (durum === "yanlis") { this.yanlisDurak(d); return; }
+        if (durum === "sonra") { this.siraDegil(d); return; }
         if (d) {
           d.durak.alindi = true;
           this.durakCiz(d, 0xd9f2c4, 0x8fd16a);
           Sesler.nota(660 + this.duraklar.filter((x) => x.durak.alindi).length * 110, 0, 0.12, 0.12, "triangle");
-          harfiSoyle(this.harf);
+          if (this.tur === "harf") harfiSoyle(this.harf);
+          else this.siraliParcaAl(d.x, d.y);
         }
         this.git(i + 1);
       },
@@ -209,14 +225,27 @@ class ArabayiUlastirSahnesi extends MiniOyunSahnesi {
     });
   }
 
+  // Sıralı oyun: doğru durak ama sırası gelmedi; araba durur, başa döner (can gitmez)
+  siraDegil(d) {
+    Sesler.nota(330, 0, 0.1, 0.1, "sine");
+    this.tweens.add({ targets: d, angle: { from: -12, to: 12 }, duration: 70, yoyo: true, repeat: 2, onComplete: () => d.setAngle(0) });
+    const siradaki = this.duraklar.find((x) => !x.durak.alindi && x.durak.harf === this.soru.parcalar[this.sira]);
+    this.time.delayedCall(500, () => { if (siradaki) this.ipucuGoster(siradaki); });
+    this.time.delayedCall(900, () => { if (!this.bitti) this.basaDon(); });
+  }
+
   yolSonu() {
     const son = this.yol[this.yol.length - 1];
     const vardi = Math.hypot(son.x - BITIS.x - 20, son.y - this.bitisY) < 110;
     const eksikler = this.duraklar.filter((d) => d.durak.dogru && !d.durak.alindi);
     if (vardi && !eksikler.length) {
+      this.tweens.add({ targets: this.araba, x: BITIS.x + 60, duration: 300 });
+      if (this.tur !== "harf") {
+        this.siraliTamam(() => { this.gidiyor = false; this.yeniTur(); });
+        return;
+      }
       Sesler.pling();
       this.ilerlemeArtir(BITIS.x, this.bitisY);
-      this.tweens.add({ targets: this.araba, x: BITIS.x + 60, duration: 300 });
       if (!this.bitti) this.time.delayedCall(1300, () => { this.gidiyor = false; this.yeniTur(); });
       return;
     }

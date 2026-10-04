@@ -123,7 +123,8 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   sallanır, başka parça can götürür; a/n'de harf toplama).
   altin-madencisi (Altın Madencisi: kanca sağa sola sallanır, dokununca iner ve ilk külçeyi çeker;
   bütün külçeler aynı görünür; istenen harf altın (ilerleme), başka harf taşa döner ve yavaş
-  çekilir; can yok, kaybetmek yok).
+  çekilir; can yok, kaybetmek yok; Kazma gibi 2. seviye harflerle hece, 3. seviye hecelerle kelime:
+  sırası gelmemiş doğru külçe geri gömülür).
   kazi-kazan (Kazı Kazan: gümüş kaplama RenderTexture'dan parmakla silinir, altından resim çıkar;
   yaklaşık yarısı kazınınca harf seçenekleri belirir, resmin ilk sesi seçilir).
   tombala (Tombala: resimli kart; torbadan harf topu çıkar (ünlü söylenir), o sesle başlayan
@@ -131,7 +132,8 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   yok" düğmesine basılır; satır dolunca "Çinko!", kart dolunca "Tombala!").
   arabayi-ulastir (Arabayı Ulaştır: arabadan başlayıp bitiş bayrağına parmakla yol çizilir;
   araba yolu izler, doğru harfli durakları toplar; yanlış durakta durur, can gider; bitişe varıp
-  durak eksikse eksikler parlar, araba başa döner (can gitmez)).
+  durak eksikse eksikler parlar, araba başa döner (can gitmez); Kazma gibi 2. seviye hecenin harf
+  durakları, 3. seviye kelimenin hece durakları sırayla; sırası gelmemiş durakta başa döner).
   yakala-yaz (Yakala ve Yaz: kelime söylenir, çantada harf yerleri boş; uçuşan harf yaratıklarına
   dokununca ağ iner (en yakın yaratık); gereken harf çantadaki yerine uçar, gerekmeyen can götürür;
   uçanlar arasında gereken harf hep bulunur).
@@ -140,10 +142,12 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   resmin ilk sesini taşıyan üçgen cam parçası boşluğa sürüklenir ya da dokunulur).
   bombayi-kurtar (Bombayı Kurtar: sevimli bomba yavaşça geri sayar; harf etiketli kablolardan
   istenen harfinkine dokununca kesilir, bomba konfetiye döner; yanlış kablo kıvılcım, can gider;
-  süre biterse patlama yok, yalnızca "puf" dumanı ve can gider; korkutucu değil).
-  yilan (Yılan: hece söylenir; yılanın başına göre gidilecek yöne dokunulur; hecenin harfleri
-  sırayla yenir, gövdede görünür, hece okunur; duvar/kendine çarpma yok, kenardan öbür kenara
-  geçer; 1. seviyede yanlış harf yalnızca uyarı, 2-3. seviyede can götürür).
+  süre biterse patlama yok, yalnızca "puf" dumanı ve can gider; korkutucu değil; Kazma gibi 2. seviye
+  hecenin harf kabloları, 3. seviye kelimenin hece kabloları sırayla kesilir, parça başına süre uzar).
+  yilan (Yılan: yılanın başına göre gidilecek yöne dokunulur; Kazma gibi 1. seviye istenen harfi ye
+  (yanlış harf yalnızca uyarı), 2. seviye hecenin harflerini, 3. seviye kelimenin hecelerini sırayla
+  ye (sırası gelmemiş yem kaçar, başkası can götürür); yenen gövdede görünür; duvar/kendine çarpma yok).
+  Ortak sıralı düzen: `siraliKur`, `siraliSoruSec`, `siraliParcaAl` (ortak.js).
   canavari-besle (Canavarı Besle: canavar konuşma balonunda harf ister (ünlü söylenir); masadaki
   harfli meyve canavara doğru sürüklenip bırakılır (1. seviyede dokunmak yeter), kavisle ağzına
   uçar; doğruysa yer ve büyür, yanlışsa yüzünü buruşturup tükürür, can gider).

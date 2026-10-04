@@ -37,17 +37,9 @@ class KazmaSahnesi extends MiniOyunSahnesi {
     this.ortakKur();
     this.ayar = KAZMA_SEVIYELERI[this.seviye] || KAZMA_SEVIYELERI[1];
     this.kalpleriKur(3);
-    // Oyun türü: harf topla / harflerle hece / hecelerle kelime (bkz. dosya başı)
-    this.tur = "harf";
-    if (this.seviye >= 3 && kelimeOyunuOlur(this.harf)) this.tur = "kelime";
-    else if (this.seviye >= 2 && heceOyunuOlur(this.harf)) this.tur = "hece";
-    this.heceOyunu = this.tur !== "harf"; // harfler tek başına okunmaz, yalnızca hece/kelime
+    this.siraliKur(); // harf topla / harflerle hece / hecelerle kelime (bkz. dosya başı)
     this.ilerlemeKur(this.tur === "harf" ? this.ayar.hedef : this.tur === "hece" ? 4 : 3);
     if (this.tur === "harf") this.hedefPaneliKur("Topla:");
-    this.soru = null;
-    this.sira = 0;
-    this.kelimeSirasi = Phaser.Utils.Array.Shuffle(ogrenilmisKelimeler(this.harf).slice());
-    this.heceler = heceHavuzu(this.harf);
     this.hedefKare = null;
     this.yuruyor = false;
     this.basladi = false;
@@ -104,11 +96,7 @@ class KazmaSahnesi extends MiniOyunSahnesi {
         this.hazineler.push(this.hazineYap(k.c, k.r, harf, false));
       }
     } else {
-      // Üstte: hoparlör (dokununca yeniden söylenir) ve toplanacak parçaların boş yerleri
-      this.hoparlor = this.add.container(470, 55, [this.hoparlorCiz(0, 0, 32)]).setDepth(900)
-        .setSize(84, 84).setInteractive({ useHandCursor: true });
-      this.hoparlor.on("pointerdown", () => { if (this.soru) Sesler.soyle(this.soru.metin); });
-      this.yuvalar = this.add.container(660, 55).setDepth(900);
+      this.siraliPanelKur();
     }
     this.topragiCiz();
 
@@ -130,23 +118,8 @@ class KazmaSahnesi extends MiniOyunSahnesi {
     if (this.bitti) return;
     for (const h of this.hazineler) this.tweens.add({ targets: h, alpha: 0, scale: 0.5, duration: 250, onComplete: () => h.destroy() });
     this.hazineler = [];
-    let parcalar;
-    let yanlislar;
-    if (this.tur === "hece") {
-      const metin = heceSorusu(this.heceler, this.harf, this.seviye, 1, 0.4, this.soru && this.soru.metin).hedef;
-      parcalar = [...metin];
-      this.soru = { metin, parcalar };
-      const harfler = bilinenHarfler(this.harf).filter((h) => !metin.includes(h));
-      yanlislar = Phaser.Utils.Array.Shuffle(harfler.slice());
-    } else {
-      if (!this.kelimeSirasi.length) this.kelimeSirasi = Phaser.Utils.Array.Shuffle(ogrenilmisKelimeler(this.harf).slice());
-      const k = this.kelimeSirasi.pop();
-      parcalar = k.heceler;
-      this.soru = { metin: k.kelime, parcalar };
-      const heceler = [...new Set(this.heceler.map((h) => h.hece))].filter((h) => !parcalar.includes(h));
-      yanlislar = Phaser.Utils.Array.Shuffle(heceler);
-    }
-    this.sira = 0;
+    const yanlislar = this.siraliSoruSec();
+    const { parcalar } = this.soru;
     // Yanlış parçalar (bilinen harf az ise her biri en çok iki kez)
     const yanlisParcalar = [];
     const adet = Math.min(this.ayar.sirali, yanlislar.length * 2);
@@ -173,38 +146,13 @@ class KazmaSahnesi extends MiniOyunSahnesi {
       h.setScale(0);
       this.tweens.add({ targets: h, scale: 1, duration: 260, delay: 250, ease: "Back.Out" });
     }
-    this.yuvalariCiz();
-    this.tweens.add({ targets: this.hoparlor, scale: 1.2, duration: 160, yoyo: true });
-    Sesler.soyle(this.soru.metin);
+    this.siraliSoyle();
     this.time.delayedCall(700, () => this.elGoster(this.siradakiTas()));
   }
 
   // Sıradaki toplanacak parçanın taşlarından biri
   siradakiTas() {
     return this.hazineler.find((h) => h.hazine.metin === this.soru.parcalar[this.sira]);
-  }
-
-  // Üstteki boş yerler: toplananlar yazılı, sıradaki sarı
-  yuvalariCiz() {
-    this.yuvalar.removeAll(true);
-    const { parcalar } = this.soru;
-    const en = this.tur === "hece" ? 64 : 96;
-    parcalar.forEach((metin, i) => {
-      const x = (i - (parcalar.length - 1) / 2) * (en + 12);
-      const g = this.add.graphics();
-      const dolu = i < this.sira;
-      g.fillStyle(dolu ? 0xffd34d : i === this.sira ? 0xfff3b0 : 0xfffdf6, 1);
-      g.fillRoundedRect(x - en / 2, -32, en, 64, 14);
-      g.lineStyle(4, 0x2b2b2b, 1);
-      g.strokeRoundedRect(x - en / 2, -32, en, 64, 14);
-      this.yuvalar.add(g);
-      if (dolu) {
-        this.yuvalar.add(boyaliOrtala(titret(this.add.text(x, 0, metin, {
-          fontFamily: "Andika", fontSize: "38px", color: "#ffffff",
-          stroke: "#3b2a1a", strokeThickness: 7, padding: { x: 3, y: 3 },
-        }), 1.2)));
-      }
-    });
   }
 
   konum(c, r) {
@@ -324,27 +272,12 @@ class KazmaSahnesi extends MiniOyunSahnesi {
   // yalnızca sallanır; başka parça can götürür
   siraliBak(h) {
     if (!this.soru || this.sira >= this.soru.parcalar.length) return;
-    const { parcalar } = this.soru;
-    if (h.hazine.metin === parcalar[this.sira]) {
+    const durum = this.siraliDurum(h.hazine.metin);
+    if (durum === "sirada") {
       this.hazineler = this.hazineler.filter((x) => x !== h);
-      Sesler.damla();
-      if (this.tur === "kelime") Sesler.soyle(h.hazine.metin); // hece okunur (tek harf okunmaz)
-      const hedef = this.yuvalar.x + (this.sira - (parcalar.length - 1) / 2) * ((this.tur === "hece" ? 64 : 96) + 12);
-      h.setDepth(950);
-      this.sira++;
-      this.tweens.add({ targets: h, x: hedef, y: this.yuvalar.y, scale: 0.8, duration: 450, ease: "Cubic.InOut",
-        onComplete: () => { h.destroy(); this.yuvalariCiz(); } });
-      if (this.sira >= parcalar.length) {
-        this.time.delayedCall(700, () => {
-          if (this.bitti) return;
-          Sesler.pling();
-          Sesler.soyle(this.soru.metin);
-          this.tweens.add({ targets: this.yuvalar, scale: 1.15, duration: 180, yoyo: true, repeat: 1 });
-          this.ilerlemeArtir(this.yuvalar.x, this.yuvalar.y + 40);
-          this.time.delayedCall(1600, () => this.yeniSoru());
-        });
-      }
-    } else if (parcalar.slice(this.sira).includes(h.hazine.metin)) {
+      if (this.siraliParcaAl(h.x, h.y)) this.siraliTamam(() => this.yeniSoru());
+      this.tweens.add({ targets: h, scale: 0.4, alpha: 0, duration: 300, onComplete: () => h.destroy() });
+    } else if (durum === "sonra") {
       // Sırası gelmedi: can gitmez, sıradaki parça gösterilir
       Sesler.nota(330, 0, 0.1, 0.1, "sine");
       this.tweens.add({ targets: h, angle: { from: -12, to: 12 }, duration: 70, yoyo: true, repeat: 2, onComplete: () => h.setAngle(0) });
