@@ -8,15 +8,48 @@ const Sesler = {
   // hikâye) tarayıcının sesi okur. Hazır ses dosyalarını yeniden açmak için true yapılır.
   dosyaSesleri: false,
 
-  // Tarayıcılar sesi ancak ilk dokunuş / tuş basışından sonra açar.
+  // Tarayıcılar sesi ancak ilk dokunuş / tuş basışından sonra açar. Telefonda ses ancak parmak
+  // kalkınca açılabilir; o ana kadar istenen sesler bekletilir (bekleyenler) ve ses açılınca çalınır.
   ac() {
     if (!this.baglam) {
       const Baglam = window.AudioContext || window.webkitAudioContext;
       if (!Baglam) return;
       this.baglam = new Baglam();
+      this.baglam.addEventListener?.("statechange", () => this.bekleyenleriCal());
     }
-    if (this.baglam.state === "suspended") this.baglam.resume();
+    if (this.baglam.state !== "running") {
+      const sonuc = this.baglam.resume();
+      if (sonuc && sonuc.then) sonuc.then(() => this.bekleyenleriCal()).catch(() => {});
+      // iOS: dokunuş içinde duyulmayan kısa bir ses çalmak sesi kalıcı olarak açar
+      try {
+        const kaynak = this.baglam.createBufferSource();
+        kaynak.buffer = this.baglam.createBuffer(1, 1, 22050);
+        kaynak.connect(this.baglam.destination);
+        kaynak.start(0);
+      } catch (e) { /* önemli değil */ }
+    }
     this.dosyalariYukle();
+  },
+
+  // Ses çalınabilir mi? Değilse (ses henüz açılmadıysa) sesi en çok 1,5 saniye bekletir.
+  calabilir(sonra) {
+    if (!this.baglam) this.ac();
+    const b = this.baglam;
+    if (!b) return false;
+    if (b.state === "running") return true;
+    const simdi = performance.now();
+    this.bekleyenler = (this.bekleyenler || []).filter((x) => simdi - x.zaman < 1500);
+    if (sonra && this.bekleyenler.length < 40) this.bekleyenler.push({ zaman: simdi, sonra });
+    return false;
+  },
+
+  // Ses açılınca bekleyen sesleri çalar (eskimiş olanları atar)
+  bekleyenleriCal() {
+    if (!this.baglam || this.baglam.state !== "running" || !this.bekleyenler) return;
+    const simdi = performance.now();
+    const liste = this.bekleyenler.filter((x) => simdi - x.zaman < 1500);
+    this.bekleyenler = [];
+    for (const x of liste) x.sonra();
   },
 
   // Seslendirilmiş sözleri arka planda indirip çözer (ilk dokunuştan sonra, bir kez)
@@ -40,8 +73,8 @@ const Sesler = {
 
   // Tek bir nota çalar.
   nota(frekans, baslangic, sure, ses = 0.2, tur = "triangle") {
+    if (!this.calabilir(() => this.nota(frekans, baslangic, sure, ses, tur))) return;
     const b = this.baglam;
-    if (!b || b.state !== "running") return;
     const t = b.currentTime + baslangic;
     const osc = b.createOscillator();
     const kazanc = b.createGain();
@@ -57,8 +90,8 @@ const Sesler = {
 
   // Yumuşak bir ayak sesi ("tıp"). Sırayla iki farklı ton.
   adim(tek) {
+    if (!this.calabilir(null)) return; // ayak sesi geç gelmesin, bekletilmez
     const b = this.baglam;
-    if (!b || b.state !== "running") return;
     const t = b.currentTime;
     const osc = b.createOscillator();
     const kazanc = b.createGain();
@@ -87,8 +120,8 @@ const Sesler = {
 
   // Su damlası şişeye girerken: yukarı kayan yumuşak bir "blup".
   damla() {
+    if (!this.calabilir(() => this.damla())) return;
     const b = this.baglam;
-    if (!b || b.state !== "running") return;
     const t = b.currentTime;
     const osc = b.createOscillator();
     const kazanc = b.createGain();
