@@ -1,19 +1,20 @@
 // Mini oyun: Labirent (hece kapıları, karesel labirent)
-// Öğretmenin isteği: karesel bir labirent; yolu gözle eleyerek bulmak olmasın. Labirentte çıkmaz
-// sokak yok, yollar birbirine bağlanır (dolaşılabilir). Karakter soldan girer, sağdaki hazineye
-// (çıkışa) gitmeye çalışır. Durduğu karede açık olan her yönde heceli bir kapı vardır. Hece
-// söylenir (hoparlörle tekrar); yalnızca söylenen hecenin kapısı çıkışa giden en kısa yoldadır.
-// Çocuk bir kapıya dokununca karakter o yöne bir kare yürür: doğru hece çıkışa yaklaştırır,
-// yanlış hece labirentte dolaştırır (can gitmez). Üst üste iki yanlıştan sonra doğru kapı hafifçe
-// büyüyüp küçülür (ipucu). İlerleme çubuğu çıkışa ne kadar yaklaşıldığını gösterir. Bitişte yıldız
+// Öğretmenin isteği: büyük, karışık, karesel bir labirent; doğru heceleri bulmadan çıkmak neredeyse
+// imkânsız olsun, yol gözle elenemesin. Çıkmaz sokak yok, yollar birbirine bağlanır ve fazladan
+// kısa yollarla çok sayıda yol ayrımı olur. Karakter soldan girer, sağdaki hazineye (çıkışa)
+// gitmeye çalışır. Hece yalnızca yol ayrımlarında sorulur: orada açık her yönde heceli bir kapı
+// vardır, yalnızca söylenen hecenin kapısı çıkışa giden en kısa yoldadır. Düz yollarda ve
+// dönemeçlerde karakter kendiliğinden bir sonraki yol ayrımına kadar yürür. Doğru hece çıkışa
+// yaklaştırır, yanlış hece labirentte dolaştırır (can gitmez). Üst üste iki yanlıştan sonra doğru
+// kapı hafifçe büyüyüp küçülür (ipucu). İlerleme çubuğu çıkışa yakınlığı gösterir. Bitişte yıldız
 // sayısı yanlış seçimlere göre (her 2 yanlış bir yıldız eksiltir, en az 1).
-// Seviyeler (bütün hece oyunlarında olduğu gibi): 1: 4x3 labirent, iki harfli heceler (an, na);
-// 2: 5x3, üç harfli heceler (tat); 3: 6x4, üç harfli benzer ve ters heceler.
+// Seviyeler (bütün hece oyunlarında olduğu gibi): 1: 7x4 labirent, iki harfli heceler (an, na);
+// 2: 8x5, üç harfli heceler (tat); 3: 10x5, üç harfli benzer ve ters heceler.
 
 const LABIRENT_SEVIYELERI = {
-  1: { sutun: 4, satir: 3, acikOrani: 0.4 },
-  2: { sutun: 5, satir: 3, acikOrani: 0 },
-  3: { sutun: 6, satir: 4, acikOrani: 0 },
+  1: { sutun: 7, satir: 4, ekYol: 0.2, enAzAyrim: 5, acikOrani: 0.4 },
+  2: { sutun: 8, satir: 5, ekYol: 0.22, enAzAyrim: 7, acikOrani: 0 },
+  3: { sutun: 10, satir: 5, ekYol: 0.25, enAzAyrim: 9, acikOrani: 0 },
 };
 
 const LABIRENT_ALAN = { sol: 150, sag: 1110, ust: 150, alt: 680 };
@@ -41,6 +42,7 @@ class LabirentSahnesi extends MiniOyunSahnesi {
     this.hece = null;
     this.yanlisSayisi = 0;
     this.ustUsteYanlis = 0;
+    this.geldigi = null; // karakterin geldiği kare (düz yolda geri dönmesin)
 
     const hoparlor = this.add.container(640, 60, [this.hoparlorCiz(0, 0, 38)]).setDepth(900)
       .setSize(96, 96).setInteractive({ useHandCursor: true });
@@ -51,7 +53,9 @@ class LabirentSahnesi extends MiniOyunSahnesi {
     this.labirentCiz();
     this.ilerlemeKur(this.mesafe[this.kare.c][this.kare.r]);
     const { x, y } = this.merkez(this.kare.c, this.kare.r);
-    this.cocuk = this.add.image(x, y + 26, "cocuk").setOrigin(0.5, 1).setScale(0.42).setDepth(20);
+    this.cocuk = this.add.image(x, y + this.kareBoy * 0.24, "cocuk").setOrigin(0.5, 1)
+      .setScale(Math.min(0.42, this.kareBoy / 260)).setDepth(20);
+    this.kapiOlcek = Math.min(1, this.kareEn / 120);
 
     this.input.on("gameobjectdown", (p, nesne) => {
       if (nesne.kapi) this.kapiyaDokun(nesne);
@@ -81,7 +85,31 @@ class LabirentSahnesi extends MiniOyunSahnesi {
 
   // Karesel labirent: önce dallanan bir labirent kazılır, sonra çıkmaz sokaklar başka bir
   // komşuya açılır (dolaşılabilir, gözle elenemez). Giriş solda, çıkış sağda.
+  // Doğru yolda en az enAzAyrim yol ayrımı (hece sorusu) olana kadar yeniden üretilir
   labirentUret() {
+    for (let deneme = 0; deneme < 40; deneme++) {
+      this.labirentKaz();
+      if (this.yoldakiAyrimlar() >= this.ayar.enAzAyrim) return;
+    }
+  }
+
+  // Girişten çıkışa en kısa yolda kaç yol ayrımı var (hece kaç kez sorulur)
+  yoldakiAyrimlar() {
+    let kare = this.kare;
+    let geri = null;
+    let sayi = 0;
+    for (let i = 0; i < 200 && (kare.c !== this.cikis.c || kare.r !== this.cikis.r); i++) {
+      const komsular = this.komsular(kare.c, kare.r);
+      const ileri = komsular.filter((k) => !geri || k.c !== geri.c || k.r !== geri.r);
+      if (ileri.length > 1) sayi++;
+      const sonraki = komsular.reduce((a, b) => (this.mesafe[b.c][b.r] < this.mesafe[a.c][a.r] ? b : a));
+      geri = kare;
+      kare = sonraki;
+    }
+    return sayi;
+  }
+
+  labirentKaz() {
     const { sutun, satir } = this.ayar;
     this.kareEn = (LABIRENT_ALAN.sag - LABIRENT_ALAN.sol) / sutun;
     this.kareBoy = (LABIRENT_ALAN.alt - LABIRENT_ALAN.ust) / satir;
@@ -108,9 +136,19 @@ class LabirentSahnesi extends MiniOyunSahnesi {
         if (kapali.length) this.ac(c, r, kapali[0][0], kapali[0][1]);
       }
     }
+    // Fazladan kısa yollar: daha çok yol ayrımı ve döngü (karışık labirent)
+    for (let c = 0; c < sutun; c++) {
+      for (let r = 0; r < satir; r++) {
+        for (const [dc, dr] of [[1, 0], [0, 1]]) {
+          if (icinde(c + dc, r + dr) && !this.acik(c, r, dc, dr) && Math.random() < this.ayar.ekYol) this.ac(c, r, dc, dr);
+        }
+      }
+    }
     // Giriş ve çıkış
-    this.kare = { c: 0, r: Phaser.Math.Between(0, satir - 1) };
-    this.cikis = { c: sutun - 1, r: Phaser.Math.Between(0, satir - 1) };
+    // Giriş ve çıkış zıt köşelere yakın (yol uzun olsun)
+    const ust = Math.random() < 0.5;
+    this.kare = { c: 0, r: ust ? Phaser.Math.Between(0, 1) : Phaser.Math.Between(satir - 2, satir - 1) };
+    this.cikis = { c: sutun - 1, r: ust ? Phaser.Math.Between(satir - 2, satir - 1) : Phaser.Math.Between(0, 1) };
     // Çıkışa uzaklık (her kareden en kısa yol, kare sayısı)
     this.mesafe = Array.from({ length: sutun }, () => new Array(satir).fill(Infinity));
     this.mesafe[this.cikis.c][this.cikis.r] = 0;
@@ -162,13 +200,20 @@ class LabirentSahnesi extends MiniOyunSahnesi {
     this.sandik = this.add.image(1205, cikis.y + 6, "sandik-kapali").setScale(0.62).setDepth(5);
   }
 
-  // Karakter bir kareye geldi: açık her yöne heceli kapı, hece söylenir
+  // Karakter bir kareye geldi. Yol ayrımı değilse (geldiği yön dışında tek yol) kendiliğinden
+  // yürümeye devam eder; yol ayrımında açık her yöne heceli kapı çıkar, hece söylenir.
   kareyeGel() {
     if (this.bitti) return;
     for (const kap of this.kapilar) kap.destroy();
     this.kapilar = [];
     const { c, r } = this.kare;
     const komsular = this.komsular(c, r);
+    const geri = this.geldigi;
+    const ileri = komsular.filter((k) => !geri || k.c !== geri.c || k.r !== geri.r);
+    if (ileri.length === 1) {
+      this.adimAt(ileri[0]);
+      return;
+    }
     // Çıkışa en kısa yoldaki komşu (birden çoksa biri) doğru kapı
     const enYakin = Math.min(...komsular.map((k) => this.mesafe[k.c][k.r]));
     const dogru = Phaser.Utils.Array.GetRandom(komsular.filter((k) => this.mesafe[k.c][k.r] === enYakin));
@@ -179,8 +224,8 @@ class LabirentSahnesi extends MiniOyunSahnesi {
     const m = this.merkez(c, r);
     komsular.forEach((k, i) => {
       const hece = k === dogru ? hedef : yanlislar.pop();
-      const x = m.x + k.dc * this.kareEn * 0.5;
-      const y = m.y + k.dr * this.kareBoy * 0.5;
+      const x = m.x + k.dc * this.kareEn * 0.52;
+      const y = m.y + k.dr * this.kareBoy * 0.52;
       this.kapilar.push(this.kapiYap(x, y, hece, k === dogru, k, i * 90));
     });
     this.time.delayedCall(400, () => {
@@ -213,7 +258,7 @@ class LabirentSahnesi extends MiniOyunSahnesi {
     kap.kapi = { hece, dogru, komsu };
     kap.setSize(110, 90).setInteractive({ useHandCursor: true });
     kap.setScale(0);
-    this.tweens.add({ targets: kap, scale: 1, duration: 260, delay: gecikme, ease: "Back.Out" });
+    this.tweens.add({ targets: kap, scale: this.kapiOlcek, duration: 260, delay: gecikme, ease: "Back.Out" });
     return kap;
   }
 
@@ -233,22 +278,30 @@ class LabirentSahnesi extends MiniOyunSahnesi {
       this.ustUsteYanlis++;
     }
     g.strokeRoundedRect(-44, -34, 86, 62, 14);
-    this.tweens.add({ targets: kap, scale: 1.15, duration: 150, yoyo: true });
+    this.tweens.add({ targets: kap, scale: this.kapiOlcek * 1.15, duration: 150, yoyo: true });
     Sesler.soyle(kap.kapi.hece);
     for (const k of this.kapilar) if (k !== kap) this.tweens.add({ targets: k, alpha: 0, scale: 0.6, duration: 250 });
-    this.yuru(kap, () => {
-      this.kare = { c: kap.kapi.komsu.c, r: kap.kapi.komsu.r };
+    this.time.delayedCall(250, () => this.tweens.add({ targets: kap, alpha: 0, scale: 0.5, duration: 200 }));
+    this.adimAt(kap.kapi.komsu);
+  }
+
+  // Bir kare yürür; çıkışa varınca hazine, değilse sıradaki kare (yol ayrımına kadar devam)
+  adimAt(komsu) {
+    const onceki = { c: this.kare.c, r: this.kare.r };
+    this.yuru(null, () => {
+      this.geldigi = onceki;
+      this.kare = { c: komsu.c, r: komsu.r };
       // İlerleme: çıkışa ne kadar yaklaşıldı (geri gidince azalır)
       this.ilerleme = Math.max(0, this.ilerlemeHedef - this.mesafe[this.kare.c][this.kare.r]);
       this.ilerlemeyiCiz();
       if (this.kare.c === this.cikis.c && this.kare.r === this.cikis.r) this.hazineyeVar();
       else this.kareyeGel();
-    });
+    }, this.merkez(komsu.c, komsu.r));
   }
 
-  // Karakter seçilen kapıdan geçip komşu kareye yürür
+  // Karakter hedef noktaya yürür
   yuru(kap, bitince, hedef) {
-    const n = hedef || this.merkez(kap.kapi.komsu.c, kap.kapi.komsu.r);
+    const n = hedef;
     const c = this.cocuk;
     let adim = 0;
     const adimSaati = this.time.addEvent({ delay: 150, loop: true, callback: () => {
@@ -257,10 +310,10 @@ class LabirentSahnesi extends MiniOyunSahnesi {
       Sesler.adim(adim % 2 === 1);
     } });
     if (Math.abs(n.x - c.x) > 1) c.setFlipX(n.x < c.x);
-    const mesafe = Phaser.Math.Distance.Between(c.x, c.y - 26, n.x, n.y);
-    if (kap) this.time.delayedCall(250, () => this.tweens.add({ targets: kap, alpha: 0, scale: 0.5, duration: 200 }));
+    const ayak = this.kareBoy * 0.24;
+    const mesafe = Phaser.Math.Distance.Between(c.x, c.y - ayak, n.x, n.y);
     this.tweens.add({
-      targets: c, x: n.x, y: n.y + 26, duration: Math.max(200, mesafe * 4.5), ease: "Linear",
+      targets: c, x: n.x, y: n.y + ayak, duration: Math.max(150, mesafe * 3.6), ease: "Linear",
       onComplete: () => {
         adimSaati.remove();
         c.setTexture("cocuk");
@@ -283,7 +336,7 @@ class LabirentSahnesi extends MiniOyunSahnesi {
       this.ilerlemeyiCiz();
       this.odulUcur(this.sandik.x, this.sandik.y);
       this.time.delayedCall(700, () => this.bitir(true));
-    }, { x: this.sandik.x - 50, y: this.sandik.y - 26 });
+    }, { x: this.sandik.x - 50, y: this.sandik.y - this.kareBoy * 0.24 });
   }
 
   oyunBitti() {

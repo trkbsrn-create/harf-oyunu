@@ -135,7 +135,8 @@ Telefonda ilk dokunuştaki efekt sesi kayboluyordu (Mini Games); efektler ses a�
 bekletiliyor (Sürüm 109). iPhone 11 Chrome'da efektler hiç duyulmuyordu (sessiz mod düğmesi
 Web Audio'yu kısıyor); ses oturumu "playback" yapıldı (Sürüm 110). Öğretmen deneyecek.
 Labirent (Sürüm 111): karesel labirent, çıkmaz sokak yok; doğru hece çıkışa götürür, yanlış hece
-dolaştırır.
+dolaştırır. Sürüm 112: hece yalnızca yol ayrımlarında; büyük ve karışık labirent (doğru yolda
+en az 5/7/9 yol ayrımı).
 Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı
 fikirleri var).
 
