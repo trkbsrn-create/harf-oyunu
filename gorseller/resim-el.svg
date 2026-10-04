@@ -1,0 +1,16 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- El (açık avuç) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="162" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="pembe" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="6" height="6" fill="#ffd2c8"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ff9c8a" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M44 116 q-4 -24 -18 -40 q-8 -10 -2 -14 q8 -4 18 10 l4 4 v-50 q0 -8 7 -8 q7 0 7 8 v34 v-44 q0 -8 7 -8 q7 0 7 8 v44 v-38 q0 -8 7 -8 q7 0 7 8 v40 v-28 q0 -8 7 -8 q7 0 7 8 v52 q0 22 -16 34z" fill="url(#pembe)"/>
+  </g>
+</svg>

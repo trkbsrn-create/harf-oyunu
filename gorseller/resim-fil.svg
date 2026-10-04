@@ -1,0 +1,22 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Fil (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="210" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="gri" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#d6d3cc"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#a9a59c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="66" cy="114" rx="50" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50 84 v26 h12 v-24 M88 84 v26 h12 v-26" fill="url(#gri)"/>
+    <path d="M40 56 q6 -26 46 -26 q36 0 36 30 q0 26 -30 26 h-36 q-22 -2 -16 -30z" fill="url(#gri)"/>
+    <path d="M120 58 q8 4 6 14" fill="none" stroke-width="3"/>
+    <path d="M44 40 q-24 -6 -28 16 q-2 14 2 28 q4 16 -8 24 l6 4 q14 -6 14 -26 q0 -12 8 -16" fill="url(#gri)"/>
+    <path d="M50 30 q-20 4 -16 30 q12 8 26 -4 q4 -18 -10 -26z" fill="#e2dfd8"/>
+    <circle cx="32" cy="48" r="3" fill="#2b2b2b"/>
+  </g>
+</svg>

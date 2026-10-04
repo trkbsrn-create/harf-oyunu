@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Yaprak (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="134" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="yesil" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9eba7"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#8fd16a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M18 108 l20 -20" fill="none" stroke-width="5"/>
+    <path d="M38 88 q-12 -50 30 -72 q30 -14 54 -10 q4 30 -12 56 q-24 36 -72 26z" fill="url(#yesil)"/>
+    <path d="M38 88 q32 -30 72 -76 M56 70 l-4 -22 M72 54 l-2 -24 M88 36 l0 -16 M66 62 l20 2 M82 44 l18 2" fill="none" stroke-width="3"/>
+  </g>
+</svg>

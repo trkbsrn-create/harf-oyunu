@@ -1,14 +1,18 @@
-// Mini oyun: Resimden Sesi Bul (sesin resmi)
-// Her turda harf ekranda görünür (ünlüyse ayrıca söylenir; ünsüz okunmaz). Çocuk o sesle başlayan resmi kartlar arasından seçer. Kartın köşesindeki
-// hoparlöre dokununca resmin adı okunur. Yanlış resim bir can götürür.
-// Seviye arttıkça: tur sayısı artar, öbür öğrenilmiş harfler de sorulur, kart sayısı artar.
-// Şimdilik her harfin tek resmi var (harfler.js'deki resim); resimler sonra çoğalacak.
+// Mini oyun: Resimden Sesi Bul (harf kelimenin neresinde?)
+// Öğretmenin isteği: düzeye göre harfin kelimedeki yeri sorulur. 1. düzey: harf başında,
+// 2. düzey: sonunda, 3. düzey: ortasında olan resmi bul. Kelimeler kelimeler.js'de.
+// Oyun başında önce harf büyükçe gelir (ünlüyse söylenir), sonra üç kutudan harfin yeri gösterilir
+// ve söylenir ("Başında a olan resimleri bul!"; ünsüz okunmaz: "Başında bu harf olan...").
+// Sonra harf ve kutular üstteki panele küçülür, sorular başlar. Her soruda bir doğru resim var;
+// yanlış resimlerde o harf hiç geçmez. Kartın köşesindeki hoparlör resmin adını okur.
+// Yanlış resim bir can götürür.
 
 const RESIMDEN_SES_SEVIYELERI = {
-  1: { tur: 5, kart: 3, kendiOrani: 1 },
-  2: { tur: 6, kart: 3, kendiOrani: 0.6 },
-  3: { tur: 8, kart: 4, kendiOrani: 0.5 },
+  1: { konum: "bas", tur: 6, kart: 3 },
+  2: { konum: "son", tur: 6, kart: 3 },
+  3: { konum: "orta", tur: 6, kart: 4 },
 };
+const KONUM_KUTUSU = { bas: 0, orta: 1, son: 2 };
 
 class ResimdenSesSahnesi extends MiniOyunSahnesi {
   constructor() {
@@ -17,70 +21,134 @@ class ResimdenSesSahnesi extends MiniOyunSahnesi {
 
   preload() {
     super.preload();
-    for (const h of HARFLER) if (h.resim) this.load.svg(h.resim, `gorseller/${h.resim}.svg`);
+    for (const k of RESIMLI_KELIMELER) {
+      const ad = kelimeResmi(k);
+      this.load.svg(ad, `gorseller/${ad}.svg`);
+    }
   }
 
   create() {
     this.ortakKur();
     this.ayar = RESIMDEN_SES_SEVIYELERI[this.seviye] || RESIMDEN_SES_SEVIYELERI[1];
-    this.cevaplandi = false; // "Tekrar" ile yeniden açılınca eski turdan kalmasın
+    // "Tekrar" ile yeniden açılınca eski turdan kalmasın
+    this.cevaplandi = false;
+    this.basladi = false;
+    this.kartlar = [];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.tur);
-    // Resmi olan öğrenilmiş harfler (sorulabilecek ve yanlış seçenek olabilecekler)
-    const ogrenilmis = ogrenilmisHarfler(this.harf);
-    this.resimliler = HARFLER.filter((h) => h.resim && ogrenilmis.includes(h.kucuk));
-    this.kartlar = [];
-
-    // Üstte soru: hoparlör ve harf (dokununca ses yeniden söylenir)
-    this.soru = this.add.container(640, 175).setDepth(5).setVisible(false);
-    const zemin = this.add.graphics();
-    zemin.fillStyle(0xfffdf6, 1);
-    zemin.fillRoundedRect(-150, -62, 300, 124, 24);
-    zemin.lineStyle(5, 0x2b2b2b, 1);
-    zemin.strokeRoundedRect(-150, -62, 300, 124, 24);
-    this.soru.add([zemin, this.hoparlorCiz(-80, 0, 34)]);
-    this.soru.setSize(300, 124).setInteractive({ useHandCursor: true });
-    this.soru.on("pointerdown", () => harfiSoyle(this.sorulan));
+    const liste = (KONUMLU_KELIMELER[this.harf] || KONUMLU_KELIMELER.a)[this.ayar.konum];
+    this.dogrular = Phaser.Utils.Array.Shuffle(liste.slice());
+    this.dogruSira = 0;
+    this.yanlislar = RESIMLI_KELIMELER.filter((k) => !k.includes(this.harf));
+    const bilgi = HARFLER.find((h) => h.kucuk === this.harf);
+    this.yonerge = `${KONUM_ADLARI[this.ayar.konum]} ${bilgi && bilgi.unlu ? this.harf : "bu harf"} olan resimleri bul!`;
 
     this.input.on("gameobjectdown", (p, nesne) => {
       if (nesne.hoparlor) Sesler.soyle(nesne.hoparlor);
       else if (nesne.kart) this.kartaDokun(nesne);
+      else if (nesne === this.soru && this.basladi) Sesler.soyle(this.yonerge);
     });
-    this.time.delayedCall(400, () => this.harfiTanit(() => this.yeniTur()));
+    this.time.delayedCall(400, () => this.tanit());
+  }
+
+  // Harf ve yeri: üç kutu, harf kendi kutusunda (sarı). olcek: kutu boyu
+  kutularYap(boy) {
+    const kap = this.add.container(0, 0);
+    const en = boy * 0.84;
+    const aralik = en + boy * 0.18;
+    for (let i = 0; i < 3; i++) {
+      const x = (i - 1) * aralik;
+      const dolu = i === KONUM_KUTUSU[this.ayar.konum];
+      const g = this.add.graphics();
+      g.fillStyle(dolu ? 0xffe680 : 0xfffdf6, 1);
+      g.fillRoundedRect(x - en / 2, -boy / 2, en, boy, boy * 0.18);
+      g.lineStyle(Math.max(4, boy * 0.05), 0x2b2b2b, 1);
+      g.strokeRoundedRect(x - en / 2, -boy / 2, en, boy, boy * 0.18);
+      kap.add(g);
+      if (dolu) {
+        kap.harfYazisi = boyaliOrtala(this.add.text(x, 0, this.harf, {
+          fontFamily: "Andika", fontSize: `${Math.round(boy * 0.72)}px`, color: "#2b2b2b", padding: { x: 4, y: 4 },
+        }));
+        kap.add(kap.harfYazisi);
+      }
+    }
+    return kap;
+  }
+
+  // Oyun başı: önce harf, sonra yeri söylenir; sonra üstteki panele küçülür ve sorular başlar
+  tanit() {
+    const harf = boyaliOrtala(titret(this.add.text(640, 260, this.harf, {
+      fontFamily: "Andika", fontSize: "170px", color: "#ffffff",
+      stroke: "#3b2a1a", strokeThickness: 16, padding: { x: 6, y: 6 },
+    }), 3)).setDepth(20).setScale(0);
+    this.tweens.add({ targets: harf, scale: 1, duration: 380, ease: "Back.Out" });
+    harfiSoyle(this.harf);
+    const kutular = this.kutularYap(110).setPosition(640, 470).setDepth(20).setAlpha(0);
+    const kutuHarfi = kutular.harfYazisi;
+    // Harf kutusuna büyük harften iner
+    this.time.delayedCall(1100, () => {
+      this.tweens.add({ targets: kutular, alpha: 1, duration: 250 });
+      const hedefX = kutular.x + kutuHarfi.x;
+      kutuHarfi.setVisible(false);
+      const ucan = boyaliOrtala(this.add.text(harf.x, harf.y, this.harf, {
+        fontFamily: "Andika", fontSize: "79px", color: "#2b2b2b", padding: { x: 4, y: 4 },
+      })).setDepth(21).setScale(2);
+      this.tweens.add({ targets: ucan, x: hedefX, y: kutular.y + kutuHarfi.y, scale: 1, duration: 600, ease: "Cubic.InOut",
+        onComplete: () => {
+          ucan.destroy();
+          kutuHarfi.setVisible(true);
+          Sesler.nota(880, 0, 0.12, 0.12);
+          this.tweens.add({ targets: kutuHarfi, scale: 1.25, duration: 160, yoyo: true });
+          Sesler.soyle(this.yonerge, () => this.time.delayedCall(300, () => panele()));
+        } });
+    });
+    // Panele küçül: üstte hoparlör ve kutular kalır
+    const panele = () => {
+      if (this.bitti || this.basladi) return;
+      this.basladi = true;
+      this.tweens.add({ targets: harf, alpha: 0, scale: 0.5, duration: 300, onComplete: () => harf.destroy() });
+      this.soru = this.add.container(640, 175).setDepth(5).setScale(0.6).setAlpha(0);
+      const zemin = this.add.graphics();
+      zemin.fillStyle(0xfffdf6, 1);
+      zemin.fillRoundedRect(-200, -62, 400, 124, 24);
+      zemin.lineStyle(5, 0x2b2b2b, 1);
+      zemin.strokeRoundedRect(-200, -62, 400, 124, 24);
+      this.soru.add([zemin, this.hoparlorCiz(-140, 0, 34), this.kutularYap(84).setPosition(40, 0)]);
+      this.soru.setSize(400, 124).setInteractive({ useHandCursor: true });
+      this.tweens.add({ targets: kutular, x: 680, y: 175, scale: 84 / 110, alpha: 0, duration: 400, ease: "Cubic.InOut",
+        onComplete: () => kutular.destroy() });
+      this.tweens.add({ targets: this.soru, scale: 1, alpha: 1, duration: 350, delay: 200, ease: "Back.Out",
+        onComplete: () => this.yeniTur() });
+    };
+    // Söz hiç bitmezse de oyun başlasın
+    this.time.delayedCall(7000, () => panele());
   }
 
   yeniTur() {
     if (this.bitti) return;
     for (const k of this.kartlar) k.destroy();
     this.kartlar = [];
-    // Sorulan harf: 1. seviyede hep oyunun harfi; sonra öbür öğrenilmiş harfler de
-    const sorulanlar = this.resimliler.map((h) => h.kucuk);
-    this.sorulan = Math.random() < this.ayar.kendiOrani || sorulanlar.length < 2
-      ? this.harf : Phaser.Utils.Array.GetRandom(sorulanlar.filter((h) => h !== this.harf));
-    if (this.soruHarfi) this.soruHarfi.destroy();
-    this.soruHarfi = boyaliOrtala(titret(this.add.text(40, 0, this.sorulan, {
-      fontFamily: "Andika", fontSize: "84px", color: "#ffffff",
-      stroke: "#3b2a1a", strokeThickness: 12, padding: { x: 4, y: 4 },
-    }), 2));
-    this.soru.add(this.soruHarfi).setVisible(true).setScale(0.8);
-    this.tweens.add({ targets: this.soru, scale: 1, duration: 250, ease: "Back.Out" });
-    harfiSoyle(this.sorulan);
-
-    // Kartlar: doğru resim ve yanlışlar, karışık sırada
-    const dogru = this.resimliler.find((h) => h.kucuk === this.sorulan);
-    const yanlislar = Phaser.Utils.Array.Shuffle(this.resimliler.filter((h) => h !== dogru))
-      .slice(0, this.ayar.kart - 1);
+    // Doğru kelime: karışık listeden sırayla (liste biterse yeniden karıştırılır)
+    if (this.dogruSira >= this.dogrular.length) {
+      const son = this.dogrular[this.dogrular.length - 1];
+      this.dogrular = Phaser.Utils.Array.Shuffle(this.dogrular.slice());
+      if (this.dogrular[0] === son && this.dogrular.length > 1) this.dogrular.push(this.dogrular.shift());
+      this.dogruSira = 0;
+    }
+    const dogru = this.dogrular[this.dogruSira++];
+    const yanlislar = Phaser.Utils.Array.Shuffle(this.yanlislar.slice()).slice(0, this.ayar.kart - 1);
     const secenekler = Phaser.Utils.Array.Shuffle([dogru, ...yanlislar]);
     const aralik = this.ayar.kart === 4 ? 260 : 300;
-    secenekler.forEach((h, i) => {
+    secenekler.forEach((k, i) => {
       const x = 640 + (i - (secenekler.length - 1) / 2) * aralik;
-      this.kartlar.push(this.kartYap(x, 470, h, h === dogru, i * 90));
+      this.kartlar.push(this.kartYap(x, 470, k, k === dogru, i * 90));
     });
+    this.tweens.add({ targets: this.soru, scale: 1.08, duration: 160, yoyo: true });
     // İlk turda gösteren el doğru kartı gösterir (bir kez)
     this.time.delayedCall(secenekler.length * 90 + 500, () => this.elGoster(this.kartlar.find((k) => k.kart.dogru)));
   }
 
-  kartYap(x, y, bilgi, dogru, gecikme) {
+  kartYap(x, y, kelime, dogru, gecikme) {
     const kap = this.add.container(x, y).setDepth(10);
     const g = this.add.graphics();
     g.fillStyle(0x000000, 0.12);
@@ -89,15 +157,15 @@ class ResimdenSesSahnesi extends MiniOyunSahnesi {
     g.fillRoundedRect(-110, -104, 216, 204, 22);
     g.lineStyle(5, 0x2b2b2b, 1);
     g.strokeRoundedRect(-110, -104, 216, 204, 22);
-    const resim = this.add.image(-2, -8, bilgi.resim);
-    resim.setScale(Math.min(150 / resim.width, 150 / resim.height));
+    const resim = this.add.image(-2, -8, kelimeResmi(kelime));
+    resim.setScale(Math.min(160 / resim.width, 150 / resim.height));
     const hoparlor = this.add.container(78, 72, [this.hoparlorCiz(0, 0, 20)]).setSize(72, 72)
       .setInteractive({ useHandCursor: true });
-    hoparlor.hoparlor = bilgi.kelime;
+    hoparlor.hoparlor = kelime;
     kap.add([g, resim, hoparlor]);
     kap.cerceve = g;
     kap.setSize(216, 204).setInteractive({ useHandCursor: true });
-    kap.kart = { dogru, kelime: bilgi.kelime };
+    kap.kart = { dogru, kelime };
     kap.setScale(0);
     this.tweens.add({ targets: kap, scale: 1, duration: 280, delay: gecikme, ease: "Back.Out" });
     return kap;

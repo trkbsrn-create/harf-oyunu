@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Ayak (çıplak, yandan) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="116" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="pembe" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="6" height="6" fill="#ffd2c8"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ff9c8a" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="62" cy="112" rx="46" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 10 h26 q2 50 8 62 q30 6 50 12 q10 4 8 14 q-2 10 -20 10 h-66 q-12 -2 -10 -16 q4 -30 4 -82z" fill="url(#pembe)"/>
+    <circle cx="112" cy="84" r="5" fill="#ffd2c8" stroke-width="2.5"/>
+    <circle cx="102" cy="80" r="4.5" fill="#ffd2c8" stroke-width="2.5"/>
+    <circle cx="93" cy="77" r="4" fill="#ffd2c8" stroke-width="2.5"/>
+  </g>
+</svg>

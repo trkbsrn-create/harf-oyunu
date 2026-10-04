@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Tencere (kapaklı) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="153" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="tencere" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#ff9c8a"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#e0533d" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="114" rx="50" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M20 48 h90 v52 q0 10 -10 10 h-70 q-10 0 -10 -10z" fill="url(#tencere)"/>
+    <path d="M20 58 h-12 M110 58 h12" fill="none" stroke-width="7"/>
+    <path d="M16 46 q49 -30 98 0z" fill="url(#tencere)"/>
+    <path d="M58 26 h14 v-6 h-14z" fill="#5a3b2a"/>
+    <path d="M30 64 v30" fill="none" stroke="#ffffff" stroke-width="5"/>
+  </g>
+</svg>

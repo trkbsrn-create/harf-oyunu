@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Fıstık (yer fıstığı, kabuklu) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="192" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kabuk2" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)">
+      <rect width="6" height="6" fill="#f2d7b0"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#d9b07a" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="114" rx="46" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M36 20 q24 -6 30 18 q2 10 -4 20 q-6 10 0 20 q4 22 -20 28 q-26 4 -32 -18 q-4 -14 6 -26 q8 -10 0 -22 q0 -16 20 -20z" fill="url(#kabuk2)"/>
+    <path d="M34 34 l4 4 M46 30 l2 6 M28 80 l6 2 M40 90 l2 -6 M50 76 l-6 2" fill="none" stroke-width="2.5"/>
+    <ellipse cx="96" cy="88" rx="16" ry="20" fill="#f7d6b0"/>
+    <path d="M96 70 v36" fill="none" stroke-width="2.5"/>
+  </g>
+</svg>

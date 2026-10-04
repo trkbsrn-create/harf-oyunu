@@ -60,9 +60,12 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   can yok. 2-3. düzey: harfin ipucu resmi yazılış yönünde yol boyunca götürülür, sarı iz kalır;
   sapınca çizgi baştan, can gider; harf 3 kez; yollar `HARF_YOLLARI` dik temel harf yönüne göre;
   2. düzey kalın yol, oklar, numaralar; 3. düzey ince yol, yalnızca başlangıç noktası); resimden-ses (Resimden Sesi
-  Bul: ses söylenir ve harf görünür, o sesle başlayan resim seçilir; kart köşesindeki
-  hoparlör resmin adını okur; 1. seviyede hep oyunun harfi, sonra öbür harfler de;
-  şimdilik her harfin tek resmi var); hafiza-kartlari (Hafıza Kartları: kartlar kapalı,
+  Bul: düzeye göre harfin kelimedeki yeri: 1. başında, 2. sonunda, 3. ortasında olan resmi seç
+  (öğretmenin isteği). Oyun başında önce harf gelir (ünlüyse söylenir), sonra üç kutuda harfin
+  yeri gösterilir ve söylenir ("Başında a olan resimleri bul!"; ünsüzde "bu harf"), sonra üstteki
+  panele küçülür. Kelimeler `KONUMLU_KELIMELER` (resimden-ses/kelimeler.js; 114 resim,
+  gorseller/resim-<kelime>.svg, doodle_ciz.py); yanlış resimlerde harf hiç geçmez; 6 soru, 3/3/4
+  kart; kart köşesindeki hoparlör resmin adını okur); hafiza-kartlari (Hafıza Kartları: kartlar kapalı,
   iki kart açılır, eşleşen açık kalır; 1-2. seviye aynı harfi eşleştir, 3. seviye harf ile
   resmi eşleştir; her 2 yanlış eşleştirmede 1 can gider); hece-koprusu (Hece Köprüsü:
   hece yazılmaz, yalnızca söylenir (hoparlörle tekrar); çocuk dereki harf taşlarına dokunup
@@ -287,6 +290,13 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 - GitHub işlerini (kaydetme, gönderme, çekme isteği açma, ana sürüme ekleme/merge)
   Claude yapar. Kullanıcıdan GitHub'da düğmeye basmasını isteme; bu terimleri
   kullanıcıya açıklamak gerekirse sade Türkçe kullan.
+
+## Kelime seçimi
+- Oyunlara kelime seçerken Türkçe kurallarına uygun kelimeler seçilir (öğretmenin kuralı):
+  büyük ünlü uyumu olan, başında iki ünsüz olmayan, yabancı olmayan kelimeler (elma, kalem,
+  pizza, tren gibi kelimeler kullanılmaz). Öğretmenin kendisinin eklediği kelimeler kalır.
+- Kelime resimden kolay tanınmalı; birbirine benzeyen resimler (kurt/kedi gibi) aynı soruda
+  karışmasın.
 
 ## Yazı ve harfler
 - Oyundaki bütün yazılar Türkçe.
