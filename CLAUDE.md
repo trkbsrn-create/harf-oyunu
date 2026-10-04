@@ -109,7 +109,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   kapılarda hece (hece söylenir, hoparlörle tekrar; 2. seviye iki, 3. seviye üç harfli)).
   hece-muzigi (Hece Müziği: 1. seviye ksilofon: heceli tuşlar, oyun melodi çalar (tuş parlar,
   hece okunur), çocuk aynı sırayla basar; 2-3. seviye nota akışı: heceli notalar sağdan sola
-  akar, istenen heceli notaya kırmızı çizgide dokunulur; notalar beşli (pentatonik) dizide).
+  akar, istenen heceli notaya kırmızı çizgide dokunulur; notalar beşli (pentatonik) dizide;
+  öğretmenin isteği: 2-3. seviye bitince yakalanan notalar porteye dizilip sırayla melodi olarak çalar
+  ("Senin şarkın!", `finalMelodi`, sonda akor), sonra "Aferin!"; görsel: süzülen renkli nota
+  işaretleri, renkli porte şeritleri, nabız gibi atan çizgi, `notaPatlat` halka + nota parçacıkları).
   scrabble (Scrabble: kelime söylenir, resmi varsa (`KELIME_RESIMLERI`) yanında; raftaki harf
   taşlarına dokununca sıradaki boş yere geçer; yanlış yerdeki taşlar rafa döner, can gider).
   ordek-vurma (Ördek Vurma: panayır standı; ördekler sıra sıra zıt yönlerde kayar, sırtlarında
