@@ -1,16 +1,15 @@
-// Mini oyun: Kırık Cam
-// Öğretmenin kararı: iki taslak da kullanılır.
-//   1. seviye "Camı kır": buzlu camın arkasında bir resim var, camın üstünde harfler. İstenen
-//      harflere dokununca cam o noktadan çatlar; doğru harflerin hepsi bulununca cam kırılır,
-//      resim ortaya çıkar ve adı okunur. Yanlış harf bir can götürür.
-//   2-3. seviye "Camı onar": resimli camın bir parçası kırılıp düşmüş. Aşağıdaki cam
-//      parçalarından resmin ilk sesini taşıyanı boşluğa sürükle (ya da dokun); cam onarılır,
-//      resmin adı okunur. Yanlış parça bir can götürür. 3. seviyede benzer harfler.
+// Mini oyun: Kırık Cam (camı kır)
+// Buzlu camın arkasında bir resim var, camın üstünde harfler. Oyunun harfine dokununca cam o
+// noktadan çatlar; o harflerin hepsi bulununca cam kırılır, arkadaki resim ortaya çıkar ve adı
+// okunur. Öğretmenin isteği: her seviyede yalnızca "camı kır"; resim hep oyunun harfiyle başlayan
+// bir kelime (KONUMLU_KELIMELER[harf].bas, Resimden Sesi Bul'un listesi). Yanlış harf can götürür.
+// Seviyeler: 1: 3 resim, 3 doğru + 4 yanlış harf; 2: 4 resim, 3 + 6, benzer harfler;
+// 3: 5 resim, 4 + 7, benzer harfler.
 
 const KIRIK_CAM_SEVIYELERI = {
-  1: { tur: "kir", resim: 3, dogru: 3, yanlis: 4 },
-  2: { tur: "onar", resim: 4, secenek: 3, benzer: false },
-  3: { tur: "onar", resim: 5, secenek: 3, benzer: true },
+  1: { resim: 3, dogru: 3, yanlis: 4, benzer: false },
+  2: { resim: 4, dogru: 3, yanlis: 6, benzer: true },
+  3: { resim: 5, dogru: 4, yanlis: 7, benzer: true },
 };
 
 const CAM = { x: 640, y: 330, en: 460, boy: 330 };
@@ -22,7 +21,15 @@ class KirikCamSahnesi extends MiniOyunSahnesi {
 
   preload() {
     super.preload();
-    for (const h of HARFLER) if (h.resim) this.load.svg(h.resim, `gorseller/${h.resim}.svg`);
+    for (const k of this.kelimeler()) {
+      const ad = kelimeResmi(k);
+      this.load.svg(ad, `gorseller/${ad}.svg`);
+    }
+  }
+
+  // Oyunun harfiyle başlayan resimli kelimeler
+  kelimeler() {
+    return (KONUMLU_KELIMELER[this.harf] || KONUMLU_KELIMELER.a).bas;
   }
 
   create() {
@@ -30,12 +37,10 @@ class KirikCamSahnesi extends MiniOyunSahnesi {
     this.ayar = KIRIK_CAM_SEVIYELERI[this.seviye] || KIRIK_CAM_SEVIYELERI[1];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.resim);
-    const ogrenilmis = ogrenilmisHarfler(this.harf);
-    this.resimliler = HARFLER.filter((h) => h.resim && ogrenilmis.includes(h.kucuk));
-    this.turNo = 0;
+    this.resimSirasi = [];
     this.nesneler = [];
     this.kilitli = true;
-    if (this.ayar.tur === "kir") this.hedefPaneliKur("Kır:");
+    this.hedefPaneliKur("Kır:");
 
     if (!this.textures.exists("cam-parca")) {
       const g = this.make.graphics({ add: false });
@@ -55,10 +60,7 @@ class KirikCamSahnesi extends MiniOyunSahnesi {
 
     this.input.on("gameobjectdown", (p, nesne) => {
       if (nesne.camHarf) this.camHarfineDokun(nesne);
-      if (nesne.parca) this.parcayaDokun(nesne);
     });
-    this.input.on("drag", (p, nesne, x, y) => { if (nesne.parca && !this.kilitli) nesne.setPosition(x, y); });
-    this.input.on("dragend", (p, nesne) => { if (nesne.parca) this.parcaBirakildi(nesne); });
     this.time.delayedCall(400, () => this.harfiTanit(() => this.yeniTur()));
   }
 
@@ -67,16 +69,14 @@ class KirikCamSahnesi extends MiniOyunSahnesi {
     this.nesneler = [];
   }
 
+  // Sıradaki resim: aynı kelime, liste bitmeden tekrar gelmez
   resimSec() {
-    const kendi = this.resimliler.find((h) => h.kucuk === this.harf);
-    const obur = this.resimliler.filter((h) => h !== kendi);
-    const r = kendi && (this.turNo % 2 === 0 || !obur.length) ? kendi : Phaser.Utils.Array.GetRandom(obur);
-    this.turNo++;
-    return r;
+    if (!this.resimSirasi.length) this.resimSirasi = Phaser.Utils.Array.Shuffle(this.kelimeler().slice());
+    return this.resimSirasi.pop();
   }
 
-  resimKoy(bilgi) {
-    const r = this.add.image(CAM.x, CAM.y, bilgi.resim).setDepth(2);
+  resimKoy(kelime) {
+    const r = this.add.image(CAM.x, CAM.y, kelimeResmi(kelime)).setDepth(2);
     r.setScale(Math.min((CAM.en - 60) / r.width, (CAM.boy - 40) / r.height));
     this.nesneler.push(r);
     return r;
@@ -86,13 +86,11 @@ class KirikCamSahnesi extends MiniOyunSahnesi {
     if (this.bitti) return;
     this.temizle();
     this.kilitli = true;
-    this.bilgi = this.resimSec();
-    this.resimKoy(this.bilgi);
-    if (this.ayar.tur === "kir") this.kirTuru();
-    else this.onarTuru();
+    this.kelime = this.resimSec();
+    this.resimKoy(this.kelime);
+    this.kirTuru();
   }
 
-  // ---------- 1. seviye: camı kır ----------
   kirTuru() {
     // Buzlu cam
     const buz = this.add.graphics().setDepth(3);
@@ -106,25 +104,27 @@ class KirikCamSahnesi extends MiniOyunSahnesi {
     this.nesneler.push(this.catlak);
     // Harfler camın üstüne dağılır
     const ogrenilmis = ogrenilmisHarfler(this.harf).filter((h) => h !== this.harf);
+    const benzerler = (BENZER_HARFLER[this.harf] || []).filter((h) => ogrenilmis.includes(h));
+    const yanlisHavuz = this.ayar.benzer && benzerler.length ? [...benzerler, ...ogrenilmis] : ogrenilmis;
     const harfler = Phaser.Utils.Array.Shuffle([
       ...Array(this.ayar.dogru).fill(this.harf),
-      ...Array.from({ length: this.ayar.yanlis }, () => Phaser.Utils.Array.GetRandom(ogrenilmis)),
+      ...Array.from({ length: this.ayar.yanlis }, () => Phaser.Utils.Array.GetRandom(yanlisHavuz)),
     ]);
-    const yerler = [];
+    // Harfler 5 x 3 ızgaranın rastgele gözlerine, gözün içinde biraz kayarak (üst üste binmesin)
+    const gozler = [];
+    for (let c = 0; c < 5; c++) for (let r = 0; r < 3; r++) gozler.push({ c, r });
+    Phaser.Utils.Array.Shuffle(gozler);
+    const gozEn = (CAM.en - 40) / 5;
+    const gozBoy = (CAM.boy - 30) / 3;
     for (const h of harfler) {
-      let x = 0;
-      let y = 0;
-      for (let d = 0; d < 80; d++) {
-        x = Phaser.Math.Between(CAM.x - CAM.en / 2 + 50, CAM.x + CAM.en / 2 - 50);
-        y = Phaser.Math.Between(CAM.y - CAM.boy / 2 + 45, CAM.y + CAM.boy / 2 - 45);
-        if (yerler.every((n) => Math.hypot(n.x - x, n.y - y) > 95)) break;
-      }
-      yerler.push({ x, y });
+      const goz = gozler.pop();
+      const x = CAM.x - CAM.en / 2 + 20 + (goz.c + 0.5) * gozEn + Phaser.Math.Between(-6, 6);
+      const y = CAM.y - CAM.boy / 2 + 15 + (goz.r + 0.5) * gozBoy + Phaser.Math.Between(-10, 10);
       const yazi = boyaliOrtala(titret(this.add.text(x, y, h, {
         fontFamily: "Andika", fontSize: "56px", color: "#ffffff",
         stroke: "#3b2a1a", strokeThickness: 9, padding: { x: 4, y: 4 },
       }), 1.6)).setDepth(5);
-      yazi.setInteractive({ useHandCursor: true, hitArea: new Phaser.Geom.Circle(yazi.width / 2, yazi.height / 2, 46), hitAreaCallback: Phaser.Geom.Circle.Contains });
+      yazi.setInteractive({ useHandCursor: true, hitArea: new Phaser.Geom.Circle(yazi.width / 2, yazi.height / 2, 40), hitAreaCallback: Phaser.Geom.Circle.Contains });
       yazi.camHarf = { harf: h, dogru: h === this.harf };
       this.nesneler.push(yazi);
     }
@@ -172,101 +172,9 @@ class KirikCamSahnesi extends MiniOyunSahnesi {
     for (const n of this.nesneler) if (n.camHarf) n.setVisible(false);
     this.buz.setVisible(false);
     this.catlak.setVisible(false);
-    this.time.delayedCall(300, () => Sesler.soyle(this.bilgi.kelime));
+    this.time.delayedCall(300, () => Sesler.soyle(this.kelime));
     this.ilerlemeArtir(CAM.x, CAM.y);
     if (!this.bitti) this.time.delayedCall(2000, () => this.yeniTur());
-  }
-
-  // ---------- 2-3. seviye: camı onar ----------
-  onarTuru() {
-    // Camın sağ üst köşesinden üçgen bir parça eksik
-    const sag = CAM.x + CAM.en / 2;
-    const ust = CAM.y - CAM.boy / 2;
-    this.bosluk = [{ x: sag - 200, y: ust }, { x: sag, y: ust }, { x: sag, y: ust + 170 }];
-    const g = this.add.graphics().setDepth(3);
-    g.fillStyle(0xd7f0fb, 0.35);
-    g.fillRect(CAM.x - CAM.en / 2, CAM.y - CAM.boy / 2, CAM.en, CAM.boy);
-    g.fillStyle(0xfbf7ec, 1);
-    g.fillTriangle(this.bosluk[0].x, this.bosluk[0].y, this.bosluk[1].x, this.bosluk[1].y, this.bosluk[2].x, this.bosluk[2].y);
-    g.lineStyle(4, 0x2b2b2b, 1);
-    for (let i = 0; i < 3; i++) {
-      const a = this.bosluk[i];
-      const b = this.bosluk[(i + 1) % 3];
-      for (let t = 0; t < 1; t += 0.08) g.lineBetween(a.x + (b.x - a.x) * t, a.y + (b.y - a.y) * t, a.x + (b.x - a.x) * (t + 0.04), a.y + (b.y - a.y) * (t + 0.04));
-    }
-    this.nesneler.push(g);
-    this.boslukMerkez = { x: (this.bosluk[0].x + this.bosluk[1].x + this.bosluk[2].x) / 3, y: (this.bosluk[0].y + this.bosluk[1].y + this.bosluk[2].y) / 3 };
-
-    // Seçenek parçaları: doğru harf = resmin ilk sesi
-    const dogru = this.bilgi.kucuk;
-    const ogrenilmis = ogrenilmisHarfler(this.harf).filter((h) => h !== dogru);
-    let yanlislar = this.ayar.benzer ? (BENZER_HARFLER[dogru] || []).filter((h) => ogrenilmis.includes(h)) : [];
-    for (const h of Phaser.Utils.Array.Shuffle(ogrenilmis.slice())) if (!yanlislar.includes(h)) yanlislar.push(h);
-    const harfler = Phaser.Utils.Array.Shuffle([dogru, ...yanlislar.slice(0, this.ayar.secenek - 1)]);
-    harfler.forEach((h, i) => {
-      const x = 640 + (i - (harfler.length - 1) / 2) * 220;
-      this.nesneler.push(this.parcaYap(x, 615, h, h === dogru));
-    });
-    this.kilitli = false;
-    const d = this.nesneler.find((n) => n.parca && n.parca.dogru);
-    this.time.delayedCall(400, () => this.elSurukleGoster([{ x: d.x, y: d.y }, { x: (d.x + this.boslukMerkez.x) / 2, y: 470 }, this.boslukMerkez]));
-  }
-
-  parcaYap(x, y, harf, dogru) {
-    const kap = this.add.container(x, y).setDepth(10);
-    const g = this.add.graphics();
-    // Boşlukla aynı biçimde üçgen (ağırlık merkezine göre)
-    const m = this.boslukMerkez;
-    const noktalar = this.bosluk.map((n) => ({ x: (n.x - m.x) * 0.75, y: (n.y - m.y) * 0.75 }));
-    g.fillStyle(0xd7f0fb, 1);
-    g.lineStyle(4, 0x2b2b2b, 1);
-    g.fillTriangle(noktalar[0].x, noktalar[0].y, noktalar[1].x, noktalar[1].y, noktalar[2].x, noktalar[2].y);
-    g.strokeTriangle(noktalar[0].x, noktalar[0].y, noktalar[1].x, noktalar[1].y, noktalar[2].x, noktalar[2].y);
-    const yazi = boyaliOrtala(titret(this.add.text(10, -6, harf, {
-      fontFamily: "Andika", fontSize: "54px", color: "#ffffff",
-      stroke: "#3b2a1a", strokeThickness: 9, padding: { x: 4, y: 4 },
-    }), 1.6));
-    kap.add([g, yazi]);
-    kap.cizim = g;
-    kap.parca = { harf, dogru, evX: x, evY: y, noktalar };
-    kap.setSize(170, 140).setInteractive({ useHandCursor: true, draggable: true });
-    kap.on("dragstart", () => { kap.surukle = false; kap.basX = kap.x; kap.basY = kap.y; });
-    kap.on("drag", () => { if (Math.hypot(kap.x - kap.basX, kap.y - kap.basY) > 12) kap.surukle = true; });
-    return kap;
-  }
-
-  // Dokunma da yeter: parça boşluğa uçar
-  parcayaDokun() {}
-
-  parcaBirakildi(kap) {
-    if (this.bitti || this.kilitli) return;
-    const yakin = Math.hypot(kap.x - this.boslukMerkez.x, kap.y - this.boslukMerkez.y) < 150;
-    if (!kap.surukle || yakin) this.parcaDene(kap);
-    else this.tweens.add({ targets: kap, x: kap.parca.evX, y: kap.parca.evY, duration: 250 });
-  }
-
-  parcaDene(kap) {
-    if (kap.parca.dogru) {
-      this.kilitli = true;
-      kap.disableInteractive();
-      this.tweens.add({ targets: kap, x: this.boslukMerkez.x, y: this.boslukMerkez.y, scale: 1 / 0.75, duration: 300, ease: "Back.Out",
-        onComplete: () => {
-          kap.list[1].setVisible(false); // harf gizlenir, cam bütünleşir
-          kap.cizim.clear();
-          kap.cizim.fillStyle(0xd7f0fb, 0.35);
-          const n = kap.parca.noktalar;
-          kap.cizim.fillTriangle(n[0].x, n[0].y, n[1].x, n[1].y, n[2].x, n[2].y);
-          Sesler.pling();
-          Sesler.soyle(this.bilgi.kelime);
-          this.ilerlemeArtir(CAM.x, CAM.y);
-          if (!this.bitti) this.time.delayedCall(2000, () => this.yeniTur());
-        } });
-    } else {
-      this.tweens.add({ targets: kap, x: kap.parca.evX, y: kap.parca.evY, duration: 300 });
-      this.tweens.add({ targets: kap, angle: { from: -8, to: 8 }, duration: 70, yoyo: true, repeat: 2, onComplete: () => kap.setAngle(0) });
-      this.kalpEksilt();
-      this.ipucuGoster(this.nesneler.find((n) => n.parca && n.parca.dogru));
-    }
   }
 
   oyunBitti() {
