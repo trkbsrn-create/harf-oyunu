@@ -11,8 +11,8 @@
 // öğretmen istedikçe değiştirir. Menüdeki kartın altında küçük etiket olarak görünür.
 
 const PLANLANAN_OYUNLAR = [
-  { ad: "damla-yakala", baslik: "Damla Yakalama", etiketler: ["harf"] },
-  { ad: "harf-balonlari", baslik: "Harf Balonları", etiketler: ["harf"] },
+  { ad: "damla-yakala", baslik: "Damla Yakalama", etiketler: ["harf", "hece"] },
+  { ad: "harf-balonlari", baslik: "Harf Balonları", etiketler: ["harf", "hece"] },
   { ad: "harfi-yaz", baslik: "Harfi Yaz", etiketler: ["harf"] }, // 1. düzey şekillerle, 2-3. düzey çizerek
   { ad: "resimden-ses", baslik: "Resimden Sesi Bul", etiketler: ["harf"] },
   { ad: "hafiza-kartlari", baslik: "Hafıza Kartları", etiketler: ["harf"] },
@@ -23,26 +23,26 @@ const PLANLANAN_OYUNLAR = [
   { ad: "seker-patlatma", baslik: "Şeker Patlatma", etiketler: ["hece"] },
   { ad: "kayak", baslik: "Kayak", etiketler: ["harf", "hece"] },
   { ad: "elektrik-devresi", baslik: "Elektrik Devresi", etiketler: ["hece"] },
-  { ad: "duvardan-gecme", baslik: "Duvardan Geçme", etiketler: ["harf"] },
+  { ad: "duvardan-gecme", baslik: "Duvardan Geçme", etiketler: ["harf", "hece"] },
   { ad: "hece-muzigi", baslik: "Hece Müziği", etiketler: ["hece"] },
   { ad: "scrabble", baslik: "Scrabble", etiketler: ["hece"] },
-  { ad: "ordek-vurma", baslik: "Ördek Vurma", etiketler: ["harf"] },
-  { ad: "kazma", baslik: "Kazma", etiketler: ["harf"] },
-  { ad: "altin-madencisi", baslik: "Altın Madencisi", etiketler: ["harf"] },
+  { ad: "ordek-vurma", baslik: "Ördek Vurma", etiketler: ["harf", "hece"] },
+  { ad: "kazma", baslik: "Kazma", etiketler: ["harf", "hece"] },
+  { ad: "altin-madencisi", baslik: "Altın Madencisi", etiketler: ["harf", "hece"] },
   { ad: "kazi-kazan", baslik: "Kazı Kazan", etiketler: ["harf"] },
-  { ad: "tombala", baslik: "Tombala", etiketler: ["harf"] },
-  { ad: "arabayi-ulastir", baslik: "Arabayı Ulaştır", etiketler: ["harf"] },
+  { ad: "tombala", baslik: "Tombala", etiketler: ["harf", "hece"] },
+  { ad: "arabayi-ulastir", baslik: "Arabayı Ulaştır", etiketler: ["harf", "hece"] },
   { ad: "yakala-yaz", baslik: "Yakala ve Yaz", etiketler: ["hece"] },
   { ad: "kirik-cam", baslik: "Kırık Cam", etiketler: ["harf"] },
-  { ad: "bombayi-kurtar", baslik: "Bombayı Kurtar", etiketler: ["harf"] },
-  { ad: "yilan", baslik: "Yılan", etiketler: ["hece"] },
+  { ad: "bombayi-kurtar", baslik: "Bombayı Kurtar", etiketler: ["harf", "hece"] },
+  { ad: "yilan", baslik: "Yılan", etiketler: ["harf", "hece"] },
   // Araştırmadan gelen yeni fikirler (taslak)
-  { ad: "canavari-besle", baslik: "Canavarı Besle", etiketler: ["harf"] },
+  { ad: "canavari-besle", baslik: "Canavarı Besle", etiketler: ["harf", "hece"] },
   { ad: "harf-kesme", baslik: "Harf Kesme", etiketler: ["harf"] },
   { ad: "hece-kulesi", baslik: "Hece Kulesi", etiketler: ["hece"] },
   { ad: "birlestir-buyut", baslik: "Birleştir Büyüt", etiketler: ["harf", "hece"] },
   { ad: "harfle-boya", baslik: "Harfle Boya", etiketler: ["harf"] },
-  { ad: "harf-firtinasi", baslik: "Harf Fırtınası", etiketler: ["harf"] },
+  { ad: "harf-firtinasi", baslik: "Harf Fırtınası", etiketler: ["harf", "hece"] },
 ];
 
 // Yapılmış mini oyunlar: ad -> sahne sınıfı
