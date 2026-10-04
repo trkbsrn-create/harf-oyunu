@@ -5,9 +5,10 @@
 // bomba patlamaz, yalnızca "puf" diye duman çıkar (korkutucu değil); bir can gider, yeni bomba.
 // Seviyeler: 1: 4 bomba, 3 kablo, 20 sn; 2: 5 bomba, 4 kablo, 16 sn; 3: 6 bomba, 4 kablo,
 // benzer harfler, 13 sn.
-// Öğretmenin isteği (Kazma gibi): 2. seviye harflerle hece (hece söylenir; hecenin harflerinin
-// kabloları sırayla kesilir; 4 hece), 3. seviye hecelerle kelime (3 kelime). Her parça için süre
-// biraz uzar. Sırası gelmemiş doğru kablo kesilmez, yalnızca sallanır (can gitmez). a/n'de harf.
+// Öğretmenin isteği (Kazma gibi): 2. seviye harflerle hece (hece söylenir; 4 hece), 3. seviye
+// hecelerle kelime (3 kelime). Bomba bölmeli: her parça için bir bölme, bölmeler sırayla açılır,
+// her bölmede doğru kablo kesilir (bolmeleriKur). Her parça için süre biraz uzar. Sırası gelmemiş
+// parçanın kablosu kesilmez, yalnızca sallanır (can gitmez). a/n'de harf.
 
 const BOMBA_SEVIYELERI = {
   1: { tur: 4, kablo: 3, sure: 20, benzer: false },

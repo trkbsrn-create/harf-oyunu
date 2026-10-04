@@ -146,8 +146,9 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   çıkar ve adı okunur; seviyeyle resim ve yanlış harf sayısı artar, 2-3. seviyede benzer harfler).
   bombayi-kurtar (Bombayı Kurtar: sevimli bomba yavaşça geri sayar; harf etiketli kablolardan
   istenen harfinkine dokununca kesilir, bomba konfetiye döner; yanlış kablo kıvılcım, can gider;
-  süre biterse patlama yok, yalnızca "puf" dumanı ve can gider; korkutucu değil; Kazma gibi 2. seviye
-  hecenin harf kabloları, 3. seviye kelimenin hece kabloları sırayla kesilir, parça başına süre uzar).
+  süre biterse patlama yok, yalnızca "puf" dumanı ve can gider; korkutucu değil; Kazma gibi 2.
+  ve 3. seviyede bomba bölmeli: her harf/hece için bir bölme (4 kablo), bölmeler sırayla açılır, doğru
+  kesilen bölmenin lambası yeşil yanar (`bolmeleriKur`); parça başına süre uzar).
   yilan (Yılan: yılanın başına göre gidilecek yöne dokunulur; Kazma gibi 1. seviye istenen harfi ye
   (yanlış harf yalnızca uyarı), 2. seviye hecenin harflerini, 3. seviye kelimenin hecelerini sırayla
   ye (sırası gelmemiş yem kaçar, başkası can götürür); yenen gövdede görünür; duvar/kendine çarpma yok).
