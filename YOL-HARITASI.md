@@ -134,6 +134,8 @@ harfli (ilk grupta yok; üç harfli zor seçenekler).
 Telefonda ilk dokunuştaki efekt sesi kayboluyordu (Mini Games); efektler ses açılana kadar
 bekletiliyor (Sürüm 109). iPhone 11 Chrome'da efektler hiç duyulmuyordu (sessiz mod düğmesi
 Web Audio'yu kısıyor); ses oturumu "playback" yapıldı (Sürüm 110). Öğretmen deneyecek.
+Labirent (Sürüm 111): karesel labirent, çıkmaz sokak yok; doğru hece çıkışa götürür, yanlış hece
+dolaştırır.
 Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı
 fikirleri var).
 
