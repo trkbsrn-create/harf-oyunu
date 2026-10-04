@@ -105,7 +105,8 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   yeni harf gruplarıyla 4-5 heceli kelimeler de eklenecek).
   duvardan-gecme (Duvardan Geçme: karakter (cocuk-tirman.svg, arkadan) yolda koşar; ufuktan üç
   kapılı tuğla duvarlar yaklaşır; istenen harfin kapısının şeridine geç (dokun ya da sürükle);
-  yanlış kapıya çarpınca can gider).
+  yanlış kapıya çarpınca can gider; öğretmenin isteği: Kayak gibi 1. seviye harf, 2-3. seviyede
+  kapılarda hece (hece söylenir, hoparlörle tekrar; 2. seviye iki, 3. seviye üç harfli)).
   hece-muzigi (Hece Müziği: 1. seviye ksilofon: heceli tuşlar, oyun melodi çalar (tuş parlar,
   hece okunur), çocuk aynı sırayla basar; 2-3. seviye nota akışı: heceli notalar sağdan sola
   akar, istenen heceli notaya kırmızı çizgide dokunulur; notalar beşli (pentatonik) dizide).
