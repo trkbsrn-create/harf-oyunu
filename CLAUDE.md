@@ -79,8 +79,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   tahtaya yürür; bütün tahtalar oturunca köprü tamamlanır, çocuk karşıya geçer; yanlışsa taşlar
   döner, can gider); heceyi-bul (Heceyi Bul: hece söylenir, sırtında hece yazılı balıklar (balik.svg,
   oyunda boyanır) derede yüzer, doğru heceli balığa dokunulur; yanlış balık bir kez can
-  götürür); labirent (Labirent: öğretmenin isteğiyle karesel labirent (4x3, 5x3, 6x4); çıkmaz sokak yok,
-  yollar dolaşılabilir (gözle eleyerek yol bulunmasın); durulan karede açık her yönde heceli kapı,
+  götürür); labirent (Labirent: öğretmenin isteğiyle büyük, karışık karesel labirent (7x4, 8x5, 10x5);
+  çıkmaz sokak yok, fazladan kısa yollarla çok yol ayrımı (`ekYol`); doğru yolda en az 5/7/9 yol
+  ayrımı (`enAzAyrim`, olmazsa yeniden üretilir); hece yalnızca yol ayrımlarında sorulur, düz yolda
+  ve dönemeçte karakter kendiliğinden yürür (`adimAt`); yol ayrımında açık her yönde heceli kapı,
   yalnızca söylenen hecenin kapısı çıkışa en kısa yoldan götürür; yanlış hece karakteri o yöne
   götürür, labirentte dolaştırır (can yok); üst üste 2 yanlıştan sonra ipucu; ilerleme çubuğu
   çıkışa yakınlık; yıldız: her 2 yanlış bir eksik; çıkışta hazine).
