@@ -800,6 +800,12 @@ MOR = tarama("mor", "#d8c2f3", "#a77be0", -35, 7, 3)
 def resim(ad, aciklama, desenler, govde, tohum):
     yaz(f"resim-{ad}.svg", 130, 120, aciklama, desenler, govde, tohum)
 
+resim("elma", "Elma", KIRMIZI + tarama("yaprak", "#c9eba7", "#8fd16a", 35, 6, 3),
+    golge(65, 114, 38) + kalem("""    <path d="M66 30 q-2 -16 6 -24" fill="none" stroke-width="5"/>
+    <path d="M72 20 q20 -18 36 -6 q-16 18 -36 6z" fill="url(#yaprak)"/>
+    <path d="M65 30 q-14 -10 -32 -4 q-26 10 -22 44 q4 34 30 42 q12 4 24 -4 q12 8 24 4 q26 -8 30 -42 q4 -34 -22 -44 q-18 -6 -32 4z" fill="url(#kirmizi)"/>
+    <path d="M30 52 q4 -12 16 -16" fill="none" stroke="#ffffff" stroke-width="6"/>
+"""), 102)
 resim("ayi", "Ayı (oturan, önden)", KAHVE + tarama("acik", "#f2d7b0", "#d9b07a", -30, 6, 2.5),
     golge(65, 114, 44) + kalem("""    <circle cx="36" cy="18" r="13" fill="url(#kahve)"/>
     <circle cx="94" cy="18" r="13" fill="url(#kahve)"/>
@@ -1333,13 +1339,16 @@ resim("yatak", "Yatak", KAHVE + MAVI + tarama("yastik", "#ffffff", "#e6e6e6", 30
     <path d="M20 62 q0 -12 14 -12 h16 q10 2 10 14z" fill="url(#yastik)"/>
     <path d="M44 60 h70 q6 0 6 8 v10 h-76z" fill="url(#mavi)"/>
 """), 193)
-resim("kartal", "Kartal (açık kanatlı)", KAHVE + tarama("beyaz", "#ffffff", "#e6e6e6", 30, 6, 2.5) + SARI2,
-    kalem("""    <path d="M58 56 q-30 -30 -54 -20 q14 6 18 12 q-12 0 -16 6 q16 2 22 8 q-8 4 -8 10 q22 -4 38 0z" fill="url(#kahve)"/>
-    <path d="M72 56 q30 -30 54 -20 q-14 6 -18 12 q12 0 16 6 q-16 2 -22 8 q8 4 8 10 q-22 -4 -38 0z" fill="url(#kahve)"/>
-    <path d="M52 60 q0 -10 13 -10 q13 0 13 10 l-4 40 l-9 12 l-9 -12z" fill="url(#kahve)"/>
-    <circle cx="65" cy="38" r="15" fill="url(#beyaz)"/>
-    <path d="M65 40 l12 4 l-10 8z" fill="url(#sari)" stroke-width="2.5"/>
-    <circle cx="60" cy="34" r="2.6" fill="#2b2b2b"/><circle cx="72" cy="34" r="2.6" fill="#2b2b2b"/>
+resim("kartal", "Kartal (yandan, dalda tünemiş)", KAHVE + tarama("beyaz", "#ffffff", "#e6e6e6", 30, 6, 2.5) + SARI2,
+    kalem("""    <path d="M6 104 q60 -8 120 4" fill="none" stroke="#8a6a3c" stroke-width="7"/>
+    <path d="M80 86 l26 26 l8 -10 l-22 -26z" fill="#5a3b2a"/>
+    <path d="M40 54 q6 -22 34 -20 q30 4 32 34 q2 26 -24 30 q-30 4 -40 -14 q-8 -14 -2 -30z" fill="url(#kahve)"/>
+    <path d="M60 50 q30 -6 40 22 q4 18 -12 28 q-6 -24 -28 -50z" fill="#8a5a32"/>
+    <path d="M56 98 v8 l-6 4 M68 98 v8 l6 4" fill="none" stroke="#ffc928" stroke-width="4"/>
+    <circle cx="44" cy="36" r="20" fill="url(#beyaz)"/>
+    <path d="M28 28 q-14 2 -16 12 q2 8 8 10 q0 -8 10 -10z" fill="url(#sari)" stroke-width="3"/>
+    <circle cx="40" cy="30" r="3" fill="#2b2b2b"/>
+    <path d="M34 24 l12 -2" fill="none" stroke-width="3.5"/>
 """), 194)
 
 # --- i harfi ---

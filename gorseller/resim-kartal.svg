@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
-  <!-- Kartal (açık kanatlı) (doodle tarzı, kendi çizimimiz) -->
+  <!-- Kartal (yandan, dalda tünemiş) (doodle tarzı, kendi çizimimiz) -->
   <defs>
     <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
       <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="194" result="g"/>
@@ -19,11 +19,14 @@
     </pattern>
   </defs>
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M58 56 q-30 -30 -54 -20 q14 6 18 12 q-12 0 -16 6 q16 2 22 8 q-8 4 -8 10 q22 -4 38 0z" fill="url(#kahve)"/>
-    <path d="M72 56 q30 -30 54 -20 q-14 6 -18 12 q12 0 16 6 q-16 2 -22 8 q8 4 8 10 q-22 -4 -38 0z" fill="url(#kahve)"/>
-    <path d="M52 60 q0 -10 13 -10 q13 0 13 10 l-4 40 l-9 12 l-9 -12z" fill="url(#kahve)"/>
-    <circle cx="65" cy="38" r="15" fill="url(#beyaz)"/>
-    <path d="M65 40 l12 4 l-10 8z" fill="url(#sari)" stroke-width="2.5"/>
-    <circle cx="60" cy="34" r="2.6" fill="#2b2b2b"/><circle cx="72" cy="34" r="2.6" fill="#2b2b2b"/>
+    <path d="M6 104 q60 -8 120 4" fill="none" stroke="#8a6a3c" stroke-width="7"/>
+    <path d="M80 86 l26 26 l8 -10 l-22 -26z" fill="#5a3b2a"/>
+    <path d="M40 54 q6 -22 34 -20 q30 4 32 34 q2 26 -24 30 q-30 4 -40 -14 q-8 -14 -2 -30z" fill="url(#kahve)"/>
+    <path d="M60 50 q30 -6 40 22 q4 18 -12 28 q-6 -24 -28 -50z" fill="#8a5a32"/>
+    <path d="M56 98 v8 l-6 4 M68 98 v8 l6 4" fill="none" stroke="#ffc928" stroke-width="4"/>
+    <circle cx="44" cy="36" r="20" fill="url(#beyaz)"/>
+    <path d="M28 28 q-14 2 -16 12 q2 8 8 10 q0 -8 10 -10z" fill="url(#sari)" stroke-width="3"/>
+    <circle cx="40" cy="30" r="3" fill="#2b2b2b"/>
+    <path d="M34 24 l12 -2" fill="none" stroke-width="3.5"/>
   </g>
 </svg>

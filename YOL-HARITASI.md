@@ -117,7 +117,9 @@ Mini oyun düzenlemeleri: 1) her oyuna "harf"/"hece" etiketi (Sürüm 99): TAMAM
 etiketleri düzeltebilir. Sonra bazı oyunlarda geliştirmeler. 2) Şekillerle Yazma ve Harfi Çiz "Harfi Yaz"
 adıyla birleşti: 1. düzey şekillerle (şeker makinesinden 4 malzeme), 2-3. düzey çizerek (Sürüm 100): TAMAM. 3) Resimden Sesi Bul kapsamlı hâle geldi: 1. düzey harf başında,
 2. düzey sonunda, 3. düzey ortasında; 114 kelime resmi çizildi; oyun başında harf ve yeri
-gösterilip söylenir (Sürüm 101): TAMAM. Yeni kelimelerin seslendirmesi sonra (şimdilik tarayıcı sesi).
+gösterilip söylenir (Sürüm 101): TAMAM. Yeni kelimelerin seslendirmesi sonra (şimdilik tarayıcı sesi). Kartal yeniden çizildi, elma eklendi, i sorulurken
+yanlış seçeneklerde ı de geçmiyor (okuma karışmasın; Sürüm 102). Öğretmen: tarayıcı kelimeleri
+güzel okuyor, şimdilik onunla devam.
 Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı
 fikirleri var).
 
