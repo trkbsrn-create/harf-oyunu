@@ -95,7 +95,8 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   kayak (Kayak: pist yukarı akar, üç şerit; kayakçının sağına/soluna dokunarak ya da
   sürükleyerek şerit değiştir. 1. seviye harf topla (doğru harfli kar topları, yanlış harf ve
   kaya can götürür); 2-3. seviye hece kapıları (hece söylenir, doğru kapıdan geç; yeni sıra
-  önceki geçilince gelir)).
+  önceki geçilince gelir); öğretmenin isteği: doğru top/kapı art arda aynı şeritte olmaz
+  (`dogruSeritSec`), kayakçı hep hareket eder).
   elektrik-devresi (Elektrik Devresi: kelime söylenir; soldaki ilk heceden sağdaki ikinci heceye
   kablo çekilir (sürükleyerek ya da sırayla dokunarak); doğruysa ampul yanar, kelime yazılır ve
   okunur; yanlışsa kıvılcım, can gider).

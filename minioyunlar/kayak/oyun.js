@@ -7,6 +7,8 @@
 //   2-3. seviye (üst düzey, "hece kapıları"): her sırada üç bayrak kapısı gelir, hece söylenir;
 //      kayakçı o hecenin kapısından geçmeli. Yanlış kapı bir can götürür. 2. seviyede iki harfli,
 //      3. seviyede üç harfli heceler (tat), pist daha hızlı.
+//   Öğretmenin isteği: doğru top / doğru kapı hiçbir zaman art arda aynı şeritte olmaz
+//   (`dogruSeritSec`), kayakçı hep hareket etmek zorunda kalır.
 
 const KAYAK_SEVIYELERI = {
   1: { tur: "topla", hedef: 8, hiz: 150, aralik: 1500 },
@@ -38,6 +40,7 @@ class KayakSahnesi extends MiniOyunSahnesi {
     this.uretilen = 0;
     this.uretici = null;
     this.hece = null;
+    this.sonDogruSerit = null; // doğru cevap art arda aynı şeritte olmasın (öğretmenin isteği)
     this.basladi = false;
 
     // Kar zemini ve pist kenarları
@@ -132,18 +135,26 @@ class KayakSahnesi extends MiniOyunSahnesi {
     else this.kapiSirasiUret();
   }
 
+  // Doğru cevabın şeridi: bir öncekinden farklı (kayakçı hep hareket etmek zorunda kalsın)
+  dogruSeritSec() {
+    const serit = Phaser.Utils.Array.GetRandom([0, 1, 2].filter((s) => s !== this.sonDogruSerit));
+    this.sonDogruSerit = serit;
+    return serit;
+  }
+
   topUret() {
-    const serit = Phaser.Math.Between(0, 2);
-    const x = KAYAK_SERITLER[serit];
     const zar = Math.random();
     // Kolay başlangıç: ilk iki top doğru harf
-    if (this.uretilen > 2 && zar > 0.75) {
+    const kayaMi = this.uretilen > 2 && zar > 0.75;
+    const dogru = !kayaMi && (this.uretilen <= 2 || zar < 0.5);
+    const serit = dogru ? this.dogruSeritSec() : Phaser.Math.Between(0, 2);
+    const x = KAYAK_SERITLER[serit];
+    if (kayaMi) {
       const kaya = this.add.image(x, 800, "kaya").setScale(0.7).setDepth(10);
       kaya.kayak = { tur: "kaya", serit };
       this.nesneler.push(kaya);
       return;
     }
-    const dogru = this.uretilen <= 2 || zar < 0.5;
     const harf = dogru ? this.harf : Phaser.Utils.Array.GetRandom(ogrenilmisHarfler(this.harf).filter((h) => h !== this.harf));
     const kap = this.add.container(x, 800).setDepth(10);
     const g = this.add.graphics();
@@ -169,7 +180,11 @@ class KayakSahnesi extends MiniOyunSahnesi {
     this.hece = hedef;
     const renkler = Phaser.Utils.Array.Shuffle(KAYAK_RENKLERI.slice());
     const sira = [];
-    secenekler.forEach((hece, serit) => {
+    // Doğru kapı bir önceki doğru kapının şeridinde olmasın
+    const dogruSerit = this.dogruSeritSec();
+    const yanlislar = secenekler.filter((h) => h !== hedef);
+    const dizilis = [0, 1, 2].map((s) => (s === dogruSerit ? hedef : yanlislar.pop()));
+    dizilis.forEach((hece, serit) => {
       const kap = this.add.container(KAYAK_SERITLER[serit], 820).setDepth(10);
       const g = this.add.graphics();
       g.lineStyle(6, 0x2b2b2b, 1);

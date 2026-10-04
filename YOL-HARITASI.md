@@ -139,6 +139,7 @@ dolaştırır. Sürüm 112: hece yalnızca yol ayrımlarında; büyük ve karı�
 en az 5/7/9 yol ayrımı).
 Şeker Patlatma (Sürüm 113): harfler doğru sıradaysa yön serbest (kıvrılarak da); daha canlı
 görseller (sargılı şekerler, parıltılar, patlama efektleri, övgü yazısı, lolipoplar).
+Kayak (Sürüm 114): doğru cevap art arda aynı şeritte gelmiyor.
 Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı
 fikirleri var).
 
