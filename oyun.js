@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 115;
+const SURUM = 116;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -3293,8 +3293,8 @@ class BulutSahnesi extends Phaser.Scene {
 BulutSahnesi.prototype.harfiDoldur = AdaSahnesi.prototype.harfiDoldur;
 BulutSahnesi.prototype.bekle = AdaSahnesi.prototype.bekle;
 
-// Yazı tipi yüklendikten sonra oyunu başlat (yoksa yazı yanlış görünür).
-document.fonts.load('72px "Andika"').finally(() => {
+// Yazı tipi (index.html'deki yaziTipiHazir) yüklendikten sonra oyunu başlat (yoksa yazı yanlış görünür).
+(window.yaziTipiHazir || Promise.resolve()).then(() => document.fonts.load('72px "Andika"')).finally(() => {
   new Phaser.Game({
     type: Phaser.AUTO,
     parent: "oyun",

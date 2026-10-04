@@ -28,7 +28,7 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   dönüşmüş ve altı yelkenli parçası çantada olarak başlar (`hepsiniAc`).
   Yazılar da doodle: `doodleYazi` (başlık, düğme, pencere yazıları: boya kalemi taraması,
   kalem çerçevesi, titrek kenar) ve `titret` (öğretilen harfler: biçim aynı, yalnızca
-  kenar titrer). Harf biçimi her zaman Andika'dır; başka yazı tipi kullanılmaz.
+  kenar titrer). Harf biçimi her zaman aynı yazı tipidir (kodda adı hep "Andika"; aşağıya bkz.).
 - `minioyunlar/` – Mini oyunlar. Her biri kendi klasöründe (`minioyunlar/<ad>/`), ayrı bir
   Phaser sahnesi; `ortak.js`'deki `miniOyunKaydet(ad, sınıf)` ile kaydolur, `index.html`'e
   betiği eklenir. Sahne `{ harf, seviye, donus }` bilgisiyle açılır. `PLANLANAN_OYUNLAR`
@@ -299,6 +299,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   "playback" (navigator.audioSession) ve dokunuşta döngülü sessiz bir <audio> çalınır; sayfa
   gizlenince durur.
 - `yazitipi/` – Andika yazı tipi ve lisansı (SIL Open Font License).
+  Öğretmenin isteği: cihazda TTKB Dik Temel Abece (Bold, MEB'in dik temel harf yazı tipi) kuruluysa
+  oyun onu kullanır (index.html `yaziTipiHazir`: `local()` ile, %120 büyütülür; kodda ad yine
+  "Andika"); kurulu değilse Andika. TTKB'nin telifi yazarına (Prof. Namık Kemal Sarıkavak) ait;
+  dosyası depoya KONMAZ. Öğretmen yazardan izin isteyecek; izin gelirse dosya eklenebilir.
 - `gorseller/` – Kendi çizdiğimiz SVG görseller. Bütün oyun doodle tarzında: titrek kalem
   çizgisi (SVG içinde feTurbulence/feDisplacementMap süzgeci), boya kalemi taraması,
   kareli defter kâğıdı zemin (doku-*.svg, kesintisiz döşenir). Pencereler de SVG:
@@ -331,8 +335,8 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
 
 ## Yazı ve harfler
 - Oyundaki bütün yazılar Türkçe.
-- Harfler tırnaksız dik temel harf stiliyle gösterilir. Kullanılan yazı tipi:
-  **Andika** (`yazitipi/Andika-Regular.ttf`).
+- Harfler tırnaksız dik temel harf stiliyle gösterilir. Kullanılan yazı tipi: cihazda kuruluysa
+  **TTKB Dik Temel Abece Bold**, değilse **Andika** (`yazitipi/Andika-Regular.ttf`).
 - Küçük harf önce gelir. Büyük harf yalnızca cümle başında ve özel isimlerde kullanılır.
 - Türkçe büyük/küçük harf dönüşümüne dikkat: i ↔ İ, ı ↔ I
   (JavaScript'te `toLocaleUpperCase('tr-TR')` kullan).
