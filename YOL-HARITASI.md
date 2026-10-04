@@ -128,6 +128,9 @@ nota, tren, otobüs, patates, ceket de eklendi (Sürüm 104).
 Hafıza Kartları: yalnızca oyunun harfinin resimleri (aynı resim çiftleri; 4/5/6 çift; Sürüm 106). Öğretmenin düzeltmesi
 (Sürüm 107): 1. seviye aynı resim, 2. seviye harf + başında o harf olan resim, 3. seviye harf +
 sonunda o harf olan resim; oyun başında ne eşleştirileceği söyleniyor.
+Hece Köprüsü (Sürüm 108): köprü yok, doğru hecelerle tahta tahta kuruluyor, bitince çocuk
+karşıya geçiyor. Bütün hece oyunlarında seviye: 1 iki harfli, 2 üç harfli (tat, lal), 3 dört
+harfli (ilk grupta yok; üç harfli zor seçenekler).
 Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı
 fikirleri var).
 

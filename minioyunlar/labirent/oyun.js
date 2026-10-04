@@ -3,8 +3,8 @@
 // yollar ayrılır ve her yolun başında heceli bir kapı vardır. Hece söylenir (hoparlörle tekrar);
 // çocuk o hecenin kapısına dokununca karakter o yoldan bir sonraki kavşağa yürür. Öbür yollar
 // çıkmaz sokaktır. Yanlış kapı bir can götürür, doğru kapı hafifçe büyüyüp küçülür (ipucu).
-// Seviyeler: 1: 4 kavşak, 2 kapı, çok farklı heceler; 2: 5 kavşak, 3 kapı, benzer heceler;
-// 3: 6 kavşak, 3 kapı, ters ve açık heceler de.
+// Seviyeler: 1: 4 kavşak, 2 kapı, iki harfli heceler (an, na); 2: 5 kavşak, 3 kapı, üç harfli
+// heceler (tat); 3: 6 kavşak, 3 kapı, üç harfli benzer ve ters heceler (bütün hece oyunlarında olduğu gibi).
 
 const LABIRENT_SEVIYELERI = {
   1: { kavsak: 4, kapi: 2, acikOrani: 0 },

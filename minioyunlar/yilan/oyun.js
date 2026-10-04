@@ -4,8 +4,8 @@
 // harflerini sırayla yemek gerekir (önce "a", sonra "n"). Yenen harf yılanın gövdesinde görünür;
 // hece tamamlanınca okunur. Sırası gelmeyen ya da hecede olmayan harf bir can götürür.
 // Duvar ve kendine çarpma yok (çocuklar için): yılan kenardan çıkınca öbür kenardan girer.
-// Seviyeler: 1: 4 hece, yavaş, kapalı hece, yanlış harf can götürmez (yalnızca uyarı);
-// 2: 5 hece; 3: 6 hece, hızlı, açık hece de.
+// Seviyeler (bütün hece oyunlarında olduğu gibi): 1: 4 hece, yavaş, iki harfli (an, na), yanlış
+// harf can götürmez (yalnızca uyarı); 2: 5 hece, üç harfli (tat); 3: 6 hece, hızlı, üç harfli.
 
 const YILAN_SEVIYELERI = {
   1: { tur: 4, adim: 380, yem: 4, acikOrani: 0, affet: true },
@@ -78,7 +78,7 @@ class YilanSahnesi extends MiniOyunSahnesi {
     this.yemler = [];
     for (const parca of this.yilan) parca.harf = null;
     this.yilanCiz();
-    // Hecenin iki harfi + şaşırtma harfleri
+    // Hecenin harfleri + şaşırtma harfleri
     for (const h of this.hece) this.yemKoy(h);
     const ogrenilmis = ogrenilmisHarfler(this.harf).filter((h) => !this.hece.includes(h));
     for (let i = 0; i < this.ayar.yem - 2; i++) this.yemKoy(Phaser.Utils.Array.GetRandom(ogrenilmis));
