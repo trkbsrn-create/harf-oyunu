@@ -1,20 +1,23 @@
-// Mini oyun: Labirent (hece kapıları)
-// Bütün labirent ekranda görünür. Karakter soldan başlar, sağdaki hazineye gider. Her kavşakta
-// yollar ayrılır ve her yolun başında heceli bir kapı vardır. Hece söylenir (hoparlörle tekrar);
-// çocuk o hecenin kapısına dokununca karakter o yoldan bir sonraki kavşağa yürür. Öbür yollar
-// çıkmaz sokaktır. Yanlış kapı bir can götürür, doğru kapı hafifçe büyüyüp küçülür (ipucu).
-// Seviyeler: 1: 4 kavşak, 2 kapı, iki harfli heceler (an, na); 2: 5 kavşak, 3 kapı, üç harfli
-// heceler (tat); 3: 6 kavşak, 3 kapı, üç harfli benzer ve ters heceler (bütün hece oyunlarında olduğu gibi).
+// Mini oyun: Labirent (hece kapıları, karesel labirent)
+// Öğretmenin isteği: karesel bir labirent; yolu gözle eleyerek bulmak olmasın. Labirentte çıkmaz
+// sokak yok, yollar birbirine bağlanır (dolaşılabilir). Karakter soldan girer, sağdaki hazineye
+// (çıkışa) gitmeye çalışır. Durduğu karede açık olan her yönde heceli bir kapı vardır. Hece
+// söylenir (hoparlörle tekrar); yalnızca söylenen hecenin kapısı çıkışa giden en kısa yoldadır.
+// Çocuk bir kapıya dokununca karakter o yöne bir kare yürür: doğru hece çıkışa yaklaştırır,
+// yanlış hece labirentte dolaştırır (can gitmez). Üst üste iki yanlıştan sonra doğru kapı hafifçe
+// büyüyüp küçülür (ipucu). İlerleme çubuğu çıkışa ne kadar yaklaşıldığını gösterir. Bitişte yıldız
+// sayısı yanlış seçimlere göre (her 2 yanlış bir yıldız eksiltir, en az 1).
+// Seviyeler (bütün hece oyunlarında olduğu gibi): 1: 4x3 labirent, iki harfli heceler (an, na);
+// 2: 5x3, üç harfli heceler (tat); 3: 6x4, üç harfli benzer ve ters heceler.
 
 const LABIRENT_SEVIYELERI = {
-  1: { kavsak: 4, kapi: 2, acikOrani: 0 },
-  2: { kavsak: 5, kapi: 3, acikOrani: 0 },
-  3: { kavsak: 6, kapi: 3, acikOrani: 0.4 },
+  1: { sutun: 4, satir: 3, acikOrani: 0.4 },
+  2: { sutun: 5, satir: 3, acikOrani: 0 },
+  3: { sutun: 6, satir: 4, acikOrani: 0 },
 };
 
-const LABIRENT_SERITLER = [215, 345, 475, 605]; // yolların yükseklikleri (y)
-const LABIRENT_SOL = 90;
-const LABIRENT_SAG = 1150; // hazine
+const LABIRENT_ALAN = { sol: 150, sag: 1110, ust: 150, alt: 680 };
+const YONLER = [[1, 0], [-1, 0], [0, 1], [0, -1]];
 
 class LabirentSahnesi extends MiniOyunSahnesi {
   constructor() {
@@ -32,175 +35,220 @@ class LabirentSahnesi extends MiniOyunSahnesi {
     this.ortakKur();
     this.heceOyunu = true; // ünlü tek başına okunmaz, yalnızca hece duyulur
     this.ayar = LABIRENT_SEVIYELERI[this.seviye] || LABIRENT_SEVIYELERI[1];
-    this.kalpleriKur(3);
-    this.ilerlemeKur(this.ayar.kavsak);
     this.kapilar = [];
     this.kilitli = true;
     this.heceler = heceHavuzu(this.harf);
     this.hece = null;
+    this.yanlisSayisi = 0;
+    this.ustUsteYanlis = 0;
 
     const hoparlor = this.add.container(640, 60, [this.hoparlorCiz(0, 0, 38)]).setDepth(900)
       .setSize(96, 96).setInteractive({ useHandCursor: true });
     hoparlor.on("pointerdown", () => { if (this.hece) Sesler.soyle(this.hece); });
     this.hoparlor = hoparlor;
 
-    this.labirentKur();
-    this.cocuk = this.add.image(LABIRENT_SOL, this.kavsaklar[0].y + 30, "cocuk")
-      .setOrigin(0.5, 1).setScale(0.55).setDepth(20);
-    this.kavsakNo = 0;
+    this.labirentUret();
+    this.labirentCiz();
+    this.ilerlemeKur(this.mesafe[this.kare.c][this.kare.r]);
+    const { x, y } = this.merkez(this.kare.c, this.kare.r);
+    this.cocuk = this.add.image(x, y + 26, "cocuk").setOrigin(0.5, 1).setScale(0.42).setDepth(20);
 
     this.input.on("gameobjectdown", (p, nesne) => {
       if (nesne.kapi) this.kapiyaDokun(nesne);
     });
-    this.time.delayedCall(400, () => this.harfiTanit(() => this.kavsagaGel()));
+    this.time.delayedCall(400, () => this.harfiTanit(() => this.kareyeGel()));
   }
 
-  // Labirentin planı: her kavşağın serit'i, kapıların seritleri ve doğru kapı
-  labirentKur() {
-    const n = this.ayar.kavsak;
-    this.adim = (LABIRENT_SAG - 60 - LABIRENT_SOL) / n;
-    this.kavsaklar = [];
-    let serit = Phaser.Math.Between(1, 2);
-    for (let i = 0; i < n; i++) {
-      const x = LABIRENT_SOL + i * this.adim;
-      // Kapıların seritleri: farklı seritler, biri doğru
-      const seritler = Phaser.Utils.Array.Shuffle([0, 1, 2, 3]).slice(0, this.ayar.kapi).sort();
-      const dogru = Phaser.Utils.Array.GetRandom(seritler);
-      this.kavsaklar.push({ x, y: LABIRENT_SERITLER[serit], serit, seritler, dogru });
-      serit = dogru;
-    }
-    this.cikisY = LABIRENT_SERITLER[serit];
+  merkez(c, r) {
+    return {
+      x: LABIRENT_ALAN.sol + (c + 0.5) * this.kareEn,
+      y: LABIRENT_ALAN.ust + (r + 0.5) * this.kareBoy,
+    };
+  }
 
-    // Yollar: önce koyu kenar, üstüne açık toprak
+  acik(c, r, dc, dr) {
+    return this.duvarsiz.has(`${c},${r},${c + dc},${r + dr}`);
+  }
+
+  ac(c, r, dc, dr) {
+    this.duvarsiz.add(`${c},${r},${c + dc},${r + dr}`);
+    this.duvarsiz.add(`${c + dc},${r + dr},${c},${r}`);
+  }
+
+  komsular(c, r) {
+    return YONLER.filter(([dc, dr]) => this.acik(c, r, dc, dr)).map(([dc, dr]) => ({ c: c + dc, r: r + dr, dc, dr }));
+  }
+
+  // Karesel labirent: önce dallanan bir labirent kazılır, sonra çıkmaz sokaklar başka bir
+  // komşuya açılır (dolaşılabilir, gözle elenemez). Giriş solda, çıkış sağda.
+  labirentUret() {
+    const { sutun, satir } = this.ayar;
+    this.kareEn = (LABIRENT_ALAN.sag - LABIRENT_ALAN.sol) / sutun;
+    this.kareBoy = (LABIRENT_ALAN.alt - LABIRENT_ALAN.ust) / satir;
+    this.duvarsiz = new Set();
+    const icinde = (c, r) => c >= 0 && c < sutun && r >= 0 && r < satir;
+    const gezildi = new Set(["0,0"]);
+    const yigin = [[0, 0]];
+    while (yigin.length) {
+      const [c, r] = yigin[yigin.length - 1];
+      const secenek = Phaser.Utils.Array.Shuffle(YONLER.slice())
+        .filter(([dc, dr]) => icinde(c + dc, r + dr) && !gezildi.has(`${c + dc},${r + dr}`));
+      if (!secenek.length) { yigin.pop(); continue; }
+      const [dc, dr] = secenek[0];
+      this.ac(c, r, dc, dr);
+      gezildi.add(`${c + dc},${r + dr}`);
+      yigin.push([c + dc, r + dr]);
+    }
+    // Çıkmaz sokakları kaldır: tek kapısı olan kare kapalı bir komşusuna açılır
+    for (let c = 0; c < sutun; c++) {
+      for (let r = 0; r < satir; r++) {
+        if (this.komsular(c, r).length >= 2) continue;
+        const kapali = Phaser.Utils.Array.Shuffle(YONLER.slice())
+          .filter(([dc, dr]) => icinde(c + dc, r + dr) && !this.acik(c, r, dc, dr));
+        if (kapali.length) this.ac(c, r, kapali[0][0], kapali[0][1]);
+      }
+    }
+    // Giriş ve çıkış
+    this.kare = { c: 0, r: Phaser.Math.Between(0, satir - 1) };
+    this.cikis = { c: sutun - 1, r: Phaser.Math.Between(0, satir - 1) };
+    // Çıkışa uzaklık (her kareden en kısa yol, kare sayısı)
+    this.mesafe = Array.from({ length: sutun }, () => new Array(satir).fill(Infinity));
+    this.mesafe[this.cikis.c][this.cikis.r] = 0;
+    const kuyruk = [this.cikis];
+    while (kuyruk.length) {
+      const { c, r } = kuyruk.shift();
+      for (const k of this.komsular(c, r)) {
+        if (this.mesafe[k.c][k.r] === Infinity) {
+          this.mesafe[k.c][k.r] = this.mesafe[c][r] + 1;
+          kuyruk.push(k);
+        }
+      }
+    }
+  }
+
+  // Çalılık zemin, toprak yollar, giriş ve hazine
+  labirentCiz() {
+    const { sutun, satir } = this.ayar;
     const g = this.add.graphics().setDepth(1);
+    g.fillStyle(0xb9e08a, 1);
+    g.fillRoundedRect(LABIRENT_ALAN.sol - 16, LABIRENT_ALAN.ust - 16,
+      LABIRENT_ALAN.sag - LABIRENT_ALAN.sol + 32, LABIRENT_ALAN.alt - LABIRENT_ALAN.ust + 32, 24);
+    g.lineStyle(5, 0x2b2b2b, 1);
+    g.strokeRoundedRect(LABIRENT_ALAN.sol - 16, LABIRENT_ALAN.ust - 16,
+      LABIRENT_ALAN.sag - LABIRENT_ALAN.sol + 32, LABIRENT_ALAN.alt - LABIRENT_ALAN.ust + 32, 24);
     const yollar = [];
-    this.kavsaklar.forEach((k) => {
-      const donus = k.x + this.adim * 0.22;
-      for (const s of k.seritler) {
-        const y = LABIRENT_SERITLER[s];
-        const son = s === k.dogru ? k.x + this.adim : k.x + this.adim * 0.78;
-        yollar.push([[k.x, k.y], [donus, k.y], [donus, y], [son, y]]);
+    for (let c = 0; c < sutun; c++) {
+      for (let r = 0; r < satir; r++) {
+        for (const k of this.komsular(c, r)) {
+          if (k.dc < 0 || k.dr < 0) continue; // her yol bir kez
+          yollar.push([this.merkez(c, r), this.merkez(k.c, k.r)]);
+        }
       }
-    });
-    yollar.push([[LABIRENT_SOL + this.kavsaklar.length * this.adim, this.cikisY], [LABIRENT_SAG, this.cikisY]]);
-    yollar.push([[LABIRENT_SOL - 70, this.kavsaklar[0].y], [LABIRENT_SOL, this.kavsaklar[0].y]]);
-    for (const [kalinlik, renk] of [[62, 0x8d6e4c], [48, 0xe8cfa4]]) {
-      g.lineStyle(kalinlik, renk, 1);
-      for (const yol of yollar) {
-        g.beginPath();
-        g.moveTo(yol[0][0], yol[0][1]);
-        for (const [x, y] of yol.slice(1)) g.lineTo(x, y);
-        g.strokePath();
-      }
-      // Köşeler yuvarlak görünsün
-      g.fillStyle(renk, 1);
-      for (const yol of yollar) for (const [x, y] of yol) g.fillCircle(x, y, kalinlik / 2);
     }
-    // Çıkmaz sokakların sonunda tuğla duvar
-    this.kavsaklar.forEach((k) => {
-      for (const s of k.seritler) {
-        if (s === k.dogru) continue;
-        const x = k.x + this.adim * 0.78 + 26;
-        const y = LABIRENT_SERITLER[s];
-        g.fillStyle(0xd9735b, 1);
-        g.fillRect(x - 8, y - 30, 16, 60);
-        g.lineStyle(3, 0x2b2b2b, 1);
-        g.strokeRect(x - 8, y - 30, 16, 60);
-        g.lineBetween(x - 8, y - 10, x + 8, y - 10);
-        g.lineBetween(x - 8, y + 10, x + 8, y + 10);
+    const giris = this.merkez(this.kare.c, this.kare.r);
+    const cikis = this.merkez(this.cikis.c, this.cikis.r);
+    yollar.push([{ x: 40, y: giris.y }, giris]);
+    yollar.push([cikis, { x: 1205, y: cikis.y }]);
+    const kalin = Math.min(this.kareEn, this.kareBoy) * 0.42;
+    for (const [kalinlik, renk] of [[kalin + 12, 0x8d6e4c], [kalin, 0xe8cfa4]]) {
+      g.lineStyle(kalinlik, renk, 1);
+      g.fillStyle(renk, 1);
+      for (const [a, b] of yollar) {
+        g.lineBetween(a.x, a.y, b.x, b.y);
+        g.fillCircle(a.x, a.y, kalinlik / 2);
+        g.fillCircle(b.x, b.y, kalinlik / 2);
       }
-    });
-    this.sandik = this.add.image(LABIRENT_SAG + 40, this.cikisY + 6, "sandik-kapali").setScale(0.75).setDepth(5);
+    }
+    this.sandik = this.add.image(1205, cikis.y + 6, "sandik-kapali").setScale(0.62).setDepth(5);
   }
 
-  // Karakter bir kavşağa geldi: kapılar belirir, hece söylenir
-  kavsagaGel() {
+  // Karakter bir kareye geldi: açık her yöne heceli kapı, hece söylenir
+  kareyeGel() {
     if (this.bitti) return;
     for (const kap of this.kapilar) kap.destroy();
     this.kapilar = [];
-    const k = this.kavsaklar[this.kavsakNo];
-    const { hedef, secenekler } = heceSorusu(this.heceler, this.harf, this.seviye, k.seritler.length,
+    const { c, r } = this.kare;
+    const komsular = this.komsular(c, r);
+    // Çıkışa en kısa yoldaki komşu (birden çoksa biri) doğru kapı
+    const enYakin = Math.min(...komsular.map((k) => this.mesafe[k.c][k.r]));
+    const dogru = Phaser.Utils.Array.GetRandom(komsular.filter((k) => this.mesafe[k.c][k.r] === enYakin));
+    const { hedef, secenekler } = heceSorusu(this.heceler, this.harf, this.seviye, komsular.length,
       this.ayar.acikOrani, this.hece);
     this.hece = hedef;
-    // Doğru hece doğru seridin kapısına, öbürleri karışık
     const yanlislar = secenekler.filter((h) => h !== hedef);
-    k.seritler.forEach((s, i) => {
-      const hece = s === k.dogru ? hedef : yanlislar.pop();
-      const x = k.x + this.adim * 0.54;
-      this.kapilar.push(this.kapiYap(x, LABIRENT_SERITLER[s], hece, s === k.dogru, s, i * 90));
+    const m = this.merkez(c, r);
+    komsular.forEach((k, i) => {
+      const hece = k === dogru ? hedef : yanlislar.pop();
+      const x = m.x + k.dc * this.kareEn * 0.5;
+      const y = m.y + k.dr * this.kareBoy * 0.5;
+      this.kapilar.push(this.kapiYap(x, y, hece, k === dogru, k, i * 90));
     });
     this.time.delayedCall(400, () => {
       if (this.bitti) return;
       this.tweens.add({ targets: this.hoparlor, scale: 1.2, duration: 160, yoyo: true });
       Sesler.soyle(hedef, () => {
         this.kilitli = false;
-        this.elGoster(this.kapilar.find((kap) => kap.kapi.dogru));
+        const dogruKapi = this.kapilar.find((kap) => kap.kapi.dogru);
+        this.elGoster(dogruKapi);
+        if (this.ustUsteYanlis >= 2) this.ipucuGoster(dogruKapi);
       });
     });
   }
 
-  kapiYap(x, y, hece, dogru, serit, gecikme) {
+  kapiYap(x, y, hece, dogru, komsu, gecikme) {
     const kap = this.add.container(x, y).setDepth(10);
     const g = this.add.graphics();
     g.fillStyle(0x000000, 0.15);
-    g.fillRoundedRect(-40, -30, 86, 66, 14);
+    g.fillRoundedRect(-40, -30, 86, 62, 14);
     g.fillStyle(0xfffdf6, 1);
-    g.fillRoundedRect(-44, -34, 86, 66, 14);
+    g.fillRoundedRect(-44, -34, 86, 62, 14);
     g.lineStyle(4, 0x2b2b2b, 1);
-    g.strokeRoundedRect(-44, -34, 86, 66, 14);
-    const yazi = boyaliOrtala(titret(this.add.text(-1, -1, hece, {
-      fontFamily: "Andika", fontSize: "38px", color: "#ffffff",
+    g.strokeRoundedRect(-44, -34, 86, 62, 14);
+    const yazi = boyaliOrtala(titret(this.add.text(-1, -3, hece, {
+      fontFamily: "Andika", fontSize: "36px", color: "#ffffff",
       stroke: "#3b2a1a", strokeThickness: 7, padding: { x: 4, y: 4 },
     }), 1.6));
     kap.add([g, yazi]);
     kap.cizim = g;
-    kap.kapi = { hece, dogru, serit };
-    kap.setSize(110, 96).setInteractive({ useHandCursor: true });
+    kap.kapi = { hece, dogru, komsu };
+    kap.setSize(110, 90).setInteractive({ useHandCursor: true });
     kap.setScale(0);
     this.tweens.add({ targets: kap, scale: 1, duration: 260, delay: gecikme, ease: "Back.Out" });
     return kap;
   }
 
   kapiyaDokun(kap) {
-    if (this.bitti || this.kilitli || kap.kapi.denendi) return;
+    if (this.bitti || this.kilitli) return;
+    this.kilitli = true;
+    const g = kap.cizim;
     if (kap.kapi.dogru) {
-      this.kilitli = true;
       Sesler.pling();
-      const g = kap.cizim;
       g.lineStyle(8, 0x8fd16a, 1);
-      g.strokeRoundedRect(-44, -34, 86, 66, 14);
-      this.tweens.add({ targets: kap, scale: 1.15, duration: 150, yoyo: true });
-      Sesler.soyle(kap.kapi.hece);
-      // Öbür kapılar kaybolur, karakter yürür
-      for (const k of this.kapilar) if (k !== kap) this.tweens.add({ targets: k, alpha: 0, scale: 0.6, duration: 250 });
-      const sonKavsak = this.kavsakNo === this.kavsaklar.length - 1;
-      if (!sonKavsak) this.ilerlemeArtir(kap.x, kap.y);
-      this.yuru(kap, () => {
-        this.kavsakNo++;
-        if (sonKavsak) this.hazineyeVar(kap);
-        else this.kavsagaGel();
-      });
+      this.ustUsteYanlis = 0;
     } else {
-      kap.kapi.denendi = true;
-      const g = kap.cizim;
+      // Yanlış hece: karakter yine o yola gider, labirentte dolaşır (can gitmez)
+      Sesler.yanlis();
       g.lineStyle(8, 0xff8a7a, 1);
-      g.strokeRoundedRect(-44, -34, 86, 66, 14);
-      kap.setAlpha(0.6);
-      this.tweens.add({ targets: kap, angle: { from: -8, to: 8 }, duration: 70, yoyo: true, repeat: 2,
-        onComplete: () => kap.setAngle(0) });
-      this.kalpEksilt();
-      this.time.delayedCall(700, () => { if (!this.bitti) Sesler.soyle(this.hece); });
-      this.ipucuGoster(this.kapilar.find((k) => k.kapi.dogru));
+      this.yanlisSayisi++;
+      this.ustUsteYanlis++;
     }
+    g.strokeRoundedRect(-44, -34, 86, 62, 14);
+    this.tweens.add({ targets: kap, scale: 1.15, duration: 150, yoyo: true });
+    Sesler.soyle(kap.kapi.hece);
+    for (const k of this.kapilar) if (k !== kap) this.tweens.add({ targets: k, alpha: 0, scale: 0.6, duration: 250 });
+    this.yuru(kap, () => {
+      this.kare = { c: kap.kapi.komsu.c, r: kap.kapi.komsu.r };
+      // İlerleme: çıkışa ne kadar yaklaşıldı (geri gidince azalır)
+      this.ilerleme = Math.max(0, this.ilerlemeHedef - this.mesafe[this.kare.c][this.kare.r]);
+      this.ilerlemeyiCiz();
+      if (this.kare.c === this.cikis.c && this.kare.r === this.cikis.r) this.hazineyeVar();
+      else this.kareyeGel();
+    });
   }
 
-  // Karakter kavşaktan seçilen yol boyunca bir sonraki kavşağa (son kavşakta hazineye) yürür
-  yuru(kap, bitince) {
-    const k = this.kavsaklar[this.kavsakNo];
-    const y = LABIRENT_SERITLER[kap.kapi.serit];
-    const donus = k.x + this.adim * 0.22;
-    const sonX = this.kavsakNo === this.kavsaklar.length - 1 ? LABIRENT_SAG - 30 : k.x + this.adim;
-    const noktalar = [{ x: donus, y: k.y }, { x: donus, y }, { x: kap.x, y }, { x: sonX, y }];
+  // Karakter seçilen kapıdan geçip komşu kareye yürür
+  yuru(kap, bitince, hedef) {
+    const n = hedef || this.merkez(kap.kapi.komsu.c, kap.kapi.komsu.r);
     const c = this.cocuk;
     let adim = 0;
     const adimSaati = this.time.addEvent({ delay: 150, loop: true, callback: () => {
@@ -208,34 +256,34 @@ class LabirentSahnesi extends MiniOyunSahnesi {
       c.setTexture(adim % 2 ? "cocuk-adim1" : "cocuk-adim2");
       Sesler.adim(adim % 2 === 1);
     } });
-    const git = (i) => {
-      if (i >= noktalar.length) {
+    if (Math.abs(n.x - c.x) > 1) c.setFlipX(n.x < c.x);
+    const mesafe = Phaser.Math.Distance.Between(c.x, c.y - 26, n.x, n.y);
+    if (kap) this.time.delayedCall(250, () => this.tweens.add({ targets: kap, alpha: 0, scale: 0.5, duration: 200 }));
+    this.tweens.add({
+      targets: c, x: n.x, y: n.y + 26, duration: Math.max(200, mesafe * 4.5), ease: "Linear",
+      onComplete: () => {
         adimSaati.remove();
         c.setTexture("cocuk");
         bitince();
-        return;
-      }
-      const n = noktalar[i];
-      const mesafe = Phaser.Math.Distance.Between(c.x, c.y - 30, n.x, n.y);
-      if (Math.abs(n.x - c.x) > 1) c.setFlipX(n.x < c.x);
-      this.tweens.add({
-        targets: c, x: n.x, y: n.y + 30, duration: Math.max(80, mesafe * 4.2), ease: "Linear",
-        onComplete: () => {
-          // Kapının yerinden geçerken kapı kaybolur
-          if (i === 2) this.tweens.add({ targets: kap, alpha: 0, scale: 0.5, duration: 200 });
-          git(i + 1);
-        },
-      });
-    };
-    git(0);
+      },
+    });
   }
 
-  // Son kavşaktan sonra hazine açılır, oyun kazanılır
-  hazineyeVar(kap) {
-    this.sandik.setTexture("sandik-acik");
-    this.tweens.add({ targets: this.sandik, scale: 0.9, duration: 200, yoyo: true });
-    Sesler.hazine();
-    this.ilerlemeArtir(this.sandik.x, this.sandik.y);
+  // Çıkışa varıldı: karakter hazineye yürür, sandık açılır, oyun kazanılır
+  hazineyeVar() {
+    for (const kap of this.kapilar) kap.destroy();
+    this.kapilar = [];
+    this.yuru(null, () => {
+      this.sandik.setTexture("sandik-acik");
+      this.tweens.add({ targets: this.sandik, scale: 0.75, duration: 200, yoyo: true });
+      Sesler.hazine();
+      // Yıldızlar: her 2 yanlış seçim bir yıldız eksiltir (en az 1)
+      this.canSayisi = Math.max(1, 3 - Math.floor(this.yanlisSayisi / 2));
+      this.ilerleme = this.ilerlemeHedef;
+      this.ilerlemeyiCiz();
+      this.odulUcur(this.sandik.x, this.sandik.y);
+      this.time.delayedCall(700, () => this.bitir(true));
+    }, { x: this.sandik.x - 50, y: this.sandik.y - 26 });
   }
 
   oyunBitti() {
