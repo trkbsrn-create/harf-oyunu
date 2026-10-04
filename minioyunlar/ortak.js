@@ -13,7 +13,7 @@
 const PLANLANAN_OYUNLAR = [
   { ad: "damla-yakala", baslik: "Damla Yakalama", etiketler: ["harf"] },
   { ad: "harf-balonlari", baslik: "Harf Balonları", etiketler: ["harf"] },
-  { ad: "harfi-ciz", baslik: "Harfi Çiz", etiketler: ["harf"] },
+  { ad: "harfi-yaz", baslik: "Harfi Yaz", etiketler: ["harf"] }, // 1. düzey şekillerle, 2-3. düzey çizerek
   { ad: "resimden-ses", baslik: "Resimden Sesi Bul", etiketler: ["harf"] },
   { ad: "hafiza-kartlari", baslik: "Hafıza Kartları", etiketler: ["harf"] },
   { ad: "hece-koprusu", baslik: "Hece Köprüsü", etiketler: ["hece"] },
@@ -24,7 +24,6 @@ const PLANLANAN_OYUNLAR = [
   { ad: "kayak", baslik: "Kayak", etiketler: ["harf", "hece"] },
   { ad: "elektrik-devresi", baslik: "Elektrik Devresi", etiketler: ["hece"] },
   { ad: "duvardan-gecme", baslik: "Duvardan Geçme", etiketler: ["harf"] },
-  { ad: "sekillerle-yazma", baslik: "Şekillerle Yazma", etiketler: ["harf"] },
   { ad: "hece-muzigi", baslik: "Hece Müziği", etiketler: ["hece"] },
   { ad: "scrabble", baslik: "Scrabble", etiketler: ["hece"] },
   { ad: "ordek-vurma", baslik: "Ördek Vurma", etiketler: ["harf"] },

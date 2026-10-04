@@ -49,10 +49,17 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   Yapılanlar: damla-yakala (Damla Yakalama: düşen harfli damlalardan doğrulara dokun;
   seviyeyle hız, benzer harf ve hedef sayısı artar); harf-balonlari (Harf Balonları: tur
   tur, sallanan balonlardan istenen harfin hepsini patlat; seviyeyle balon/tur sayısı,
-  benzer harf artar, 3. seviyede balonlar gezinir); harfi-ciz (Harfi Çiz: harfin ipucu
-  resmi yazılış yönünde yol boyunca götürülür, sarı iz kalır; sapınca çizgi baştan, can
-  gider; harf 3 kez; yollar `HARF_YOLLARI` dik temel harf yönüne göre; seviyeyle yardım
-  azalır: oklar/numaralar → başlangıç noktası → silik iz); resimden-ses (Resimden Sesi
+  benzer harf artar, 3. seviyede balonlar gezinir); harfi-yaz (Harfi Yaz: öğretmenin kararıyla
+  Şekillerle Yazma ve Harfi Çiz birleşti. harfi-yaz/oyun.js tek sahne kurar, init'te düzeye göre
+  prototipini SekillerleYazmaSahnesi (sekiller.js, 1. düzey) ya da HarfiCizSahnesi (ciz.js, 2-3.
+  düzey) yapar; gösteren el bölüm başına bir kez (`harfiYazEli`: kol, tepsi, çizim).
+  1. düzey: içi boş büyük harf (HARF_YOLLARI büyütülür); sağda şeker makinesi (seker-makinesi.svg,
+  kolu seker-makinesi-kol.svg, `MAKINE`); tepsi boş başlar, kola dokununca ya da aşağı
+  sürükleyince oluktan 4 malzeme (düğme/çiçek/şeker) tepsiye düşer; tepsi boşalınca kol parlar,
+  yeniden çekilir; malzeme yazılış sırasındaki sıradaki yere oturur (dokunmak da yeter); 2 harf;
+  can yok. 2-3. düzey: harfin ipucu resmi yazılış yönünde yol boyunca götürülür, sarı iz kalır;
+  sapınca çizgi baştan, can gider; harf 3 kez; yollar `HARF_YOLLARI` dik temel harf yönüne göre;
+  2. düzey kalın yol, oklar, numaralar; 3. düzey ince yol, yalnızca başlangıç noktası); resimden-ses (Resimden Sesi
   Bul: ses söylenir ve harf görünür, o sesle başlayan resim seçilir; kart köşesindeki
   hoparlör resmin adını okur; 1. seviyede hep oyunun harfi, sonra öbür harfler de;
   şimdilik her harfin tek resmi var); hafiza-kartlari (Hafıza Kartları: kartlar kapalı,
@@ -79,9 +86,6 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   duvardan-gecme (Duvardan Geçme: karakter (cocuk-tirman.svg, arkadan) yolda koşar; ufuktan üç
   kapılı tuğla duvarlar yaklaşır; istenen harfin kapısının şeridine geç (dokun ya da sürükle);
   yanlış kapıya çarpınca can gider).
-  sekillerle-yazma (Şekillerle Yazma: içi boş büyük harf (HARF_YOLLARI büyütülür); tepsiden
-  düğme/çiçek/şeker sürüklenir, yazılış sırasındaki sıradaki yere oturur; can yok; 1. seviyede
-  dokunmak da yeter, 3. seviyede harf silik ve sıradaki yere yakın bırakmak gerekir).
   hece-muzigi (Hece Müziği: 1. seviye ksilofon: heceli tuşlar, oyun melodi çalar (tuş parlar,
   hece okunur), çocuk aynı sırayla basar; 2-3. seviye nota akışı: heceli notalar sağdan sola
   akar, istenen heceli notaya kırmızı çizgide dokunulur; notalar beşli (pentatonik) dizide).

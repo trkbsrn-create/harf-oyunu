@@ -114,7 +114,8 @@ yalnızca onları gösteriyor (Sürüm 98). Zip gelince bu sesler yapay zekâ se
 Öğretmenin kararı: önce mini oyun düzenlemeleri, bütün oyunlar bitince sese dönülecek (yeni sözler
 de gelebilir). Efekt fikri (peri, robot, sincap, dev, mağara) örnekleri dinletildi, seçim sonra.
 Mini oyun düzenlemeleri: 1) her oyuna "harf"/"hece" etiketi (Sürüm 99): TAMAM; öğretmen
-etiketleri düzeltebilir. Sonra bazı oyunlarda geliştirmeler.
+etiketleri düzeltebilir. Sonra bazı oyunlarda geliştirmeler. 2) Şekillerle Yazma ve Harfi Çiz "Harfi Yaz"
+adıyla birleşti: 1. düzey şekillerle (şeker makinesinden 4 malzeme), 2-3. düzey çizerek (Sürüm 100): TAMAM.
 Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı
 fikirleri var).
 
