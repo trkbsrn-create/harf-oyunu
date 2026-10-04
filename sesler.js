@@ -263,11 +263,15 @@ const Sesler = {
     soz.rate = 0.9; // doğal seslerde fazla yavaşlatmak robotik duyuluyor
     const turkce = this.turkceSes();
     if (turkce) soz.voice = turkce;
+    let basladi = false;
+    let gecildi = false; // cihaz sesine geçildi: bu sözün bitişi sayılmaz
     soz.onstart = () => {
+      basladi = true;
       clearTimeout(guvence);
       guvence = setTimeout(bitti, tahmin * 1.5 + 1500);
     };
     soz.onend = () => {
+      if (gecildi) return;
       clearTimeout(guvence);
       bitti();
     };
@@ -276,6 +280,22 @@ const Sesler = {
       if (no !== this.sozNo) return; // bu arada daha yeni bir söz geldi
       konusma.resume();
       konusma.speak(soz);
+      // Chrome'un internetten çalışan sesi (Google Türkçe) bazen hiç başlamıyor: söz hiç duyulmuyordu
+      // (Brave'de cihazın kendi sesi kullanıldığı için sorun yoktu). Söz kısa sürede başlamazsa
+      // cihazın kendi Türkçe sesine geçilir, söz onunla yeniden söylenir; sayfa açık kaldıkça o kullanılır.
+      if (turkce && !turkce.localService && !this.uzakSesBozuk) {
+        setTimeout(() => {
+          if (basladi || no !== this.sozNo || this.uzakSesBozuk) return;
+          this.uzakSesBozuk = true;
+          this.turkce = undefined;
+          const yerel = this.turkceSes();
+          if (!yerel || !yerel.localService) return;
+          clearTimeout(guvence);
+          gecildi = true;
+          konusma.cancel();
+          setTimeout(() => this.tarayiciylaSoyle(metin, bitince), 120);
+        }, 1500);
+      }
     };
     if (konusma.speaking || konusma.pending) {
       konusma.cancel();
@@ -316,6 +336,7 @@ const Sesler = {
         if (ad.includes("online")) p += 40;
         if (ad.includes("google")) p += 30;
         if (["emel", "seda", "yelda", "filiz"].some((k) => ad.includes(k))) p += 5;
+        if (this.uzakSesBozuk && !v.localService) p -= 1000; // internet sesi çalışmadı: cihazın sesi
         return p;
       };
       this.turkce = turkceler.sort((a, b) => puan(b) - puan(a))[0];
