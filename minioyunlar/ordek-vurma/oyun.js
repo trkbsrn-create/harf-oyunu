@@ -3,9 +3,10 @@
 // harfin ördeklerine dokunur (nişangâh çıkar); vurulan ördek takla atıp devrilir. Yanlış harfli
 // ördek bir can götürür. Kaçan ördek ceza değildir; kenardan çıkan ördek yeni harfle geri gelir.
 // Seviyeler: 1: 2 sıra, yavaş, 8 ördek; 2: 2 sıra, benzer harfler, 10 ördek; 3: 3 sıra, hızlı, 12.
-// Öğretmenin isteği: hece de var. 2-3. seviyede ördeklerin sırtında hece yazar (2. seviye iki harfli,
-// 3. seviye üç harfli; heceSorusu'na seviye - 1). Aranan hece söylenir (üstteki karta dokununca
-// yeniden), her ORDEK_HECE_DEGISIM vuruşta bir başka hece istenir. Bu harfte hece yoksa (a, n) harf.
+// Ortak kural (Kazma düzeni): 2. seviyede hece söylenir, ördeklerde harfler; hecenin harfleri
+// sırayla vurulur (üstteki yerlere uçar; 4 hece). 3. seviyede kelime söylenir, ördeklerde heceler;
+// kelimenin heceleri sırayla (3 kelime). Sırası gelmemiş doğru ördek yalnızca sallanır (can gitmez),
+// başka parça can götürür. Bu harfte hece yoksa (a, n) harf.
 
 const ORDEK_SEVIYELERI = {
   1: { hedef: 8, siralar: [330, 520], hiz: 70, benzer: false, dogruOrani: 0.45 },
@@ -14,7 +15,6 @@ const ORDEK_SEVIYELERI = {
 };
 
 const ORDEK_ARALIK = 250;
-const ORDEK_HECE_DEGISIM = 3; // hece oyununda aranan hece kaç vuruşta bir değişir
 
 class OrdekVurmaSahnesi extends MiniOyunSahnesi {
   constructor() {
@@ -25,22 +25,20 @@ class OrdekVurmaSahnesi extends MiniOyunSahnesi {
     this.ortakKur();
     this.ayar = ORDEK_SEVIYELERI[this.seviye] || ORDEK_SEVIYELERI[1];
     this.kalpleriKur(3);
-    this.ilerlemeKur(this.ayar.hedef);
-    this.heceOyunu = this.seviye >= 2 && heceOyunuOlur(this.harf); // ünlü tek başına okunmaz
-    this.hedef = this.harf; // vurulacak harf ya da hece
-    this.vurulan = 0;
-    this.hece = null;
-    this.panelYazi = null;
+    this.siraliKur();
+    this.ilerlemeKur(this.tur === "harf" ? this.ayar.hedef : this.tur === "hece" ? 4 : 3);
+    this.hedef = this.harf; // vurulacak harf ya da sıradaki parça
+    this.siraliYanlislar = [];
     this.ordekler = [];
     this.uretilen = 0;
     this.basladi = false;
     const ogrenilmis = ogrenilmisHarfler(this.harf).filter((h) => h !== this.harf);
     const benzerler = (BENZER_HARFLER[this.harf] || []).filter((h) => ogrenilmis.includes(h));
     this.yanlislar = this.ayar.benzer && benzerler.length ? [...benzerler, ...benzerler, ...ogrenilmis] : ogrenilmis;
-    if (this.heceOyunu) {
-      this.heceler = heceHavuzu(this.harf);
-      this.hecePaneliKur();
-      this.heceSec();
+    if (this.tur !== "harf") {
+      this.siraliPanelKur();
+      this.siraliYanlislar = this.siraliSoruSec();
+      this.hedef = this.soru.parcalar[0];
     } else {
       this.hedefPaneliKur("Vur:");
     }
@@ -55,7 +53,7 @@ class OrdekVurmaSahnesi extends MiniOyunSahnesi {
     this.input.on("pointerdown", (p) => this.ates(p));
     this.time.delayedCall(400, () => this.harfiTanit(() => {
       if (this.bitti) return;
-      if (this.heceOyunu) Sesler.soyle(this.hedef);
+      if (this.tur !== "harf") this.siraliSoyle();
       // Her sırada ördekler eşit aralıkla dizilir; sıralar zıt yönde kayar
       this.ayar.siralar.forEach((y, s) => {
         const yon = s % 2 === 0 ? 1 : -1;
@@ -99,54 +97,45 @@ class OrdekVurmaSahnesi extends MiniOyunSahnesi {
 
   yeniHarf() {
     this.uretilen++;
+    if (this.tur !== "harf") {
+      // Sıralı oyun: çoğunlukla sıradaki parça, bazen sırası gelmemiş parça ya da yanlış parça
+      if (!this.hedef) return Phaser.Utils.Array.GetRandom(this.siraliYanlislar) || this.soru.parcalar[0]; // hece okunuyor
+      const kalan = this.soru.parcalar.slice(this.sira + 1);
+      const r = Math.random();
+      if (r < this.ayar.dogruOrani) return this.hedef;
+      if (kalan.length && r < this.ayar.dogruOrani + 0.2) return Phaser.Utils.Array.GetRandom(kalan);
+      return this.siraliYanlislar.length ? Phaser.Utils.Array.GetRandom(this.siraliYanlislar) : this.hedef;
+    }
     // Kolay başlangıç: ilk ördeklerden ikisi doğru harf
     if (this.uretilen % 4 === 2 && this.uretilen < 8) return this.hedef;
     return Math.random() < this.ayar.dogruOrani ? this.hedef : Phaser.Utils.Array.GetRandom(this.yanlislar);
   }
 
-  // Hece oyunu: üstte "Vur:" ve aranan hece (dokununca yeniden söylenir)
-  hecePaneliKur() {
-    this.panel = this.add.container(640, 50).setDepth(900);
-    const zemin = this.add.graphics();
-    zemin.fillStyle(0xfffdf6, 1);
-    zemin.fillRoundedRect(-140, -34, 280, 68, 18);
-    zemin.lineStyle(4, 0x2b2b2b, 1);
-    zemin.strokeRoundedRect(-140, -34, 280, 68, 18);
-    this.panel.add([zemin, doodleYazi(this, -70, -2, "Vur:", 32).setOrigin(0.5)]);
-    this.panel.setSize(280, 68).setInteractive({ useHandCursor: true });
-    this.panel.on("pointerdown", () => Sesler.soyle(this.hedef));
-  }
-
-  // Yeni aranan hece: yanlış seçenekler aynı uzunlukta; ekrandaki ördekler yeniden değerlendirilir
-  heceSec() {
-    const { hedef, secenekler } = heceSorusu(this.heceler, this.harf, this.seviye - 1, 4, 0.4, this.hece);
-    this.hece = hedef;
-    this.hedef = hedef;
-    this.yanlislar = secenekler.filter((h) => h !== hedef);
-    const yaz = () => {
-      if (this.panelYazi) this.panelYazi.destroy();
-      this.panelYazi = boyaliOrtala(titret(this.add.text(55, 0, hedef, {
-        fontFamily: "Andika", fontSize: "50px", color: "#ffffff",
-        stroke: "#3b2a1a", strokeThickness: 8, padding: { x: 4, y: 4 },
-      }), 1.5));
-      this.panel.add(this.panelYazi);
-    };
-    if (!this.panelYazi) yaz();
-    else {
-      this.tweens.add({ targets: this.panel, scaleX: 0, duration: 150, onComplete: () => {
-        yaz();
-        this.tweens.add({ targets: this.panel, scaleX: 1, duration: 200, ease: "Back.Out" });
-        Sesler.nota(784, 0, 0.12, 0.12, "sine");
-        Sesler.soyle(hedef);
-      } });
-    }
+  // Sıralı oyun: aranan parça değişti. Kenardaki ördekler yeni yazı alır; görünen ördeklerde aranan
+  // parça yoksa biri onu alır
+  hedefDegisti() {
+    this.hedef = this.soru.parcalar[this.sira];
+    const gorunur = (o) => o.x > 150 && o.x < 1130;
     for (const o of this.ordekler) {
       if (o.ordek.vuruldu) continue;
-      // Ekrandaki ördeklerin bir kısmı yeni heceyi alır, öbürleri yanlış hecelerden birini
-      const kenarda = o.x < 0 || o.x > 1280;
-      if (kenarda || Math.random() < 0.5) this.harfVer(o);
+      if (!gorunur(o)) this.harfVer(o);
       else o.ordek.dogru = o.ordek.harf === this.hedef;
     }
+    const adaylar = this.ordekler.filter((o) => !o.ordek.vuruldu && gorunur(o));
+    if (adaylar.length && !adaylar.some((o) => o.ordek.dogru)) {
+      const o = Phaser.Utils.Array.GetRandom(adaylar);
+      this.harfVer(o, this.hedef);
+      o.setScale(0.6);
+      this.tweens.add({ targets: o, scale: 1, duration: 250, ease: "Back.Out" });
+    }
+  }
+
+  // Sıralı oyun: yeni hece ya da kelime
+  yeniSoru() {
+    this.siraliYanlislar = this.siraliSoruSec();
+    this.siraliSoyle();
+    for (const o of this.ordekler) if (!o.ordek.vuruldu) this.harfVer(o);
+    this.hedefDegisti();
   }
 
   ordekYap(x, y, yon) {
@@ -177,9 +166,9 @@ class OrdekVurmaSahnesi extends MiniOyunSahnesi {
     return kap;
   }
 
-  harfVer(kap) {
+  harfVer(kap, verilen) {
     if (kap.yazi) kap.yazi.destroy();
-    const harf = this.yeniHarf();
+    const harf = verilen || this.yeniHarf();
     kap.yazi = boyaliOrtala(titret(this.add.text(-kap.ordek.yon * 10, -10, harf, {
       fontFamily: "Andika", fontSize: harf.length > 2 ? "38px" : harf.length > 1 ? "44px" : "50px", color: "#ffffff",
       stroke: "#3b2a1a", strokeThickness: 8, padding: { x: 4, y: 4 },
@@ -216,15 +205,25 @@ class OrdekVurmaSahnesi extends MiniOyunSahnesi {
       Sesler.nota(220, 0, 0.05, 0.06, "square"); // ıska: yalnızca küçük bir ses
       return;
     }
+    const durum = this.tur === "harf" ? (o.ordek.dogru ? "sirada" : "yanlis") : this.siraliDurum(o.ordek.harf);
+    if (durum === "sonra") {
+      // Sırası gelmedi: yalnızca sallanır (can gitmez)
+      Sesler.nota(330, 0, 0.1, 0.1, "sine");
+      this.tweens.add({ targets: o, angle: { from: -12, to: 12 }, duration: 70, yoyo: true, repeat: 2, onComplete: () => o.setAngle(0) });
+      return;
+    }
     o.ordek.vuruldu = true;
-    if (o.ordek.dogru) {
+    if (durum === "sirada") {
       Sesler.pat();
-      if (this.heceOyunu) Sesler.soyle(this.hedef);
-      else harfiSoyle(this.harf);
-      this.ilerlemeArtir(o.x, o.y);
-      this.vurulan++;
-      if (this.heceOyunu && this.vurulan % ORDEK_HECE_DEGISIM === 0 && this.ilerleme < this.ilerlemeHedef) {
-        this.time.delayedCall(700, () => { if (!this.bitti) this.heceSec(); });
+      if (this.tur === "harf") {
+        harfiSoyle(this.harf);
+        this.ilerlemeArtir(o.x, o.y);
+      } else if (this.siraliParcaAl(o.x, o.y)) {
+        this.hedef = null; // hece tamam: okunana kadar aranan yok
+        for (const x of this.ordekler) x.ordek.dogru = false;
+        this.siraliTamam(() => this.yeniSoru());
+      } else {
+        this.hedefDegisti();
       }
       // Takla atıp suya devrilir; kenara ulaşınca yeni harfle döner
       this.tweens.add({ targets: o, angle: o.ordek.yon * 360, y: o.ordek.y + 40, duration: 450, ease: "Quad.In",

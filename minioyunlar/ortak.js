@@ -547,6 +547,18 @@ class MiniOyunSahnesi extends Phaser.Scene {
     return parcalar.slice(this.sira).includes(metin) ? "sonra" : "yanlis";
   }
 
+  // Kapılı oyunlar için (Kayak, Duvardan Geçme): sıradaki parça ve (adet - 1) başka parça; en çok
+  // biri sırası gelmemiş doğru parça, gerisi yanlış. doldur: farklı parça yetmezse yanlış tekrarlanır.
+  siraliSecenekler(yanlislar, adet, doldur) {
+    const hedef = this.soru.parcalar[this.sira];
+    const sonrakiler = Phaser.Utils.Array.Shuffle(this.soru.parcalar.slice(this.sira + 1)).slice(0, 1);
+    const digerleri = [...new Set([...sonrakiler, ...Phaser.Utils.Array.Shuffle(yanlislar.slice())])].filter((h) => h !== hedef);
+    while (doldur && digerleri.length && digerleri.length < adet - 1) {
+      digerleri.push(Phaser.Utils.Array.GetRandom(yanlislar.length ? yanlislar : digerleri));
+    }
+    return [hedef, ...digerleri.slice(0, adet - 1)];
+  }
+
   // Üstte hoparlör (dokununca yeniden söylenir) ve toplanacak parçaların boş yerleri
   siraliPanelKur(x = 660, y = 55) {
     this.hoparlor = this.add.container(x - 190, y, [this.hoparlorCiz(0, 0, 32)]).setDepth(900)

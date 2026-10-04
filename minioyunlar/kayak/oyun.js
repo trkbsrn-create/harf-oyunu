@@ -4,16 +4,18 @@
 // değiştirir. Öğretmenin kararı: iki taslak da kullanılır.
 //   1. seviye (basit, "harf topla"): pistte harfli kar topları ve kayalar gelir. Oyunun harfini
 //      taşıyan topları topla; yanlış harf ya da kaya bir can götürür. Kaçırılan top ceza değil.
-//   2-3. seviye (üst düzey, "hece kapıları"): her sırada üç bayrak kapısı gelir, hece söylenir;
-//      kayakçı o hecenin kapısından geçmeli. Yanlış kapı bir can götürür. 2. seviyede iki harfli,
-//      3. seviyede üç harfli heceler (tat), pist daha hızlı.
+//   2-3. seviye ("kapılar", ortak kural: Kazma düzeni): 2. seviyede hece söylenir, hecenin
+//      harflerinin kapılarından sırayla geçilir (üstteki yerlere uçar; 4 hece); 3. seviyede kelime
+//      söylenir, hecelerinin kapılarından sırayla geçilir (3 kelime), pist daha hızlı. Her sırada
+//      kapılardan biri sıradaki parça; sırası gelmemiş parçanın kapısı can götürmez, başka parça
+//      can götürür.
 //   Öğretmenin isteği: doğru top / doğru kapı hiçbir zaman art arda aynı şeritte olmaz
 //   (`dogruSeritSec`), kayakçı hep hareket etmek zorunda kalır.
 
 const KAYAK_SEVIYELERI = {
   1: { tur: "topla", hedef: 8, hiz: 150, aralik: 1500 },
-  2: { tur: "kapi", hedef: 6, hiz: 135, acikOrani: 0 },
-  3: { tur: "kapi", hedef: 8, hiz: 160, acikOrani: 0.4 },
+  2: { tur: "kapi", hiz: 135 },
+  3: { tur: "kapi", hiz: 160 },
 };
 
 const KAYAK_SERITLER = [430, 640, 850];
@@ -32,16 +34,15 @@ class KayakSahnesi extends MiniOyunSahnesi {
 
   create() {
     this.ortakKur();
-    // ünlü tek başına okunmaz, yalnızca hece duyulur. Bu harfte hece yoksa (a, n; bilinen harfler
-    // yetmez) 2-3. seviye de harf toplama olur.
-    this.heceOyunu = this.seviye >= 2 && heceOyunuOlur(this.harf);
-    this.ayar = (this.heceOyunu || this.seviye <= 1) ? (KAYAK_SEVIYELERI[this.seviye] || KAYAK_SEVIYELERI[1]) : KAYAK_SEVIYELERI[1];
+    // Bu harfte hece yoksa (a, n; bilinen harfler yetmez) 2-3. seviye de harf toplama olur.
+    this.siraliKur();
+    this.ayar = (this.tur !== "harf" || this.seviye <= 1) ? (KAYAK_SEVIYELERI[this.seviye] || KAYAK_SEVIYELERI[1]) : KAYAK_SEVIYELERI[1];
     this.kalpleriKur(3);
-    this.ilerlemeKur(this.ayar.hedef);
+    this.ilerlemeKur(this.tur === "harf" ? this.ayar.hedef : this.tur === "hece" ? 4 : 3);
     this.nesneler = [];
     this.uretilen = 0;
     this.uretici = null;
-    this.hece = null;
+    this.siraliYanlislar = [];
     this.sonDogruSerit = null; // doğru cevap art arda aynı şeritte olmasın (öğretmenin isteği)
     this.basladi = false;
 
@@ -82,11 +83,7 @@ class KayakSahnesi extends MiniOyunSahnesi {
     if (this.ayar.tur === "topla") {
       this.hedefPaneliKur("Topla:");
     } else {
-      this.heceler = heceHavuzu(this.harf);
-      const hoparlor = this.add.container(640, 60, [this.hoparlorCiz(0, 0, 38)]).setDepth(900)
-        .setSize(96, 96).setInteractive({ useHandCursor: true });
-      hoparlor.on("pointerdown", () => { if (this.hece) Sesler.soyle(this.hece); });
-      this.hoparlor = hoparlor;
+      this.siraliPanelKur();
     }
 
     // Şerit değiştirme: kayakçının solu/sağı; sürüklerken parmağı izler
@@ -177,16 +174,18 @@ class KayakSahnesi extends MiniOyunSahnesi {
   }
 
   kapiSirasiUret() {
-    // Hece kapıları 2. seviyede başlar: 2. seviye iki harfli, 3. seviye üç harfli heceler
-    const { hedef, secenekler } = heceSorusu(this.heceler, this.harf, this.seviye - 1, 3, this.ayar.acikOrani, this.hece);
-    this.hece = hedef;
+    // Hece/kelime bittiyse yenisi söylenir; kapılardan biri sıradaki parça, öbürleri sırası
+    // gelmemiş bir parça (en çok bir) ve yanlış parçalar
+    const yeni = !this.soru || this.sira >= this.soru.parcalar.length;
+    if (yeni) this.siraliYanlislar = this.siraliSoruSec();
+    const [hedef, ...yanlislar] = this.siraliSecenekler(this.siraliYanlislar, 3);
     const renkler = Phaser.Utils.Array.Shuffle(KAYAK_RENKLERI.slice());
     const sira = [];
     // Doğru kapı bir önceki doğru kapının şeridinde olmasın
     const dogruSerit = this.dogruSeritSec();
-    const yanlislar = secenekler.filter((h) => h !== hedef);
     const dizilis = [0, 1, 2].map((s) => (s === dogruSerit ? hedef : yanlislar.pop()));
     dizilis.forEach((hece, serit) => {
+      if (!hece) return; // yeterli parça yoksa o şeritte kapı yok
       const kap = this.add.container(KAYAK_SERITLER[serit], 820).setDepth(10);
       const g = this.add.graphics();
       g.lineStyle(6, 0x2b2b2b, 1);
@@ -205,8 +204,7 @@ class KayakSahnesi extends MiniOyunSahnesi {
       sira.push(kap);
       this.nesneler.push(kap);
     });
-    this.tweens.add({ targets: this.hoparlor, scale: 1.2, duration: 160, yoyo: true });
-    Sesler.soyle(hedef);
+    if (yeni) this.siraliSoyle();
     const dogruKapi = sira.find((k) => k.kayak.dogru);
     dogruKapi.elKaydir = -40;
     this.elGoster(dogruKapi);
@@ -248,14 +246,18 @@ class KayakSahnesi extends MiniOyunSahnesi {
   carpisma(n) {
     const k = n.kayak;
     const ayni = k.serit === this.serit;
-    if (k.tur === "kapi" && k.dogru) this.time.delayedCall(500, () => this.uret()); // sıradaki kapılar
     if (k.tur === "kapi") {
+      // Sıradaki kapılar (hece/kelime tamamlandıysa okunduktan sonra)
+      const tamam = k.dogru && ayni && this.siraliParcaAl(n.x, n.y - 40);
+      if (tamam) this.siraliTamam(() => this.uret());
+      else if (k.dogru) this.time.delayedCall(500, () => this.uret());
       if (!ayni) return; // kayakçı yalnızca bir kapıdan geçer
       if (k.dogru) {
-        Sesler.pling();
-        Sesler.soyle(k.hece);
         this.tweens.add({ targets: n, scale: 1.15, duration: 140, yoyo: true });
-        this.ilerlemeArtir(n.x, n.y - 40);
+      } else if (this.siraliDurum(k.hece) === "sonra") {
+        // Sırası gelmedi: can gitmez, sıradaki parçanın kapısı yeniden gelir
+        Sesler.nota(330, 0, 0.1, 0.1, "sine");
+        n.list[0].setAlpha(0.5);
       } else {
         n.list[0].setAlpha(0.5);
         this.kalpEksilt();
