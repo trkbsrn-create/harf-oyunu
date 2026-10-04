@@ -170,7 +170,9 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   okuma yönünde yan yana gelen ünlü + ünsüz hece olur (ünlü taşlar kırmızı, ünsüzler
   yeşil-mavi, heceler sarı); 3. seviyede heceler kalır, iki hece KELIMELER'deki bir kelimeyi
   kurarsa kelime olur; tahta dolunca en eski taşlar uçar; can yok).
-  harfle-boya (Harfle Boya: `BOYA_RESIMLERI` (ev, çiçek, gemi) basit biçimlerden bölgeler; her
+  harfle-boya (Harfle Boya: `BOYA_RESIMLERI` (harfle-boya/resimler.js; 12 resim, gerçekçi renkler;
+  seviye 1 ev/çiçek/ağaç/balık, 2 gemi/kelebek/araba/kedi, 3 fener/tren/kale/roket, seviyeyle daha çok
+  bölge; `detay` harfsiz süs resim bitince boyanır, `cizgi` hep görünür) basit biçimlerden bölgeler; her
   bölgede harf; istenen harfli bölgeye dokununca boyanır; doğrular bitince kalan bölgeler sırayla
   boyanır; üstte kalan bölgenin harfi görünmüyorsa `lx, ly` ile harf yeri verilir).
   harf-firtinasi (Harf Fırtınası: art arda kısa görevler; önce görevin adı büyükçe çıkar
