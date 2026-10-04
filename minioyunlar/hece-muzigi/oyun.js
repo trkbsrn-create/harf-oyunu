@@ -3,13 +3,14 @@
 //   1. seviye "Hece ksilofonu": her tuş bir hece ve bir nota. Oyun kısa bir melodi çalar (tuşlar
 //      sırayla parlar, heceler okunur); çocuk aynı tuşlara aynı sırayla basar. Melodi her turda
 //      biraz uzar (2, 2, 3, 3 nota). Yanlış tuş bir can götürür, melodi yeniden çalar.
-//   2-3. seviye "Nota akışı": heceli notalar sağdan sola akar. Üstte istenen hece var (söylenir).
+//   2-3. seviye "Nota akışı": heceli notalar sağdan sola akar. Üstte istenen hece var (söylenir;
+//      öğretmenin isteği: her 2 doğru notada bir başka hece istenir, bkz. yeniHedef).
 //      İstenen heceli nota kırmızı çizgiye gelince ona dokun; nota çalar. Başka heceli notalara
 //      dokunmak bir can götürür; kaçırılan nota ceza değildir. 3. seviyede daha hızlı ve
 //      benzer heceler. Hece uzunluğu (bütün hece oyunlarında olduğu gibi): 1. seviye iki harfli,
 //      2-3. seviye üç harfli (tat, lal).
 // Öğretmenin isteği: 2-3. seviyede oyun bitince çocuğun yakaladığı bütün notalar porte üzerine dizilir
-// ve sırayla melodi olarak çalar ("Senin şarkın!"), sonra "Aferin!" gelir (bitir'den önce
+// ve sırayla melodi olarak çalar, her notada hecesi okunur ("Senin şarkın!"), sonra "Aferin!" gelir (bitir'den önce
 // finalMelodi). Görsel/efekt: arkada süzülen renkli nota işaretleri, parlayan çizgi, notalar hafifçe
 // sallanır; doğru notada renkli halka ve uçuşan nota parçacıkları (notaPatlat).
 // Ses dosyası yok: notalar tarayıcıda üretilir (Sesler.nota).
@@ -24,6 +25,10 @@ const HECE_MUZIGI_SEVIYELERI = {
 const NOTALAR = [523, 587, 659, 784, 880, 1047];
 const TUS_RENKLERI = [0xff9c8a, 0xffe680, 0xb5e48c, 0x9be3dc, 0xc8a2ff];
 const CIZGI_X = 260;
+const HEDEF_DEGISIM = 2; // aranan hece kaç doğru notada bir değişir
+// Sondaki şarkıda notalar arası süre (hece okunurken; tarayıcı sesi gecikebilir)
+const ADIM_EN_AZ = 650;
+const ADIM_EN_COK = 1600;
 
 class HeceMuzigiSahnesi extends MiniOyunSahnesi {
   constructor() {
@@ -45,6 +50,8 @@ class HeceMuzigiSahnesi extends MiniOyunSahnesi {
     this.uretici = null;
     this.calinanlar = []; // yakalanan notalar (sondaki melodi için)
     this.finalde = false;
+    this.yavasBitis = 0;
+    this.yakalanan = 0;
     this.finalBitti = false;
     this.sahneSusle();
 
@@ -242,23 +249,51 @@ class HeceMuzigiSahnesi extends MiniOyunSahnesi {
 
   akisBaslat() {
     if (this.bitti) return;
-    const { hedef } = heceSorusu(this.heceler, this.harf, this.seviye, 2, this.seviye >= 3 ? 0.4 : 0, null);
-    this.hece = hedef;
-    this.hecePaneli.removeAll(true);
-    const z = this.add.graphics();
-    z.fillStyle(0xfffdf6, 1);
-    z.fillRoundedRect(-110, -45, 220, 90, 20);
-    z.lineStyle(4, 0x2b2b2b, 1);
-    z.strokeRoundedRect(-110, -45, 220, 90, 20);
-    this.hecePaneli.add([z, boyaliOrtala(titret(this.add.text(0, 0, hedef, {
-      fontFamily: "Andika", fontSize: "60px", color: "#ffffff",
-      stroke: "#3b2a1a", strokeThickness: 10, padding: { x: 4, y: 4 },
-    }), 1.8))]);
-    Sesler.soyle(hedef);
-    this.uretilen = 0;
-    this.uretici = this.time.addEvent({ delay: this.ayar.aralik, loop: true, callback: () => this.notaUret() });
-    this.notaUret();
     this.input.on("gameobjectdown", (p, nesne) => { if (nesne.nota) this.notayaDokun(nesne); });
+    this.yeniHedef(true);
+    this.uretici = this.time.addEvent({ delay: this.ayar.aralik, loop: true, callback: () => this.notaUret() });
+  }
+
+  // Öğretmenin isteği: aranan hece her HEDEF_DEGISIM doğru notada bir değişir (üst üste aynı hece
+  // gelmez). Kart döner, kısa bir ses çalar, yeni hece söylenir; ekrandaki eski notalar uçup gider,
+  // notalar kısa bir süre yavaşlar ve ilk iki yeni nota doğru hece olur.
+  yeniHedef(ilk) {
+    if (this.bitti || this.finalde) return;
+    const { hedef } = heceSorusu(this.heceler, this.harf, this.seviye, 2, this.seviye >= 3 ? 0.4 : 0, this.hece);
+    this.hece = hedef;
+    this.yakalanan = 0;
+    this.uretilen = 0;
+    if (!ilk) {
+      for (const n of this.notalar) {
+        n.nota.alindi = true;
+        this.tweens.add({ targets: n, y: n.y - 80, alpha: 0, scale: 0.5, duration: 350, onComplete: () => n.destroy() });
+      }
+      this.notalar = [];
+      Sesler.nota(784, 0, 0.12, 0.12, "sine");
+      Sesler.nota(1047, 0.1, 0.18, 0.12, "sine");
+    }
+    this.yavasBitis = this.time.now + (ilk ? 0 : 1800);
+    const yaz = () => {
+      this.hecePaneli.removeAll(true);
+      const z = this.add.graphics();
+      z.fillStyle(0xfffdf6, 1);
+      z.fillRoundedRect(-110, -45, 220, 90, 20);
+      z.lineStyle(4, 0x2b2b2b, 1);
+      z.strokeRoundedRect(-110, -45, 220, 90, 20);
+      this.hecePaneli.add([z, boyaliOrtala(titret(this.add.text(0, 0, hedef, {
+        fontFamily: "Andika", fontSize: "60px", color: "#ffffff",
+        stroke: "#3b2a1a", strokeThickness: 10, padding: { x: 4, y: 4 },
+      }), 1.8))]);
+      this.tweens.add({ targets: this.hoparlor, scale: 1.2, duration: 160, yoyo: true });
+      Sesler.soyle(hedef);
+      this.notaUret();
+    };
+    if (ilk) { yaz(); return; }
+    // Kart döner: daralır, yeni hece yazılır, açılır
+    this.tweens.add({ targets: this.hecePaneli, scaleX: 0, duration: 160, ease: "Quad.In", onComplete: () => {
+      yaz();
+      this.tweens.add({ targets: this.hecePaneli, scaleX: 1, duration: 200, ease: "Back.Out" });
+    } });
   }
 
   notaUret() {
@@ -268,8 +303,8 @@ class HeceMuzigiSahnesi extends MiniOyunSahnesi {
     let hece = this.hece;
     if (!dogru) {
       const { secenekler } = heceSorusu(this.heceler, this.harf, this.seviye, 3, 0.3, null);
-      hece = Phaser.Utils.Array.GetRandom(secenekler.filter((h) => h !== this.hece)) || "el";
-      if (hece === this.hece) hece = "el";
+      const yedek = this.heceler.filter((h) => h.hece.length === this.hece.length && h.hece !== this.hece).map((h) => h.hece);
+      hece = Phaser.Utils.Array.GetRandom(secenekler.filter((h) => h !== this.hece)) || Phaser.Utils.Array.GetRandom(yedek);
     }
     const satir = Phaser.Math.Between(0, 4);
     const y = 300 + satir * 55;
@@ -298,7 +333,7 @@ class HeceMuzigiSahnesi extends MiniOyunSahnesi {
   update(zaman, fark) {
     if (this.bitti || this.finalde || this.ayar.tur !== "akis" || !this.notalar) return;
     for (const n of [...this.notalar]) {
-      n.x -= (this.ayar.hiz * fark) / 1000;
+      n.x -= (this.ayar.hiz * (this.time.now < this.yavasBitis ? 0.35 : 1) * fark) / 1000;
       n.y = n.nota.tabanY + Math.sin(zaman / 260 + n.nota.faz) * 4; // hafifçe sallanır
       // İlk doğru nota çizgiye yaklaşınca gösteren el
       if (n.nota.dogru && n.x < CIZGI_X + 260 && n.x > CIZGI_X) this.elGoster(n);
@@ -321,6 +356,12 @@ class HeceMuzigiSahnesi extends MiniOyunSahnesi {
       this.tweens.add({ targets: this.cizgiParilti, scaleX: 1.6, alpha: 0.6, duration: 120, yoyo: true });
       this.ilerlemeArtir(n.x, n.y);
       this.notalar = this.notalar.filter((x) => x !== n);
+      this.yakalanan++;
+      if (this.yakalanan >= HEDEF_DEGISIM && this.ilerleme < this.ilerlemeHedef) {
+        this.yakalanan = 0;
+        for (const x of this.notalar) x.nota.alindi = true; // eski heceli notalar artık sayılmaz
+        this.time.delayedCall(450, () => this.yeniHedef());
+      }
       this.tweens.add({ targets: n, y: n.y - 60, scale: 1.3, alpha: 0, duration: 350, onComplete: () => n.destroy() });
     } else if (n.nota.dogru) {
       // Doğru nota ama erken/geç: ceza yok, nota hafifçe sallanır
@@ -353,7 +394,6 @@ class HeceMuzigiSahnesi extends MiniOyunSahnesi {
     const baslik = doodleYazi(this, 640, 175, "Senin şarkın!", 52, "mavi").setOrigin(0.5).setDepth(30).setScale(0);
     this.tweens.add({ targets: baslik, scale: 1, duration: 400, ease: "Back.Out" });
     const sarki = this.calinanlar.length ? this.calinanlar : [{ frekans: NOTALAR[0], satir: 4, hece: this.hece }];
-    const adim = 360;
     const solX = 200;
     const aralik = Math.min(110, 980 / Math.max(1, sarki.length - 1));
     // Notalar porteye sırayla dizilir
@@ -376,37 +416,45 @@ class HeceMuzigiSahnesi extends MiniOyunSahnesi {
       this.tweens.add({ targets: kap, scale: 1, duration: 260, delay: 300 + i * 70, ease: "Back.Out" });
       return kap;
     });
-    // Çalma imleci notaların üstünden geçer; her nota çalarken zıplar ve parlar
-    const baslangic = 600 + sarki.length * 70;
-    const imlec = this.add.rectangle(solX - 60, 410, 10, 330, 0xffc928, 0.7).setDepth(19).setAlpha(0);
-    this.time.delayedCall(baslangic, () => {
+    // Çalma imleci notadan notaya geçer; her nota çalarken hecesi okunur, nota zıplar ve parlar.
+    // Sıradaki nota, hece okunup bitince gelir (en az ADIM_EN_AZ, en çok ADIM_EN_COK ms).
+    const imlec = this.add.rectangle(solX, 410, 10, 330, 0xffc928, 0.7).setDepth(19).setAlpha(0);
+    const cal = (i) => {
+      if (this.bitti) return;
+      if (i >= sarki.length) { sonAkor(); return; }
+      const s = sarki[i];
+      const son = i === sarki.length - 1;
+      const kap = dizilen[i];
       imlec.setAlpha(1);
-      this.tweens.add({ targets: imlec, x: solX + (sarki.length - 1) * aralik, duration: Math.max(1, (sarki.length - 1) * adim) });
-    });
-    sarki.forEach((s, i) => {
-      this.time.delayedCall(baslangic + i * adim, () => {
-        const son = i === sarki.length - 1;
-        Sesler.nota(s.frekans, 0, son ? 0.9 : 0.4, 0.22, "triangle");
-        Sesler.nota(s.frekans * 2, 0, 0.25, 0.05, "sine");
-        if (i % 2 === 0) Sesler.nota(s.frekans / 2, 0, 0.5, 0.1, "sine"); // bas
-        const kap = dizilen[i];
-        this.tweens.add({ targets: kap, y: kap.y - 26, scale: 1.25, duration: 140, yoyo: true, ease: "Quad.Out" });
-        this.notaPatlat(kap.x, kap.y, TUS_RENKLERI[s.satir]);
-      });
-    });
+      this.tweens.add({ targets: imlec, x: kap.x, duration: 160, ease: "Quad.Out" });
+      Sesler.nota(s.frekans, 0, son ? 0.9 : 0.5, 0.22, "triangle");
+      Sesler.nota(s.frekans * 2, 0, 0.25, 0.05, "sine");
+      if (i % 2 === 0) Sesler.nota(s.frekans / 2, 0, 0.6, 0.1, "sine"); // bas
+      this.tweens.add({ targets: kap, y: kap.y - 26, scale: 1.3, duration: 160, yoyo: true, ease: "Quad.Out" });
+      this.notaPatlat(kap.x, kap.y, TUS_RENKLERI[s.satir]);
+      const basla = this.time.now;
+      let gecti = false;
+      const sonraki = () => {
+        if (gecti) return;
+        gecti = true;
+        this.time.delayedCall(Math.max(150, ADIM_EN_AZ - (this.time.now - basla)), () => cal(i + 1));
+      };
+      Sesler.soyle(s.hece, sonraki);
+      this.time.delayedCall(ADIM_EN_COK, sonraki);
+    };
+    this.time.delayedCall(700 + sarki.length * 70, () => cal(0));
     // Sonda parlak bir akor ve büyük nota patlaması
-    const bitis = baslangic + sarki.length * adim + 150;
-    this.time.delayedCall(bitis, () => {
+    const sonAkor = () => {
       imlec.destroy();
       for (const f of [523, 659, 784, 1047]) Sesler.nota(f, 0, 1.2, 0.12, "triangle");
       this.notaPatlat(640, 410, 0xffc928, true);
       this.cameras.main.flash(250, 255, 246, 200);
       for (const kap of dizilen) this.tweens.add({ targets: kap, angle: { from: -8, to: 8 }, duration: 120, yoyo: true, repeat: 2 });
-    });
-    this.time.delayedCall(bitis + 1300, () => {
-      this.tweens.add({ targets: [...dizilen, baslik], alpha: 0, duration: 300 });
-      bitince();
-    });
+      this.time.delayedCall(1300, () => {
+        this.tweens.add({ targets: [...dizilen, baslik], alpha: 0, duration: 300 });
+        bitince();
+      });
+    };
   }
 
   oyunBitti() {
