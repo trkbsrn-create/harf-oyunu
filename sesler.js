@@ -4,6 +4,9 @@
 
 const Sesler = {
   baglam: null,
+  // Öğretmenin kararı: seslendirme en sona kaldı; şimdilik bütün sözleri (harf, hece, kelime,
+  // hikâye) tarayıcının sesi okur. Hazır ses dosyalarını yeniden açmak için true yapılır.
+  dosyaSesleri: false,
 
   // Tarayıcılar sesi ancak ilk dokunuş / tuş basışından sonra açar.
   ac() {
@@ -18,7 +21,7 @@ const Sesler = {
 
   // Seslendirilmiş sözleri arka planda indirip çözer (ilk dokunuştan sonra, bir kez)
   dosyalariYukle() {
-    if (this.tamponlar || typeof SES_DOSYALARI === "undefined") return;
+    if (!this.dosyaSesleri || this.tamponlar || typeof SES_DOSYALARI === "undefined") return;
     this.tamponlar = {};
     for (const dosya of new Set(Object.values(SES_DOSYALARI))) this.tampon(dosya);
   },
@@ -128,7 +131,7 @@ const Sesler = {
   // silebilir, söz yarıda kalır). Güvence süresi, ses gerçekten başladığında yeniden
   // kurulur: yavaş telefonda ses geç başlasa da sonraki adım onu kesmez.
   soyle(metin, bitince) {
-    const dosya = typeof SES_DOSYALARI !== "undefined" && SES_DOSYALARI[metin];
+    const dosya = this.dosyaSesleri && typeof SES_DOSYALARI !== "undefined" && SES_DOSYALARI[metin];
     if (dosya && this.baglam) this.dosyaCal(dosya, metin, bitince);
     else this.tarayiciylaSoyle(metin, bitince);
   },

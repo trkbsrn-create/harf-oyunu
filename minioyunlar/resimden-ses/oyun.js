@@ -1,8 +1,8 @@
 // Mini oyun: Resimden Sesi Bul (harf kelimenin neresinde?)
 // Öğretmenin isteği: düzeye göre harfin kelimedeki yeri sorulur. 1. düzey: harf başında,
 // 2. düzey: sonunda, 3. düzey: ortasında olan resmi bul. Kelimeler kelimeler.js'de.
-// Oyun başında önce harf büyükçe gelir (ünlüyse söylenir), sonra üç kutudan harfin yeri gösterilir
-// ve söylenir ("Başında a olan resimleri bul!"; ünsüz okunmaz: "Başında bu harf olan...").
+// Oyun başında önce harf büyükçe gelir ve sesi söylenir, sonra üç kutudan harfin yeri gösterilir
+// ve söylenir ("Başında a olan resimleri bul!"; ünsüzde cümlede "bu harf" denir).
 // Sonra harf ve kutular üstteki panele küçülür, sorular başlar. Her soruda bir doğru resim var;
 // yanlış resimlerde o harf (ve onunla karışan ses: i/ı) hiç geçmez. Kartın köşesindeki hoparlör
 // resmin adını okur.

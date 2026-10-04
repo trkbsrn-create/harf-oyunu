@@ -40,9 +40,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   oyun şimdilik yok. Mini oyunlar bitince ana oyuna (tesis düğmeleri) bağlanacak.
   Ortak sınıf `MiniOyunSahnesi` (ortak.js): kâğıt zemin, Geri, 3 can (kalp.svg), ilerleme
   çubuğu, bitiş penceresi ("Aferin!" / "Bir daha dene", Tekrar / Geri). Sesli okuma
-  `Sesler.soyle`. Ünlü kendisi okunur; ünsüz oyun içinde hiç okunmaz (öğretmenin kararı:
-  tarayıcı "ne", "te" der, hece de resimle karışıyor), yalnızca harf görünür. Oyun başında `harfiTanit`: ünlü söylenir;
-  ünsüzde oyun hemen başlar (yardım uyarısı ve hece tanıtımı öğretmenin kararıyla kaldırıldı).
+  `Sesler.soyle`. Öğretmenin yeni kararı: ünsüzler de okunur; `harfiSoyle` tarayıcıya harfin adı
+  ("ne") yerine yalnızca sesini verir (harfler.js `okunus`: n "nnn", l "lll", t "t"; öğretmen Chrome'da
+  dinleyip düzeltir). Oyun başında `harfiTanit`: harf söylenir (yardım uyarısı ve hece tanıtımı
+  öğretmenin kararıyla kaldırıldı).
   Hece oyunlarında (`this.heceOyunu = true`; Kayak'ta 2-3. seviye) ünlü de tek başına okunmaz,
   taşa/harfe dokununca harf okunmaz; yalnızca hece ya da kelime duyulur (öğretmenin kararı). Benzer harfler `BENZER_HARFLER` (yalnızca öğrenilmiş olanlar kullanılır).
   Mini oyun betikleri index.html'de oyun.js'den önce yüklenir.
@@ -62,7 +63,7 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   2. düzey kalın yol, oklar, numaralar; 3. düzey ince yol, yalnızca başlangıç noktası); resimden-ses (Resimden Sesi
   Bul: düzeye göre harfin kelimedeki yeri: 1. başında, 2. sonunda, 3. ortasında olan resmi seç
   (öğretmenin isteği). Oyun başında önce harf gelir (ünlüyse söylenir), sonra üç kutuda harfin
-  yeri gösterilir ve söylenir ("Başında a olan resimleri bul!"; ünsüzde "bu harf"), sonra üstteki
+  yeri gösterilir ve söylenir ("Başında a olan resimleri bul!"; ünsüzde harf okunur, cümlede "bu harf"), sonra üstteki
   panele küçülür. Kelimeler `KONUMLU_KELIMELER` (resimden-ses/kelimeler.js; 132 resim,
   gorseller/resim-<kelime>.svg, doodle_ciz.py); yanlış resimlerde harf ve onunla karışan ses (i/ı) geçmez; 6 soru, 3/3/4
   kart; kart köşesindeki hoparlör resmin adını okur); hafiza-kartlari (Hafıza Kartları: kartlar kapalı,
@@ -254,6 +255,8 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   bölüm bölüm ▶ ve "Beğenmedim"; işaretler localStorage'da; "Listeyi kopyala" Claude'a verilir,
   beğenilmeyenler öğretmenin kendi sesiyle kayit.html'de kaydedilir).
 - `sesler.js` – Oyun sesleri. Efektler tarayıcıda (Web Audio) üretilir.
+  Öğretmenin kararı: seslendirme en sona kaldı; şimdilik bütün sözleri tarayıcı okur
+  (`Sesler.dosyaSesleri = false`; ses dosyaları depoda duruyor, true yapılınca çalınır).
   Sesli okuma `Sesler.soyle`: söz `sesler/liste.js`'de (`SES_DOSYALARI`, söz → dosya) varsa
   `sesler/<dosya>.mp3` çalınır (Web Audio; dosyalar ilk dokunuştan sonra arka planda yüklenir).
   Sesler Azure'un yapay zekâ sesleriyle üretildi (öğretmenin seçimi: harf, hece ve kelime

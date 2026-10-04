@@ -15,15 +15,17 @@
 //            denenir; olmazsa hece ipucu gelir. Öğretmen bütün ünsüzlerde böyle istedi.
 //   kisaSes : bu ünsüzün sesi uzatılamaz ("t"); kısa ses yeter, güç aşamasında
 //            harf her kısa sesle biraz dolar
+//   okunus  : ünsüzü tarayıcının sesine okuturken verilen yazı (yalnızca sesi: "nnn", "ne" değil).
+//            Öğretmen Chrome'da dinleyip hangisinin iyi olduğunu söyleyince düzeltilir.
 
 const HARFLER = [
   // Grup 1
   { kucuk: "a", buyuk: "A", unlu: true,  grup: 1, kelime: "arı",      harfKelimeBasinda: true, resim: "ari" },
-  { kucuk: "n", buyuk: "N", unlu: false, grup: 1, kelime: "nar",      harfKelimeBasinda: true, resim: "nar", hece: "an", tekBasinaDenenir: true },
+  { kucuk: "n", buyuk: "N", unlu: false, grup: 1, kelime: "nar",      harfKelimeBasinda: true, resim: "nar", hece: "an", tekBasinaDenenir: true, okunus: "nnn" },
   { kucuk: "e", buyuk: "E", unlu: true,  grup: 1, kelime: "eşek",     harfKelimeBasinda: true, resim: "esek" },
-  { kucuk: "t", buyuk: "T", unlu: false, grup: 1, kelime: "tilki",    harfKelimeBasinda: true, resim: "tilki", hece: "at", tekBasinaDenenir: true, kisaSes: true },
+  { kucuk: "t", buyuk: "T", unlu: false, grup: 1, kelime: "tilki",    harfKelimeBasinda: true, resim: "tilki", hece: "at", tekBasinaDenenir: true, kisaSes: true, okunus: "t" },
   { kucuk: "i", buyuk: "İ", unlu: true,  grup: 1, kelime: "inek",     harfKelimeBasinda: true, resim: "inek" },
-  { kucuk: "l", buyuk: "L", unlu: false, grup: 1, kelime: "leylek",   harfKelimeBasinda: true, resim: "leylek", hece: "al", tekBasinaDenenir: true },
+  { kucuk: "l", buyuk: "L", unlu: false, grup: 1, kelime: "leylek",   harfKelimeBasinda: true, resim: "leylek", hece: "al", tekBasinaDenenir: true, okunus: "lll" },
 
   // Grup 2
   { kucuk: "o", buyuk: "O", unlu: true,  grup: 2, kelime: "okul",     harfKelimeBasinda: true },

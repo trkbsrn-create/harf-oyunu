@@ -133,15 +133,11 @@ function heceSorusu(hepsi, harf, seviye, secenekSayisi, acikOrani, onceki) {
   return { hedef: hedef.hece, secenekler: karistir([hedef.hece, ...secenekler]) };
 }
 
-// Ünlüler tek başına söylenir. Ünsüz okunmaz (öğretmenin kararı): tarayıcı tek başına "ne",
-// "te" der, hecesi ("at") de resimle ("tilki") karışıyor. Ünsüzde yalnızca harf görünür.
+// Harfin sesini tarayıcıya okutur. Öğretmenin yeni kararı: ünsüzler de okunsun; tarayıcıya
+// harfin adı ("ne") yerine yalnızca sesi verilir (harfler.js'deki okunus: "nnn", "lll", "t").
 function harfiSoyle(harf, bitince) {
   const bilgi = HARFLER.find((h) => h.kucuk === harf);
-  if (bilgi && bilgi.unlu) {
-    Sesler.soyle(harf, bitince);
-  } else if (bitince) {
-    setTimeout(bitince, 300);
-  }
+  Sesler.soyle((bilgi && bilgi.okunus) || harf, bitince);
 }
 
 // Gösteren el her mini oyunda (sayfa açık kaldıkça) bir kez çıkar
@@ -420,12 +416,11 @@ class MiniOyunSahnesi extends Phaser.Scene {
     geriAlani.on("pointerdown", () => this.geriDon(zincirSon));
   }
 
-  // Oyunun başında harfi tanıtır, bitince() çağrılır. Ünlü söylenir; ünsüz okunmaz
-  // (öğretmenin kararı: ünsüzde yardım uyarısı ve hece tanıtımı kaldırıldı), oyun hemen başlar.
-  // Hece oyunlarında (heceOyunu) ünlü de okunmaz; yalnızca hece duyulur (öğretmenin kararı).
+  // Oyunun başında harfi tanıtır, bitince() çağrılır. Harfin sesi söylenir (ünsüz de; harfiSoyle).
+  // Hece oyunlarında (heceOyunu) harf tek başına okunmaz; yalnızca hece duyulur (öğretmenin kararı).
   harfiTanit(bitince) {
     const bilgi = HARFLER.find((h) => h.kucuk === this.harf);
-    if (bilgi && bilgi.unlu && !this.heceOyunu) {
+    if (bilgi && !this.heceOyunu) {
       harfiSoyle(this.harf);
       this.time.delayedCall(900, bitince);
     } else {
