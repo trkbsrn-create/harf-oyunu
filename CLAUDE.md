@@ -279,6 +279,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   telefonda sözler kesilmesin). Susturmak için `Sesler.sustur`.
   Telefonda tarayıcı sesi yalnızca parmak kalkınca açmaya izin verir; bu yüzden ses ve
   sesli okuma her dokunuşun sonunda (pointerup/touchend) açılır (sesler.js sonu).
+  Parmak değdiği an (pointerdown) çalınmak istenen efektler ses henüz açılmadıysa kaybolmasın
+  diye bekletilir (`Sesler.calabilir`, `bekleyenler`, en çok 1,5 sn) ve ses açılınca çalınır;
+  iOS için açılışta duyulmayan kısa bir ses çalınır. Yeni efekt yazarken `calabilir` kullanılır.
 - `yazitipi/` – Andika yazı tipi ve lisansı (SIL Open Font License).
 - `gorseller/` – Kendi çizdiğimiz SVG görseller. Bütün oyun doodle tarzında: titrek kalem
   çizgisi (SVG içinde feTurbulence/feDisplacementMap süzgeci), boya kalemi taraması,
@@ -369,6 +372,8 @@ Her hatadan sonra buraya yeni bir kural ekle.
   ve hiç varamaz. Testleri yavaş tarayıcıda da çalıştır.
 - Telefonda sesi parmak ekrana değdiği an (pointerdown/touchstart) açmaya çalışma; tarayıcı
   izin vermez, ses mikrofon iznine kadar hiç gelmez. Ses parmak kalkınca açılmalı.
+- Telefonda ilk dokunuşta (pointerdown) çalınan efekt, ses henüz açılmadığı için kayboluyordu
+  (Mini Games düğmesi). Efektler `Sesler.calabilir` ile bekletilir, ses açılınca çalınır.
 - Phaser sahnesi yeniden açılınca (Tekrar, başka seviye) aynı nesne kullanılır; önceki turdan
   kalan alanlar (`this.tuslar`, `this.cevaplandi` gibi) silinmez. Mini oyunun `create`'inde
   bütün durum alanlarını sıfırla.
