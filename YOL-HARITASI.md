@@ -137,6 +137,8 @@ Web Audio'yu kısıyor); ses oturumu "playback" yapıldı (Sürüm 110). Öğret
 Labirent (Sürüm 111): karesel labirent, çıkmaz sokak yok; doğru hece çıkışa götürür, yanlış hece
 dolaştırır. Sürüm 112: hece yalnızca yol ayrımlarında; büyük ve karışık labirent (doğru yolda
 en az 5/7/9 yol ayrımı).
+Şeker Patlatma (Sürüm 113): harfler doğru sıradaysa yön serbest (kıvrılarak da); daha canlı
+görseller (sargılı şekerler, parıltılar, patlama efektleri, övgü yazısı, lolipoplar).
 Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı
 fikirleri var).
 
