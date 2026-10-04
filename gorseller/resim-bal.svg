@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Bal (kavanozda, kaşıklı) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="228" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="sari" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+      <rect width="6" height="6" fill="#ffe680"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffc928" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="cam" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="9" height="9" fill="#eef8fc"/>
+      <line x1="0" y1="4.5" x2="9" y2="4.5" stroke="#d7eef7" stroke-width="2" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="kahve" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#d9a46b"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#b07a42" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="114" rx="40" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M34 26 h62 v10 h-62z" fill="url(#kahve)"/>
+    <path d="M30 36 h70 q6 0 6 8 v60 q0 8 -8 8 h-66 q-8 0 -8 -8 v-60 q0 -8 6 -8z" fill="url(#cam)"/>
+    <path d="M30 54 h70 v50 q0 6 -6 6 h-58 q-6 0 -6 -6z" fill="url(#sari)" stroke="none"/>
+    <path d="M30 54 q35 10 70 0" fill="none" stroke-width="3"/>
+    <path d="M30 36 h70 q6 0 6 8 v60 q0 8 -8 8 h-66 q-8 0 -8 -8 v-60 q0 -8 6 -8z" fill="none"/>
+    <path d="M44 72 h42 v22 h-42z" fill="#ffffff" stroke-width="3"/>
+    <path d="M58 82 q4 -6 8 0 q4 6 8 0" fill="none" stroke-width="2.5"/>
+  </g>
+</svg>

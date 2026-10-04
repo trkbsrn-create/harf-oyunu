@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Kazan (ateş üstünde) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="149" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kazan" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#8e8e8e"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#5f5f5f" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="turuncu" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#ffc58f"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#f08a3c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="114" rx="46" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 112 q-4 -16 10 -20 q-2 10 8 12 q0 -16 10 -18 q2 12 10 14 q4 -10 12 -10 q6 10 -2 22z" fill="url(#turuncu)"/>
+    <path d="M18 40 h94 q4 50 -47 54 q-51 -4 -47 -54z" fill="url(#kazan)"/>
+    <ellipse cx="65" cy="40" rx="47" ry="9" fill="#5f5f5f"/>
+    <path d="M18 46 q-12 0 -12 -10 M112 46 q12 0 12 -10" fill="none" stroke-width="5"/>
+    <path d="M50 26 q-6 -8 0 -16 M72 26 q-6 -8 0 -16" fill="none" stroke="#a9a59c" stroke-width="3"/>
+  </g>
+</svg>

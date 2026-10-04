@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Erik (yeşil, yapraklı) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="163" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="erik" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#d4f0a0"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#9ccf4e" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="yesil" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9eba7"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#8fd16a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="114" rx="44" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M58 30 q4 -14 12 -20" fill="none" stroke="#8a6a3c" stroke-width="4"/>
+    <path d="M70 12 q18 -10 30 2 q-16 10 -30 -2z" fill="url(#yesil)"/>
+    <ellipse cx="44" cy="70" rx="30" ry="34" fill="url(#erik)"/>
+    <ellipse cx="88" cy="74" rx="28" ry="32" fill="url(#erik)"/>
+    <path d="M44 36 q-6 30 0 66 M88 42 q-6 30 0 62" fill="none" stroke-width="2.5"/>
+    <path d="M30 54 q4 -10 10 -12 M76 58 q4 -10 10 -12" fill="none" stroke="#ffffff" stroke-width="4"/>
+  </g>
+</svg>

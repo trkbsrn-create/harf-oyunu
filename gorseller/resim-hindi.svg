@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Hindi (kuyruğu açık) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="209" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kahve" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#d9a46b"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#b07a42" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="kirmizi" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#ff9c8a"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#e0533d" stroke-width="3.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="sari" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+      <rect width="6" height="6" fill="#ffe680"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffc928" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="turuncu" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#ffc58f"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#f08a3c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="114" rx="44" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="65" cy="60" r="50" fill="url(#turuncu)"/>
+    <circle cx="65" cy="60" r="38" fill="url(#sari)"/>
+    <circle cx="65" cy="60" r="26" fill="url(#kirmizi)"/>
+    <ellipse cx="65" cy="76" rx="22" ry="26" fill="url(#kahve)"/>
+    <circle cx="65" cy="44" r="13" fill="url(#kahve)"/>
+    <path d="M65 46 l8 4 l-8 4z" fill="#ffe680" stroke-width="2.5"/>
+    <path d="M64 54 q-6 8 0 14" fill="#e0533d" stroke-width="2.5"/>
+    <circle cx="60" cy="42" r="2.4" fill="#2b2b2b"/><circle cx="70" cy="42" r="2.4" fill="#2b2b2b"/>
+    <path d="M58 100 v12 M72 100 v12" fill="none" stroke="#f08a3c" stroke-width="4"/>
+  </g>
+</svg>
