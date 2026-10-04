@@ -1,7 +1,8 @@
 // Mini oyunlar menüsü: karşılama ekranındaki "Mini Games" düğmesiyle açılır.
 // Üstte harf seçici (ilk harf grubu), altında her mini oyunun kartı. Hazır olan oyunun
 // kartına dokununca o oyun seçilen harfle açılır; hazır olmayanlarda "Yakında" yazar.
-// Mini oyunları ayrı ayrı geliştirip denemek için.
+// Mini oyunları ayrı ayrı geliştirip denemek için. Öğretmenin isteği: kartlar etikete göre
+// süzülebilir (hepsi / harf / hece; seviye seçicinin sağında).
 
 const MENU_SAYFA_KART = 8;
 // Etiket rozetlerinin renkleri (harf: kırmızımsı, hece: sarı; Birleştir Büyüt taşlarıyla aynı)
@@ -70,12 +71,31 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
       });
       return { seviye, x, y };
     });
+    // Etiket süzgeci: hepsi / harf / hece
+    if (!this.secilenEtiket) this.secilenEtiket = "hepsi";
+    this.etiketDugmeleri = ["hepsi", "harf", "hece"].map((etiket, i) => {
+      const x = 900 + i * 100;
+      const y = 232;
+      this.add.text(x, y, etiket, {
+        fontFamily: "Andika", fontSize: "24px", color: "#2b2b2b",
+      }).setOrigin(0.5).setDepth(1);
+      const alan = this.add.rectangle(x, y, 96, 64).setInteractive({ useHandCursor: true });
+      alan.on("pointerdown", () => {
+        if (this.secilenEtiket === etiket) return;
+        Sesler.ac();
+        Sesler.nota(660, 0, 0.08, 0.12);
+        this.secilenEtiket = etiket;
+        this.harfleriCiz();
+        this.sayfa = 0;
+        this.sayfayiKur();
+      });
+      return { etiket, x, y };
+    });
     this.harfleriCiz();
 
     // Oyun kartları: sayfada 8 kart (4'erli iki sıra). Sayfalar oklarla ya da parmağı
     // sağa/sola kaydırarak değişir. Hazır oyunlar önce, "Yakında" olanlar sonra gelir.
-    this.sayfaSayisi = Math.ceil(PLANLANAN_OYUNLAR.length / MENU_SAYFA_KART);
-    if (this.sayfa === undefined || this.sayfa >= this.sayfaSayisi) this.sayfa = 0;
+    if (this.sayfa === undefined) this.sayfa = 0;
     this.kartlar = this.add.container(0, 0);
     this.solOk = this.okYap(52, -1);
     this.sagOk = this.okYap(1228, 1);
@@ -112,10 +132,19 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
     this.sayfayiKur(yon);
   }
 
+  // Seçilen etiketi taşıyan oyunlar
+  oyunListesi() {
+    if (this.secilenEtiket === "hepsi") return PLANLANAN_OYUNLAR;
+    return PLANLANAN_OYUNLAR.filter((o) => (o.etiketler || []).includes(this.secilenEtiket));
+  }
+
   sayfayiKur(yon = 0) {
     this.kartlar.removeAll(true);
+    const liste = this.oyunListesi();
+    this.sayfaSayisi = Math.max(1, Math.ceil(liste.length / MENU_SAYFA_KART));
+    if (this.sayfa >= this.sayfaSayisi) this.sayfa = 0;
     const ilk = this.sayfa * MENU_SAYFA_KART;
-    PLANLANAN_OYUNLAR.slice(ilk, ilk + MENU_SAYFA_KART).forEach((oyun, i) => {
+    liste.slice(ilk, ilk + MENU_SAYFA_KART).forEach((oyun, i) => {
       const x = 640 + ((i % 4) - 1.5) * 270;
       const y = 380 + Math.floor(i / 4) * 190;
       const hazir = Boolean(MINI_OYUNLAR[oyun.ad]);
@@ -175,6 +204,14 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
       g.fillCircle(d.x, d.y, 28);
       g.lineStyle(secili ? 5 : 3, 0x2b2b2b, 1);
       g.strokeCircle(d.x, d.y, 28);
+    }
+    // Etiket süzgeci: seçili olan kendi renginde ve kalın çizgili, öbürleri beyaz
+    for (const d of this.etiketDugmeleri || []) {
+      const secili = d.etiket === this.secilenEtiket;
+      g.fillStyle(secili ? (ETIKET_RENKLERI[d.etiket] || 0xffe680) : 0xffffff, 1);
+      g.fillRoundedRect(d.x - 42, d.y - 20, 84, 40, 20);
+      g.lineStyle(secili ? 5 : 3, 0x2b2b2b, 1);
+      g.strokeRoundedRect(d.x - 42, d.y - 20, 84, 40, 20);
     }
   }
 
