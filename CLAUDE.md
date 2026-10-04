@@ -141,6 +141,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
   Hoparlör çizimi ortak: `hoparlorCiz`. Ortak "Yakala:/Patlat:" paneli
   `hedefPaneliKur`.
+  Etiketler: `PLANLANAN_OYUNLAR`'da her oyunun `etiketler`i ("harf", "hece" ya da ikisi; oyunun
+  neyin öğretimine uygun olduğu). İlk dağılımı Claude yaptı, öğretmen değiştirir. Menü kartının
+  altında rozet olarak görünür (`ETIKET_RENKLERI`: harf kırmızımsı, hece sarı).
   Menü sayfalıdır (sayfada 8 kart, oklar ya da parmak kaydırma); listede öğretmenin
   fikirleri ve araştırmadan gelen fikirler "Yakında" olarak durur, sırayla yapılır.
 - Mini oyun ilkeleri (öğretmenin isteğiyle yapılan araştırmadan; her yeni mini oyunda uygulanır):

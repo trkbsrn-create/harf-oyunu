@@ -4,6 +4,8 @@
 // Mini oyunları ayrı ayrı geliştirip denemek için.
 
 const MENU_SAYFA_KART = 8;
+// Etiket rozetlerinin renkleri (harf: kırmızımsı, hece: sarı; Birleştir Büyüt taşlarıyla aynı)
+const ETIKET_RENKLERI = { harf: 0xff9c8a, hece: 0xffe680 };
 
 class MiniOyunlarSahnesi extends Phaser.Scene {
   constructor() {
@@ -121,6 +123,20 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
         this.add.image(0, 0, "oyun-karti"),
         doodleYazi(this, -3, hazir ? -3 : -18, oyun.baslik, oyun.baslik.length > 15 ? 24 : 28).setOrigin(0.5),
       ]).setSize(232, 152);
+      // Etiketler (harf / hece): kartın altında küçük renkli rozetler
+      const etiketler = oyun.etiketler || [];
+      etiketler.forEach((e, j) => {
+        const ex = (j - (etiketler.length - 1) / 2) * 74 - 3;
+        const ey = hazir ? 48 : 58;
+        const g = this.add.graphics();
+        g.fillStyle(ETIKET_RENKLERI[e] || 0xdddddd, 1);
+        g.fillRoundedRect(ex - 33, ey - 14, 66, 28, 14);
+        g.lineStyle(3, 0x2b2b2b, 1);
+        g.strokeRoundedRect(ex - 33, ey - 14, 66, 28, 14);
+        kart.add([g, this.add.text(ex, ey, e, {
+          fontFamily: "Andika", fontSize: "20px", color: "#2b2b2b",
+        }).setOrigin(0.5)]);
+      });
       if (hazir) {
         kart.setInteractive({ useHandCursor: true });
         kart.on("pointerdown", () => this.oyunuAc(oyun.ad));
