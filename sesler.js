@@ -11,6 +11,7 @@ const Sesler = {
   // Tarayıcılar sesi ancak ilk dokunuş / tuş basışından sonra açar. Telefonda ses ancak parmak
   // kalkınca açılabilir; o ana kadar istenen sesler bekletilir (bekleyenler) ve ses açılınca çalınır.
   ac() {
+    this.iosSesiniAc();
     if (!this.baglam) {
       const Baglam = window.AudioContext || window.webkitAudioContext;
       if (!Baglam) return;
@@ -29,6 +30,43 @@ const Sesler = {
       } catch (e) { /* önemli değil */ }
     }
     this.dosyalariYukle();
+  },
+
+  // iPhone/iPad: sessiz mod düğmesi açıkken tarayıcı Web Audio efektlerini (notalar, kutlamalar)
+  // kısar; sesli okuma yine duyulur. Efektler de duyulsun diye ses oturumu "playback" yapılır
+  // (yeni iOS: navigator.audioSession); eski iOS için dokunuşta duyulmayan, döngülü kısa bir
+  // ses dosyası (<audio>) çalınır, bu da oturumu "playback"e geçirir. Sayfa gizlenince durur.
+  iosSesiniAc() {
+    const ios = /iPad|iPhone|iPod/.test(navigator.userAgent)
+      || (navigator.platform === "MacIntel" && navigator.maxTouchPoints > 1);
+    if (!ios) return;
+    try {
+      if (navigator.audioSession && navigator.audioSession.type !== "playback") navigator.audioSession.type = "playback";
+    } catch (e) { /* desteklenmiyor */ }
+    if (!this.sessizSes) {
+      // 0,5 sn sessiz WAV (8 kHz, 8 bit, tek kanal)
+      const n = 4000;
+      const veri = new Uint8Array(44 + n);
+      const yaz = (i, metin) => { for (let k = 0; k < metin.length; k++) veri[i + k] = metin.charCodeAt(k); };
+      const sayi = (i, d, bayt) => { for (let k = 0; k < bayt; k++) veri[i + k] = (d >> (8 * k)) & 255; };
+      yaz(0, "RIFF"); sayi(4, 36 + n, 4); yaz(8, "WAVEfmt "); sayi(16, 16, 4); sayi(20, 1, 2); sayi(22, 1, 2);
+      sayi(24, 8000, 4); sayi(28, 8000, 4); sayi(32, 1, 2); sayi(34, 8, 2); yaz(36, "data"); sayi(40, n, 4);
+      veri.fill(128, 44);
+      const ses = document.createElement("audio");
+      ses.src = URL.createObjectURL(new Blob([veri], { type: "audio/wav" }));
+      ses.loop = true;
+      ses.setAttribute("playsinline", "");
+      ses.setAttribute("x-webkit-airplay", "deny");
+      ses.disableRemotePlayback = true;
+      this.sessizSes = ses;
+      document.addEventListener("visibilitychange", () => {
+        if (document.hidden) ses.pause();
+      });
+    }
+    if (this.sessizSes.paused && !document.hidden) {
+      const sonuc = this.sessizSes.play();
+      if (sonuc && sonuc.catch) sonuc.catch(() => {});
+    }
   },
 
   // Ses çalınabilir mi? Değilse (ses henüz açılmadıysa) sesi en çok 1,5 saniye bekletir.

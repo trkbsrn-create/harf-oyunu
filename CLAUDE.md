@@ -282,6 +282,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   Parmak değdiği an (pointerdown) çalınmak istenen efektler ses henüz açılmadıysa kaybolmasın
   diye bekletilir (`Sesler.calabilir`, `bekleyenler`, en çok 1,5 sn) ve ses açılınca çalınır;
   iOS için açılışta duyulmayan kısa bir ses çalınır. Yeni efekt yazarken `calabilir` kullanılır.
+  iPhone/iPad'de sessiz mod düğmesi açıkken Web Audio efektleri hiç duyulmaz (sesli okuma duyulur;
+  öğretmen iPhone 11 Chrome'da notaları ve kutlama sesini duymadı). `iosSesiniAc`: ses oturumu
+  "playback" (navigator.audioSession) ve dokunuşta döngülü sessiz bir <audio> çalınır; sayfa
+  gizlenince durur.
 - `yazitipi/` – Andika yazı tipi ve lisansı (SIL Open Font License).
 - `gorseller/` – Kendi çizdiğimiz SVG görseller. Bütün oyun doodle tarzında: titrek kalem
   çizgisi (SVG içinde feTurbulence/feDisplacementMap süzgeci), boya kalemi taraması,
