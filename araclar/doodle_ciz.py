@@ -760,6 +760,40 @@ yaz("onay-pencere.svg", 540, 320, "Yeniden başlatma onay penceresi",
     <rect x="290" y="200" width="190" height="80" rx="36" fill="url(#pembe)"/>
 ''', 5), 49, 4)
 
+# ---- Şeker makinesi (Şekillerle Yazma, 1. düzey): cam fanus, kırmızı gövde, önde çıkış
+# oluğu. Kolu ayrı resim (seker-makinesi-kol.svg): oyunda sağ yandaki mile (230, 300) takılır,
+# çekilince aşağı döner. Fanustaki şekerler düğme, çiçek, şeker ve top karışık.
+fanus_seker = ""
+for i, (x, y, r, renk) in enumerate([(78, 150, 17, "#ff9c8a"), (112, 158, 15, "#ffe680"), (146, 152, 17, "#9be3dc"),
+                                       (180, 156, 15, "#c8a2ff"), (94, 182, 16, "#b5e48c"), (130, 186, 17, "#ffc58f"),
+                                       (166, 184, 16, "#ff9c8a"), (62, 180, 13, "#9be3dc"), (196, 180, 13, "#ffe680"),
+                                       (112, 126, 14, "#c8a2ff"), (150, 122, 15, "#b5e48c"), (86, 122, 12, "#ffe680"),
+                                       (178, 126, 12, "#ff9c8a"), (130, 98, 13, "#9be3dc")]):
+    fanus_seker += f'    <circle cx="{x}" cy="{y}" r="{r}" fill="{renk}"/>\n'
+    if i % 3 == 0:
+        fanus_seker += f'    <circle cx="{x}" cy="{y}" r="{r * 0.45:.1f}" fill="none" stroke-width="2"/>\n'
+yaz("seker-makinesi.svg", 260, 420, "Şeker makinesi: cam fanus, kırmızı gövde, çıkış oluğu; kolu ayrı",
+    tarama("makine", "#ff9c8a", "#ef5b5b", -35, 8, 3.5) + tarama("cam", "#eef8fc", "#d7eef7", 30, 9, 2),
+    golge(130, 410, 110, 8) + kalem(f'''    <circle cx="130" cy="130" r="104" fill="url(#cam)"/>
+{fanus_seker}    <circle cx="130" cy="130" r="104" fill="none"/>
+    <path d="M70 70 q20 -26 50 -32" fill="none" stroke="#ffffff" stroke-width="7"/>
+    <path d="M104 22 q26 -18 52 0 v10 h-52 z" fill="url(#makine)"/>
+    <rect x="86" y="226" width="88" height="22" rx="6" fill="url(#makine)"/>
+    <path d="M60 248 h140 l26 152 h-192 z" fill="url(#makine)"/>
+    <rect x="92" y="318" width="76" height="52" rx="12" fill="#5a3b2a"/>
+    <path d="M92 352 h76" fill="none" stroke-width="3"/>
+    <circle cx="130" cy="282" r="16" fill="#fff4c2"/>
+    <path d="M122 282 h16" fill="none" stroke-width="3"/>
+    <circle cx="226" cy="300" r="12" fill="#c9c9c9"/>
+'''), 61)
+yaz("seker-makinesi-kol.svg", 150, 60, "Şeker makinesinin kolu; mil sol uçta (16, 30)",
+    tarama("topuz", "#ffe680", "#ffc928", -40, 6, 3),
+    kalem('''    <path d="M16 30 h100" fill="none" stroke-width="10"/>
+    <path d="M16 30 h100" fill="none" stroke="#c9c9c9" stroke-width="5"/>
+    <circle cx="16" cy="30" r="10" fill="#c9c9c9"/>
+    <circle cx="124" cy="30" r="22" fill="url(#topuz)"/>
+'''), 62)
+
 # ---- Zemin dokuları (kesintisiz döşenir; titreme süzgeci yok) ----
 def doku(ad, boy, zemin, cizgiler, aciklama):
     s = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{boy}" height="{boy}" viewBox="0 0 {boy} {boy}">
