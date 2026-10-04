@@ -1,12 +1,12 @@
 // Resimden Sesi Bul: harfin kelimedeki yerine göre resimli kelimeler (sadece veri).
 // bas: harf başında (1. düzey), son: sonunda (2. düzey), orta: ortasında (3. düzey).
-// Öğretmenin kararı: Türkçe kurallarına uygun kelimeler (büyük ünlü uyumu, başta iki ünsüz yok,
-// yabancı kelime yok); öğretmenin eklediği limon, lama, lahmacun, iki, iguana da var.
+// Öğretmenin kuralı: okumada karışabilen sesler (ı/i gibi) soruyu karıştırmasın: "i" sorulurken
+// yanlış seçeneklerde "ı" de geçmez (`KARISAN_SESLER`). Öğretmenin eklediği kelimeler de var.
 // Resim: harfin kendi ipucu resmi (harfler.js) ya da gorseller/resim-<kelime>.svg (doodle_ciz.py).
 const KONUMLU_KELIMELER = {
   a: {
     bas: ["arı", "ayı", "at", "armut", "ay", "ağaç", "ayak", "ayakkabı", "araba", "altın", "ayna", "aslan"],
-    son: ["kova", "fırça", "çorba", "masa", "çanta", "kumbara", "kurbağa"],
+    son: ["elma", "kova", "fırça", "çorba", "masa", "çanta", "kumbara", "kurbağa"],
     orta: ["kapı", "balık", "tavuk", "kaşık", "havuç", "yaprak", "bardak"],
   },
   n: {
@@ -15,7 +15,7 @@ const KONUMLU_KELIMELER = {
     orta: ["çanta", "dondurma", "tencere", "anahtar", "yengeç", "fındık", "fener"],
   },
   e: {
-    bas: ["eşek", "ev", "el", "erik", "ekmek", "etek", "eldiven", "elbise"],
+    bas: ["eşek", "elma", "ev", "el", "erik", "ekmek", "etek", "eldiven", "elbise"],
     son: ["deve", "küpe", "tencere", "kepçe", "iğne", "bilye", "şemsiye"],
     orta: ["kedi", "gemi", "ördek", "sepet", "ceviz", "bebek", "çiçek", "kemik"],
   },
@@ -32,9 +32,12 @@ const KONUMLU_KELIMELER = {
   l: {
     bas: ["leylek", "lamba", "lahana", "lokum", "leğen", "lama", "limon", "lahmacun"],
     son: ["fil", "bal", "gül", "kartal", "çatal", "zil", "nal"],
-    orta: ["balık", "kelebek", "bulut", "kulak", "halı", "silgi", "bilezik"],
+    orta: ["elma", "balık", "kelebek", "bulut", "kulak", "halı", "silgi", "bilezik"],
   },
 };
+
+// Okumada birbirine karışabilen sesler: yanlış seçeneklerde bunlar da geçmez
+const KARISAN_SESLER = { i: ["ı"], ı: ["i"], o: ["ö"], ö: ["o"], u: ["ü"], ü: ["u"] };
 
 const KONUM_ADLARI = { bas: "Başında", son: "Sonunda", orta: "Ortasında" };
 

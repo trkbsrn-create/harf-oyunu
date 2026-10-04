@@ -4,7 +4,8 @@
 // Oyun başında önce harf büyükçe gelir (ünlüyse söylenir), sonra üç kutudan harfin yeri gösterilir
 // ve söylenir ("Başında a olan resimleri bul!"; ünsüz okunmaz: "Başında bu harf olan...").
 // Sonra harf ve kutular üstteki panele küçülür, sorular başlar. Her soruda bir doğru resim var;
-// yanlış resimlerde o harf hiç geçmez. Kartın köşesindeki hoparlör resmin adını okur.
+// yanlış resimlerde o harf (ve onunla karışan ses: i/ı) hiç geçmez. Kartın köşesindeki hoparlör
+// resmin adını okur.
 // Yanlış resim bir can götürür.
 
 const RESIMDEN_SES_SEVIYELERI = {
@@ -39,7 +40,9 @@ class ResimdenSesSahnesi extends MiniOyunSahnesi {
     const liste = (KONUMLU_KELIMELER[this.harf] || KONUMLU_KELIMELER.a)[this.ayar.konum];
     this.dogrular = Phaser.Utils.Array.Shuffle(liste.slice());
     this.dogruSira = 0;
-    this.yanlislar = RESIMLI_KELIMELER.filter((k) => !k.includes(this.harf));
+    // Yanlış resimlerde harf (ve onunla karışabilen ses, ör. i için ı) hiç geçmez
+    const yasak = [this.harf, ...(KARISAN_SESLER[this.harf] || [])];
+    this.yanlislar = RESIMLI_KELIMELER.filter((k) => !yasak.some((h) => k.includes(h)));
     const bilgi = HARFLER.find((h) => h.kucuk === this.harf);
     this.yonerge = `${KONUM_ADLARI[this.ayar.konum]} ${bilgi && bilgi.unlu ? this.harf : "bu harf"} olan resimleri bul!`;
 

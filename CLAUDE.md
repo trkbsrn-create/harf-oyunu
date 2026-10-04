@@ -63,8 +63,8 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   Bul: düzeye göre harfin kelimedeki yeri: 1. başında, 2. sonunda, 3. ortasında olan resmi seç
   (öğretmenin isteği). Oyun başında önce harf gelir (ünlüyse söylenir), sonra üç kutuda harfin
   yeri gösterilir ve söylenir ("Başında a olan resimleri bul!"; ünsüzde "bu harf"), sonra üstteki
-  panele küçülür. Kelimeler `KONUMLU_KELIMELER` (resimden-ses/kelimeler.js; 114 resim,
-  gorseller/resim-<kelime>.svg, doodle_ciz.py); yanlış resimlerde harf hiç geçmez; 6 soru, 3/3/4
+  panele küçülür. Kelimeler `KONUMLU_KELIMELER` (resimden-ses/kelimeler.js; 115 resim,
+  gorseller/resim-<kelime>.svg, doodle_ciz.py); yanlış resimlerde harf ve onunla karışan ses (i/ı) geçmez; 6 soru, 3/3/4
   kart; kart köşesindeki hoparlör resmin adını okur); hafiza-kartlari (Hafıza Kartları: kartlar kapalı,
   iki kart açılır, eşleşen açık kalır; 1-2. seviye aynı harfi eşleştir, 3. seviye harf ile
   resmi eşleştir; her 2 yanlış eşleştirmede 1 can gider); hece-koprusu (Hece Köprüsü:
@@ -292,9 +292,9 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   kullanıcıya açıklamak gerekirse sade Türkçe kullan.
 
 ## Kelime seçimi
-- Oyunlara kelime seçerken Türkçe kurallarına uygun kelimeler seçilir (öğretmenin kuralı):
-  büyük ünlü uyumu olan, başında iki ünsüz olmayan, yabancı olmayan kelimeler (elma, kalem,
-  pizza, tren gibi kelimeler kullanılmaz). Öğretmenin kendisinin eklediği kelimeler kalır.
+- Oyunlara kelime seçerken Türkçe okuma kurallarına dikkat edilir (öğretmenin kuralı): okumada
+  karışabilen sesler (ı/i gibi) soruyu karıştırmasın; örneğin "i" sorulurken yanlış seçeneklerde
+  "ı" de olmasın (`KARISAN_SESLER`). Büyük ünlü uyumu şart değil (öğretmen: "çok önemli değil").
 - Kelime resimden kolay tanınmalı; birbirine benzeyen resimler (kurt/kedi gibi) aynı soruda
   karışmasın.
 
