@@ -156,7 +156,10 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   canavari-besle (Canavarı Besle: canavar konuşma balonunda harf ister (ünlü söylenir); masadaki
   harfli meyve canavara doğru sürüklenip bırakılır (1. seviyede dokunmak yeter), kavisle ağzına
   uçar; doğruysa yer ve büyür, yanlışsa yüzünü buruşturup tükürür, can gider; Kazma düzeni: 2. seviye
-  hece, 3. seviye kelime istenir (balonda hoparlör), parçalı meyveler sırayla; sırası gelmemiş meyve geri döner).
+  hece, 3. seviye kelime istenir (balonda hoparlör), parçalı meyveler sırayla; sırası gelmemiş meyve geri döner; her seviyede
+  başka canavar (`CANAVARLAR`: boynuzlu yeşil, tek gözlü tüylü mor, üç gözlü kanatlı mercan), her karede
+  çizilir: nefes, göz kırpma, meyveyi izleyen gözler, yaklaşınca açılan ağız; `lokmaYedi`: çiğneme,
+  şişme, kırıntı, kalpler, yaylanarak büyüme; yanlışta yeşeren yüz; kazanınca zıplar).
   harf-kesme (Harf Kesme: meyveler aşağıdan havaya fırlar (yerçekimi); parmağın kaydığı çizgiye
   değen meyve kesilir (dokunmak da keser); doğru harf ikiye ayrılır, yanlış harf can götürür,
   kaçan meyve ceza değil; seri kesim: tek kaydırışta 2+ doğru meyve "2'li kesim!" yazısı).
