@@ -1,8 +1,12 @@
 // Mini oyun: Şeker Patlatma (hece zinciri)
-// Tahtada harfli şekerler var. Hece söylenir (hoparlörle tekrar). Çocuk o heceyi oluşturan yan
-// yana (soldan sağa) ya da alt alta (yukarıdan aşağı) şekerleri sırayla birleştirir: parmağını ilk
-// şekerden sonrakilere kaydırır ya da sırayla dokunur. Hece doğruysa şekerler patlar, üsttekiler
-// düşer, yukarıdan yenileri gelir. Yanlış hece bir can götürür.
+// Tahtada harfli şekerler var. Hece söylenir (hoparlörle tekrar). Çocuk o heceyi oluşturan komşu
+// şekerleri sırayla birleştirir: parmağını ilk şekerden sonrakilere kaydırır ya da sırayla dokunur.
+// Öğretmenin kararı: harfler baştan sona doğru sırada seçildiyse yön önemli değil (soldan sağa,
+// alt alta ya da üç harflide bir aşağı bir sağa gibi kıvrılarak). Hece doğruysa şekerler patlar,
+// üsttekiler düşer, yukarıdan yenileri gelir. Yanlış hece bir can götürür.
+// Görsel heyecan (öğretmenin isteği): sargılı parlak şekerler, hafif sallanma ve parıltılar,
+// seçilen şekerin çevresinde parlayan halka, patlamada beyaz parlama, yıldızlı parçacıklar,
+// hafif ekran sarsıntısı ve "Süper!" gibi uçan bir övgü yazısı; tahtanın iki yanında lolipoplar.
 // Tahtada istenen hece her zaman en az bir yerde bulunur.
 // Seviyeler (bütün hece oyunlarında olduğu gibi): 1: 6 hece, iki harfli (an, na); 2: 8 hece, üç
 // harfli (tat); 3: 10 hece, üç harfli, benzer heceler.
@@ -53,11 +57,20 @@ class SekerPatlatmaSahnesi extends MiniOyunSahnesi {
     const boy = SEKER_SATIR * SEKER_BOY + 28;
     g.fillStyle(0x000000, 0.1);
     g.fillRoundedRect(sol + 8, ust + 8, en, boy, 26);
-    g.fillStyle(0xf6efe0, 1);
+    g.fillStyle(0xffe9f0, 1);
     g.fillRoundedRect(sol, ust, en, boy, 26);
+    g.fillStyle(0xffffff, 0.6);
+    for (let i = 0; i < 40; i++) {
+      g.fillCircle(sol + 20 + ((i * 97) % (en - 40)), ust + 20 + ((i * 53) % (boy - 40)), 4);
+    }
     g.lineStyle(5, 0x2b2b2b, 1);
     g.strokeRoundedRect(sol, ust, en, boy, 26);
+    this.lolipopCiz(sol - 95, ust + boy - 60, 0xff9c8a, -8);
+    this.lolipopCiz(sol + en + 95, ust + boy - 60, 0x9be3dc, 8);
+    this.lolipopCiz(sol - 70, ust + 70, 0xc8a2ff, 6, 0.7);
+    this.lolipopCiz(sol + en + 70, ust + 70, 0xffe680, -6, 0.7);
     this.secimCizim = this.add.graphics().setDepth(15);
+    this.halkalar = this.add.graphics().setDepth(9);
 
     if (!this.textures.exists("seker-parca")) {
       const p = this.make.graphics({ add: false });
@@ -74,10 +87,41 @@ class SekerPatlatmaSahnesi extends MiniOyunSahnesi {
       for (let r = 0; r < SEKER_SATIR; r++) this.tahta[c].push(null);
     }
 
+    // Ara sıra rastgele bir şekerde parıltı
+    this.time.addEvent({ delay: 1300, loop: true, callback: () => this.pariltiYap() });
     this.input.on("pointerdown", (p) => this.basildi(p));
     this.input.on("pointermove", (p) => { if (p.isDown) this.surukle(p); });
     this.input.on("pointerup", () => this.birakildi());
     this.time.delayedCall(400, () => this.harfiTanit(() => this.yeniTur(true)));
+  }
+
+  // Tahtanın yanında süs lolipop: sap ve sarmal desenli şeker
+  lolipopCiz(x, y, renk, aci, olcek = 1) {
+    const g = this.add.graphics().setDepth(2);
+    g.lineStyle(10, 0x2b2b2b, 1);
+    g.lineBetween(0, 20, 0, 150);
+    g.lineStyle(6, 0xffffff, 1);
+    g.lineBetween(0, 20, 0, 150);
+    g.fillStyle(renk, 1);
+    g.fillCircle(0, 0, 46);
+    g.lineStyle(7, 0xffffff, 0.85);
+    g.beginPath();
+    for (let t = 0; t < 14; t += 0.2) g.lineTo(Math.cos(t) * t * 3.1, Math.sin(t) * t * 3.1);
+    g.strokePath();
+    g.lineStyle(5, 0x2b2b2b, 1);
+    g.strokeCircle(0, 0, 46);
+    g.setPosition(x, y).setAngle(aci).setScale(olcek);
+    this.tweens.add({ targets: g, angle: aci + (aci > 0 ? -6 : 6), duration: 1600, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+  }
+
+  // Rastgele bir şekerin üstünde kısa bir yıldız parıltısı
+  pariltiYap() {
+    if (this.bitti) return;
+    const dolu = this.tahta.flat().filter(Boolean);
+    const s = Phaser.Utils.Array.GetRandom(dolu);
+    if (!s) return;
+    const yildiz = this.add.star(s.x + 26, s.y - 22, 4, 4, 14, 0xffffff).setDepth(12).setScale(0);
+    this.tweens.add({ targets: yildiz, scale: 1, angle: 90, duration: 300, yoyo: true, onComplete: () => yildiz.destroy() });
   }
 
   konum(c, r) {
@@ -87,17 +131,33 @@ class SekerPatlatmaSahnesi extends MiniOyunSahnesi {
   sekerYap(c, r, harf, ustten) {
     const { x, y } = this.konum(c, r);
     const kap = this.add.container(x, ustten ? y - SEKER_BOY * (SEKER_SATIR + 1) : y).setDepth(10);
+    // Sargılı şeker: iki yanda büzgülü kâğıt, parlak gövde, şeritler ve parlaklık
+    const renk = SEKER_RENKLERI[harf] || 0xffc58f;
+    const koyu = Phaser.Display.Color.ValueToColor(renk).darken(18).color;
     const g = this.add.graphics();
     g.fillStyle(0x000000, 0.15);
-    g.fillEllipse(4, 6, 98, 78);
-    g.fillStyle(SEKER_RENKLERI[harf] || 0xffc58f, 1);
-    g.fillEllipse(0, 0, 98, 78);
+    g.fillEllipse(4, 7, 86, 72);
+    for (const yon of [-1, 1]) {
+      g.fillStyle(koyu, 1);
+      g.fillTriangle(yon * 34, 0, yon * 58, -24, yon * 58, 24);
+      g.lineStyle(3, 0x2b2b2b, 1);
+      g.strokeTriangle(yon * 34, 0, yon * 58, -24, yon * 58, 24);
+      g.lineStyle(2, 0x2b2b2b, 0.6);
+      g.lineBetween(yon * 44, -8, yon * 54, -16);
+      g.lineBetween(yon * 44, 8, yon * 54, 16);
+    }
+    g.fillStyle(renk, 1);
+    g.fillEllipse(0, 0, 86, 70);
+    g.lineStyle(6, 0xffffff, 0.35);
+    for (const dx of [-24, 0, 24]) g.lineBetween(dx - 10, 30, dx + 10, -30);
     g.lineStyle(4, 0x2b2b2b, 1);
-    g.strokeEllipse(0, 0, 98, 78);
-    g.lineStyle(5, 0xffffff, 0.8);
+    g.strokeEllipse(0, 0, 86, 70);
+    g.lineStyle(5, 0xffffff, 0.9);
     g.beginPath();
-    g.arc(-6, -4, 28, Math.PI * 1.1, Math.PI * 1.45);
+    g.arc(-4, -2, 26, Math.PI * 1.1, Math.PI * 1.45);
     g.strokePath();
+    g.fillStyle(0xffffff, 0.9);
+    g.fillCircle(-24, -18, 4);
     const yazi = boyaliOrtala(titret(this.add.text(0, 0, harf, {
       fontFamily: "Andika", fontSize: "48px", color: "#ffffff",
       stroke: "#3b2a1a", strokeThickness: 8, padding: { x: 4, y: 4 },
@@ -108,6 +168,9 @@ class SekerPatlatmaSahnesi extends MiniOyunSahnesi {
     if (ustten) {
       this.tweens.add({ targets: kap, y, duration: 420 + r * 40, ease: "Bounce.Out" });
     }
+    // Hafif sallanma (canlı dursun)
+    this.tweens.add({ targets: g, angle: { from: -3, to: 3 }, duration: Phaser.Math.Between(900, 1400),
+      yoyo: true, repeat: -1, ease: "Sine.InOut", delay: Phaser.Math.Between(0, 800) });
     return kap;
   }
 
@@ -125,23 +188,19 @@ class SekerPatlatmaSahnesi extends MiniOyunSahnesi {
     return Phaser.Utils.Array.GetRandom(obur.length ? obur : this.harfler);
   }
 
-  // Tahtada hecenin bulunduğu yerler: okuma yönünde (soldan sağa ya da yukarıdan aşağı)
-  // art arda şekerler [[s1, s2, ...], ...]
+  // Tahtada hecenin bulunduğu yerler: harfleri sırayla taşıyan komşu şekerler (yön serbest:
+  // düz, alt alta ya da kıvrılarak) [[s1, s2, ...], ...]
   heceYerleri(hece) {
     const yerler = [];
-    for (let c = 0; c < SEKER_SUTUN; c++) {
-      for (let r = 0; r < SEKER_SATIR; r++) {
-        for (const [dc, dr] of [[1, 0], [0, 1]]) {
-          const dizi = [];
-          for (let k = 0; k < hece.length; k++) {
-            const s = this.tahta[c + dc * k] && this.tahta[c + dc * k][r + dr * k];
-            if (!s || s.seker.harf !== hece[k]) break;
-            dizi.push(s);
-          }
-          if (dizi.length === hece.length) yerler.push(dizi);
-        }
+    const ara = (dizi) => {
+      if (dizi.length === hece.length) { yerler.push(dizi); return; }
+      const son = dizi[dizi.length - 1];
+      for (const [dc, dr] of [[1, 0], [0, 1], [-1, 0], [0, -1]]) {
+        const s = this.tahta[son.seker.c + dc] && this.tahta[son.seker.c + dc][son.seker.r + dr];
+        if (s && !dizi.includes(s) && s.seker.harf === hece[dizi.length]) ara([...dizi, s]);
       }
-    }
+    };
+    for (const sutun of this.tahta) for (const s of sutun) if (s && s.seker.harf === hece[0]) ara([s]);
     return yerler;
   }
 
@@ -241,11 +300,27 @@ class SekerPatlatmaSahnesi extends MiniOyunSahnesi {
     this.secimCiz();
   }
 
+  // Seçili şekerlerin arkasında parlayan halka
+  halkalariCiz() {
+    const g = this.halkalar;
+    g.clear();
+    const nabiz = 0.5 + 0.5 * Math.sin(this.time.now / 140);
+    for (const s of this.secim) {
+      if (!s.active) continue;
+      g.fillStyle(0xfff1a8, 0.45 + 0.35 * nabiz);
+      g.fillCircle(s.x, s.y, 56 + nabiz * 6);
+    }
+  }
+
+  update() {
+    if (this.halkalar) this.halkalariCiz();
+  }
+
   secimCiz() {
     const g = this.secimCizim;
     g.clear();
     if (this.secim.length < 2) return;
-    for (const [kalinlik, renk] of [[14, 0xffffff], [6, 0xe0533d]]) {
+    for (const [kalinlik, renk] of [[18, 0xffffff], [8, 0xff6fa8]]) {
       g.lineStyle(kalinlik, renk, 0.9);
       for (let i = 1; i < this.secim.length; i++) {
         g.lineBetween(this.secim[i - 1].x, this.secim[i - 1].y, this.secim[i].x, this.secim[i].y);
@@ -263,12 +338,8 @@ class SekerPatlatmaSahnesi extends MiniOyunSahnesi {
     this.kilitli = true;
     const liste = this.secim.slice();
     const kurulan = liste.map((s) => s.seker.harf).join("");
-    // Hece okuma yönünde kurulmalı: hep soldan sağa ya da hep yukarıdan aşağı
-    const yon = (a, b) => `${b.seker.c - a.seker.c},${b.seker.r - a.seker.r}`;
-    const ilkYon = yon(liste[0], liste[1]);
-    const okumaYonu = (ilkYon === "1,0" || ilkYon === "0,1")
-      && liste.every((s, i) => i === 0 || yon(liste[i - 1], s) === ilkYon);
-    if (kurulan === this.hece && okumaYonu) {
+    // Harfler baştan sona doğru sıradaysa doğru (yön önemli değil; komşuluk seçerken bakılır)
+    if (kurulan === this.hece) {
       this.time.delayedCall(200, () => this.patlat(liste));
     } else {
       this.tweens.add({ targets: liste, angle: { from: -10, to: 10 }, duration: 70, yoyo: true, repeat: 2,
@@ -291,13 +362,25 @@ class SekerPatlatmaSahnesi extends MiniOyunSahnesi {
     Sesler.soyle(this.hece);
     const ortaX = liste.reduce((t, s) => t + s.x, 0) / liste.length;
     const ortaY = liste.reduce((t, s) => t + s.y, 0) / liste.length;
+    this.cameras.main.shake(160, 0.004);
+    this.ovguYaz(ortaX, ortaY);
     for (const s of liste) {
-      this.add.particles(s.x, s.y, "seker-parca", {
-        speed: { min: 120, max: 300 }, lifespan: 500, scale: { start: 1, end: 0 },
-        tint: [SEKER_RENKLERI[s.seker.harf] || 0xffc58f, 0xffffff], emitting: false,
-      }).setDepth(20).explode(14);
       this.tahta[s.seker.c][s.seker.r] = null;
-      s.destroy();
+      // Beyaz parlama, sonra şeker büyüyüp kaybolur; renkli ve yıldızlı parçacıklar
+      const parlama = this.add.circle(s.x, s.y, 20, 0xffffff, 0.9).setDepth(19);
+      this.tweens.add({ targets: parlama, scale: 3.4, alpha: 0, duration: 380, onComplete: () => parlama.destroy() });
+      this.add.particles(s.x, s.y, "seker-parca", {
+        speed: { min: 140, max: 360 }, lifespan: 650, scale: { start: 1.2, end: 0 }, gravityY: 300,
+        tint: [SEKER_RENKLERI[s.seker.harf] || 0xffc58f, 0xffffff, 0xffe680, 0xff9cc4], emitting: false,
+      }).setDepth(20).explode(18);
+      for (let k = 0; k < 4; k++) {
+        const yildiz = this.add.star(s.x, s.y, 5, 6, 14, Phaser.Utils.Array.GetRandom([0xffe680, 0xff9cc4, 0x9be3dc]))
+          .setStrokeStyle(2, 0x2b2b2b).setDepth(21);
+        const aci = Math.PI * 2 * (k / 4) + Math.random();
+        this.tweens.add({ targets: yildiz, x: s.x + Math.cos(aci) * 110, y: s.y + Math.sin(aci) * 110,
+          angle: 180, scale: 0.3, alpha: 0, duration: 600, ease: "Cubic.Out", onComplete: () => yildiz.destroy() });
+      }
+      this.tweens.add({ targets: s, scale: 1.5, alpha: 0, duration: 180, onComplete: () => s.destroy() });
     }
     this.secim = [];
     this.secimCiz();
@@ -326,6 +409,14 @@ class SekerPatlatmaSahnesi extends MiniOyunSahnesi {
       }
       this.time.delayedCall(550, () => this.yeniTur(false));
     });
+  }
+
+  // Uçan övgü yazısı ("Süper!" gibi)
+  ovguYaz(x, y) {
+    const soz = Phaser.Utils.Array.GetRandom(["Süper!", "Harika!", "Bravo!", "Şahane!", "Aferin!"]);
+    const yazi = doodleYazi(this, x, y, soz, 54, "mavi").setOrigin(0.5).setDepth(30).setScale(0.4).setAngle(-6);
+    this.tweens.add({ targets: yazi, scale: 1, duration: 260, ease: "Back.Out" });
+    this.tweens.add({ targets: yazi, y: y - 90, alpha: 0, duration: 650, delay: 450, onComplete: () => yazi.destroy() });
   }
 
   oyunBitti() {

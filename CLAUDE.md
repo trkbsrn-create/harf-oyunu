@@ -86,9 +86,12 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   yalnızca söylenen hecenin kapısı çıkışa en kısa yoldan götürür; yanlış hece karakteri o yöne
   götürür, labirentte dolaştırır (can yok); üst üste 2 yanlıştan sonra ipucu; ilerleme çubuğu
   çıkışa yakınlık; yıldız: her 2 yanlış bir eksik; çıkışta hazine).
-  seker-patlatma (Şeker Patlatma: harfli şeker tahtası; söylenen heceyi okuma yönünde
-  (soldan sağa / yukarıdan aşağı) yan yana iki şekeri kaydırarak ya da sırayla dokunarak
-  kur; şekerler patlar, yenileri düşer; hece tahtada hep bulunur, bir harften en çok 5 şeker).
+  seker-patlatma (Şeker Patlatma: harfli şeker tahtası; söylenen hecenin harflerini taşıyan
+  komşu şekerleri sırayla kaydırarak ya da dokunarak seç; öğretmenin kararı: harfler baştan sona
+  doğru sıradaysa yön serbest (düz, alt alta, kıvrılarak); şekerler patlar, yenileri düşer; hece
+  tahtada hep bulunur, bir harften en çok 5 şeker; görsel heyecan: sargılı parlak şekerler, sallanma,
+  parıltı, seçili şekerde parlayan halka, patlamada parlama + yıldızlar + sarsıntı + "Süper!" yazısı,
+  yanlarda lolipoplar).
   kayak (Kayak: pist yukarı akar, üç şerit; kayakçının sağına/soluna dokunarak ya da
   sürükleyerek şerit değiştir. 1. seviye harf topla (doğru harfli kar topları, yanlış harf ve
   kaya can götürür); 2-3. seviye hece kapıları (hece söylenir, doğru kapıdan geç; yeni sıra
