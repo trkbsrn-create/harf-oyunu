@@ -3,49 +3,15 @@
 // istenen harfin bölgelerine dokununca o bölge boyanır. Hepsi boyanınca resmin kalanı da
 // kendiliğinden boyanır, resim canlanır. Başka harfli bölgeye dokunmak bir can götürür.
 // Seviyeler: 1: 2 resim; 2: 3 resim; 3: 3 resim, öbür bölgelerde benzer harfler.
+// Öğretmenin isteği: çok resim, gerçekçi renkler, seviyeyle daha ayrıntılı resimler (resimler.js:
+// her resmin seviyesi var; 1. seviye az bölgeli, 3. seviye çok bölgeli). Harfsiz süsler (göz, jant)
+// ve çizgiler (bıyık, anten) resim bitince boyanır / hep görünür.
 
 const BOYA_SEVIYELERI = {
   1: { resim: 2, benzer: false },
   2: { resim: 3, benzer: false },
   3: { resim: 3, benzer: true },
 };
-
-// Resimler: bölgeler (biçim, boyutlar, son renk). Koordinatlar ekran üzerinde.
-const BOYA_RESIMLERI = [
-  { ad: "ev", bolgeler: [
-    { tur: "dikdortgen", x: 300, y: 560, en: 680, boy: 90, renk: 0x8fd16a },
-    { tur: "daire", x: 1010, y: 230, r: 60, renk: 0xffd34d },
-    { tur: "dikdortgen", x: 730, y: 210, en: 50, boy: 90, renk: 0xb07a42 },
-    { tur: "cokgen", noktalar: [[420, 330], [640, 175], [860, 330]], renk: 0xff6b5a },
-    { tur: "dikdortgen", x: 450, y: 330, en: 380, boy: 230, renk: 0xffe2a8, lx: 515, ly: 505 },
-    { tur: "dikdortgen", x: 600, y: 420, en: 80, boy: 140, renk: 0xb07a42 },
-    { tur: "dikdortgen", x: 480, y: 370, en: 90, boy: 80, renk: 0x9be3dc },
-    { tur: "dikdortgen", x: 710, y: 370, en: 90, boy: 80, renk: 0x9be3dc },
-  ] },
-  { ad: "cicek", bolgeler: [
-    { tur: "cokgen", noktalar: [[540, 560], [740, 560], [710, 660], [570, 660]], renk: 0xd9735b },
-    { tur: "dikdortgen", x: 628, y: 340, en: 24, boy: 220, renk: 0x6fbf4a },
-    { tur: "elips", x: 560, y: 470, en: 110, boy: 50, renk: 0x8fd16a },
-    { tur: "elips", x: 720, y: 430, en: 110, boy: 50, renk: 0x8fd16a },
-    { tur: "daire", x: 640, y: 175, r: 55, renk: 0xff9c8a },
-    { tur: "daire", x: 735, y: 245, r: 55, renk: 0xc8a2ff },
-    { tur: "daire", x: 700, y: 345, r: 55, renk: 0xff9c8a },
-    { tur: "daire", x: 580, y: 345, r: 55, renk: 0xc8a2ff },
-    { tur: "daire", x: 545, y: 245, r: 55, renk: 0xff9c8a },
-    { tur: "daire", x: 640, y: 265, r: 45, renk: 0xffd34d },
-  ] },
-  { ad: "gemi", bolgeler: [
-    { tur: "dikdortgen", x: 280, y: 560, en: 720, boy: 100, renk: 0x7cc4ef },
-    { tur: "daire", x: 330, y: 210, r: 55, renk: 0xffd34d },
-    { tur: "cokgen", noktalar: [[420, 470], [860, 470], [800, 560], [480, 560]], renk: 0xb07a42 },
-    { tur: "dikdortgen", x: 630, y: 190, en: 20, boy: 280, renk: 0x8d6e4c },
-    { tur: "cokgen", noktalar: [[620, 210], [620, 450], [470, 450]], renk: 0xffffff },
-    { tur: "cokgen", noktalar: [[660, 230], [660, 450], [800, 450]], renk: 0xffe680 },
-    { tur: "cokgen", noktalar: [[650, 190], [650, 150], [720, 170]], renk: 0xff6b5a },
-    { tur: "daire", x: 560, y: 510, r: 20, renk: 0xc9ecff },
-    { tur: "daire", x: 720, y: 510, r: 20, renk: 0xc9ecff },
-  ] },
-];
 
 class HarfleBoyaSahnesi extends MiniOyunSahnesi {
   constructor() {
@@ -58,7 +24,8 @@ class HarfleBoyaSahnesi extends MiniOyunSahnesi {
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.resim);
     this.hedefPaneliKur("Boya:");
-    this.resimler = Phaser.Utils.Array.Shuffle(BOYA_RESIMLERI.slice());
+    const uygun = BOYA_RESIMLERI.filter((r) => r.seviye === this.seviye);
+    this.resimler = Phaser.Utils.Array.Shuffle((uygun.length ? uygun : BOYA_RESIMLERI).slice());
     this.turNo = 0;
     this.bolgeler = [];
     this.kilitli = true;
@@ -70,15 +37,18 @@ class HarfleBoyaSahnesi extends MiniOyunSahnesi {
 
   yeniResim() {
     if (this.bitti) return;
-    for (const b of this.bolgeler) { b.yazi.destroy(); b.destroy(); }
+    for (const b of this.bolgeler) { if (b.yazi) b.yazi.destroy(); b.destroy(); }
     this.bolgeler = [];
     const resim = this.resimler[this.turNo % this.resimler.length];
     this.turNo++;
-    // Bölgelerin aşağı yukarı yarısı oyunun harfi (en az 3)
-    const sira = Phaser.Utils.Array.Shuffle([...resim.bolgeler.keys()]);
-    const hedefSayisi = Math.max(3, Math.round(resim.bolgeler.length * 0.45));
+    // Harfli bölgelerin aşağı yukarı yarısı oyunun harfi (en az 3)
+    const harfliler = resim.bolgeler.filter((b) => !b.detay && b.tur !== "cizgi");
+    const sira = Phaser.Utils.Array.Shuffle([...harfliler.keys()]);
+    const hedefSayisi = Math.max(3, Math.round(harfliler.length * 0.45));
     resim.bolgeler.forEach((b, i) => {
-      const dogru = sira.indexOf(i) < hedefSayisi;
+      if (b.tur === "cizgi") { this.bolgeler.push(this.cizgiYap(b, i)); return; }
+      if (b.detay) { this.bolgeler.push(this.bolgeYap(b, null, i)); return; }
+      const dogru = sira.indexOf(harfliler.indexOf(b)) < hedefSayisi;
       const harf = dogru ? this.harf : Phaser.Utils.Array.GetRandom(this.yanlisHavuz);
       this.bolgeler.push(this.bolgeYap(b, harf, i));
     });
@@ -89,7 +59,16 @@ class HarfleBoyaSahnesi extends MiniOyunSahnesi {
     });
   }
 
-  // Bir bölge: boyanmamış (beyaz) çizim + dokunma alanı + harf
+  // Hep görünen siyah çizgi (bıyık, anten, pencere çıtası)
+  cizgiYap(b, i) {
+    const g = this.add.graphics().setDepth(9 + i * 0.001);
+    g.lineStyle(b.kalinlik || 4, 0x2b2b2b, 1);
+    g.strokePoints(b.noktalar.map(([x, y]) => ({ x, y })), false);
+    g.bolge = { b, boyandi: true, detay: true };
+    return g;
+  }
+
+  // Bir bölge: boyanmamış (beyaz) çizim + dokunma alanı + harf (harf null: harfsiz süs)
   bolgeYap(b, harf, i) {
     const g = this.add.graphics().setDepth(2 + i * 0.01);
     let alan;
@@ -109,13 +88,15 @@ class HarfleBoyaSahnesi extends MiniOyunSahnesi {
       orta = { x: b.noktalar.reduce((t, p) => t + p[0], 0) / n, y: b.noktalar.reduce((t, p) => t + p[1], 0) / n };
     }
     if (b.lx !== undefined) orta = { x: b.lx, y: b.ly }; // harf, üstteki bölgelerin altında kalmasın
-    g.bolge = { b, alan, harf, dogru: harf === this.harf, boyandi: false };
+    g.bolge = { b, alan, harf, dogru: harf === this.harf, boyandi: false, detay: !harf };
     this.bolgeCiz(g, 0xffffff);
+    if (!harf) return g; // harfsiz süs: dokunulmaz, resim bitince boyanır
     const icerir = b.tur === "dikdortgen" ? Phaser.Geom.Rectangle.Contains : b.tur === "daire" ? Phaser.Geom.Circle.Contains
       : b.tur === "elips" ? Phaser.Geom.Ellipse.Contains : Phaser.Geom.Polygon.Contains;
     g.setInteractive({ hitArea: alan, hitAreaCallback: icerir, useHandCursor: true });
     g.on("pointerdown", () => this.dokun(g));
-    const boyut = b.tur === "daire" && b.r < 30 ? 26 : 36;
+    const kucuk = (b.tur === "daire" && b.r < 34) || (b.tur === "elips" && Math.min(b.en, b.boy) < 60);
+    const boyut = kucuk ? 26 : 36;
     g.yazi = boyaliOrtala(titret(this.add.text(orta.x, orta.y, harf, {
       fontFamily: "Andika", fontSize: `${boyut}px`, color: "#ffffff",
       stroke: "#3b2a1a", strokeThickness: 7, padding: { x: 3, y: 3 },
@@ -143,7 +124,7 @@ class HarfleBoyaSahnesi extends MiniOyunSahnesi {
     this.time.delayedCall(gecikme, () => {
       if (!g.active) return;
       this.bolgeCiz(g, g.bolge.b.renk);
-      this.tweens.add({ targets: g.yazi, alpha: g.bolge.dogru ? 1 : 0.3, duration: 200 });
+      if (g.yazi) this.tweens.add({ targets: g.yazi, alpha: g.bolge.dogru ? 1 : 0.3, duration: 200 });
     });
   }
 
@@ -169,8 +150,8 @@ class HarfleBoyaSahnesi extends MiniOyunSahnesi {
   resimBitti() {
     this.kilitli = true;
     const kalanlar = this.bolgeler.filter((b) => !b.bolge.boyandi);
-    kalanlar.forEach((b, i) => this.boya(b, 200 + i * 120));
-    this.time.delayedCall(300 + kalanlar.length * 120, () => {
+    kalanlar.forEach((b, i) => this.boya(b, 200 + i * 90));
+    this.time.delayedCall(300 + kalanlar.length * 90, () => {
       Sesler.buyume();
       this.ilerlemeArtir(640, 400);
       if (!this.bitti) this.time.delayedCall(1600, () => this.yeniResim());
