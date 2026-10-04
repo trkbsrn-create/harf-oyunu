@@ -4,6 +4,9 @@
 // Yanlış harfli balona dokunmak bir can götürür.
 // Seviye arttıkça: balon ve tur sayısı artar, benzer (karışabilen) harfler gelir, 3. seviyede
 // balonlar yavaşça gezinir.
+// Ortak kural (Kazma düzeni): 2. seviye harflerle hece (hece söylenir; hecenin harf balonları
+// sırayla patlatılır, üstteki yerlere uçar; 4 hece), 3. seviye hecelerle kelime (3 kelime). Sırası
+// gelmemiş doğru balon yalnızca sallanır; başka parça can götürür.
 
 const HARF_BALONLARI_SEVIYELERI = {
   1: { tur: 3, balon: 7, dogru: 3, benzerOrani: 0, gezinir: false },
@@ -26,8 +29,10 @@ class HarfBalonlariSahnesi extends MiniOyunSahnesi {
     this.ortakKur();
     this.ayar = HARF_BALONLARI_SEVIYELERI[this.seviye] || HARF_BALONLARI_SEVIYELERI[1];
     this.kalpleriKur(3);
-    this.ilerlemeKur(this.ayar.tur * this.ayar.dogru);
-    this.hedefPaneliKur("Patlat:");
+    this.siraliKur();
+    this.ilerlemeKur(this.tur === "harf" ? this.ayar.tur * this.ayar.dogru : this.tur === "hece" ? 4 : 3);
+    if (this.tur === "harf") this.hedefPaneliKur("Patlat:");
+    else this.siraliPanelKur();
     this.turYazisi = this.add.text(960, 100, "", {
       fontFamily: "Andika", fontSize: "24px", color: "#6b6b6b",
     }).setOrigin(0.5).setDepth(900);
@@ -56,10 +61,18 @@ class HarfBalonlariSahnesi extends MiniOyunSahnesi {
   yeniTur() {
     if (this.bitti) return;
     this.turNo++;
-    this.turYazisi.setText(`Tur ${this.turNo} / ${this.ayar.tur}`);
     const harfler = [];
-    for (let i = 0; i < this.ayar.dogru; i++) harfler.push(this.harf);
-    while (harfler.length < this.ayar.balon) {
+    if (this.tur !== "harf") {
+      // Sıralı oyun: hecenin harfleri (kelimenin heceleri) ve yanlış parçalar
+      const yanlislar = this.siraliSoruSec();
+      harfler.push(...this.soru.parcalar);
+      for (let i = 0; yanlislar.length && harfler.length < this.ayar.balon - 2; i++) harfler.push(yanlislar[i % yanlislar.length]);
+      this.siraliSoyle();
+    } else {
+      this.turYazisi.setText(`Tur ${this.turNo} / ${this.ayar.tur}`);
+      for (let i = 0; i < this.ayar.dogru; i++) harfler.push(this.harf);
+    }
+    while (this.tur === "harf" && harfler.length < this.ayar.balon) {
       if (this.benzerler.length && Math.random() < this.ayar.benzerOrani) {
         harfler.push(Phaser.Utils.Array.GetRandom(this.benzerler));
       } else {
@@ -82,7 +95,12 @@ class HarfBalonlariSahnesi extends MiniOyunSahnesi {
       this.balonYap(x, y, harf, yerler.length * 70);
     }
     // İlk turda gösteren el: doğru balonlardan biri (bir kez)
-    this.time.delayedCall(yerler.length * 70 + 400, () => this.elGoster(this.balonlar.find((b) => b.balon.dogru)));
+    this.time.delayedCall(yerler.length * 70 + 400, () => this.elGoster(this.siradakiBalon()));
+  }
+
+  siradakiBalon() {
+    const aranan = this.tur === "harf" ? this.harf : this.soru.parcalar[this.sira];
+    return this.balonlar.find((b) => b.balon.harf === aranan && !b.balon.patladi);
   }
 
   balonYap(x, y, harf, gecikme) {
@@ -90,13 +108,13 @@ class HarfBalonlariSahnesi extends MiniOyunSahnesi {
     // Kabın ortası balonun ortası (balon.svg'de resmin ortasından 23 px yukarıda); ip aşağıda
     const resim = this.add.image(0, 23, "balon").setTint(Phaser.Utils.Array.GetRandom(BALON_RENKLERI));
     const yazi = this.add.text(0, 0, harf, {
-      fontFamily: "Andika", fontSize: "44px", color: "#ffffff",
+      fontFamily: "Andika", fontSize: harf.length > 2 ? "28px" : harf.length > 1 ? "34px" : "44px", color: "#ffffff",
       stroke: "#3b2a1a", strokeThickness: 8, padding: { x: 3, y: 3 },
     });
     boyaliOrtala(titret(yazi, 1.2));
     kap.add([resim, yazi]);
     kap.setSize(100, 116).setInteractive({ useHandCursor: true }); // dokunma alanı balondan biraz geniş
-    kap.balon = { harf, dogru: harf === this.harf };
+    kap.balon = { harf, dogru: this.tur === "harf" ? harf === this.harf : this.soru.parcalar.includes(harf) };
     kap.setScale(0);
     this.tweens.add({ targets: kap, scale: 1, duration: 300, delay: gecikme, ease: "Back.Out" });
     // Hafifçe sallanır (3. seviyede ayrıca yavaşça gezinir)
@@ -111,7 +129,16 @@ class HarfBalonlariSahnesi extends MiniOyunSahnesi {
 
   balonaDokun(kap) {
     if (this.bitti || kap.balon.patladi) return;
-    if (kap.balon.dogru) {
+    const durum = this.tur === "harf" ? (kap.balon.dogru ? "sirada" : "yanlis") : this.siraliDurum(kap.balon.harf);
+    if (durum === "sonra") {
+      // Sırası gelmedi: yalnızca sallanır (can gitmez), sıradaki balon gösterilir
+      Sesler.nota(330, 0, 0.1, 0.1, "sine");
+      this.tweens.add({ targets: kap.list, x: { from: -8, to: 8 }, duration: 60, yoyo: true, repeat: 2,
+        onComplete: () => kap.list.forEach((n) => n.setX(0)) });
+      this.ipucuGoster(this.siradakiBalon());
+      return;
+    }
+    if (durum === "sirada") {
       kap.balon.patladi = true;
       Sesler.pat();
       this.add.particles(kap.x, kap.y, "balon-parca", {
@@ -121,6 +148,13 @@ class HarfBalonlariSahnesi extends MiniOyunSahnesi {
       this.tweens.killTweensOf(kap);
       kap.destroy();
       this.balonlar = this.balonlar.filter((b) => b !== kap);
+      if (this.tur !== "harf") {
+        if (this.siraliParcaAl(kap.x, kap.y)) {
+          this.siraliTamam(() => this.yeniTur());
+          this.turuBitir();
+        }
+        return;
+      }
       this.ilerlemeArtir(kap.x, kap.y);
       // Bu turdaki doğru balonlar bitti mi?
       if (!this.bitti && !this.balonlar.some((b) => b.balon.dogru)) this.turuBitir();
@@ -131,7 +165,7 @@ class HarfBalonlariSahnesi extends MiniOyunSahnesi {
         onComplete: () => kap.list.forEach((n) => n.setX(0)) });
       this.kalpEksilt();
       // Nazik ipucu: doğru balonlardan biri hafifçe büyüyüp küçülür
-      this.ipucuGoster(this.balonlar.find((b) => b.balon.dogru && !b.balon.patladi));
+      this.ipucuGoster(this.siradakiBalon());
     }
   }
 
@@ -145,7 +179,7 @@ class HarfBalonlariSahnesi extends MiniOyunSahnesi {
       this.tweens.add({ targets: kap, y: -150, duration: 900, delay: Phaser.Math.Between(0, 200), ease: "Quad.In",
         onComplete: () => kap.destroy() });
     }
-    if (this.turNo < this.ayar.tur) {
+    if (this.tur === "harf" && this.turNo < this.ayar.tur) {
       Sesler.pling();
       this.time.delayedCall(1100, () => this.yeniTur());
     }

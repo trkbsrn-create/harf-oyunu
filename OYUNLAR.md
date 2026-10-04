@@ -42,9 +42,11 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   taşa/harfe dokununca harf okunmaz; yalnızca hece ya da kelime duyulur (öğretmenin kararı). Benzer harfler `BENZER_HARFLER` (yalnızca öğrenilmiş olanlar kullanılır).
   Mini oyun betikleri index.html'de oyun.js'den önce yüklenir.
   Yapılanlar: damla-yakala (Damla Yakalama: düşen harfli damlalardan doğrulara dokun;
-  seviyeyle hız, benzer harf ve hedef sayısı artar); harf-balonlari (Harf Balonları: tur
+  seviyeyle hız, benzer harf ve hedef sayısı artar; Kazma düzeni: 2-3. seviyede parçalı damlalar
+  sırayla, yere düşen ceza değil); harf-balonlari (Harf Balonları: tur
   tur, sallanan balonlardan istenen harfin hepsini patlat; seviyeyle balon/tur sayısı,
-  benzer harf artar, 3. seviyede balonlar gezinir); harfi-yaz (Harfi Yaz: öğretmenin kararıyla
+  benzer harf artar, 3. seviyede balonlar gezinir; Kazma düzeni: 2-3. seviyede parçalı balonlar
+  sırayla); harfi-yaz (Harfi Yaz: öğretmenin kararıyla
   Şekillerle Yazma ve Harfi Çiz birleşti. harfi-yaz/oyun.js tek sahne kurar, init'te düzeye göre
   prototipini SekillerleYazmaSahnesi (sekiller.js, 1. düzey) ya da HarfiCizSahnesi (ciz.js, 2-3.
   düzey) yapar; gösteren el bölüm başına bir kez (`harfiYazEli`: kol, tepsi, çizim).
@@ -88,8 +90,8 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   yanlarda lolipoplar).
   kayak (Kayak: pist yukarı akar, üç şerit; kayakçının sağına/soluna dokunarak ya da
   sürükleyerek şerit değiştir. 1. seviye harf topla (doğru harfli kar topları, yanlış harf ve
-  kaya can götürür); 2-3. seviye hece kapıları (hece söylenir, doğru kapıdan geç; yeni sıra
-  önceki geçilince gelir); öğretmenin isteği: doğru top/kapı art arda aynı şeritte olmaz
+  kaya can götürür); 2-3. seviye kapılar Kazma düzeniyle (hecenin harf kapıları / kelimenin hece
+  kapıları sırayla, `siraliSecenekler`; yeni sıra önceki geçilince gelir); öğretmenin isteği: doğru top/kapı art arda aynı şeritte olmaz
   (`dogruSeritSec`), kayakçı hep hareket eder).
   elektrik-devresi (Elektrik Devresi: söylenen hece ya da kelime için soldan sağa her sütundan bir
   parçaya kablo çekilir (sürükleyerek ya da sırayla dokunarak); doğruysa ampul yanar, yazılır ve
@@ -100,7 +102,7 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   duvardan-gecme (Duvardan Geçme: karakter (cocuk-tirman.svg, arkadan) yolda koşar; ufuktan üç
   kapılı tuğla duvarlar yaklaşır; istenen harfin kapısının şeridine geç (dokun ya da sürükle);
   yanlış kapıya çarpınca can gider; öğretmenin isteği: Kayak gibi 1. seviye harf, 2-3. seviyede
-  kapılarda hece (hece söylenir, hoparlörle tekrar; 2. seviye iki, 3. seviye üç harfli)).
+  kapılarda Kazma düzeni (2. seviye hecenin harf kapıları, 3. seviye kelimenin hece kapıları sırayla)).
   hece-muzigi (Hece Müziği: 1. seviye ksilofon: heceli tuşlar, oyun melodi çalar (tuş parlar,
   hece okunur), çocuk aynı sırayla basar; 2-3. seviye nota akışı: heceli notalar sağdan sola
   akar, istenen heceli notaya kırmızı çizgide dokunulur; notalar beşli (pentatonik) dizide;
@@ -113,8 +115,8 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   taşlarına dokununca sıradaki boş yere geçer; yanlış yerdeki taşlar rafa döner, can gider).
   ordek-vurma (Ördek Vurma: panayır standı; ördekler sıra sıra zıt yönlerde kayar, sırtlarında
   harf; doğru harfli ördeğe dokununca nişangâh çıkar, ördek takla atar; yanlış harf can götürür;
-  kenardan çıkan ördek yeni harfle döner; öğretmenin isteği: 2-3. seviyede ördeklerde hece (2. seviye
-  iki, 3. seviye üç harfli; aranan hece söylenir, her 3 vuruşta değişir, `heceSec`)).
+  kenardan çıkan ördek yeni harfle döner; Kazma düzeni: 2. seviye hecenin harfli ördekleri, 3. seviye
+  kelimenin heceli ördekleri sırayla vurulur; aranan parça değişince `hedefDegisti`).
   kazma (Kazma: toprak ızgarası; dokunulan ya da basılı tutulan yere doğru karakter kare kare
   kazarak ilerler; harfli taşlar (hepsi aynı renk) toplanır, yanlış harf can götürür; kayalar
   kazılmaz; yoldaki taşa yalnızca tam o kare seçildiyse basılır; öğretmenin isteği: 2. seviye harflerle
@@ -150,7 +152,8 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   Ortak sıralı düzen: `siraliKur`, `siraliSoruSec`, `siraliParcaAl` (ortak.js).
   canavari-besle (Canavarı Besle: canavar konuşma balonunda harf ister (ünlü söylenir); masadaki
   harfli meyve canavara doğru sürüklenip bırakılır (1. seviyede dokunmak yeter), kavisle ağzına
-  uçar; doğruysa yer ve büyür, yanlışsa yüzünü buruşturup tükürür, can gider).
+  uçar; doğruysa yer ve büyür, yanlışsa yüzünü buruşturup tükürür, can gider; Kazma düzeni: 2. seviye
+  hece, 3. seviye kelime istenir (balonda hoparlör), parçalı meyveler sırayla; sırası gelmemiş meyve geri döner).
   harf-kesme (Harf Kesme: meyveler aşağıdan havaya fırlar (yerçekimi); parmağın kaydığı çizgiye
   değen meyve kesilir (dokunmak da keser); doğru harf ikiye ayrılır, yanlış harf can götürür,
   kaçan meyve ceza değil; seri kesim: tek kaydırışta 2+ doğru meyve "2'li kesim!" yazısı).

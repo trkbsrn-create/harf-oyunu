@@ -5,6 +5,10 @@
 // doğruysa canavar yer ve biraz büyür; yanlışsa yüzünü buruşturup tükürür, bir can gider.
 // Seviyeler: 1: 5 lokma, hep oyunun harfi, dokunmak yeter; 2: 6 lokma, arada öbür harfler;
 // 3: 8 lokma, benzer harfler.
+// Ortak kural (Kazma düzeni): 2. seviyede canavar hece ister (söylenir, balonda hoparlör); hecenin
+// harfli meyveleri sırayla fırlatılır, üstteki yerlere uçar (4 hece). 3. seviyede kelime ister,
+// heceli meyveler sırayla (3 kelime). Sırası gelmemiş doğru meyve geri döner (can gitmez), başka
+// parça tükürülür, can gider. Bu harfte hece yoksa (a, n) harf.
 
 const CANAVAR_SEVIYELERI = {
   1: { tur: 5, kendiOrani: 1, dokunma: true, benzer: false },
@@ -24,7 +28,9 @@ class CanavariBesleSahnesi extends MiniOyunSahnesi {
     this.ortakKur();
     this.ayar = CANAVAR_SEVIYELERI[this.seviye] || CANAVAR_SEVIYELERI[1];
     this.kalpleriKur(3);
-    this.ilerlemeKur(this.ayar.tur);
+    this.siraliKur();
+    this.ilerlemeKur(this.tur === "harf" ? this.ayar.tur : this.tur === "hece" ? 4 : 3);
+    if (this.tur !== "harf") this.siraliPanelKur();
     this.meyveler = [];
     this.istenen = null;
     this.kilitli = true;
@@ -103,6 +109,7 @@ class CanavariBesleSahnesi extends MiniOyunSahnesi {
     if (this.bitti) return;
     for (const m of this.meyveler) m.destroy();
     this.meyveler = [];
+    if (this.tur !== "harf") { this.siraliIstek(); return; }
     const ogrenilmis = ogrenilmisHarfler(this.harf);
     this.istenen = Math.random() < this.ayar.kendiOrani ? this.harf
       : Phaser.Utils.Array.GetRandom(ogrenilmis.filter((h) => h !== this.harf));
@@ -141,6 +148,37 @@ class CanavariBesleSahnesi extends MiniOyunSahnesi {
     this.time.delayedCall(500, () => this.elSurukleGoster([{ x: dogru.x, y: dogru.y }, { x: (dogru.x + AGIZ.x) / 2, y: 300 }, AGIZ]));
   }
 
+  // Sıralı oyun: canavar hece/kelime ister (balonda hoparlör); masada parçalar ve yanlışlar
+  siraliIstek() {
+    const yanlislar = this.siraliSoruSec();
+    this.canavarCiz("bekle");
+    this.balon.removeAll(true);
+    const b = this.add.graphics();
+    b.fillStyle(0xfffdf6, 1);
+    b.lineStyle(4, 0x2b2b2b, 1);
+    b.fillRoundedRect(-80, -60, 160, 120, 30);
+    b.strokeRoundedRect(-80, -60, 160, 120, 30);
+    b.fillTriangle(40, 50, 90, 100, 70, 46);
+    this.balon.add([b, this.hoparlorCiz(0, 0, 36)]);
+    this.balon.setScale(0);
+    this.tweens.add({ targets: this.balon, scale: 1, duration: 300, ease: "Back.Out" });
+    this.siraliSoyle();
+    const parcalar = [...this.soru.parcalar];
+    for (let i = 0; yanlislar.length && i < 2; i++) parcalar.push(yanlislar[i % yanlislar.length]);
+    const n = parcalar.length;
+    Phaser.Utils.Array.Shuffle(parcalar).forEach((h, i) => {
+      this.meyveler.push(this.meyveYap(n > 4 ? 140 + i * (440 / (n - 1)) : 170 + i * 130, 515, h, i * 80));
+    });
+    this.kilitli = false;
+    const dogru = this.siradakiMeyve();
+    this.time.delayedCall(500, () => this.elSurukleGoster([{ x: dogru.x, y: dogru.y }, { x: (dogru.x + AGIZ.x) / 2, y: 300 }, AGIZ]));
+  }
+
+  siradakiMeyve() {
+    const aranan = this.tur === "harf" ? this.istenen : this.soru.parcalar[this.sira];
+    return this.meyveler.find((m) => m.meyve.harf === aranan);
+  }
+
   meyveYap(x, y, harf, gecikme) {
     const kap = this.add.container(x, y).setDepth(8);
     const g = this.add.graphics();
@@ -151,11 +189,11 @@ class CanavariBesleSahnesi extends MiniOyunSahnesi {
     g.lineStyle(5, 0x6fbf4a, 1);
     g.lineBetween(4, -44, 14, -60);
     const yazi = boyaliOrtala(titret(this.add.text(0, 2, harf, {
-      fontFamily: "Andika", fontSize: "50px", color: "#ffffff",
+      fontFamily: "Andika", fontSize: harf.length > 2 ? "32px" : harf.length > 1 ? "40px" : "50px", color: "#ffffff",
       stroke: "#3b2a1a", strokeThickness: 8, padding: { x: 4, y: 4 },
     }), 1.5));
     kap.add([g, yazi]);
-    kap.meyve = { harf, dogru: harf === this.istenen, evX: x, evY: y };
+    kap.meyve = { harf, dogru: this.tur === "harf" ? harf === this.istenen : this.soru.parcalar.includes(harf), evX: x, evY: y };
     kap.setSize(110, 110).setInteractive({ useHandCursor: true, draggable: true });
     kap.setScale(0);
     this.tweens.add({ targets: kap, scale: 1, duration: 250, delay: gecikme, ease: "Back.Out" });
@@ -193,7 +231,34 @@ class CanavariBesleSahnesi extends MiniOyunSahnesi {
   }
 
   yedi(n) {
-    if (n.meyve.dogru) {
+    const durum = this.tur === "harf" ? (n.meyve.dogru ? "sirada" : "yanlis") : this.siraliDurum(n.meyve.harf);
+    if (durum === "sirada" && this.tur !== "harf") {
+      // Sıradaki parça: canavar yer, parça üstteki yerine uçar
+      n.destroy();
+      this.meyveler = this.meyveler.filter((m) => m !== n);
+      this.canavarCiz("mutlu");
+      this.tweens.add({ targets: this.canavar, scaleX: this.buyukluk * 1.12, scaleY: this.buyukluk * 0.9, duration: 120, yoyo: true,
+        onComplete: () => this.canavar.setScale(this.buyukluk) });
+      if (this.siraliParcaAl(AGIZ.x, AGIZ.y - 60)) {
+        this.buyukluk = Math.min(1.35, this.buyukluk + 0.06);
+        this.siraliTamam(() => this.yeniIstek());
+      } else {
+        this.time.delayedCall(600, () => { if (!this.bitti) { this.canavarCiz("bekle"); this.kilitli = false; } });
+      }
+      return;
+    }
+    if (durum === "sonra") {
+      // Sırası gelmedi: canavar başını sallar, meyve yerine döner (can gitmez)
+      Sesler.nota(330, 0, 0.1, 0.1, "sine");
+      this.tweens.add({ targets: this.canavar, angle: { from: -6, to: 6 }, duration: 80, yoyo: true, repeat: 2, onComplete: () => this.canavar.setAngle(0) });
+      this.tweens.add({ targets: n, x: n.meyve.evX, y: n.meyve.evY, angle: 0, duration: 400, onComplete: () => {
+        n.setDepth(8).setInteractive({ useHandCursor: true, draggable: true });
+        this.kilitli = false;
+        this.ipucuGoster(this.siradakiMeyve());
+      } });
+      return;
+    }
+    if (durum === "sirada") {
       n.destroy();
       this.meyveler = this.meyveler.filter((m) => m !== n);
       this.canavarCiz("mutlu");
@@ -215,9 +280,9 @@ class CanavariBesleSahnesi extends MiniOyunSahnesi {
       this.time.delayedCall(900, () => {
         if (this.bitti) return;
         this.canavarCiz("bekle");
-        harfiSoyle(this.istenen);
+        if (this.tur === "harf") harfiSoyle(this.istenen);
         this.kilitli = false;
-        this.ipucuGoster(this.meyveler.find((m) => m.meyve.dogru));
+        this.ipucuGoster(this.siradakiMeyve());
       });
     }
   }
