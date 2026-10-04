@@ -141,7 +141,7 @@ class HarfFirtinasiSahnesi extends MiniOyunSahnesi {
   }
 
   secKur() {
-    const { hedef, secenekler } = heceSorusu(this.heceler, this.harf, Math.max(2, this.seviye), 2, this.seviye >= 3 ? 0.4 : 0, null);
+    const { hedef, secenekler } = heceSorusu(this.heceler, this.harf, this.seviye, 2, this.seviye >= 3 ? 0.4 : 0, null);
     Sesler.soyle(hedef);
     const hop = this.add.container(640, 250, [this.hoparlorCiz(0, 0, 34)]).setSize(80, 80).setInteractive({ useHandCursor: true });
     hop.on("pointerdown", () => Sesler.soyle(hedef));

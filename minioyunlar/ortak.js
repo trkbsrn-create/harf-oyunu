@@ -82,7 +82,16 @@ function ogrenilmisKelimeler(harf) {
   return harfli.length >= 3 ? harfli : uygun;
 }
 
-// Öğrenilmiş harflerle kurulabilecek bütün heceler: kapalı (ünlü+ünsüz: an) ve açık (ünsüz+ünlü: na)
+// Hecenin harf sayısı seviyeye göre (öğretmenin kararı; bütün hece oyunlarında): 1. seviye iki
+// harfli (an, na), 2. seviye üç harfli (tat, lal), 3. seviye dört harfli. İlk harf grubunda
+// (a n e t i l) dört harfli hece yok; 3. seviyede üç harfli heceler zor seçeneklerle sorulur.
+// Yeni harf grupları gelince (ör. "türk" gibi) 3. seviye dört harfliye geçer.
+function heceUzunlugu(seviye) {
+  return seviye <= 1 ? 2 : 3;
+}
+
+// Öğrenilmiş harflerle kurulabilecek bütün heceler: iki harfli kapalı (ünlü+ünsüz: an) ve açık
+// (ünsüz+ünlü: na), üç harfli (ünsüz+ünlü+ünsüz: tat, lal, net). u: ünlü, s: ilk ünsüz.
 function heceHavuzu(harf) {
   const ogrenilmis = ogrenilmisHarfler(harf).map((h) => HARFLER.find((x) => x.kucuk === h));
   const unluler = ogrenilmis.filter((h) => h.unlu).map((h) => h.kucuk);
@@ -94,35 +103,41 @@ function heceHavuzu(harf) {
       heceler.push({ hece: s + u, u, s, acik: true });
     }
   }
+  for (const u of unluler) {
+    for (const s of unsuzler) {
+      for (const s2 of unsuzler) heceler.push({ hece: s + u + s2, u, s, acik: false });
+    }
+  }
   return heceler;
 }
 
-// Hece sorusu: oyunun harfini içeren bir hece ve seviyeye göre yanlış seçenekler.
-//   1: hiç ortak harfi olmayan kapalı heceler (an / el / it)
-//   2: tek harfi değişen kapalı heceler (an / en / at)
-//   3: ters hece de (an / na); açık hece de sorulabilir (acikOrani)
+// Hece sorusu: oyunun harfini içeren, seviyenin uzunluğunda bir hece ve aynı uzunlukta yanlış
+// seçenekler. 1. seviye (iki harfli): hiç ortak harfi olmayan seçenekler önce; kapalı ve açık
+// hece karışık (acikOrani ile, en az 0.4). 2. seviye (üç harfli): az ortak harfli seçenekler.
+// 3. seviye (üç harfli, zor): tek harfi değişen ve ters heceler (tal / lat / tel).
 // secenekSayisi: doğru dahil kaç seçenek; onceki: üst üste aynı hece sorulmasın.
 function heceSorusu(hepsi, harf, seviye, secenekSayisi, acikOrani, onceki) {
-  const adaylar = hepsi.filter((h) => (h.u === harf || h.s === harf)
-    && (Math.random() < acikOrani ? h.acik : !h.acik) && h.hece !== onceki);
-  const hedef = Phaser.Utils.Array.GetRandom(adaylar.length ? adaylar
-    : hepsi.filter((h) => h.u === harf || h.s === harf));
-  const digerleri = hepsi.filter((h) => h.hece !== hedef.hece);
+  const uzunluk = heceUzunlugu(seviye);
+  const havuz = hepsi.filter((h) => h.hece.length === uzunluk);
+  const acikOran = Math.max(acikOrani || 0, 0.4);
+  const harfli = havuz.filter((h) => h.hece.includes(harf));
+  const adaylar = harfli.filter((h) => h.hece !== onceki
+    && (uzunluk !== 2 || (Math.random() < acikOran ? h.acik : !h.acik)));
+  const hedef = Phaser.Utils.Array.GetRandom(adaylar.length ? adaylar : harfli);
+  const digerleri = havuz.filter((h) => h.hece !== hedef.hece);
   const karistir = (dizi) => Phaser.Utils.Array.Shuffle(dizi.slice());
+  // Ortak harf sayısı (aynı yerde aynı harf) ve ters hece
+  const ortak = (a) => [...a.hece].filter((c, i) => c === hedef.hece[i]).length;
+  const ayniHarfler = (a) => [...a.hece].sort().join("") === [...hedef.hece].sort().join("");
   let oncelikli = [];
   if (seviye <= 1) {
-    oncelikli = karistir(digerleri.filter((h) => !h.acik && h.u !== hedef.u && h.s !== hedef.s));
+    oncelikli = karistir(digerleri.filter((h) => ![...h.hece].some((c) => hedef.hece.includes(c))));
   } else if (seviye === 2) {
-    const kapali = digerleri.filter((h) => !h.acik);
-    oncelikli = [
-      ...karistir(kapali.filter((h) => h.s === hedef.s)),
-      ...karistir(kapali.filter((h) => h.u === hedef.u)),
-    ];
+    oncelikli = karistir(digerleri.filter((h) => ortak(h) <= 1));
   } else {
-    const ters = digerleri.filter((h) => h.u === hedef.u && h.s === hedef.s);
     oncelikli = [
-      ...ters,
-      ...karistir(digerleri.filter((h) => h.acik === hedef.acik && (h.s === hedef.s || h.u === hedef.u))),
+      ...karistir(digerleri.filter((h) => ayniHarfler(h))),
+      ...karistir(digerleri.filter((h) => ortak(h) === uzunluk - 1)),
     ];
   }
   const secenekler = [];

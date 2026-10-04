@@ -5,8 +5,8 @@
 //   1. seviye (basit, "harf topla"): pistte harfli kar topları ve kayalar gelir. Oyunun harfini
 //      taşıyan topları topla; yanlış harf ya da kaya bir can götürür. Kaçırılan top ceza değil.
 //   2-3. seviye (üst düzey, "hece kapıları"): her sırada üç bayrak kapısı gelir, hece söylenir;
-//      kayakçı o hecenin kapısından geçmeli. Yanlış kapı bir can götürür. 3. seviyede ters ve
-//      açık heceler de, pist daha hızlı.
+//      kayakçı o hecenin kapısından geçmeli. Yanlış kapı bir can götürür. 2. seviyede iki harfli,
+//      3. seviyede üç harfli heceler (tat), pist daha hızlı.
 
 const KAYAK_SEVIYELERI = {
   1: { tur: "topla", hedef: 8, hiz: 150, aralik: 1500 },
@@ -164,7 +164,8 @@ class KayakSahnesi extends MiniOyunSahnesi {
   }
 
   kapiSirasiUret() {
-    const { hedef, secenekler } = heceSorusu(this.heceler, this.harf, this.seviye, 3, this.ayar.acikOrani, this.hece);
+    // Hece kapıları 2. seviyede başlar: 2. seviye iki harfli, 3. seviye üç harfli heceler
+    const { hedef, secenekler } = heceSorusu(this.heceler, this.harf, this.seviye - 1, 3, this.ayar.acikOrani, this.hece);
     this.hece = hedef;
     const renkler = Phaser.Utils.Array.Shuffle(KAYAK_RENKLERI.slice());
     const sira = [];

@@ -6,7 +6,8 @@
 //   2-3. seviye "Nota akışı": heceli notalar sağdan sola akar. Üstte istenen hece var (söylenir).
 //      İstenen heceli nota kırmızı çizgiye gelince ona dokun; nota çalar. Başka heceli notalara
 //      dokunmak bir can götürür; kaçırılan nota ceza değildir. 3. seviyede daha hızlı ve
-//      benzer heceler.
+//      benzer heceler. Hece uzunluğu (bütün hece oyunlarında olduğu gibi): 1. seviye iki harfli,
+//      2-3. seviye üç harfli (tat, lal).
 // Ses dosyası yok: notalar tarayıcıda üretilir (Sesler.nota).
 
 const HECE_MUZIGI_SEVIYELERI = {
@@ -58,9 +59,10 @@ class HeceMuzigiSahnesi extends MiniOyunSahnesi {
 
   // ---------- 1. seviye: ksilofon ----------
   ksilofonKur() {
-    // Tuş heceleri: oyunun harfini içeren farklı kapalı heceler
-    const uygun = Phaser.Utils.Array.Shuffle(this.heceler.filter((h) => !h.acik && (h.u === this.harf || h.s === this.harf)).map((h) => h.hece));
-    const obur = Phaser.Utils.Array.Shuffle(this.heceler.filter((h) => !h.acik).map((h) => h.hece));
+    // Tuş heceleri: oyunun harfini içeren farklı iki harfli kapalı heceler (1. seviye iki harfli)
+    const ikili = this.heceler.filter((h) => h.hece.length === heceUzunlugu(this.seviye) && !h.acik);
+    const uygun = Phaser.Utils.Array.Shuffle(ikili.filter((h) => h.hece.includes(this.harf)).map((h) => h.hece));
+    const obur = Phaser.Utils.Array.Shuffle(ikili.map((h) => h.hece));
     const heceler = [];
     for (const h of [...uygun, ...obur]) if (!heceler.includes(h) && heceler.length < this.ayar.tus) heceler.push(h);
     this.tuslar = heceler.map((hece, i) => {

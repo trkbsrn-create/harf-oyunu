@@ -5,7 +5,8 @@
 //    blok düşer; kulenin üstüne oturursa kule büyür. Kuleyi ıskalarsa blok düşer ve aynı hece
 //    yeniden vince gelir (1. seviyede can gitmez, sonra bir can gider).
 // Kelime kurulmaz; her blok ayrı bir hecedir. Kule yükseldikçe aşağı kayar, ekrandan taşmaz.
-// Seviyeler: 1: 5 kat, yavaş sallanma, geniş tolerans; 2: 6 kat; 3: 8 kat, hızlı, açık hece de.
+// Seviyeler: 1: 5 kat, yavaş sallanma, geniş tolerans, iki harfli heceler (an, na); 2: 6 kat, üç
+// harfli heceler (tat); 3: 8 kat, hızlı, üç harfli benzer heceler (bütün hece oyunlarında olduğu gibi).
 
 const KULE_SEVIYELERI = {
   1: { kat: 5, salinim: 1.5, tolerans: 0.85, affet: true, acikOrani: 0 },

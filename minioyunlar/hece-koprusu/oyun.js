@@ -1,20 +1,24 @@
-// Mini oyun: Hece Köprüsü (taşları sırala)
-// Hece yazılmaz, yalnızca sesli söylenir (öğretmenin isteği; hoparlöre dokununca yeniden
-// söylenir). Köprüde iki boş yer var; çocuk derede duran harf taşlarına dokunarak taşları
-// sırayla köprüye koyar. Hece doğru kurulunca hece okunur ve karakter karşıya geçer.
+// Mini oyun: Hece Köprüsü (köprüyü hecelerle kur)
+// Derenin üstünde köprü yok, çocuk karşıya geçemez (öğretmenin isteği). Her turda bir hece
+// sesli söylenir (yazılmaz; hoparlöre dokununca yeniden söylenir). Çocuk derede duran harf
+// taşlarına dokunarak taşları sırayla üstteki boş yerlere koyar. Hece doğru kurulunca hece okunur,
+// taşlar bir köprü tahtasına dönüşüp köprüdeki yerine oturur ve çocuk o tahtaya yürür.
+// Bütün tahtalar yerine oturunca köprü tamamlanır, çocuk karşıya geçer.
 // Yanlış hece kurulursa taşlar geri döner, bir can gider. Yerleşmiş bir taşa dokununca geri döner.
-// 1-2. seviye yalnızca kapalı hece (an); 3. seviyede açık hece de (na) gelir.
+// Seviyeler (bütün hece oyunlarında olduğu gibi): 1. iki harfli heceler (an, na), 2. üç harfli
+// heceler (tat, lal), 3. üç harfli heceler ve benzer harfli yanlış taşlar.
 
 const HECE_KOPRUSU_SEVIYELERI = {
-  1: { tur: 4, tas: 3, acikOrani: 0, benzer: false },
-  2: { tur: 5, tas: 4, acikOrani: 0, benzer: true },
-  3: { tur: 6, tas: 5, acikOrani: 0.5, benzer: true },
+  1: { tur: 4, yanlis: 2, acikOrani: 0.4, benzer: false },
+  2: { tur: 5, yanlis: 2, acikOrani: 0, benzer: false },
+  3: { tur: 6, yanlis: 3, acikOrani: 0, benzer: true },
 };
 
-const KOPRU_YERLERI = [{ x: 565, y: 272 }, { x: 715, y: 272 }];
 const KOPRU_SOL = 250;
 const KOPRU_SAG = 1030;
 const KOPRU_Y = 330;
+const HECE_YERI_Y = 190;
+const TAS_Y = 585;
 
 class HeceKoprusuSahnesi extends MiniOyunSahnesi {
   constructor() {
@@ -32,9 +36,15 @@ class HeceKoprusuSahnesi extends MiniOyunSahnesi {
     this.ayar = HECE_KOPRUSU_SEVIYELERI[this.seviye] || HECE_KOPRUSU_SEVIYELERI[1];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.tur);
+    this.heceler = heceHavuzu(this.harf);
     this.taslar = [];
+    this.yerler = [];
+    this.hece = null;
+    this.tahtaSayisi = 0;
     this.kilitli = true;
+    this.tahtaEn = (KOPRU_SAG - KOPRU_SOL) / this.ayar.tur;
     this.manzaraCiz();
+    this.yerCizimi = this.add.graphics().setDepth(2);
 
     // Üstte hoparlör: dokununca hece yeniden söylenir
     const hoparlor = this.add.container(640, 60, [this.hoparlorCiz(0, 0, 38)]).setDepth(900)
@@ -50,7 +60,8 @@ class HeceKoprusuSahnesi extends MiniOyunSahnesi {
     this.time.delayedCall(400, () => this.harfiTanit(() => this.yeniTur()));
   }
 
-  // Dere, iki kıyı, köprü tahtası ve köprüdeki iki boş yer
+  // Dere ve iki kıyı. Köprü yok: yalnızca iki kıyıda köprü başı direkleri ve tahtaların
+  // oturacağı yerler silik kesik çizgiyle görünür.
   manzaraCiz() {
     const g = this.add.graphics().setDepth(1);
     g.fillStyle(0x9fd8f5, 1);
@@ -69,28 +80,36 @@ class HeceKoprusuSahnesi extends MiniOyunSahnesi {
     g.strokeRect(-10, KOPRU_Y, KOPRU_SOL + 10, 100);
     g.fillRect(KOPRU_SAG, KOPRU_Y, 1290 - KOPRU_SAG, 100);
     g.strokeRect(KOPRU_SAG, KOPRU_Y, 1290 - KOPRU_SAG, 100);
-    // Köprü tahtası ve ayakları
+    // Köprü başı direkleri
     g.fillStyle(0xc99a63, 1);
-    for (const x of [400, 880]) {
-      g.fillRect(x - 10, KOPRU_Y + 18, 20, 90);
-      g.strokeRect(x - 10, KOPRU_Y + 18, 20, 90);
+    for (const x of [KOPRU_SOL - 14, KOPRU_SAG + 14]) {
+      g.fillRect(x - 8, KOPRU_Y - 40, 16, 50);
+      g.strokeRect(x - 8, KOPRU_Y - 40, 16, 50);
     }
-    g.fillRect(KOPRU_SOL, KOPRU_Y, KOPRU_SAG - KOPRU_SOL, 22);
-    g.strokeRect(KOPRU_SOL, KOPRU_Y, KOPRU_SAG - KOPRU_SOL, 22);
-    // Boş yerler (kesikli çerçeve) ve sıra numaraları
-    this.yerCizimi = this.add.graphics().setDepth(2);
-    KOPRU_YERLERI.forEach((yer, i) => {
-      this.add.text(yer.x, KOPRU_Y + 40, String(i + 1), {
-        fontFamily: "Andika", fontSize: "24px", color: "#6b6b6b",
-      }).setOrigin(0.5).setDepth(2);
-    });
-    this.yerleriCiz();
+    // Tahtaların yeri: silik kesik çizgi
+    const s = this.add.graphics().setDepth(1);
+    s.lineStyle(3, 0x2b2b2b, 0.35);
+    for (let i = 0; i < this.ayar.tur; i++) {
+      const x0 = KOPRU_SOL + i * this.tahtaEn + 4;
+      for (let x = x0; x < x0 + this.tahtaEn - 8; x += 16) {
+        s.lineBetween(x, KOPRU_Y, Math.min(x + 8, x0 + this.tahtaEn - 8), KOPRU_Y);
+        s.lineBetween(x, KOPRU_Y + 22, Math.min(x + 8, x0 + this.tahtaEn - 8), KOPRU_Y + 22);
+      }
+    }
+  }
+
+  // Hecenin harf sayısı kadar boş yer (üstte, ortada)
+  yerKonumlari() {
+    const n = this.hece.length;
+    return Array.from({ length: n }, (_, i) => ({ x: 640 + (i - (n - 1) / 2) * 150, y: HECE_YERI_Y }));
   }
 
   yerleriCiz(renk = 0x2b2b2b) {
     const g = this.yerCizimi;
     g.clear();
-    for (const yer of KOPRU_YERLERI) {
+    this.yerKonumlari().forEach((yer) => {
+      g.fillStyle(0xfffdf6, 0.7);
+      g.fillRoundedRect(yer.x - 62, yer.y - 54, 124, 108, 18);
       g.lineStyle(4, renk, 1);
       // Kesikli dikdörtgen
       const [x0, y0, en, boy] = [yer.x - 62, yer.y - 54, 124, 108];
@@ -104,32 +123,20 @@ class HeceKoprusuSahnesi extends MiniOyunSahnesi {
           g.lineBetween(ax + (bx - ax) * t1, ay + (by - ay) * t1, ax + (bx - ax) * t2, ay + (by - ay) * t2);
         }
       }
-    }
-  }
-
-  // Bu oyunda kurulabilecek heceler: kapalı (ünlü + ünsüz) ve açık (ünsüz + ünlü)
-  heceSec() {
-    const ogrenilmis = ogrenilmisHarfler(this.harf);
-    const bilgi = (h) => HARFLER.find((x) => x.kucuk === h);
-    const unlu = bilgi(this.harf).unlu;
-    const esler = ogrenilmis.filter((h) => h !== this.harf && bilgi(h).unlu !== unlu);
-    const es = Phaser.Utils.Array.GetRandom(esler);
-    const [u, s] = unlu ? [this.harf, es] : [es, this.harf];
-    const acik = Math.random() < this.ayar.acikOrani;
-    return acik ? s + u : u + s;
+    });
   }
 
   yeniTur() {
     if (this.bitti) return;
     for (const t of this.taslar) t.destroy();
     this.taslar = [];
-    this.yerler = [null, null];
-    // Aynı hece üst üste gelmesin
-    let hece = this.heceSec();
-    for (let i = 0; i < 5 && hece === this.hece; i++) hece = this.heceSec();
+    // Seviyenin uzunluğunda, oyunun harfini içeren bir hece (aynısı üst üste gelmez)
+    const hece = heceSorusu(this.heceler, this.harf, this.seviye, 1, this.ayar.acikOrani, this.hece).hedef;
     this.hece = hece;
+    this.yerler = new Array(hece.length).fill(null);
+    this.yerleriCiz();
 
-    // Taşlar: hecenin iki harfi ve yanlışlar (zor seviyede benzer harfler önce)
+    // Taşlar: hecenin harfleri ve yanlışlar (zor seviyede benzer harfler önce)
     const ogrenilmis = ogrenilmisHarfler(this.harf).filter((h) => !hece.includes(h));
     let yanlislar = [];
     if (this.ayar.benzer) {
@@ -143,12 +150,12 @@ class HeceKoprusuSahnesi extends MiniOyunSahnesi {
     for (const h of Phaser.Utils.Array.Shuffle(ogrenilmis.slice())) {
       if (!yanlislar.includes(h)) yanlislar.push(h);
     }
-    yanlislar = yanlislar.slice(0, this.ayar.tas - 2);
+    yanlislar = yanlislar.slice(0, this.ayar.yanlis);
     const harfler = Phaser.Utils.Array.Shuffle([...hece, ...yanlislar]);
-    const aralik = 170;
+    const aralik = harfler.length > 5 ? 150 : 170;
     harfler.forEach((h, i) => {
       const x = 640 + (i - (harfler.length - 1) / 2) * aralik;
-      this.taslar.push(this.tasYap(x, 575, h, i * 80));
+      this.taslar.push(this.tasYap(x, TAS_Y, h, i * 80));
     });
 
     this.time.delayedCall(450, () => {
@@ -198,7 +205,7 @@ class HeceKoprusuSahnesi extends MiniOyunSahnesi {
     if (this.bitti || this.kilitli) return;
     const tas = kap.tas;
     if (tas.yer >= 0) {
-      // Köprüdeki taş dereye geri döner
+      // Yerleşmiş taş dereye geri döner
       this.yerler[tas.yer] = null;
       tas.yer = -1;
       Sesler.nota(440, 0, 0.06, 0.1);
@@ -210,7 +217,7 @@ class HeceKoprusuSahnesi extends MiniOyunSahnesi {
     this.yerler[bos] = kap;
     tas.yer = bos;
     Sesler.nota(620, 0, 0.06, 0.1);
-    const yer = KOPRU_YERLERI[bos];
+    const yer = this.yerKonumlari()[bos];
     this.tweens.add({ targets: kap, x: yer.x, y: yer.y, duration: 350, ease: "Back.Out" });
     if (this.yerler.every(Boolean)) {
       this.kilitli = true;
@@ -227,9 +234,8 @@ class HeceKoprusuSahnesi extends MiniOyunSahnesi {
         this.tweens.add({ targets: k, scale: 1.12, duration: 160, yoyo: true });
       }
       Sesler.pling();
-      this.ilerlemeArtir(640, KOPRU_YERLERI[0].y);
       Sesler.soyle(this.hece);
-      this.karsiyaGec(() => this.yeniTur());
+      this.time.delayedCall(600, () => this.tahtaKoy());
     } else {
       for (const k of this.yerler) {
         this.tasCiz(k.cizim, 0xff8a7a);
@@ -243,7 +249,7 @@ class HeceKoprusuSahnesi extends MiniOyunSahnesi {
       }
       this.kalpEksilt();
       this.time.delayedCall(800, () => {
-        this.yerler = [null, null];
+        this.yerler = new Array(this.hece.length).fill(null);
         if (this.bitti) return;
         Sesler.soyle(this.hece, () => {
           this.kilitli = false;
@@ -254,8 +260,55 @@ class HeceKoprusuSahnesi extends MiniOyunSahnesi {
     }
   }
 
-  // Karakter köprüden karşıya yürür, sonra baştaki yerine döner
-  karsiyaGec(bitince) {
+  // Doğru hecenin taşları bir tahtaya dönüşür, tahta köprüdeki sıradaki yere oturur
+  tahtaKoy() {
+    if (this.bitti) return;
+    const no = this.tahtaSayisi++;
+    const x = KOPRU_SOL + (no + 0.5) * this.tahtaEn;
+    const en = this.tahtaEn - 6;
+    const tahta = this.add.container(640, HECE_YERI_Y).setDepth(15).setAlpha(0);
+    const g = this.add.graphics();
+    g.fillStyle(0xc99a63, 1);
+    g.fillRect(-en / 2, 0, en, 22);
+    g.lineStyle(4, 0x2b2b2b, 1);
+    g.strokeRect(-en / 2, 0, en, 22);
+    g.lineStyle(2, 0x8a6a3c, 1);
+    g.lineBetween(-en / 2 + 8, 11, en / 2 - 8, 11);
+    // Tahtanın altında küçük ayak
+    g.fillStyle(0xc99a63, 1);
+    g.fillRect(-7, 22, 14, 70);
+    g.lineStyle(4, 0x2b2b2b, 1);
+    g.strokeRect(-7, 22, 14, 70);
+    const yazi = this.add.text(0, -24, this.hece, {
+      fontFamily: "Andika", fontSize: "30px", color: "#3b2a1a", padding: { x: 2, y: 2 },
+    }).setOrigin(0.5);
+    tahta.add([g, yazi]);
+    // Kullanılmayan taşlar derede kaybolur
+    for (const t of this.taslar) {
+      if (!this.yerler.includes(t)) this.tweens.add({ targets: t, alpha: 0, scale: 0.6, duration: 300 });
+    }
+    // Taşlar küçülüp tahtaya karışır
+    for (const k of this.yerler) {
+      this.tweens.add({ targets: k, scale: 0.2, alpha: 0, x: 640, duration: 300, ease: "Quad.In" });
+    }
+    this.tweens.add({ targets: tahta, alpha: 1, duration: 200, delay: 250 });
+    this.tweens.add({ targets: tahta, x, y: KOPRU_Y, duration: 650, delay: 350, ease: "Back.Out",
+      onComplete: () => {
+        Sesler.nota(330, 0, 0.1, 0.2, "square");
+        this.tweens.add({ targets: yazi, alpha: 0.75, duration: 300 });
+        // Çocuk yeni tahtanın ucuna yürür; köprü bittiyse karşıya geçer, sonra oyun biter
+        if (this.tahtaSayisi >= this.ayar.tur) {
+          this.yuru(1150, () => { this.sevin(); this.ilerlemeArtir(1150, KOPRU_Y - 60); });
+        } else {
+          this.ilerlemeArtir(x, KOPRU_Y);
+          this.yuru(x + this.tahtaEn / 2 - 30, () => this.yeniTur());
+        }
+      } });
+    this.yerCizimi.clear();
+  }
+
+  // Karakter zeminde (köprü ve kıyı aynı yükseklikte) hedefe yürür
+  yuru(hedefX, bitince) {
     const c = this.cocuk;
     let adim = 0;
     const adimSaati = this.time.addEvent({ delay: 160, loop: true, callback: () => {
@@ -263,31 +316,19 @@ class HeceKoprusuSahnesi extends MiniOyunSahnesi {
       c.setTexture(adim % 2 ? "cocuk-adim1" : "cocuk-adim2");
       Sesler.adim(adim % 2 === 1);
     } });
-    // Taşların üstünden basarak geçer: taşlara yaklaşınca zıplayıp çıkar, sonra iner
-    const zemin = KOPRU_Y + 6;
-    const tasUstu = KOPRU_YERLERI[0].y - 48;
-    const ilkX = KOPRU_YERLERI[0].x - 62;
-    const sonX = KOPRU_YERLERI[1].x + 62;
-    const yukseklik = (x) => {
-      if (x < ilkX - 50 || x > sonX + 50) return zemin;
-      if (x >= ilkX + 10 && x <= sonX - 10) return tasUstu;
-      const t = x < ilkX + 10 ? (x - (ilkX - 50)) / 60 : ((sonX + 50) - x) / 60;
-      // Yay çizerek çıkar/iner
-      return zemin + (tasUstu - zemin) * t - Math.sin(Math.PI * t) * 30;
-    };
     this.tweens.add({
-      targets: c, x: 1150, duration: 1800, delay: 300, ease: "Linear",
-      onUpdate: () => c.setY(yukseklik(c.x)),
+      targets: c, x: hedefX, duration: Math.max(400, Math.abs(hedefX - c.x) * 4), ease: "Linear",
       onComplete: () => {
         adimSaati.remove();
         c.setTexture("cocuk");
-        this.tweens.add({ targets: c, alpha: 0, duration: 250, delay: 200, onComplete: () => {
-          c.setX(130);
-          this.tweens.add({ targets: c, alpha: 1, duration: 250 });
-          bitince();
-        } });
+        bitince();
       },
     });
+  }
+
+  // Karşıya geçti: sevinçle zıplar
+  sevin() {
+    this.tweens.add({ targets: this.cocuk, y: KOPRU_Y + 6 - 40, duration: 200, yoyo: true, repeat: 2, ease: "Quad.Out" });
   }
 
   oyunBitti() {

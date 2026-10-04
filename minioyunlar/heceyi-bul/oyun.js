@@ -2,10 +2,10 @@
 // Oyun bir heceyi sesli söyler (hoparlöre dokununca yeniden söylenir). Derede sırtında hece
 // yazılı balıklar yüzer; çocuk söylenen heceli balığa dokunur. Doğru balık sudan zıplar,
 // yanlış balık bir can götürür.
-// Seviyeler (öğretmenin onayladığı öneri):
-//   1: heceler birbirinden çok farklı (an, el, it), 3 balık
-//   2: yalnızca bir harfi değişen heceler (an, en, in, at), 4 balık
-//   3: ters heceler de var (an, na), açık hece de sorulur, 5 balık
+// Seviyeler (bütün hece oyunlarında olduğu gibi):
+//   1: iki harfli heceler (an, na), birbirinden çok farklı, 3 balık
+//   2: üç harfli heceler (tat, lal), 4 balık
+//   3: üç harfli, tek harfi değişen ve ters heceler (tal, lat), 5 balık
 
 const HECEYI_BUL_SEVIYELERI = {
   1: { tur: 5, balik: 3, hiz: 45, acikOrani: 0 },

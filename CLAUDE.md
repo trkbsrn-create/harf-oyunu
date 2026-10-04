@@ -73,13 +73,13 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   + sonunda o harf olan resim (a – kova); harf kartları aynı, herhangi biri herhangi bir resimle
   eşleşir, altında harfin yeri üç küçük kutuyla; oyun başında ne eşleştirileceği söylenir;
   her 2 yanlış eşleştirmede 1 can gider); hece-koprusu (Hece Köprüsü:
-  hece yazılmaz, yalnızca söylenir (hoparlörle tekrar); çocuk dereki harf taşlarına dokunup
-  köprüdeki iki yere sırayla koyar; doğruysa hece okunur, karakter taşlara basarak karşıya
-  geçer; yanlışsa taşlar döner, can gider; 1-2. seviye kapalı hece, 3. seviyede açık hece
-  de); heceyi-bul (Heceyi Bul: hece söylenir, sırtında hece yazılı balıklar (balik.svg,
+  öğretmenin isteği: başta köprü yok, çocuk karşıya geçemez; hece yazılmaz, yalnızca söylenir
+  (hoparlörle tekrar); çocuk dereki harf taşlarına dokunup üstteki boş yerlere (hece kadar) sırayla
+  koyar; doğruysa hece okunur, taşlar köprü tahtasına dönüşüp sıradaki yere oturur, çocuk o
+  tahtaya yürür; bütün tahtalar oturunca köprü tamamlanır, çocuk karşıya geçer; yanlışsa taşlar
+  döner, can gider); heceyi-bul (Heceyi Bul: hece söylenir, sırtında hece yazılı balıklar (balik.svg,
   oyunda boyanır) derede yüzer, doğru heceli balığa dokunulur; yanlış balık bir kez can
-  götürür; seviye 1 çok farklı heceler, 2 tek harfi değişen heceler, 3 ters hece (an/na) ve
-  açık hece); labirent (Labirent: bütün labirent ekranda; her kavşakta heceli kapılar, söylenen
+  götürür); labirent (Labirent: bütün labirent ekranda; her kavşakta heceli kapılar, söylenen
   hecenin kapısına dokununca karakter o yoldan yürür, öbürleri çıkmaz sokak; sonda hazine).
   seker-patlatma (Şeker Patlatma: harfli şeker tahtası; söylenen heceyi okuma yönünde
   (soldan sağa / yukarıdan aşağı) yan yana iki şekeri kaydırarak ya da sırayla dokunarak
@@ -151,6 +151,11 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   Hecelerine ayrılmış ortak kelime listesi `KELIMELER`, `ogrenilmisKelimeler(harf)` (ortak.js;
   yalnızca öğrenilmiş harflerle yazılabilen kelimeler).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).
+  Öğretmenin kuralı (bütün hece oyunlarında): seviyeyle hece uzar: 1. seviye iki harfli (an, na),
+  2. seviye üç harfli (tat, lal, net), 3. seviye dört harfli (`heceUzunlugu`; ilk harf grubunda
+  dört harfli hece yok, 3. seviyede üç harfli heceler zor seçeneklerle: tek harfi değişen, ters).
+  Yanlış seçenekler hep aynı uzunlukta. Kayak'ta hece 2. seviyede başlar (seviye - 1).
+  Birleştir Büyüt ve kelime oyunları (Elektrik Devresi, Scrabble, Yakala ve Yaz) kendi düzeninde.
   Hoparlör çizimi ortak: `hoparlorCiz`. Ortak "Yakala:/Patlat:" paneli
   `hedefPaneliKur`.
   Etiketler: `PLANLANAN_OYUNLAR`'da her oyunun `etiketler`i ("harf", "hece" ya da ikisi; oyunun
