@@ -4,7 +4,10 @@
 // (ya da parmağını sürükler). Duvar gelince doğru kapıdan geçilir; yanlış kapı kapalıdır,
 // karakter çarpıp sekerek geri döner ve bir can gider. Ünlü harf söylenir; ünsüz yalnızca
 // üstteki panelde görünür (öğretmenin kararı).
-// Seviyeler: 1: 6 duvar, çok farklı harfler, yavaş; 2: 8 duvar, benzer harfler; 3: 10 duvar, hızlı.
+// Öğretmenin isteği: hece de var (Kayak gibi). 1. seviye harf; 2-3. seviyede kapılarda hece yazar,
+// hece söylenir (hoparlörle tekrar), istenen hecenin kapısından geçilir (2. seviye iki harfli,
+// 3. seviye üç harfli heceler; heceSorusu'na seviye - 1 verilir).
+// Seviyeler: 1: 6 duvar, çok farklı harfler, yavaş; 2: 8 duvar; 3: 10 duvar, hızlı.
 
 const DUVAR_SEVIYELERI = {
   1: { duvar: 6, sure: 4600, benzer: false },
@@ -31,7 +34,16 @@ class DuvardanGecmeSahnesi extends MiniOyunSahnesi {
     this.ayar = DUVAR_SEVIYELERI[this.seviye] || DUVAR_SEVIYELERI[1];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.duvar);
-    this.hedefPaneliKur("Geç:");
+    this.heceOyunu = this.seviye >= 2; // ünlü tek başına okunmaz, yalnızca hece duyulur
+    this.hedef = this.heceOyunu ? null : this.harf; // geçilecek kapının yazısı
+    if (this.heceOyunu) {
+      this.heceler = heceHavuzu(this.harf);
+      this.hoparlor = this.add.container(640, 60, [this.hoparlorCiz(0, 0, 38)]).setDepth(900)
+        .setSize(96, 96).setInteractive({ useHandCursor: true });
+      this.hoparlor.on("pointerdown", () => { if (this.hedef) Sesler.soyle(this.hedef); });
+    } else {
+      this.hedefPaneliKur("Geç:");
+    }
     this.duvar = null;
     this.serit = 0; // -1, 0, 1
     this.uretilen = 0;
@@ -101,10 +113,18 @@ class DuvardanGecmeSahnesi extends MiniOyunSahnesi {
     return Phaser.Utils.Array.Shuffle([this.harf, ...Phaser.Utils.Array.Shuffle(yanlislar.slice(0, 3)).slice(0, 2)]);
   }
 
+  // Kapı yazıları: harf ya da hece (doğru olan this.hedef)
+  kapiYazilari() {
+    if (!this.heceOyunu) return this.harfleriSec();
+    const { hedef, secenekler } = heceSorusu(this.heceler, this.harf, this.seviye - 1, 3, 0, this.hedef);
+    this.hedef = hedef;
+    return secenekler;
+  }
+
   yeniDuvar() {
     if (this.bitti) return;
     this.uretilen++;
-    const harfler = this.harfleriSec();
+    const harfler = this.kapiYazilari();
     const kap = this.add.container(640, DUVAR_UFUK).setDepth(10);
     const g = this.add.graphics();
     // Tuğla duvar (tam boyutta çizilir, uzaktayken küçültülür)
@@ -130,16 +150,21 @@ class DuvardanGecmeSahnesi extends MiniOyunSahnesi {
       kg.fillStyle(0x2b2b2b, 1);
       kg.fillCircle(x + 60, -40, 9); // tokmak harften uzakta (nokta gibi görünmesin)
       const yazi = boyaliOrtala(titret(this.add.text(x, -130, harf, {
-        fontFamily: "Andika", fontSize: "100px", color: "#ffffff",
+        fontFamily: "Andika", fontSize: harf.length > 2 ? "62px" : harf.length > 1 ? "78px" : "100px", color: "#ffffff",
         stroke: "#3b2a1a", strokeThickness: 14, padding: { x: 6, y: 6 },
       }), 2.2));
       kap.add([kg, yazi]);
-      kapilar.push({ serit: i - 1, harf, cizim: kg, x });
+      kapilar.push({ serit: i - 1, harf, dogru: harf === this.hedef, cizim: kg, x });
     });
     kap.duvar = { k: 0, kapilar, gecti: false };
     this.duvar = kap;
     this.duvarYerlestir();
-    harfiSoyle(this.harf);
+    if (this.heceOyunu) {
+      this.tweens.add({ targets: this.hoparlor, scale: 1.2, duration: 160, yoyo: true });
+      Sesler.soyle(this.hedef);
+    } else {
+      harfiSoyle(this.harf);
+    }
     // İlk duvarda gösteren el doğru kapıyı gösterir
     this.time.delayedCall(900, () => {
       if (this.duvar === kap && !this.bitti) this.elGoster(this.isaret);
@@ -150,7 +175,7 @@ class DuvardanGecmeSahnesi extends MiniOyunSahnesi {
     const kap = this.duvar;
     const { y, olcek } = this.izdusum(kap.duvar.k);
     kap.setPosition(640, y).setScale(olcek);
-    const dogru = kap.duvar.kapilar.find((k) => k.harf === this.harf);
+    const dogru = kap.duvar.kapilar.find((k) => k.dogru);
     this.isaret.setPosition(640 + dogru.x * olcek, y - 120 * olcek);
   }
 
@@ -187,12 +212,13 @@ class DuvardanGecmeSahnesi extends MiniOyunSahnesi {
   duvaraVardi(kap) {
     kap.duvar.gecti = true;
     const kapi = kap.duvar.kapilar.find((k) => k.serit === this.serit);
-    if (kapi.harf === this.harf) {
+    if (kapi.dogru) {
       // Kapı açılır: içi karanlık geçit olur, karakter geçer
       kapi.cizim.clear();
       kapi.cizim.fillStyle(0x3b2a1a, 1);
       kapi.cizim.fillRoundedRect(kapi.x - 85, -215, 170, 215, { tl: 70, tr: 70, bl: 0, br: 0 });
       Sesler.pling();
+      if (this.heceOyunu) this.time.delayedCall(300, () => Sesler.soyle(kapi.harf));
       this.ilerlemeArtir(640 + kapi.x, DUVAR_ALT - 150);
       this.tweens.add({ targets: kap, scale: 1.6, alpha: 0, y: DUVAR_ALT + 200, duration: 450, ease: "Quad.In",
         onComplete: () => { kap.destroy(); this.time.delayedCall(250, () => this.yeniDuvar()); } });
@@ -201,7 +227,7 @@ class DuvardanGecmeSahnesi extends MiniOyunSahnesi {
       Sesler.pat();
       this.tweens.add({ targets: this.kosucu, scale: 0.8, duration: 120, yoyo: true });
       this.kalpEksilt();
-      const dogru = kap.duvar.kapilar.find((k) => k.harf === this.harf);
+      const dogru = kap.duvar.kapilar.find((k) => k.dogru);
       dogru.cizim.lineStyle(10, 0x8fd16a, 1);
       dogru.cizim.strokeRoundedRect(dogru.x - 85, -215, 170, 215, { tl: 70, tr: 70, bl: 0, br: 0 });
       this.time.delayedCall(700, () => {
