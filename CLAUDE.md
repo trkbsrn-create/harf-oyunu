@@ -63,7 +63,7 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   Bul: düzeye göre harfin kelimedeki yeri: 1. başında, 2. sonunda, 3. ortasında olan resmi seç
   (öğretmenin isteği). Oyun başında önce harf gelir (ünlüyse söylenir), sonra üç kutuda harfin
   yeri gösterilir ve söylenir ("Başında a olan resimleri bul!"; ünsüzde "bu harf"), sonra üstteki
-  panele küçülür. Kelimeler `KONUMLU_KELIMELER` (resimden-ses/kelimeler.js; 124 resim,
+  panele küçülür. Kelimeler `KONUMLU_KELIMELER` (resimden-ses/kelimeler.js; 132 resim,
   gorseller/resim-<kelime>.svg, doodle_ciz.py); yanlış resimlerde harf ve onunla karışan ses (i/ı) geçmez; 6 soru, 3/3/4
   kart; kart köşesindeki hoparlör resmin adını okur); hafiza-kartlari (Hafıza Kartları: kartlar kapalı,
   iki kart açılır, eşleşen açık kalır; 1-2. seviye aynı harfi eşleştir, 3. seviye harf ile

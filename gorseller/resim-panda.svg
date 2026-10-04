@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Panda (oturan) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="253" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="beyaz" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="6" height="6" fill="#ffffff"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#e6e6e6" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="114" rx="44" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="38" cy="20" r="12" fill="#2b2b2b"/><circle cx="92" cy="20" r="12" fill="#2b2b2b"/>
+    <path d="M28 112 q-10 -50 37 -52 q47 2 37 52z" fill="url(#beyaz)"/>
+    <path d="M30 70 q-10 10 -8 26 q10 4 16 -6z M100 70 q10 10 8 26 q-10 4 -16 -6z" fill="#2b2b2b"/>
+    <path d="M36 112 q-4 -12 10 -14 q10 2 8 14z M94 112 q4 -12 -10 -14 q-10 2 -8 14z" fill="#2b2b2b"/>
+    <circle cx="65" cy="40" r="30" fill="url(#beyaz)"/>
+    <ellipse cx="53" cy="40" rx="8" ry="10" transform="rotate(20 53 40)" fill="#2b2b2b"/>
+    <ellipse cx="77" cy="40" rx="8" ry="10" transform="rotate(-20 77 40)" fill="#2b2b2b"/>
+    <circle cx="54" cy="40" r="2.5" fill="#ffffff" stroke="none"/><circle cx="76" cy="40" r="2.5" fill="#ffffff" stroke="none"/>
+    <ellipse cx="65" cy="52" rx="5" ry="3.5" fill="#2b2b2b"/>
+    <path d="M65 55 v4 q-4 4 -7 1 M65 59 q4 4 7 1" fill="none" stroke-width="2.5"/>
+  </g>
+</svg>
