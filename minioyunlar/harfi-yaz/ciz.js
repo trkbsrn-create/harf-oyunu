@@ -1,11 +1,11 @@
-// Mini oyun: Harfi Çiz (arıyı götür)
+// Harfi Yaz, 2. ve 3. düzey: Harfi Çiz (arıyı götür). Sahne harfi-yaz/oyun.js'de kurulur.
 // Harfin yazılış yolu ekranda durur. Harfin ipucu resmi (a için arı, n için nar...) yolun
 // başındadır; çocuk onu parmağıyla yazılış yönünde yol boyunca götürür, arkasında sarı iz
 // kalır. Yoldan çok saparsa o çizgi baştan başlar ve bir can gider. Harf 3 kez yazılır.
 // Yazılış yönleri dik temel harfe göre (MEB): örneğin "a" önce sağ üstten başlayan, saat
 // yönünün tersine yuvarlak, sonra sağda yukarıdan aşağı çizgi.
-// Seviye arttıkça yardım azalır: 1) kalın yol, oklar, numaralar 2) ince yol, yalnızca
-// başlangıç noktası 3) yalnızca silik iz.
+// Düzeye göre yardım (öğretmenin seçimi): 2) kalın yol, oklar, numaralar 3) ince yol, yalnızca
+// başlangıç noktası. (Yalnızca silik iz bırakan en zor hâl kaldırıldı.)
 
 // Yol noktaları (ekran koordinatı). Satır çizgileri: üst 330, taban 470, uzun harf 250.
 function cizgiNoktalari(x1, y1, x2, y2) {
@@ -39,17 +39,12 @@ const HARF_YOLLARI = {
 };
 
 const HARFI_CIZ_SEVIYELERI = {
-  1: { yol: 46, oklar: true, numara: true, baslangic: true, tolerans: 44, sapma: 100 },
-  2: { yol: 28, oklar: false, numara: false, baslangic: true, tolerans: 36, sapma: 85 },
-  3: { yol: 8, oklar: false, numara: false, baslangic: false, tolerans: 50, sapma: 100, silik: true },
+  2: { yol: 46, oklar: true, numara: true, baslangic: true, tolerans: 44, sapma: 100 },
+  3: { yol: 28, oklar: false, numara: false, baslangic: true, tolerans: 36, sapma: 85 },
 };
 const HARFI_CIZ_TEKRAR = 3;
 
 class HarfiCizSahnesi extends MiniOyunSahnesi {
-  constructor() {
-    super("harfi-ciz");
-  }
-
   preload() {
     super.preload();
     for (const h of HARFLER) if (h.resim) this.load.svg(h.resim, `gorseller/${h.resim}.svg`);
@@ -57,7 +52,7 @@ class HarfiCizSahnesi extends MiniOyunSahnesi {
 
   create() {
     this.ortakKur();
-    this.ayar = HARFI_CIZ_SEVIYELERI[this.seviye] || HARFI_CIZ_SEVIYELERI[1];
+    this.ayar = HARFI_CIZ_SEVIYELERI[this.seviye] || HARFI_CIZ_SEVIYELERI[2];
     this.kalpleriKur(3);
     this.ilerlemeKur(HARFI_CIZ_TEKRAR);
     this.hedefPaneliKur("Yaz:");
@@ -105,7 +100,7 @@ class HarfiCizSahnesi extends MiniOyunSahnesi {
     const ilk = this.yollar[0];
     if (ilk.length > 4) {
       const adim = Math.max(1, Math.floor(ilk.length / 12));
-      this.elSurukleGoster(ilk.filter((n, i) => i % adim === 0 || i === ilk.length - 1));
+      harfiYazEli(this, "ciz", () => this.elSurukleGoster(ilk.filter((n, i) => i % adim === 0 || i === ilk.length - 1)));
     }
   }
 
@@ -230,4 +225,3 @@ class HarfiCizSahnesi extends MiniOyunSahnesi {
   }
 }
 
-miniOyunKaydet("harfi-ciz", HarfiCizSahnesi);
