@@ -67,8 +67,10 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   panele küçülür. Kelimeler `KONUMLU_KELIMELER` (resimden-ses/kelimeler.js; 132 resim,
   gorseller/resim-<kelime>.svg, doodle_ciz.py); yanlış resimlerde harf ve onunla karışan ses (i/ı) geçmez; 6 soru, 3/3/4
   kart; kart köşesindeki hoparlör resmin adını okur); hafiza-kartlari (Hafıza Kartları: kartlar kapalı,
-  iki kart açılır, eşleşen açık kalır; 1-2. seviye aynı harfi eşleştir, 3. seviye harf ile
-  resmi eşleştir; her 2 yanlış eşleştirmede 1 can gider); hece-koprusu (Hece Köprüsü:
+  iki kart açılır, eşleşen açık kalır; öğretmenin kararı: yalnızca oyunun harfiyle ilgili kartlar,
+  her çift aynı resmin iki kartı, resimler `KONUMLU_KELIMELER`'den; eşleşince kelime okunur;
+  1. seviye 4 çift (harf başında), 2. seviye 5 çift (başında, sonunda), 3. seviye 6 çift (hepsi);
+  her 2 yanlış eşleştirmede 1 can gider); hece-koprusu (Hece Köprüsü:
   hece yazılmaz, yalnızca söylenir (hoparlörle tekrar); çocuk dereki harf taşlarına dokunup
   köprüdeki iki yere sırayla koyar; doğruysa hece okunur, karakter taşlara basarak karşıya
   geçer; yanlışsa taşlar döner, can gider; 1-2. seviye kapalı hece, 3. seviyede açık hece
