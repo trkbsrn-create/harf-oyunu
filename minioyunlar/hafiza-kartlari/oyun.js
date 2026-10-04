@@ -1,15 +1,18 @@
 // Mini oyun: Hafıza Kartları
 // Kartlar kapalı durur; çocuk iki kart açar, eşleşirlerse açık kalır, eşleşmezlerse kapanır.
-// Öğretmenin kararı: yalnızca oyunun harfiyle ilgili kartlar gelir. Her çift aynı resmin iki
-// kartıdır; resimler o harfin kelimelerinden (Resimden Sesi Bul'un KONUMLU_KELIMELER'i) seçilir.
-// Eşleşince kelime okunur. Seviye arttıkça çift çoğalır ve harfin yeri çeşitlenir:
-// 1: 4 çift, harf başında; 2: 5 çift, başında ve sonunda; 3: 6 çift, başında, sonunda, ortasında.
+// Öğretmenin kararı: yalnızca oyunun harfiyle ilgili kartlar gelir; resimler o harfin
+// kelimelerinden (Resimden Sesi Bul'un KONUMLU_KELIMELER'i). Eşleşince kelime okunur.
+// 1. seviye: aynı resmi eşleştir (harfi başında olan kelimeler).
+// 2. seviye: harf kartını başında o harf olan resimle eşleştir (a – arı, a – ayı).
+// 3. seviye: harf kartını sonunda o harf olan resimle eşleştir (a – kova).
+// Harf kartlarının hepsi aynıdır: herhangi bir harf kartı herhangi bir resimle eşleşir. Harf
+// kartının altında harfin yeri üç küçük kutuyla görünür. Oyun başında ne eşleştirileceği söylenir.
 // Her 2 yanlış eşleştirmede 1 can gider (öğretmenin kararı). Bütün çiftler bulununca kazanılır.
 
 const HAFIZA_SEVIYELERI = {
-  1: { cift: 4, konumlar: ["bas"] },
-  2: { cift: 5, konumlar: ["bas", "son"] },
-  3: { cift: 6, konumlar: ["bas", "son", "orta"] },
+  1: { tur: "resim", cift: 4, konum: "bas" },
+  2: { tur: "harf", cift: 5, konum: "bas" },
+  3: { tur: "harf", cift: 5, konum: "son" },
 };
 
 const HAFIZA_KART_EN = 150;
@@ -38,7 +41,7 @@ class HafizaKartlariSahnesi extends MiniOyunSahnesi {
     this.kilitli = true;
     doodleYazi(this, 640, 50, "Eşini bul", 40).setOrigin(0.5).setDepth(900);
 
-    const ciftler = this.resimCiftleri();
+    const ciftler = this.ciftleriSec();
     this.ilerlemeKur(ciftler.length);
     // Her çift iki kart olur; kartlar karışık dizilir
     const kartlar = [];
@@ -59,27 +62,33 @@ class HafizaKartlariSahnesi extends MiniOyunSahnesi {
     this.input.on("gameobjectdown", (p, nesne) => {
       if (nesne.kart) this.kartaDokun(nesne);
     });
-    this.time.delayedCall(400, () => this.harfiTanit(() => {
+    // Ne eşleştirileceği söylenir (ünsüzde cümlede "bu harf")
+    const bilgi = HARFLER.find((h) => h.kucuk === this.harf);
+    const unlu = bilgi && bilgi.unlu;
+    const konum = KONUM_ADLARI[this.ayar.konum].toLocaleLowerCase("tr-TR");
+    this.yonerge = this.ayar.tur === "resim" ? "Aynı resimleri eşleştir!"
+      : `${unlu ? this.harf + " harfini" : "Bu harfi"}, ${konum} ${unlu ? this.harf : "bu harf"} olan resimlerle eşleştir!`;
+    this.time.delayedCall(400, () => this.harfiTanit(() => Sesler.soyle(this.yonerge, () => {
       this.kilitli = false;
       // Gösteren el iki karta sırayla dokunur (bir kez); eşleşeni göstermez
       this.elGoster([this.kartlar[0], this.kartlar[1]]);
-    }));
+    })));
   }
 
-  // Aynı resim çiftleri: oyunun harfinin kelimelerinden, seviyenin konumlarından dengeli seçilir
-  resimCiftleri() {
-    const kelimeler = KONUMLU_KELIMELER[this.harf] || KONUMLU_KELIMELER.a;
-    const havuzlar = this.ayar.konumlar.map((k) => Phaser.Utils.Array.Shuffle(kelimeler[k].slice()));
-    const secilen = [];
-    for (let i = 0; secilen.length < this.ayar.cift && i < 50; i++) {
-      const havuz = havuzlar[i % havuzlar.length];
-      const k = havuz.shift();
-      if (k && !secilen.includes(k)) secilen.push(k);
-    }
+  // Seviyenin kelimelerinden çiftler: aynı resim iki kez ya da harf kartı + resim
+  ciftleriSec() {
+    const kelimeler = (KONUMLU_KELIMELER[this.harf] || KONUMLU_KELIMELER.a)[this.ayar.konum];
+    const secilen = Phaser.Utils.Array.Shuffle(kelimeler.slice()).slice(0, this.ayar.cift);
     return secilen.map((k) => {
-      const kart = { resim: kelimeResmi(k), kelime: k };
-      return [kart, kart];
+      const resim = { resim: kelimeResmi(k), kelime: k };
+      return this.ayar.tur === "resim" ? [resim, resim] : [{ harf: this.harf }, resim];
     });
+  }
+
+  // İki açık kart eşleşiyor mu? Harf turunda bir harf kartı ile bir resim kartı yeter.
+  eslesir(k1, k2) {
+    if (this.ayar.tur === "harf") return !!k1.kart.harf !== !!k2.kart.harf;
+    return k1.kart.cift === k2.kart.cift;
   }
 
   kartYap(x, y, bilgi, gecikme) {
@@ -91,10 +100,22 @@ class HafizaKartlariSahnesi extends MiniOyunSahnesi {
     // Ön yüz: harf ya da resim (kart açılınca görünür)
     let yuz;
     if (bilgi.harf) {
-      yuz = boyaliOrtala(titret(this.add.text(0, 0, bilgi.harf, {
-        fontFamily: "Andika", fontSize: "96px", color: "#ffffff",
-        stroke: "#3b2a1a", strokeThickness: 13, padding: { x: 4, y: 4 },
-      }), 2));
+      yuz = this.add.container(0, 0);
+      yuz.add(boyaliOrtala(titret(this.add.text(0, -18, bilgi.harf, {
+        fontFamily: "Andika", fontSize: "88px", color: "#ffffff",
+        stroke: "#3b2a1a", strokeThickness: 12, padding: { x: 4, y: 4 },
+      }), 2)));
+      // Harfin kelimedeki yeri: üç küçük kutu, harfin kutusu sarı
+      const dolu = { bas: 0, orta: 1, son: 2 }[this.ayar.konum];
+      const kutu = this.add.graphics();
+      for (let i = 0; i < 3; i++) {
+        const x = (i - 1) * 32;
+        kutu.fillStyle(i === dolu ? 0xffe680 : 0xfffdf6, 1);
+        kutu.fillRoundedRect(x - 13, 46, 26, 30, 6);
+        kutu.lineStyle(3, 0x2b2b2b, 1);
+        kutu.strokeRoundedRect(x - 13, 46, 26, 30, 6);
+      }
+      yuz.add(kutu);
     } else {
       yuz = this.add.image(0, 0, bilgi.resim);
       yuz.setScale(Math.min(120 / yuz.width, 130 / yuz.height));
@@ -161,7 +182,7 @@ class HafizaKartlariSahnesi extends MiniOyunSahnesi {
     if (this.acik.length < 2) return;
 
     const [k1, k2] = this.acik;
-    if (k1.kart.cift === k2.kart.cift) {
+    if (this.eslesir(k1, k2)) {
       // Eşleşti
       this.time.delayedCall(450, () => {
         this.acik = [];

@@ -125,7 +125,9 @@ nota, tren, otobüs, patates, ceket de eklendi (Sürüm 104).
 Öğretmenin kararı: seslendirme işi en sona; şimdilik harf, hece, kelime, hepsi tarayıcı sesiyle
 (ses dosyaları kapalı, Sürüm 105). Ünsüzler de okunuyor (yalnızca sesi: "nnn", "lll", "t";
 öğretmen Chrome'da dinleyip söyleyecek).
-Hafıza Kartları: yalnızca oyunun harfinin resimleri (aynı resim çiftleri; 4/5/6 çift; Sürüm 106).
+Hafıza Kartları: yalnızca oyunun harfinin resimleri (aynı resim çiftleri; 4/5/6 çift; Sürüm 106). Öğretmenin düzeltmesi
+(Sürüm 107): 1. seviye aynı resim, 2. seviye harf + başında o harf olan resim, 3. seviye harf +
+sonunda o harf olan resim; oyun başında ne eşleştirileceği söyleniyor.
 Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı
 fikirleri var).
 
