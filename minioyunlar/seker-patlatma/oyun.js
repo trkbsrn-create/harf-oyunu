@@ -39,7 +39,7 @@ class SekerPatlatmaSahnesi extends MiniOyunSahnesi {
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.tur);
     this.heceler = heceHavuzu(this.harf);
-    this.harfler = ogrenilmisHarfler(this.harf);
+    this.harfler = bilinenHarfler(this.harf);
     this.hece = null;
     this.secim = [];
     this.kilitli = true;

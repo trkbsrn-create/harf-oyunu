@@ -168,6 +168,17 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   2. seviye üç harfli (tat, lal, net), 3. seviye dört harfli (`heceUzunlugu`; ilk harf grubunda
   dört harfli hece yok, 3. seviyede üç harfli heceler zor seçeneklerle: tek harfi değişen, ters).
   Yanlış seçenekler hep aynı uzunlukta. Kayak'ta hece 2. seviyede başlar (seviye - 1).
+  Öğretmenin kuralı (bütün hece ve kelime oyunlarında): harfler sırayla öğrenilir (a, n, e, t, i, l);
+  yalnızca o harfe kadar (kendisi dahil) öğrenilmiş harfler kullanılır (`bilinenHarfler`: e'de a n e;
+  heceHavuzu, ogrenilmisKelimeler, hece oyunlarının harf taşları). Yeterli hece/kelime yoksa oyun o
+  harfte iptal: `PLANLANAN_OYUNLAR`'da `gereken: "hece" | "kelime"`, `miniOyunOlur(ad, harf)`
+  (`heceOyunuOlur`: en az 3 iki harfli hece; `kelimeOyunuOlur`: en az 3 kelime) → a ve n'de hece
+  ve kelime oyunları yok; menüde kart soluk "Bu harfte yok", Şans Çarkı'na girmez. Yeniden
+  düzenlemeler: o uzunlukta yeterli hece yoksa iki harfli sorulur (`heceSorusu`; e'de 2-3. seviye);
+  Kayak ve Duvardan Geçme'de hece yoksa 2-3. seviye de harf; Harf Fırtınası'nda "Seç!" görevi
+  çıkmaz; Elektrik Devresi 3. seviyede üç heceli kelime azsa iki heceli kelimeler.
+  Harf oyunlarında yanlış seçenekler için grubun bütün harfleri kullanılmaya devam eder
+  (`ogrenilmisHarfler`; a'da başka harf olmadığı için).
   Birleştir Büyüt ve kelime oyunları (Elektrik Devresi, Scrabble, Yakala ve Yaz) kendi düzeninde.
   Hoparlör çizimi ortak: `hoparlorCiz`. Ortak "Yakala:/Patlat:" paneli
   `hedefPaneliKur`.

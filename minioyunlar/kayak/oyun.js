@@ -32,8 +32,10 @@ class KayakSahnesi extends MiniOyunSahnesi {
 
   create() {
     this.ortakKur();
-    this.heceOyunu = this.seviye >= 2; // ünlü tek başına okunmaz, yalnızca hece duyulur
-    this.ayar = KAYAK_SEVIYELERI[this.seviye] || KAYAK_SEVIYELERI[1];
+    // ünlü tek başına okunmaz, yalnızca hece duyulur. Bu harfte hece yoksa (a, n; bilinen harfler
+    // yetmez) 2-3. seviye de harf toplama olur.
+    this.heceOyunu = this.seviye >= 2 && heceOyunuOlur(this.harf);
+    this.ayar = (this.heceOyunu || this.seviye <= 1) ? (KAYAK_SEVIYELERI[this.seviye] || KAYAK_SEVIYELERI[1]) : KAYAK_SEVIYELERI[1];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.hedef);
     this.nesneler = [];

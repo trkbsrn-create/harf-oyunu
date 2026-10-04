@@ -60,11 +60,15 @@ class HeceMuzigiSahnesi extends MiniOyunSahnesi {
   // ---------- 1. seviye: ksilofon ----------
   ksilofonKur() {
     // Tuş heceleri: oyunun harfini içeren farklı iki harfli kapalı heceler (1. seviye iki harfli)
-    const ikili = this.heceler.filter((h) => h.hece.length === heceUzunlugu(this.seviye) && !h.acik);
-    const uygun = Phaser.Utils.Array.Shuffle(ikili.filter((h) => h.hece.includes(this.harf)).map((h) => h.hece));
-    const obur = Phaser.Utils.Array.Shuffle(ikili.map((h) => h.hece));
+    // (bu harfte kapalı hece az ise açık heceler de katılır)
+    const ikili = this.heceler.filter((h) => h.hece.length === heceUzunlugu(this.seviye));
+    const karisik = (liste) => Phaser.Utils.Array.Shuffle(liste.map((h) => h.hece));
+    const kapali = ikili.filter((h) => !h.acik);
+    const acik = ikili.filter((h) => h.acik);
+    const harfli = (liste) => liste.filter((h) => h.hece.includes(this.harf));
+    const sira = [...karisik(harfli(kapali)), ...karisik(kapali), ...karisik(harfli(acik)), ...karisik(acik)];
     const heceler = [];
-    for (const h of [...uygun, ...obur]) if (!heceler.includes(h) && heceler.length < this.ayar.tus) heceler.push(h);
+    for (const h of sira) if (!heceler.includes(h) && heceler.length < this.ayar.tus) heceler.push(h);
     this.tuslar = heceler.map((hece, i) => {
       const en = 190;
       const boy = 300 - i * 22;

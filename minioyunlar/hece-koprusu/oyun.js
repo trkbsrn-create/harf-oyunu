@@ -137,7 +137,7 @@ class HeceKoprusuSahnesi extends MiniOyunSahnesi {
     this.yerleriCiz();
 
     // Taşlar: hecenin harfleri ve yanlışlar (zor seviyede benzer harfler önce)
-    const ogrenilmis = ogrenilmisHarfler(this.harf).filter((h) => !hece.includes(h));
+    const ogrenilmis = bilinenHarfler(this.harf).filter((h) => !hece.includes(h));
     let yanlislar = [];
     if (this.ayar.benzer) {
       for (const h of hece) {

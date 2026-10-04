@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 120;
+const SURUM = 121;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -1362,7 +1362,8 @@ class AdaSahnesi extends Phaser.Scene {
   // Şans Çarkı ada sahnesinin üstünde açılır; çıkan oyuna gidilir (ada uyur, durumu korunur)
   carkiAc(dugme) {
     this.input.enabled = false;
-    const oyunlar = PLANLANAN_OYUNLAR.filter((o) => MINI_OYUNLAR[o.ad]);
+    // Bu harfte oynanamayan hece/kelime oyunları çarka girmez (a, n'de hece yok)
+    const oyunlar = PLANLANAN_OYUNLAR.filter((o) => MINI_OYUNLAR[o.ad] && miniOyunOlur(o.ad, dugme.harf));
     this.scene.launch("SansCarkiSahnesi", { harf: dugme.harf, oyunlar, bitince: (ad) => {
       const kamera = this.cameras.main;
       kamera.fadeOut(400, 251, 247, 236);

@@ -51,6 +51,7 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
         Sesler.nota(660, 0, 0.08, 0.12);
         this.secilenHarf = h.kucuk;
         this.harfleriCiz();
+        this.sayfayiKur(); // bazı oyunlar bu harfte oynanamaz (miniOyunOlur)
       });
       return { harf: h.kucuk, x, y };
     });
@@ -159,15 +160,19 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
       const x = 640 + ((i % 4) - 1.5) * 270;
       const y = 380 + Math.floor(i / 4) * 190;
       const hazir = Boolean(MINI_OYUNLAR[oyun.ad]);
+      // Öğretmenin kuralı: hece/kelime oyunu bu harfe kadar öğrenilen harflerle kurulamıyorsa
+      // (a ve n'de hece yok) kart soluk, "Bu harfte yok"
+      const olur = !hazir || miniOyunOlur(oyun.ad, this.secilenHarf);
+      const acik = hazir && olur;
       const kart = this.add.container(x, y, [
         this.add.image(0, 0, "oyun-karti"),
-        doodleYazi(this, -3, hazir ? -3 : -18, oyun.baslik, oyun.baslik.length > 15 ? 24 : 28).setOrigin(0.5),
+        doodleYazi(this, -3, acik ? -3 : -18, oyun.baslik, oyun.baslik.length > 15 ? 24 : 28).setOrigin(0.5),
       ]).setSize(232, 152);
       // Etiketler (harf / hece): kartın altında küçük renkli rozetler
       const etiketler = oyun.etiketler || [];
       etiketler.forEach((e, j) => {
         const ex = (j - (etiketler.length - 1) / 2) * 74 - 3;
-        const ey = hazir ? 48 : 58;
+        const ey = acik ? 48 : 58;
         const g = this.add.graphics();
         g.fillStyle(ETIKET_RENKLERI[e] || 0xdddddd, 1);
         g.fillRoundedRect(ex - 33, ey - 14, 66, 28, 14);
@@ -177,9 +182,14 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
           fontFamily: "Andika", fontSize: "20px", color: "#2b2b2b",
         }).setOrigin(0.5)]);
       });
-      if (hazir) {
+      if (hazir && olur) {
         kart.setInteractive({ useHandCursor: true });
         kart.on("pointerdown", () => this.oyunuAc(oyun.ad));
+      } else if (hazir) {
+        kart.add(this.add.text(-3, 24, "Bu harfte yok", {
+          fontFamily: "Andika", fontSize: "22px", color: "#8a7f6a",
+        }).setOrigin(0.5));
+        kart.setAlpha(0.45);
       } else {
         kart.add(this.add.text(-3, 30, "Yakında", {
           fontFamily: "Andika", fontSize: "24px", color: "#9a8f7a",
