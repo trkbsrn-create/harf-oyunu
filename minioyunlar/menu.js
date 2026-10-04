@@ -2,7 +2,8 @@
 // Üstte harf seçici (ilk harf grubu), altında her mini oyunun kartı. Hazır olan oyunun
 // kartına dokununca o oyun seçilen harfle açılır; hazır olmayanlarda "Yakında" yazar.
 // Mini oyunları ayrı ayrı geliştirip denemek için. Öğretmenin isteği: kartlar etikete göre
-// süzülebilir (hepsi / harf / hece; seviye seçicinin sağında).
+// süzülebilir (seviye seçicinin sağında): "harf" yalnızca harf etiketliler, "hece" yalnızca hece
+// etiketliler, ikisi birden seçiliyse yalnızca iki etiketi de olanlar, "hepsi" bütün oyunlar.
 
 const MENU_SAYFA_KART = 8;
 // Etiket rozetlerinin renkleri (harf: kırmızımsı, hece: sarı; Birleştir Büyüt taşlarıyla aynı)
@@ -71,8 +72,8 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
       });
       return { seviye, x, y };
     });
-    // Etiket süzgeci: hepsi / harf / hece
-    if (!this.secilenEtiket) this.secilenEtiket = "hepsi";
+    // Etiket süzgeci: hepsi / harf / hece (harf ve hece birlikte seçilebilir; hiçbiri = hepsi)
+    if (!this.secilenEtiketler) this.secilenEtiketler = [];
     this.etiketDugmeleri = ["hepsi", "harf", "hece"].map((etiket, i) => {
       const x = 900 + i * 100;
       const y = 232;
@@ -81,10 +82,15 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
       }).setOrigin(0.5).setDepth(1);
       const alan = this.add.rectangle(x, y, 96, 64).setInteractive({ useHandCursor: true });
       alan.on("pointerdown", () => {
-        if (this.secilenEtiket === etiket) return;
+        const once = this.secilenEtiketler;
+        if (etiket === "hepsi") {
+          if (!once.length) return;
+          this.secilenEtiketler = [];
+        } else {
+          this.secilenEtiketler = once.includes(etiket) ? once.filter((e) => e !== etiket) : [...once, etiket];
+        }
         Sesler.ac();
         Sesler.nota(660, 0, 0.08, 0.12);
-        this.secilenEtiket = etiket;
         this.harfleriCiz();
         this.sayfa = 0;
         this.sayfayiKur();
@@ -132,10 +138,15 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
     this.sayfayiKur(yon);
   }
 
-  // Seçilen etiketi taşıyan oyunlar
+  // Seçilen etiketlere göre oyunlar
   oyunListesi() {
-    if (this.secilenEtiket === "hepsi") return PLANLANAN_OYUNLAR;
-    return PLANLANAN_OYUNLAR.filter((o) => (o.etiketler || []).includes(this.secilenEtiket));
+    const secili = this.secilenEtiketler;
+    if (!secili.length) return PLANLANAN_OYUNLAR;
+    // Oyunun etiketleri seçilenlerle tam aynı olmalı (harf seçiliyse harf + hece olanlar çıkmaz)
+    return PLANLANAN_OYUNLAR.filter((o) => {
+      const etiketler = o.etiketler || [];
+      return etiketler.length === secili.length && secili.every((e) => etiketler.includes(e));
+    });
   }
 
   sayfayiKur(yon = 0) {
@@ -207,7 +218,7 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
     }
     // Etiket süzgeci: seçili olan kendi renginde ve kalın çizgili, öbürleri beyaz
     for (const d of this.etiketDugmeleri || []) {
-      const secili = d.etiket === this.secilenEtiket;
+      const secili = d.etiket === "hepsi" ? !this.secilenEtiketler.length : this.secilenEtiketler.includes(d.etiket);
       g.fillStyle(secili ? (ETIKET_RENKLERI[d.etiket] || 0xffe680) : 0xffffff, 1);
       g.fillRoundedRect(d.x - 42, d.y - 20, 84, 40, 20);
       g.lineStyle(secili ? 5 : 3, 0x2b2b2b, 1);
