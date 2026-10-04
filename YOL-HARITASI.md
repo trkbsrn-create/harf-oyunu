@@ -47,7 +47,7 @@ Proje sahibi kodlama bilmeyen bir 1. sınıf öğretmeni. Oyun kendi sınıfınd
    - Mini oyun 2: Harf Balonları (yüzen balonlar, tur tur; seviye 1-3: 7/9/11 balon, 3/3/4 tur, benzer harf, 3. seviyede gezinen balonlar): TAMAM.
    - Mini oyun 3: Harfi Çiz (ipucu resmini yazılış yolunda götür; seviyeyle yardım azalır): TAMAM.
    - Mini oyun 4: Resimden Sesi Bul (sesin resmi; 5/6/8 tur, 3/3/4 kart; hoparlörle resim adı): TAMAM. Resimler şimdilik harf başına bir tane; sonra çoğaltılacak.
-   - Öğretmenin kararı: mini oyunlarda ünsüz okunmaz (yalnızca harf görünür); oyun başındaki tanıtım kalır: TAMAM.
+   - Öğretmenin kararı: mini oyunlarda ünsüz okunmaz (yalnızca harf görünür); oyun başındaki tanıtım kalır: TAMAM. (Sürüm 105'te değişti: ünsüzler de yalnızca sesiyle okunuyor.)
    - Mini oyun 5: Hafıza Kartları (1-2. seviye aynı harf, 4/6 çift; 3. seviye harf–resim, 5 çift; 2 yanlışta 1 can): TAMAM.
    - Mini oyun 6: Hece Köprüsü (hece yalnızca sesli; taşları sırayla köprüye koy; 4/5/6 tur, 3/4/5 taş; 3. seviyede açık hece de): TAMAM.
    - Mini oyun 7: Heceyi Bul (hece balıkları; 5/6/7 tur, 3/4/5 balık; seviyeyle heceler birbirine benzer, 3. seviyede ters ve açık hece): TAMAM.
@@ -122,6 +122,9 @@ yanlış seçeneklerde ı de geçmiyor (okuma karışmasın; Sürüm 102). Öğr
 güzel okuyor, şimdilik onunla devam. Büyük ünlü uyumu yüzünden çıkarılan kalem, lale, fare, kale,
 kitap, kiraz, sincap, timsah, ateş çizilip geri eklendi (Sürüm 103). Yabancı kökenli pizza, kanguru, panda,
 nota, tren, otobüs, patates, ceket de eklendi (Sürüm 104).
+Öğretmenin kararı: seslendirme işi en sona; şimdilik harf, hece, kelime, hepsi tarayıcı sesiyle
+(ses dosyaları kapalı, Sürüm 105). Ünsüzler de okunuyor (yalnızca sesi: "nnn", "lll", "t";
+öğretmen Chrome'da dinleyip söyleyecek).
 Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı
 fikirleri var).
 
