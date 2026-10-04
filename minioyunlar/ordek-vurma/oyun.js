@@ -3,6 +3,9 @@
 // harfin ördeklerine dokunur (nişangâh çıkar); vurulan ördek takla atıp devrilir. Yanlış harfli
 // ördek bir can götürür. Kaçan ördek ceza değildir; kenardan çıkan ördek yeni harfle geri gelir.
 // Seviyeler: 1: 2 sıra, yavaş, 8 ördek; 2: 2 sıra, benzer harfler, 10 ördek; 3: 3 sıra, hızlı, 12.
+// Öğretmenin isteği: hece de var. 2-3. seviyede ördeklerin sırtında hece yazar (2. seviye iki harfli,
+// 3. seviye üç harfli; heceSorusu'na seviye - 1). Aranan hece söylenir (üstteki karta dokununca
+// yeniden), her ORDEK_HECE_DEGISIM vuruşta bir başka hece istenir. Bu harfte hece yoksa (a, n) harf.
 
 const ORDEK_SEVIYELERI = {
   1: { hedef: 8, siralar: [330, 520], hiz: 70, benzer: false, dogruOrani: 0.45 },
@@ -11,6 +14,7 @@ const ORDEK_SEVIYELERI = {
 };
 
 const ORDEK_ARALIK = 250;
+const ORDEK_HECE_DEGISIM = 3; // hece oyununda aranan hece kaç vuruşta bir değişir
 
 class OrdekVurmaSahnesi extends MiniOyunSahnesi {
   constructor() {
@@ -22,13 +26,24 @@ class OrdekVurmaSahnesi extends MiniOyunSahnesi {
     this.ayar = ORDEK_SEVIYELERI[this.seviye] || ORDEK_SEVIYELERI[1];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.hedef);
-    this.hedefPaneliKur("Vur:");
+    this.heceOyunu = this.seviye >= 2 && heceOyunuOlur(this.harf); // ünlü tek başına okunmaz
+    this.hedef = this.harf; // vurulacak harf ya da hece
+    this.vurulan = 0;
+    this.hece = null;
+    this.panelYazi = null;
     this.ordekler = [];
     this.uretilen = 0;
     this.basladi = false;
     const ogrenilmis = ogrenilmisHarfler(this.harf).filter((h) => h !== this.harf);
     const benzerler = (BENZER_HARFLER[this.harf] || []).filter((h) => ogrenilmis.includes(h));
     this.yanlislar = this.ayar.benzer && benzerler.length ? [...benzerler, ...benzerler, ...ogrenilmis] : ogrenilmis;
+    if (this.heceOyunu) {
+      this.heceler = heceHavuzu(this.harf);
+      this.hecePaneliKur();
+      this.heceSec();
+    } else {
+      this.hedefPaneliKur("Vur:");
+    }
 
     this.standCiz();
     this.nisangah = this.add.graphics().setDepth(50).setAlpha(0);
@@ -40,6 +55,7 @@ class OrdekVurmaSahnesi extends MiniOyunSahnesi {
     this.input.on("pointerdown", (p) => this.ates(p));
     this.time.delayedCall(400, () => this.harfiTanit(() => {
       if (this.bitti) return;
+      if (this.heceOyunu) Sesler.soyle(this.hedef);
       // Her sırada ördekler eşit aralıkla dizilir; sıralar zıt yönde kayar
       this.ayar.siralar.forEach((y, s) => {
         const yon = s % 2 === 0 ? 1 : -1;
@@ -84,8 +100,53 @@ class OrdekVurmaSahnesi extends MiniOyunSahnesi {
   yeniHarf() {
     this.uretilen++;
     // Kolay başlangıç: ilk ördeklerden ikisi doğru harf
-    if (this.uretilen % 4 === 2 && this.uretilen < 8) return this.harf;
-    return Math.random() < this.ayar.dogruOrani ? this.harf : Phaser.Utils.Array.GetRandom(this.yanlislar);
+    if (this.uretilen % 4 === 2 && this.uretilen < 8) return this.hedef;
+    return Math.random() < this.ayar.dogruOrani ? this.hedef : Phaser.Utils.Array.GetRandom(this.yanlislar);
+  }
+
+  // Hece oyunu: üstte "Vur:" ve aranan hece (dokununca yeniden söylenir)
+  hecePaneliKur() {
+    this.panel = this.add.container(640, 50).setDepth(900);
+    const zemin = this.add.graphics();
+    zemin.fillStyle(0xfffdf6, 1);
+    zemin.fillRoundedRect(-140, -34, 280, 68, 18);
+    zemin.lineStyle(4, 0x2b2b2b, 1);
+    zemin.strokeRoundedRect(-140, -34, 280, 68, 18);
+    this.panel.add([zemin, doodleYazi(this, -70, -2, "Vur:", 32).setOrigin(0.5)]);
+    this.panel.setSize(280, 68).setInteractive({ useHandCursor: true });
+    this.panel.on("pointerdown", () => Sesler.soyle(this.hedef));
+  }
+
+  // Yeni aranan hece: yanlış seçenekler aynı uzunlukta; ekrandaki ördekler yeniden değerlendirilir
+  heceSec() {
+    const { hedef, secenekler } = heceSorusu(this.heceler, this.harf, this.seviye - 1, 4, 0.4, this.hece);
+    this.hece = hedef;
+    this.hedef = hedef;
+    this.yanlislar = secenekler.filter((h) => h !== hedef);
+    const yaz = () => {
+      if (this.panelYazi) this.panelYazi.destroy();
+      this.panelYazi = boyaliOrtala(titret(this.add.text(55, 0, hedef, {
+        fontFamily: "Andika", fontSize: "50px", color: "#ffffff",
+        stroke: "#3b2a1a", strokeThickness: 8, padding: { x: 4, y: 4 },
+      }), 1.5));
+      this.panel.add(this.panelYazi);
+    };
+    if (!this.panelYazi) yaz();
+    else {
+      this.tweens.add({ targets: this.panel, scaleX: 0, duration: 150, onComplete: () => {
+        yaz();
+        this.tweens.add({ targets: this.panel, scaleX: 1, duration: 200, ease: "Back.Out" });
+        Sesler.nota(784, 0, 0.12, 0.12, "sine");
+        Sesler.soyle(hedef);
+      } });
+    }
+    for (const o of this.ordekler) {
+      if (o.ordek.vuruldu) continue;
+      // Ekrandaki ördeklerin bir kısmı yeni heceyi alır, öbürleri yanlış hecelerden birini
+      const kenarda = o.x < 0 || o.x > 1280;
+      if (kenarda || Math.random() < 0.5) this.harfVer(o);
+      else o.ordek.dogru = o.ordek.harf === this.hedef;
+    }
   }
 
   ordekYap(x, y, yon) {
@@ -120,12 +181,12 @@ class OrdekVurmaSahnesi extends MiniOyunSahnesi {
     if (kap.yazi) kap.yazi.destroy();
     const harf = this.yeniHarf();
     kap.yazi = boyaliOrtala(titret(this.add.text(-kap.ordek.yon * 10, -10, harf, {
-      fontFamily: "Andika", fontSize: "50px", color: "#ffffff",
+      fontFamily: "Andika", fontSize: harf.length > 2 ? "38px" : harf.length > 1 ? "44px" : "50px", color: "#ffffff",
       stroke: "#3b2a1a", strokeThickness: 8, padding: { x: 4, y: 4 },
     }), 1.4));
     kap.add(kap.yazi);
     kap.ordek.harf = harf;
-    kap.ordek.dogru = harf === this.harf;
+    kap.ordek.dogru = harf === this.hedef;
     kap.ordek.vuruldu = false;
     kap.setAngle(0).setAlpha(1).setScale(1).setY(kap.ordek.y);
     kap.list[0].setAlpha(1);
@@ -158,8 +219,13 @@ class OrdekVurmaSahnesi extends MiniOyunSahnesi {
     o.ordek.vuruldu = true;
     if (o.ordek.dogru) {
       Sesler.pat();
-      harfiSoyle(this.harf);
+      if (this.heceOyunu) Sesler.soyle(this.hedef);
+      else harfiSoyle(this.harf);
       this.ilerlemeArtir(o.x, o.y);
+      this.vurulan++;
+      if (this.heceOyunu && this.vurulan % ORDEK_HECE_DEGISIM === 0 && this.ilerleme < this.ilerlemeHedef) {
+        this.time.delayedCall(700, () => { if (!this.bitti) this.heceSec(); });
+      }
       // Takla atıp suya devrilir; kenara ulaşınca yeni harfle döner
       this.tweens.add({ targets: o, angle: o.ordek.yon * 360, y: o.ordek.y + 40, duration: 450, ease: "Quad.In",
         onComplete: () => this.tweens.add({ targets: o, alpha: 0, duration: 200 }) });

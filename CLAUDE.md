@@ -119,10 +119,14 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   taşlarına dokununca sıradaki boş yere geçer; yanlış yerdeki taşlar rafa döner, can gider).
   ordek-vurma (Ördek Vurma: panayır standı; ördekler sıra sıra zıt yönlerde kayar, sırtlarında
   harf; doğru harfli ördeğe dokununca nişangâh çıkar, ördek takla atar; yanlış harf can götürür;
-  kenardan çıkan ördek yeni harfle döner).
+  kenardan çıkan ördek yeni harfle döner; öğretmenin isteği: 2-3. seviyede ördeklerde hece (2. seviye
+  iki, 3. seviye üç harfli; aranan hece söylenir, her 3 vuruşta değişir, `heceSec`)).
   kazma (Kazma: toprak ızgarası; dokunulan ya da basılı tutulan yere doğru karakter kare kare
   kazarak ilerler; harfli taşlar (hepsi aynı renk) toplanır, yanlış harf can götürür; kayalar
-  kazılmaz; yoldaki taşa yalnızca tam o kare seçildiyse basılır).
+  kazılmaz; yoldaki taşa yalnızca tam o kare seçildiyse basılır; öğretmenin isteği: 2. seviye harflerle
+  hece yaz (hece söylenir, harfleri sırayla kazılıp üstteki yerlere uçar), 3. seviye hecelerle kelime
+  yaz (kelimenin heceleri sırayla; `yeniSoru`, `siraliBak`); sırası gelmemiş doğru parça yalnızca
+  sallanır, başka parça can götürür; a/n'de harf toplama).
   altin-madencisi (Altın Madencisi: kanca sağa sola sallanır, dokununca iner ve ilk külçeyi çeker;
   bütün külçeler aynı görünür; istenen harf altın (ilerleme), başka harf taşa döner ve yavaş
   çekilir; can yok, kaybetmek yok).
