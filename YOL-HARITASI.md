@@ -119,7 +119,8 @@ adıyla birleşti: 1. düzey şekillerle (şeker makinesinden 4 malzeme), 2-3. d
 2. düzey sonunda, 3. düzey ortasında; 114 kelime resmi çizildi; oyun başında harf ve yeri
 gösterilip söylenir (Sürüm 101): TAMAM. Yeni kelimelerin seslendirmesi sonra (şimdilik tarayıcı sesi). Kartal yeniden çizildi, elma eklendi, i sorulurken
 yanlış seçeneklerde ı de geçmiyor (okuma karışmasın; Sürüm 102). Öğretmen: tarayıcı kelimeleri
-güzel okuyor, şimdilik onunla devam.
+güzel okuyor, şimdilik onunla devam. Büyük ünlü uyumu yüzünden çıkarılan kalem, lale, fare, kale,
+kitap, kiraz, sincap, timsah, ateş çizilip geri eklendi (Sürüm 103).
 Sonraya kalanlar: kayıt ve profiller (şimdilik gerek yok), süre ayarı (öğretmenin farklı
 fikirleri var).
 

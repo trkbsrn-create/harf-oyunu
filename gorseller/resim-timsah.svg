@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Timsah (yandan, uzun ağızlı, dişli) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="248" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="timsah" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#9cc98a"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#4f8a3c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="108" rx="58" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M96 70 q22 0 30 14 q-16 4 -30 0z" fill="url(#timsah)"/>
+    <path d="M40 66 q30 -16 60 -4 q6 10 0 20 q-30 10 -60 2z" fill="url(#timsah)"/>
+    <path d="M44 66 q-20 -8 -40 -4 q-2 8 2 10 h38z" fill="url(#timsah)"/>
+    <path d="M44 74 q-20 6 -40 2 q0 -4 2 -4 h38z" fill="url(#timsah)"/>
+    <path d="M8 72 l4 -5 l4 5 l4 -5 l4 5 l4 -5 l4 5 l4 -5 l4 5 M10 72 l4 4 l4 -4 l4 4 l4 -4 l4 4 l4 -4" fill="#ffffff" stroke-width="2"/>
+    <circle cx="44" cy="56" r="7" fill="#ffffff" stroke-width="2.5"/><circle cx="45" cy="56" r="3" fill="#2b2b2b"/>
+    <path d="M56 62 q4 -4 8 0 M68 60 q4 -4 8 0 M80 60 q4 -4 8 0" fill="none" stroke-width="2.5"/>
+    <path d="M52 84 v14 h-6 M68 86 v14 h-6 M86 86 v14 h-6" fill="none" stroke-width="5"/>
+  </g>
+</svg>

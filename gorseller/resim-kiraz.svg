@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Kiraz (bir çift) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="246" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kirmizi" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#ff9c8a"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#e0533d" stroke-width="3.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="yesil" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9eba7"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#8fd16a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="114" rx="46" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 76 q10 -40 34 -66 M94 80 q-10 -40 -20 -70" fill="none" stroke="#6fbf4a" stroke-width="4"/>
+    <path d="M74 10 q22 -10 34 6 q-20 10 -34 -6z" fill="url(#yesil)"/>
+    <circle cx="40" cy="86" r="22" fill="url(#kirmizi)"/>
+    <circle cx="94" cy="88" r="22" fill="url(#kirmizi)"/>
+    <path d="M30 78 q4 -6 10 -6 M84 80 q4 -6 10 -6" fill="none" stroke="#ffffff" stroke-width="4"/>
+  </g>
+</svg>

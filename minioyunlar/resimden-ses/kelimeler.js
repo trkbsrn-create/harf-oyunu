@@ -5,34 +5,39 @@
 // Resim: harfin kendi ipucu resmi (harfler.js) ya da gorseller/resim-<kelime>.svg (doodle_ciz.py).
 const KONUMLU_KELIMELER = {
   a: {
-    bas: ["arı", "ayı", "at", "armut", "ay", "ağaç", "ayak", "ayakkabı", "araba", "altın", "ayna", "aslan"],
+    bas: ["arı", "ayı", "at", "armut", "ay", "ağaç", "ayak", "ayakkabı", "araba", "altın", "ayna",
+      "aslan", "ateş"],
     son: ["elma", "kova", "fırça", "çorba", "masa", "çanta", "kumbara", "kurbağa"],
-    orta: ["kapı", "balık", "tavuk", "kaşık", "havuç", "yaprak", "bardak"],
+    orta: ["kapı", "balık", "tavuk", "kaşık", "havuç", "yaprak", "bardak", "kalem", "lale", "fare",
+      "kale", "kitap", "kiraz", "sincap", "timsah"],
   },
   n: {
     bas: ["nar", "nal", "nohut", "nane", "nine", "nergis", "nehir"],
     son: ["aslan", "koyun", "yorgan", "kazan", "fincan", "zeytin", "balon"],
-    orta: ["çanta", "dondurma", "tencere", "anahtar", "yengeç", "fındık", "fener"],
+    orta: ["çanta", "dondurma", "tencere", "anahtar", "yengeç", "fındık", "fener", "sincap"],
   },
   e: {
     bas: ["eşek", "elma", "ev", "el", "erik", "ekmek", "etek", "eldiven", "elbise"],
-    son: ["deve", "küpe", "tencere", "kepçe", "iğne", "bilye", "şemsiye"],
-    orta: ["kedi", "gemi", "ördek", "sepet", "ceviz", "bebek", "çiçek", "kemik"],
+    son: ["deve", "küpe", "tencere", "kepçe", "iğne", "bilye", "şemsiye", "lale", "fare", "kale"],
+    orta: ["kedi", "gemi", "ördek", "sepet", "ceviz", "bebek", "çiçek", "kemik", "kalem", "ateş"],
   },
   t: {
-    bas: ["tilki", "top", "tavşan", "tabak", "tavuk", "tarak", "tencere", "terlik", "testere"],
+    bas: ["tilki", "top", "tavşan", "tabak", "tavuk", "tarak", "tencere", "terlik", "testere",
+      "timsah"],
     son: ["at", "süt", "bulut", "armut", "sepet", "kilit", "kibrit"],
-    orta: ["çatal", "kutu", "etek", "fıstık", "yatak", "kartal"],
+    orta: ["çatal", "kutu", "etek", "fıstık", "yatak", "kartal", "kitap", "ateş"],
   },
   i: {
     bas: ["inek", "ip", "iğne", "incir", "inci", "iplik", "iki", "iguana"],
     son: ["kedi", "gemi", "kirpi", "keçi", "tilki", "hindi"],
-    orta: ["fil", "diş", "zil", "biber", "civciv", "çiçek", "pil", "kilit", "kibrit"],
+    orta: ["fil", "diş", "zil", "biber", "civciv", "çiçek", "pil", "kilit", "kibrit", "kitap",
+      "kiraz", "sincap", "timsah"],
   },
   l: {
-    bas: ["leylek", "lamba", "lahana", "lokum", "leğen", "lama", "limon", "lahmacun"],
+    bas: ["leylek", "lamba", "lahana", "lokum", "leğen", "lama", "limon", "lahmacun", "lale"],
     son: ["fil", "bal", "gül", "kartal", "çatal", "zil", "nal"],
-    orta: ["elma", "balık", "kelebek", "bulut", "kulak", "halı", "silgi", "bilezik"],
+    orta: ["elma", "balık", "kelebek", "bulut", "kulak", "halı", "silgi", "bilezik", "kalem",
+      "kale"],
   },
 };
 
