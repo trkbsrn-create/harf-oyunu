@@ -142,6 +142,9 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Altın Madencisi'nde doğru külçenin önünde yanlış külçe olunca ona ulaşılamıyordu; köşedeki külçeler
   kancanın açısı dışındaydı. Nesneler rastgele yerleşirken doğru olana ulaşılabildiğini ölç.
 
+- Chrome'un internet sesi (Google Türkçe) bazen hiç başlamıyor, bütün sözler susuyordu (Brave'de
+  sorun yoktu). Söz 1,5 saniyede başlamazsa cihazın kendi sesine geçilir (`uzakSesBozuk`).
+
 ## Bekleyen işler
 - TTKB Dik Temel Abece yazı tipi: yazardan izin bekleniyor; izin gelirse dosya depoya eklenir.
 - Seslendirme en sona: öğretmenin kendi kayıtları / yapay zekâ sesleri (`Sesler.dosyaSesleri`).
