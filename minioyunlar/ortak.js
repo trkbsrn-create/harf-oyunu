@@ -16,31 +16,31 @@ const PLANLANAN_OYUNLAR = [
   { ad: "harfi-yaz", baslik: "Harfi Yaz", etiketler: ["harf"] }, // 1. düzey şekillerle, 2-3. düzey çizerek
   { ad: "resimden-ses", baslik: "Resimden Sesi Bul", etiketler: ["harf"] },
   { ad: "hafiza-kartlari", baslik: "Hafıza Kartları", etiketler: ["harf"] },
-  { ad: "hece-koprusu", baslik: "Hece Köprüsü", etiketler: ["hece"] },
-  { ad: "heceyi-bul", baslik: "Heceyi Bul", etiketler: ["hece"] },
+  { ad: "hece-koprusu", baslik: "Hece Köprüsü", etiketler: ["hece"], gereken: "hece" },
+  { ad: "heceyi-bul", baslik: "Heceyi Bul", etiketler: ["hece"], gereken: "hece" },
   // Öğretmenin fikirleri (sırayla yapılacak)
-  { ad: "labirent", baslik: "Labirent", etiketler: ["hece"] },
-  { ad: "seker-patlatma", baslik: "Şeker Patlatma", etiketler: ["hece"] },
+  { ad: "labirent", baslik: "Labirent", etiketler: ["hece"], gereken: "hece" },
+  { ad: "seker-patlatma", baslik: "Şeker Patlatma", etiketler: ["hece"], gereken: "hece" },
   { ad: "kayak", baslik: "Kayak", etiketler: ["harf", "hece"] },
-  { ad: "elektrik-devresi", baslik: "Elektrik Devresi", etiketler: ["hece"] },
+  { ad: "elektrik-devresi", baslik: "Elektrik Devresi", etiketler: ["hece"], gereken: "kelime" },
   { ad: "duvardan-gecme", baslik: "Duvardan Geçme", etiketler: ["harf", "hece"] },
-  { ad: "hece-muzigi", baslik: "Hece Müziği", etiketler: ["hece"] },
-  { ad: "scrabble", baslik: "Scrabble", etiketler: ["hece"] },
+  { ad: "hece-muzigi", baslik: "Hece Müziği", etiketler: ["hece"], gereken: "hece" },
+  { ad: "scrabble", baslik: "Scrabble", etiketler: ["hece"], gereken: "kelime" },
   { ad: "ordek-vurma", baslik: "Ördek Vurma", etiketler: ["harf", "hece"] },
   { ad: "kazma", baslik: "Kazma", etiketler: ["harf", "hece"] },
   { ad: "altin-madencisi", baslik: "Altın Madencisi", etiketler: ["harf", "hece"] },
   { ad: "kazi-kazan", baslik: "Kazı Kazan", etiketler: ["harf"] },
   { ad: "tombala", baslik: "Tombala", etiketler: ["harf", "hece"] },
   { ad: "arabayi-ulastir", baslik: "Arabayı Ulaştır", etiketler: ["harf", "hece"] },
-  { ad: "yakala-yaz", baslik: "Yakala ve Yaz", etiketler: ["hece"] },
+  { ad: "yakala-yaz", baslik: "Yakala ve Yaz", etiketler: ["hece"], gereken: "kelime" },
   { ad: "kirik-cam", baslik: "Kırık Cam", etiketler: ["harf"] },
   { ad: "bombayi-kurtar", baslik: "Bombayı Kurtar", etiketler: ["harf", "hece"] },
-  { ad: "yilan", baslik: "Yılan", etiketler: ["harf", "hece"] },
+  { ad: "yilan", baslik: "Yılan", etiketler: ["harf", "hece"], gereken: "hece" },
   // Araştırmadan gelen yeni fikirler (taslak)
   { ad: "canavari-besle", baslik: "Canavarı Besle", etiketler: ["harf", "hece"] },
   { ad: "harf-kesme", baslik: "Harf Kesme", etiketler: ["harf"] },
-  { ad: "hece-kulesi", baslik: "Hece Kulesi", etiketler: ["hece"] },
-  { ad: "birlestir-buyut", baslik: "Birleştir Büyüt", etiketler: ["harf", "hece"] },
+  { ad: "hece-kulesi", baslik: "Hece Kulesi", etiketler: ["hece"], gereken: "hece" },
+  { ad: "birlestir-buyut", baslik: "Birleştir Büyüt", etiketler: ["harf", "hece"], gereken: "hece" },
   { ad: "harfle-boya", baslik: "Harfle Boya", etiketler: ["harf"] },
   { ad: "harf-firtinasi", baslik: "Harf Fırtınası", etiketler: ["harf", "hece"] },
 ];
@@ -65,6 +65,33 @@ function ogrenilmisHarfler(harf) {
   return HARFLER.filter((h) => h.grup <= grup).map((h) => h.kucuk);
 }
 
+// Öğretmenin kuralı: harfler sırayla öğrenilir (a, n, e, t, i, l, ...). Hece ve kelime oyunlarında
+// yalnızca bu harfe kadar (kendisi dahil) öğretilmiş harfler kullanılır: e'de a, n, e var; t, l yok.
+// (Harf oyunlarında yanlış seçenekler için ogrenilmisHarfler kullanılmaya devam eder.)
+function bilinenHarfler(harf) {
+  const sira = HARFLER.findIndex((h) => h.kucuk === harf);
+  return HARFLER.slice(0, sira + 1).map((h) => h.kucuk);
+}
+
+// Hece oyunu bu harfte oynanabilir mi: en az üç iki harfli hece gerekir (a'da hiç hece yok,
+// n'de yalnızca an, na var; e'den başlar)
+function heceOyunuOlur(harf) {
+  return heceHavuzu(harf).filter((h) => h.hece.length === 2).length >= 3;
+}
+
+// Kelime oyunu bu harfte oynanabilir mi: bilinen harflerle yazılan en az üç kelime (e'den başlar)
+function kelimeOyunuOlur(harf) {
+  return ogrenilmisKelimeler(harf).length >= 3;
+}
+
+// Mini oyun bu harfte oynanabilir mi (PLANLANAN_OYUNLAR'daki gereken: "hece" / "kelime").
+// Oynanamayanlar menüde "Bu harfte yok" olur, Şans Çarkı'na girmez.
+function miniOyunOlur(ad, harf) {
+  const oyun = PLANLANAN_OYUNLAR.find((o) => o.ad === ad);
+  if (!oyun || !oyun.gereken) return true;
+  return oyun.gereken === "hece" ? heceOyunuOlur(harf) : kelimeOyunuOlur(harf);
+}
+
 // Hecelerine ayrılmış kelimeler (yalnızca ilk harf grubunun harfleriyle yazılabilenler; yeni
 // harf grupları gelince liste büyüyecek). Elektrik Devresi, Scrabble gibi oyunlar kullanır.
 const KELIMELER = [
@@ -82,9 +109,9 @@ const COK_HECELI_KELIMELER = [
   ["anteni", "an", "te", "ni"], ["atletli", "at", "let", "li"],
 ].map(([kelime, ...heceler]) => ({ kelime, heceler }));
 
-// Öğrenilmiş harflerle yazılabilen kelimeler; oyunun harfini içerenler önce
+// Bilinen harflerle (bkz. bilinenHarfler) yazılabilen kelimeler; oyunun harfini içerenler önce
 function ogrenilmisKelimeler(harf) {
-  const ogrenilmis = ogrenilmisHarfler(harf);
+  const ogrenilmis = bilinenHarfler(harf);
   const uygun = KELIMELER.filter((k) => [...k.kelime].every((h) => ogrenilmis.includes(h)));
   const harfli = uygun.filter((k) => k.kelime.includes(harf));
   return harfli.length >= 3 ? harfli : uygun;
@@ -98,10 +125,11 @@ function heceUzunlugu(seviye) {
   return seviye <= 1 ? 2 : 3;
 }
 
-// Öğrenilmiş harflerle kurulabilecek bütün heceler: iki harfli kapalı (ünlü+ünsüz: an) ve açık
-// (ünsüz+ünlü: na), üç harfli (ünsüz+ünlü+ünsüz: tat, lal, net). u: ünlü, s: ilk ünsüz.
+// Bilinen harflerle (bkz. bilinenHarfler) kurulabilecek bütün heceler: iki harfli kapalı
+// (ünlü+ünsüz: an) ve açık (ünsüz+ünlü: na), üç harfli (ünsüz+ünlü+ünsüz: tat, lal, net).
+// u: ünlü, s: ilk ünsüz.
 function heceHavuzu(harf) {
-  const ogrenilmis = ogrenilmisHarfler(harf).map((h) => HARFLER.find((x) => x.kucuk === h));
+  const ogrenilmis = bilinenHarfler(harf).map((h) => HARFLER.find((x) => x.kucuk === h));
   const unluler = ogrenilmis.filter((h) => h.unlu).map((h) => h.kucuk);
   const unsuzler = ogrenilmis.filter((h) => !h.unlu).map((h) => h.kucuk);
   const heceler = [];
@@ -125,7 +153,10 @@ function heceHavuzu(harf) {
 // 3. seviye (üç harfli, zor): tek harfi değişen ve ters heceler (tal / lat / tel).
 // secenekSayisi: doğru dahil kaç seçenek; onceki: üst üste aynı hece sorulmasın.
 function heceSorusu(hepsi, harf, seviye, secenekSayisi, acikOrani, onceki) {
-  const uzunluk = heceUzunlugu(seviye);
+  let uzunluk = heceUzunlugu(seviye);
+  // Bu harfte o uzunlukta yeterli hece yoksa (ör. e'de üç harfli yalnızca nan, nen) iki harfli
+  // heceler sorulur (yanlış seçenekler yine seviyenin zorluğunda)
+  if (hepsi.filter((h) => h.hece.length === uzunluk).length < Math.max(3, secenekSayisi)) uzunluk = 2;
   const havuz = hepsi.filter((h) => h.hece.length === uzunluk);
   const acikOran = Math.max(acikOrani || 0, 0.4);
   const harfli = havuz.filter((h) => h.hece.includes(harf));

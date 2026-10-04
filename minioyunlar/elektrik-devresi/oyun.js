@@ -9,6 +9,7 @@
 //   3: üç heceli kelime kur (ta + ne + li = taneli); üç sütun hece. Yalnızca anlamlı kelimeler
 //      (COK_HECELI_KELIMELER) ve hiçbir yanlış yol başka bir anlamlı kelime oluşturmaz.
 //      Yeni harf gruplarıyla dört ve beş heceli kelimeler de gelecek.
+// Öğretmenin kuralı: yalnızca bu harfe kadar öğretilmiş harfler (bilinenHarfler); a ve n'de oyun yok.
 
 const ELEKTRIK_SEVIYELERI = {
   1: { tur: 4, tur2: "harf", secenek: 3 },
@@ -30,7 +31,7 @@ class ElektrikDevresiSahnesi extends MiniOyunSahnesi {
     this.ayar = ELEKTRIK_SEVIYELERI[this.seviye] || ELEKTRIK_SEVIYELERI[1];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.tur);
-    this.ogrenilmis = ogrenilmisHarfler(this.harf);
+    this.ogrenilmis = bilinenHarfler(this.harf);
     this.sorular = this.sorulariHazirla();
     this.turNo = 0;
     this.prizler = [];
@@ -74,8 +75,14 @@ class ElektrikDevresiSahnesi extends MiniOyunSahnesi {
       const heceler = heceHavuzu(this.harf).filter((h) => h.hece.length === 2 && h.hece.includes(this.harf));
       return Phaser.Utils.Array.Shuffle(heceler.map((h) => ({ metin: h.hece, parcalar: [...h.hece] })));
     }
-    const liste = this.ayar.tur2 === "uc" ? COK_HECELI_KELIMELER.filter((k) => k.heceler.length === 3) : KELIMELER;
-    return harfliOnce(liste.filter(yazilabilir).map((k) => ({ metin: k.kelime, parcalar: k.heceler })));
+    let liste = KELIMELER.filter(yazilabilir);
+    if (this.ayar.tur2 === "uc") {
+      // Bu harfe kadar bilinen harflerle en az üç tane üç heceli kelime yoksa (ör. e, t, i)
+      // 3. seviye de iki heceli kelimelerle oynanır
+      const uclu = COK_HECELI_KELIMELER.filter((k) => k.heceler.length === 3 && yazilabilir(k));
+      if (uclu.length >= 3) liste = uclu;
+    }
+    return harfliOnce(liste.map((k) => ({ metin: k.kelime, parcalar: k.heceler })));
   }
 
   // Bir sütunun seçenekleri: doğru parça ve yanlışlar

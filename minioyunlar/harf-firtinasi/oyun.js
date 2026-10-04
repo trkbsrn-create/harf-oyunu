@@ -71,7 +71,9 @@ class HarfFirtinasiSahnesi extends MiniOyunSahnesi {
     if (this.baslikYazi) this.baslikYazi.destroy();
     this.sureCizim.clear();
     let tur;
-    do { tur = Phaser.Utils.Array.GetRandom(FIRTINA_GOREVLERI); } while (tur === this.oncekiGorev);
+    // "Seç!" hece görevidir; a ve n'de hece olmadığı için çıkmaz
+    const gorevler = FIRTINA_GOREVLERI.filter((g) => g !== "sec" || heceOyunuOlur(this.harf));
+    do { tur = Phaser.Utils.Array.GetRandom(gorevler); } while (tur === this.oncekiGorev);
     if (tur === "resim" && !this.resimliler.length) tur = "dokun";
     this.oncekiGorev = tur;
     this.gorevKap = this.add.container(0, 0).setDepth(10);

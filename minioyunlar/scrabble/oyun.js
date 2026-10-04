@@ -106,7 +106,7 @@ class ScrabbleSahnesi extends MiniOyunSahnesi {
 
     // Raftaki taşlar: kelimenin harfleri + fazladan (benzer) harfler, karışık
     const harfler = [...this.kelime];
-    const ogrenilmis = ogrenilmisHarfler(this.harf);
+    const ogrenilmis = bilinenHarfler(this.harf);
     const fazlalar = [];
     for (const h of Phaser.Utils.Array.Shuffle(harfler.slice())) {
       for (const b of BENZER_HARFLER[h] || []) if (ogrenilmis.includes(b) && !fazlalar.includes(b)) fazlalar.push(b);

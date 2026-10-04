@@ -34,7 +34,8 @@ class DuvardanGecmeSahnesi extends MiniOyunSahnesi {
     this.ayar = DUVAR_SEVIYELERI[this.seviye] || DUVAR_SEVIYELERI[1];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.duvar);
-    this.heceOyunu = this.seviye >= 2; // ünlü tek başına okunmaz, yalnızca hece duyulur
+    // ünlü tek başına okunmaz, yalnızca hece duyulur. Bu harfte hece yoksa (a, n) 2-3. seviye de harf.
+    this.heceOyunu = this.seviye >= 2 && heceOyunuOlur(this.harf);
     this.hedef = this.heceOyunu ? null : this.harf; // geçilecek kapının yazısı
     if (this.heceOyunu) {
       this.heceler = heceHavuzu(this.harf);

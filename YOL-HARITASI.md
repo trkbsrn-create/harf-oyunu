@@ -140,6 +140,8 @@ en az 5/7/9 yol ayrımı).
 Şeker Patlatma (Sürüm 113): harfler doğru sıradaysa yön serbest (kıvrılarak da); daha canlı
 görseller (sargılı şekerler, parıltılar, patlama efektleri, övgü yazısı, lolipoplar).
 Kayak (Sürüm 114): doğru cevap art arda aynı şeritte gelmiyor.
+Bilinen harfler (Sürüm 121): hece ve kelime oyunlarında yalnızca o harfe kadar öğrenilmiş harfler;
+a ve n'de hece/kelime oyunları yok (menüde "Bu harfte yok", çarkta çıkmaz).
 Duvardan Geçme (Sürüm 120): 2-3. seviyede hece kapıları (Kayak gibi).
 Menü (Sürüm 118-119): oyunlar etikete göre süzülür (hepsi / harf / hece; harf ve hece birlikte
 seçilebilir, etiketler tam eşleşir).

@@ -103,7 +103,7 @@ class YakalaYazSahnesi extends MiniOyunSahnesi {
   yeniHarf(gerekliOlsun) {
     const gerekenler = this.yerler.filter((y) => !y.dolu).map((y) => y.harf);
     if (gerekenler.length && (gerekliOlsun || Math.random() < 0.6)) return Phaser.Utils.Array.GetRandom(gerekenler);
-    const ogrenilmis = ogrenilmisHarfler(this.harf);
+    const ogrenilmis = bilinenHarfler(this.harf);
     let havuz = ogrenilmis.filter((h) => !this.kelime.includes(h));
     if (this.ayar.benzer) {
       const benzer = [...this.kelime].flatMap((h) => BENZER_HARFLER[h] || []).filter((h) => ogrenilmis.includes(h) && !this.kelime.includes(h));

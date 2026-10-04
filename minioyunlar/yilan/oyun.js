@@ -80,7 +80,7 @@ class YilanSahnesi extends MiniOyunSahnesi {
     this.yilanCiz();
     // Hecenin harfleri + şaşırtma harfleri
     for (const h of this.hece) this.yemKoy(h);
-    const ogrenilmis = ogrenilmisHarfler(this.harf).filter((h) => !this.hece.includes(h));
+    const ogrenilmis = bilinenHarfler(this.harf).filter((h) => !this.hece.includes(h));
     for (let i = 0; i < this.ayar.yem - 2; i++) this.yemKoy(Phaser.Utils.Array.GetRandom(ogrenilmis));
     this.tweens.add({ targets: this.hoparlor, scale: 1.2, duration: 160, yoyo: true });
     Sesler.soyle(this.hece);
@@ -178,7 +178,7 @@ class YilanSahnesi extends MiniOyunSahnesi {
       if (this.ayar.affet) Sesler.yanlis();
       else this.kalpEksilt();
       this.cameras.main.flash(150, 255, 160, 140);
-      const ogrenilmis = ogrenilmisHarfler(this.harf).filter((h) => !this.hece.includes(h));
+      const ogrenilmis = bilinenHarfler(this.harf).filter((h) => !this.hece.includes(h));
       if (this.hece.slice(this.yenen).includes(harf)) this.yemKoy(harf); // hecede lazımsa geri gelir
       else this.yemKoy(Phaser.Utils.Array.GetRandom(ogrenilmis));
       this.ipucuGoster(this.yemler.find((y) => y.yem.harf === this.hece[this.yenen]));

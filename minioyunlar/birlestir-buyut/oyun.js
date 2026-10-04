@@ -29,7 +29,7 @@ class BirlestirBuyutSahnesi extends MiniOyunSahnesi {
     this.ayar = BIRLESTIR_SEVIYELERI[this.seviye] || BIRLESTIR_SEVIYELERI[1];
     this.ilerlemeKur(this.ayar.hedef);
     const bilgi = (h) => HARFLER.find((x) => x.kucuk === h);
-    this.harfler = ogrenilmisHarfler(this.harf);
+    this.harfler = bilinenHarfler(this.harf);
     this.unluler = this.harfler.filter((h) => bilgi(h).unlu);
     this.unsuzler = this.harfler.filter((h) => !bilgi(h).unlu);
     this.tahta = Array.from({ length: TAHTA_N }, () => Array(TAHTA_N).fill(null));
