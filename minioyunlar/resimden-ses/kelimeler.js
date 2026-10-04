@@ -1,37 +1,42 @@
 // Resimden Sesi Bul: harfin kelimedeki yerine göre resimli kelimeler (sadece veri).
 // bas: harf başında (1. düzey), son: sonunda (2. düzey), orta: ortasında (3. düzey).
 // Öğretmenin kuralı: okumada karışabilen sesler (ı/i gibi) soruyu karıştırmasın: "i" sorulurken
-// yanlış seçeneklerde "ı" de geçmez (`KARISAN_SESLER`). Öğretmenin eklediği kelimeler de var.
+// yanlış seçeneklerde "ı" de geçmez (`KARISAN_SESLER`). Öğretmenin eklediği ve istediği yabancı
+// kökenli kelimeler (pizza, tren, otobüs...) de var.
 // Resim: harfin kendi ipucu resmi (harfler.js) ya da gorseller/resim-<kelime>.svg (doodle_ciz.py).
 const KONUMLU_KELIMELER = {
   a: {
     bas: ["arı", "ayı", "at", "armut", "ay", "ağaç", "ayak", "ayakkabı", "araba", "altın", "ayna",
       "aslan", "ateş"],
-    son: ["elma", "kova", "fırça", "çorba", "masa", "çanta", "kumbara", "kurbağa"],
+    son: ["elma", "kova", "fırça", "çorba", "masa", "çanta", "kumbara", "kurbağa", "pizza",
+      "panda", "nota"],
     orta: ["kapı", "balık", "tavuk", "kaşık", "havuç", "yaprak", "bardak", "kalem", "lale", "fare",
-      "kale", "kitap", "kiraz", "sincap", "timsah"],
+      "kale", "kitap", "kiraz", "sincap", "timsah", "kanguru", "patates"],
   },
   n: {
-    bas: ["nar", "nal", "nohut", "nane", "nine", "nergis", "nehir"],
-    son: ["aslan", "koyun", "yorgan", "kazan", "fincan", "zeytin", "balon"],
-    orta: ["çanta", "dondurma", "tencere", "anahtar", "yengeç", "fındık", "fener", "sincap"],
+    bas: ["nar", "nal", "nohut", "nane", "nine", "nergis", "nehir", "nota"],
+    son: ["aslan", "koyun", "yorgan", "kazan", "fincan", "zeytin", "balon", "tren"],
+    orta: ["çanta", "dondurma", "tencere", "anahtar", "yengeç", "fındık", "fener", "sincap",
+      "kanguru", "panda"],
   },
   e: {
     bas: ["eşek", "elma", "ev", "el", "erik", "ekmek", "etek", "eldiven", "elbise"],
     son: ["deve", "küpe", "tencere", "kepçe", "iğne", "bilye", "şemsiye", "lale", "fare", "kale"],
-    orta: ["kedi", "gemi", "ördek", "sepet", "ceviz", "bebek", "çiçek", "kemik", "kalem", "ateş"],
+    orta: ["kedi", "gemi", "ördek", "sepet", "ceviz", "bebek", "çiçek", "kemik", "kalem", "ateş",
+      "tren", "patates", "ceket"],
   },
   t: {
     bas: ["tilki", "top", "tavşan", "tabak", "tavuk", "tarak", "tencere", "terlik", "testere",
-      "timsah"],
-    son: ["at", "süt", "bulut", "armut", "sepet", "kilit", "kibrit"],
-    orta: ["çatal", "kutu", "etek", "fıstık", "yatak", "kartal", "kitap", "ateş"],
+      "timsah", "tren"],
+    son: ["at", "süt", "bulut", "armut", "sepet", "kilit", "kibrit", "ceket"],
+    orta: ["çatal", "kutu", "etek", "fıstık", "yatak", "kartal", "kitap", "ateş", "nota", "otobüs",
+      "patates"],
   },
   i: {
     bas: ["inek", "ip", "iğne", "incir", "inci", "iplik", "iki", "iguana"],
     son: ["kedi", "gemi", "kirpi", "keçi", "tilki", "hindi"],
     orta: ["fil", "diş", "zil", "biber", "civciv", "çiçek", "pil", "kilit", "kibrit", "kitap",
-      "kiraz", "sincap", "timsah"],
+      "kiraz", "sincap", "timsah", "pizza"],
   },
   l: {
     bas: ["leylek", "lamba", "lahana", "lokum", "leğen", "lama", "limon", "lahmacun", "lale"],
