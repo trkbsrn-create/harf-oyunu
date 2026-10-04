@@ -97,9 +97,12 @@ Tohumlar ileride hece ve kelime üretmeye ve mini oyunlara dönüşecek.
   kaya can götürür); 2-3. seviye hece kapıları (hece söylenir, doğru kapıdan geç; yeni sıra
   önceki geçilince gelir); öğretmenin isteği: doğru top/kapı art arda aynı şeritte olmaz
   (`dogruSeritSec`), kayakçı hep hareket eder).
-  elektrik-devresi (Elektrik Devresi: kelime söylenir; soldaki ilk heceden sağdaki ikinci heceye
-  kablo çekilir (sürükleyerek ya da sırayla dokunarak); doğruysa ampul yanar, kelime yazılır ve
-  okunur; yanlışsa kıvılcım, can gider).
+  elektrik-devresi (Elektrik Devresi: söylenen hece ya da kelime için soldan sağa her sütundan bir
+  parçaya kablo çekilir (sürükleyerek ya da sırayla dokunarak); doğruysa ampul yanar, yazılır ve
+  okunur; yanlışsa kıvılcım, can gider. 1. seviye harflerden hece (a + n = an), 2. seviye iki heceli
+  kelime, 3. seviye üç heceli kelime (`COK_HECELI_KELIMELER`, ortak.js: ta-ne-li, an-ten-li);
+  öğretmenin kuralı: yanlış yollardan hiçbiri anlamlı kelime oluşturmaz (`baskaKelimeVar`);
+  yeni harf gruplarıyla 4-5 heceli kelimeler de eklenecek).
   duvardan-gecme (Duvardan Geçme: karakter (cocuk-tirman.svg, arkadan) yolda koşar; ufuktan üç
   kapılı tuğla duvarlar yaklaşır; istenen harfin kapısının şeridine geç (dokun ya da sürükle);
   yanlış kapıya çarpınca can gider).

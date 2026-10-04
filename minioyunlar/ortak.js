@@ -74,6 +74,14 @@ const KELIMELER = [
   ["atlet", "at", "let"], ["telli", "tel", "li"], ["anla", "an", "la"], ["ilet", "i", "let"],
 ].map(([kelime, ...heceler]) => ({ kelime, heceler }));
 
+// Üç heceli anlamlı kelimeler (Elektrik Devresi 3. seviye; öğretmenin isteği: anlamsız üçlü
+// olmasın). Yeni harf gruplarıyla dört ve beş heceli kelimeler de eklenecek.
+const COK_HECELI_KELIMELER = [
+  ["taneli", "ta", "ne", "li"], ["naneli", "na", "ne", "li"], ["laleli", "la", "le", "li"],
+  ["antenli", "an", "ten", "li"], ["inatla", "i", "nat", "la"], ["anlatan", "an", "la", "tan"],
+  ["anteni", "an", "te", "ni"], ["atletli", "at", "let", "li"],
+].map(([kelime, ...heceler]) => ({ kelime, heceler }));
+
 // Öğrenilmiş harflerle yazılabilen kelimeler; oyunun harfini içerenler önce
 function ogrenilmisKelimeler(harf) {
   const ogrenilmis = ogrenilmisHarfler(harf);
