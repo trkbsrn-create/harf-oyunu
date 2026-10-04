@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Kalem (kurşun kalem) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="241" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="sari" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+      <rect width="6" height="6" fill="#ffe680"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffc928" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="pembe" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="6" height="6" fill="#ffd2c8"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ff9c8a" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 100 l64 -64 l14 14 l-64 64z" fill="url(#sari)"/>
+    <path d="M94 36 l8 -8 q6 -6 12 0 l2 2 q6 6 0 12 l-8 8z" fill="url(#pembe)"/>
+    <path d="M90 40 l14 14" fill="none" stroke-width="5"/>
+    <path d="M30 100 l14 14 l-26 10z" fill="#f2d7b0"/>
+    <path d="M18 124 l4 -10 l6 6z" fill="#2b2b2b"/>
+    <path d="M38 92 l56 -56" fill="none" stroke="#ffc928" stroke-width="3"/>
+  </g>
+</svg>
