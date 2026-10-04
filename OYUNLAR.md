@@ -126,7 +126,7 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   altin-madencisi (Altın Madencisi: kanca sağa sola sallanır, dokununca iner ve ilk külçeyi çeker;
   bütün külçeler aynı görünür; istenen harf altın (ilerleme), başka harf taşa döner ve yavaş
   çekilir; can yok, kaybetmek yok; Kazma gibi 2. seviye harflerle hece, 3. seviye hecelerle kelime:
-  sırası gelmemiş doğru külçe geri gömülür).
+  sırası gelmemiş doğru külçe geri gömülür; gereken külçelerin önü hep açık ve kanca açısı içinde).
   kazi-kazan (Kazı Kazan: gümüş kaplama RenderTexture'dan parmakla silinir, altından resim çıkar;
   yaklaşık yarısı kazınınca harf seçenekleri belirir, resmin ilk sesi seçilir).
   tombala (Tombala: resimli kart; torbadan harf topu çıkar (ünlü söylenir), o sesle başlayan
