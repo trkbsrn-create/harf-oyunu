@@ -140,6 +140,7 @@ en az 5/7/9 yol ayrımı).
 Şeker Patlatma (Sürüm 113): harfler doğru sıradaysa yön serbest (kıvrılarak da); daha canlı
 görseller (sargılı şekerler, parıltılar, patlama efektleri, övgü yazısı, lolipoplar).
 Kayak (Sürüm 114): doğru cevap art arda aynı şeritte gelmiyor.
+Ördek Vurma ve Kazma (Sürüm 125): hece eklendi (ördeklerde hece; kazmada harflerle hece, hecelerle kelime).
 Hece Müziği (Sürüm 124): hece değişince notalar üst üste binmiyor; şarkı yalnızca melodi, daha hızlı.
 Hece Müziği (Sürüm 123): aranan hece her 2 notada değişir; sondaki şarkıda heceler okunur.
 Hece Müziği (Sürüm 122): 2-3. seviye sonunda çocuğun notalarıyla melodi; görsel ve efekt iyileştirmesi.
