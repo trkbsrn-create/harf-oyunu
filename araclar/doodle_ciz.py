@@ -760,6 +760,39 @@ yaz("onay-pencere.svg", 540, 320, "Yeniden başlatma onay penceresi",
     <rect x="290" y="200" width="190" height="80" rx="36" fill="url(#pembe)"/>
 ''', 5), 49, 4)
 
+# ---- Resimden Sesi Bul kelime resimleri (130x120 tuval; harf başta/sonda/ortada) ----
+KIRMIZI = tarama("kirmizi", "#ff9c8a", "#e0533d", -35, 7, 3.5)
+yaz("resim-top.svg", 130, 120, "Top", tarama("mavi", "#bfe3f5", "#7cc3e6", 30, 7, 3) + KIRMIZI,
+    golge(65, 112, 40) + kalem('''    <circle cx="65" cy="60" r="48" fill="#ffffff"/>
+    <path d="M65 12 q-24 48 0 96 q24 -48 0 -96z" fill="url(#kirmizi)"/>
+    <path d="M18 50 q47 18 94 0 q2 10 0 20 q-47 18 -94 0 q-2 -10 0 -20z" fill="url(#mavi)"/>
+    <circle cx="65" cy="60" r="48" fill="none"/>
+    <path d="M36 36 q8 -12 22 -16" fill="none" stroke="#ffffff" stroke-width="6"/>
+'''), 101)
+yaz("resim-elma.svg", 130, 120, "Elma", KIRMIZI + tarama("yaprak", "#c9eba7", "#8fd16a", 35, 6, 3),
+    golge(65, 114, 38) + kalem('''    <path d="M66 30 q-2 -16 6 -24" fill="none" stroke-width="5"/>
+    <path d="M72 20 q20 -18 36 -6 q-16 18 -36 6z" fill="url(#yaprak)"/>
+    <path d="M65 30 q-14 -10 -32 -4 q-26 10 -22 44 q4 34 30 42 q12 4 24 -4 q12 8 24 4 q26 -8 30 -42 q4 -34 -22 -44 q-18 -6 -32 4z" fill="url(#kirmizi)"/>
+    <path d="M30 52 q4 -12 16 -16" fill="none" stroke="#ffffff" stroke-width="6"/>
+'''), 102)
+yaz("resim-kedi.svg", 130, 120, "Kedi (oturan, önden)", tarama("turuncu", "#ffd9a8", "#f5a65b", -35, 7, 3),
+    golge(62, 114, 42) + kalem('''    <path d="M96 106 q32 -2 26 -34 q-2 -10 -10 -8 q2 20 -18 30z" fill="url(#turuncu)"/>
+    <path d="M34 110 q-8 -50 28 -54 q36 4 28 54z" fill="url(#turuncu)"/>
+    <path d="M50 110 q0 -24 12 -26 q12 2 12 26z" fill="#ffffff" stroke-width="3"/>
+    <path d="M26 30 l6 -26 l20 14 q10 -4 20 0 l20 -14 l6 26 q8 26 -26 36 q-14 4 -20 0 q-34 -10 -26 -36z" fill="url(#turuncu)"/>
+    <path d="M34 12 l4 12 l8 -6z M90 12 l-4 12 l-8 -6z" fill="#ffd2c8" stroke-width="2.5"/>
+    <circle cx="48" cy="36" r="4" fill="#2b2b2b"/>
+    <circle cx="76" cy="36" r="4" fill="#2b2b2b"/>
+    <path d="M58 46 l4 4 l4 -4z" fill="#ff9c8a" stroke-width="2.5"/>
+    <path d="M62 50 q-4 6 -10 4 M62 50 q4 6 10 4 M40 48 h-20 M40 52 l-18 6 M84 48 h20 M84 52 l18 6" fill="none" stroke-width="2.5"/>
+'''), 103)
+yaz("resim-balon.svg", 130, 120, "Balon", tarama("mor", "#d8c2f3", "#a77be0", -35, 7, 3),
+    kalem('''    <path d="M65 86 q-10 12 4 20 q12 6 -2 14" fill="none" stroke-width="3"/>
+    <path d="M65 6 q38 0 38 40 q0 34 -38 42 q-38 -8 -38 -42 q0 -40 38 -40z" fill="url(#mor)"/>
+    <path d="M58 88 l7 -6 l7 6z" fill="#a77be0" stroke-width="3"/>
+    <path d="M42 30 q6 -12 18 -14" fill="none" stroke="#ffffff" stroke-width="6"/>
+'''), 104)
+
 # ---- Şeker makinesi (Şekillerle Yazma, 1. düzey): cam fanus, kırmızı gövde, önde çıkış
 # oluğu. Kolu ayrı resim (seker-makinesi-kol.svg): oyunda sağ yandaki mile (230, 300) takılır,
 # çekilince aşağı döner. Fanustaki şekerler düğme, çiçek, şeker ve top karışık.
