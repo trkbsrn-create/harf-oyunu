@@ -66,6 +66,33 @@
       0%, 25% { transform: rotate(0deg); }
       60%, 100% { transform: rotate(-90deg); }
     }
+    /* Açılış videosu (öğretmenin Drive'ı): "Oyunu başlat"tan sonra; "Videoyu geç" ile oyuna geçilir */
+    #acilis-video {
+      display: none;
+      position: fixed;
+      inset: 0;
+      z-index: 5;
+      background: #2b2b2b;
+      touch-action: auto;
+    }
+    #acilis-video iframe {
+      width: 100%;
+      height: 100%;
+      border: 0;
+    }
+    #videoyu-gec {
+      position: absolute;
+      right: 16px;
+      bottom: 16px;
+      padding: 14px 28px;
+      font-family: "Andika", sans-serif;
+      font-size: 28px;
+      color: #2b2b2b;
+      background: #ffe27a;
+      border: 4px solid #2b2b2b;
+      border-radius: 18px;
+      cursor: pointer;
+    }
     @media (orientation: portrait) and (pointer: coarse) {
       #yan-cevir { display: flex; }
     }
@@ -73,6 +100,10 @@
 </head>
 <body>
   <div id="oyun"></div>
+  <div id="acilis-video">
+    <iframe allow="autoplay; fullscreen" allowfullscreen title="Açılış videosu"></iframe>
+    <button id="videoyu-gec" type="button">Videoyu geç ▶</button>
+  </div>
   <div id="yan-cevir">
     <svg viewBox="0 0 100 100" aria-hidden="true">
       <rect x="30" y="10" width="40" height="80" rx="8" fill="#c9ecff" stroke="#2b2b2b" stroke-width="4"/>
@@ -109,49 +140,49 @@
 
   <!-- Phaser 3, sabit sürüm -->
   <script src="https://cdn.jsdelivr.net/npm/phaser@3.90.0/dist/phaser.min.js"></script>
-  <script src="harfler.js?s=139"></script>
-  <script src="sesler/liste.js?s=139"></script>
-  <script src="sesler.js?s=139"></script>
-  <script src="canta.js?s=139"></script>
-  <script src="dinleyici.js?s=139"></script>
+  <script src="harfler.js?s=140"></script>
+  <script src="sesler/liste.js?s=140"></script>
+  <script src="sesler.js?s=140"></script>
+  <script src="canta.js?s=140"></script>
+  <script src="dinleyici.js?s=140"></script>
   <!-- Mini oyunlar: oyun.js'den önce yüklenir (oyun başlarken sahne listesine eklenirler) -->
-  <script src="minioyunlar/ortak.js?s=139"></script>
-  <script src="minioyunlar/menu.js?s=139"></script>
-  <script src="minioyunlar/sans-carki.js?s=139"></script>
-  <script src="minioyunlar/damla-yakala/oyun.js?s=139"></script>
-  <script src="minioyunlar/harf-balonlari/oyun.js?s=139"></script>
-  <script src="minioyunlar/harfi-yaz/ciz.js?s=139"></script>
-  <script src="minioyunlar/harfi-yaz/sekiller.js?s=139"></script>
-  <script src="minioyunlar/harfi-yaz/oyun.js?s=139"></script>
-  <script src="minioyunlar/resimden-ses/kelimeler.js?s=139"></script>
-  <script src="minioyunlar/resimden-ses/oyun.js?s=139"></script>
-  <script src="minioyunlar/hafiza-kartlari/oyun.js?s=139"></script>
-  <script src="minioyunlar/hece-koprusu/oyun.js?s=139"></script>
-  <script src="minioyunlar/heceyi-bul/oyun.js?s=139"></script>
-  <script src="minioyunlar/labirent/oyun.js?s=139"></script>
-  <script src="minioyunlar/seker-patlatma/oyun.js?s=139"></script>
-  <script src="minioyunlar/kayak/oyun.js?s=139"></script>
-  <script src="minioyunlar/elektrik-devresi/oyun.js?s=139"></script>
-  <script src="minioyunlar/duvardan-gecme/oyun.js?s=139"></script>
-  <script src="minioyunlar/hece-muzigi/oyun.js?s=139"></script>
-  <script src="minioyunlar/scrabble/oyun.js?s=139"></script>
-  <script src="minioyunlar/ordek-vurma/oyun.js?s=139"></script>
-  <script src="minioyunlar/kazma/oyun.js?s=139"></script>
-  <script src="minioyunlar/altin-madencisi/oyun.js?s=139"></script>
-  <script src="minioyunlar/kazi-kazan/oyun.js?s=139"></script>
-  <script src="minioyunlar/tombala/oyun.js?s=139"></script>
-  <script src="minioyunlar/arabayi-ulastir/oyun.js?s=139"></script>
-  <script src="minioyunlar/yakala-yaz/oyun.js?s=139"></script>
-  <script src="minioyunlar/kirik-cam/oyun.js?s=139"></script>
-  <script src="minioyunlar/bombayi-kurtar/oyun.js?s=139"></script>
-  <script src="minioyunlar/yilan/oyun.js?s=139"></script>
-  <script src="minioyunlar/canavari-besle/oyun.js?s=139"></script>
-  <script src="minioyunlar/harf-kesme/oyun.js?s=139"></script>
-  <script src="minioyunlar/hece-kulesi/oyun.js?s=139"></script>
-  <script src="minioyunlar/birlestir-buyut/oyun.js?s=139"></script>
-  <script src="minioyunlar/harfle-boya/resimler.js?s=139"></script>
-  <script src="minioyunlar/harfle-boya/oyun.js?s=139"></script>
-  <script src="minioyunlar/harf-firtinasi/oyun.js?s=139"></script>
-  <script src="oyun.js?s=139"></script>
+  <script src="minioyunlar/ortak.js?s=140"></script>
+  <script src="minioyunlar/menu.js?s=140"></script>
+  <script src="minioyunlar/sans-carki.js?s=140"></script>
+  <script src="minioyunlar/damla-yakala/oyun.js?s=140"></script>
+  <script src="minioyunlar/harf-balonlari/oyun.js?s=140"></script>
+  <script src="minioyunlar/harfi-yaz/ciz.js?s=140"></script>
+  <script src="minioyunlar/harfi-yaz/sekiller.js?s=140"></script>
+  <script src="minioyunlar/harfi-yaz/oyun.js?s=140"></script>
+  <script src="minioyunlar/resimden-ses/kelimeler.js?s=140"></script>
+  <script src="minioyunlar/resimden-ses/oyun.js?s=140"></script>
+  <script src="minioyunlar/hafiza-kartlari/oyun.js?s=140"></script>
+  <script src="minioyunlar/hece-koprusu/oyun.js?s=140"></script>
+  <script src="minioyunlar/heceyi-bul/oyun.js?s=140"></script>
+  <script src="minioyunlar/labirent/oyun.js?s=140"></script>
+  <script src="minioyunlar/seker-patlatma/oyun.js?s=140"></script>
+  <script src="minioyunlar/kayak/oyun.js?s=140"></script>
+  <script src="minioyunlar/elektrik-devresi/oyun.js?s=140"></script>
+  <script src="minioyunlar/duvardan-gecme/oyun.js?s=140"></script>
+  <script src="minioyunlar/hece-muzigi/oyun.js?s=140"></script>
+  <script src="minioyunlar/scrabble/oyun.js?s=140"></script>
+  <script src="minioyunlar/ordek-vurma/oyun.js?s=140"></script>
+  <script src="minioyunlar/kazma/oyun.js?s=140"></script>
+  <script src="minioyunlar/altin-madencisi/oyun.js?s=140"></script>
+  <script src="minioyunlar/kazi-kazan/oyun.js?s=140"></script>
+  <script src="minioyunlar/tombala/oyun.js?s=140"></script>
+  <script src="minioyunlar/arabayi-ulastir/oyun.js?s=140"></script>
+  <script src="minioyunlar/yakala-yaz/oyun.js?s=140"></script>
+  <script src="minioyunlar/kirik-cam/oyun.js?s=140"></script>
+  <script src="minioyunlar/bombayi-kurtar/oyun.js?s=140"></script>
+  <script src="minioyunlar/yilan/oyun.js?s=140"></script>
+  <script src="minioyunlar/canavari-besle/oyun.js?s=140"></script>
+  <script src="minioyunlar/harf-kesme/oyun.js?s=140"></script>
+  <script src="minioyunlar/hece-kulesi/oyun.js?s=140"></script>
+  <script src="minioyunlar/birlestir-buyut/oyun.js?s=140"></script>
+  <script src="minioyunlar/harfle-boya/resimler.js?s=140"></script>
+  <script src="minioyunlar/harfle-boya/oyun.js?s=140"></script>
+  <script src="minioyunlar/harf-firtinasi/oyun.js?s=140"></script>
+  <script src="oyun.js?s=140"></script>
 </body>
 </html>
