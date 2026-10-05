@@ -33,7 +33,9 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
   gelmemiş doğru parça can götürmez; hece/kelime yoksa harf. İstisna: Tombala, Birleştir Büyüt, Harf Fırtınası.
 - Seviyeyle hece uzar: 1. seviye iki harfli, 2-3. seviye üç harfli (`heceUzunlugu`, `heceSorusu`).
 - Hece oyunlarında (`heceOyunu`) tek harf okunmaz; yalnızca hece ya da kelime söylenir.
-- Harfler `harfiSoyle` ile sesiyle okunur (n "nnn"); bütün sözleri şimdilik tarayıcı okur.
+- Harfler `harfiSoyle` ile sesiyle okunur (n "nnn"). Sözleri öğretmenin kendi kaydı okur (peri efektli,
+  `sesler/liste.js`); kaydı olmayan sözü tarayıcı okur. Yeni söz: kayit.html'e ekle, öğretmen kaydeder,
+  `araclar/peri_efekti.sh` ile efekt verilip `sesler/`e konur.
 - Yeni mini oyun: `miniOyunKaydet`, `PLANLANAN_OYUNLAR`'a ekle (etiketler: "harf"/"hece"), index.html'e betik.
 
 ## Çalışma şekli
@@ -147,7 +149,7 @@ Her hatadan sonra buraya yeni bir kural ekle.
 
 ## Bekleyen işler
 - TTKB Dik Temel Abece yazı tipi: yazardan izin bekleniyor; izin gelirse dosya depoya eklenir.
-- Seslendirme en sona: öğretmenin kendi kayıtları / yapay zekâ sesleri (`Sesler.dosyaSesleri`).
+- Ekrandaki 10 uyarı ("Telefonu yan çevir" vb.) henüz kaydedilmedi (kayit.html'de duruyor).
 - iPhone'da efekt sesi düzeltmesinin (`iosSesiniAc`) öğretmenden onayı bekleniyor.
 - Bulut bölgelerinin içeriği; bilmeceler ("Hızlı koşar, yeleleri var." → at; "Türk bayrağında
   beni görürler, kırmızıyla eş derler." → al) nerede kullanılacak, sonra konuşulacak.
