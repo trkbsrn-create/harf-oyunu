@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 139;
+const SURUM = 140;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -2802,10 +2802,33 @@ class KarsilamaSahnesi extends Phaser.Scene {
     // Öğretmenin deneme düğmesi (God mode) hikâyeyi atlar
     this.cameras.main.once("camerafadeoutcomplete", () => {
       if (tanriModu) this.scene.start("AdaSahnesi", { tanriModu });
-      else this.scene.start("HikayeSahnesi");
+      else this.videoGoster();
     });
   }
+
+  // Açılış videosu (öğretmenin Drive'ındaki video, eski kısa hikâyenin yerine). Drive videonun
+  // bittiğini oyuna bildirmez; "Videoyu geç" düğmesiyle (izleyince ya da hemen) adaya geçilir.
+  videoGoster() {
+    const kutu = document.getElementById("acilis-video");
+    const cerceve = kutu && kutu.querySelector("iframe");
+    const gec = document.getElementById("videoyu-gec");
+    if (!kutu || !cerceve || !gec) {
+      this.scene.start("AdaSahnesi");
+      return;
+    }
+    cerceve.src = ACILIS_VIDEOSU;
+    kutu.style.display = "block";
+    gec.onclick = () => {
+      gec.onclick = null;
+      kutu.style.display = "none";
+      cerceve.src = "about:blank"; // video sesi kesilsin
+      Sesler.pling();
+      this.scene.start("AdaSahnesi");
+    };
+  }
 }
+
+const ACILIS_VIDEOSU = "https://drive.google.com/file/d/1tT-Z71BMP2j6TAwkRSKdTb_9f1-B_Dvm/preview";
 
 // Açılış hikâyesi (öğretmenin seçimi A: kısa canlı sahne, yaklaşık 15 sn, "Geç" düğmesi).
 // Okuma yok; sözleri tarayıcı sesli okur. 1) fırtına, 2) sal kırılır, 3) kumsalda uyanma,
