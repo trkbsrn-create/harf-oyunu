@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 140;
+const SURUM = 141;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -2806,14 +2806,14 @@ class KarsilamaSahnesi extends Phaser.Scene {
     });
   }
 
-  // Açılış videosu (öğretmenin Drive'ındaki video, eski kısa hikâyenin yerine). Drive videonun
-  // bittiğini oyuna bildirmez; "Videoyu geç" düğmesiyle (izleyince ya da hemen) adaya geçilir.
+  // Açılış videosu (öğretmenin Drive'ındaki video). Drive videonun bittiğini oyuna bildirmez;
+  // "Videoyu geç" düğmesiyle (izleyince ya da hemen) kısa hikâyeye, oradan adaya geçilir.
   videoGoster() {
     const kutu = document.getElementById("acilis-video");
     const cerceve = kutu && kutu.querySelector("iframe");
     const gec = document.getElementById("videoyu-gec");
     if (!kutu || !cerceve || !gec) {
-      this.scene.start("AdaSahnesi");
+      this.scene.start("HikayeSahnesi");
       return;
     }
     cerceve.src = ACILIS_VIDEOSU;
@@ -2823,7 +2823,7 @@ class KarsilamaSahnesi extends Phaser.Scene {
       kutu.style.display = "none";
       cerceve.src = "about:blank"; // video sesi kesilsin
       Sesler.pling();
-      this.scene.start("AdaSahnesi");
+      this.scene.start("HikayeSahnesi");
     };
   }
 }
