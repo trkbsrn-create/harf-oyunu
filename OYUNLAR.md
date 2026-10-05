@@ -298,8 +298,8 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   Tını tanıma (LPC ile F1/F2, `UNLU_KURALLARI`) kodda duruyor ama gerçek seste "a"yı
   reddettiği için oyunda kullanılmıyor; yalnızca mikrofon.html'de ölçüm gösteriyor.
 - `mikrofon.html` – Öğretmen için mikrofon testi sayfası (Chrome'un ne duyduğunu gösterir).
-- `kayit.html` – Öğretmenin kendi sesiyle oyunun sözlerini kaydettiği sayfa (harf sesleri,
-  heceler, kelimeler, oyun sözleri, mini oyun adları; listeler harfler.js ve ortak.js'den,
+- `kayit.html` – Öğretmenin kendi sesiyle oyunun sözlerini kaydettiği sayfa (oyundaki bütün sözler: harf sesleri,
+  heceler, kelimeler, resim adları, yönergeler, ekrandaki uyarılar, oyun sözleri, mini oyun adları; listeler harfler.js, ortak.js ve resimden-ses/kelimeler.js'den,
   oyun sözleri sayfada yazılı: oyuna yeni söz eklenince oraya da eklenmeli). Kayıtlar yalnızca
   o tarayıcıda (IndexedDB) durur; sessizlik kesilir, ses eşitlenir, WAV (24 kHz). "Hepsini
   indir" zip verir (sesler/<anahtar>.wav + liste.json); öğretmen verince sesler oyuna eklenecek.
