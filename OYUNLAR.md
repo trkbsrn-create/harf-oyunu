@@ -311,7 +311,7 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   beğenilmeyenler öğretmenin kendi sesiyle kayit.html'de kaydedilir).
 - `sesler.js` – Oyun sesleri. Efektler tarayıcıda (Web Audio) üretilir.
   Sözler öğretmenin kendi sesi (kayit.html, 251 dosya; `araclar/peri_efekti.sh` ile peri efekti,
-  hecelerde az yankı, fırtına/ada sözlerinde rüzgâr/dalga; `Sesler.dosyaSesleri = true`).
+  hecelerde az yankı, fırtına/ada sözlerinde peri ses + rüzgâr/dalga; `Sesler.dosyaSesleri = true`).
   Sesli okuma `Sesler.soyle`: söz `sesler/liste.js`'de (`SES_DOSYALARI`, söz → dosya) varsa
   `sesler/<dosya>.mp3` çalınır (Web Audio; dosyalar ilk dokunuştan sonra arka planda yüklenir).
   Sesler Azure'un yapay zekâ sesleriyle üretildi (öğretmenin seçimi: harf, hece ve kelime

@@ -1,5 +1,5 @@
 // Seslendirilmiş sözler: söz → sesler/<dosya>.mp3. Öğretmenin kendi sesi (kayit.html), peri efektiyle
-// (heceler ve harf seslerinde daha az yankı); fırtına ve ada sözlerinde rüzgâr / dalga efekti.
+// (heceler ve harf seslerinde daha az yankı); fırtına ve ada sözlerinde arkada rüzgâr / dalga.
 // Burada olmayan sözleri tarayıcının Türkçe sesi okur.
 const SES_DOSYALARI = {
  "a": "harf-a",
