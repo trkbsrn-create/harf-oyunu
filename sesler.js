@@ -1,12 +1,12 @@
 // Oyun sesleri. Efektler tarayıcıda o anda üretilir (Web Audio). Sözler (harf, hece, kelime,
-// hikâye) Azure'un yapay zekâ sesleriyle önceden seslendirildi: sesler/*.mp3, sesler/liste.js
-// (araclar/seslendir.py). Dosyası olmayan sözü tarayıcının Türkçe sesi okur. Hiçbir şey kaydedilmez.
+// yönerge, hikâye) öğretmenin kendi sesiyle kaydedildi (kayit.html), peri efekti verildi:
+// sesler/*.mp3, sesler/liste.js. Dosyası olmayan sözü tarayıcının Türkçe sesi okur. Hiçbir şey kaydedilmez.
 
 const Sesler = {
   baglam: null,
-  // Öğretmenin kararı: seslendirme en sona kaldı; şimdilik bütün sözleri (harf, hece, kelime,
-  // hikâye) tarayıcının sesi okur. Hazır ses dosyalarını yeniden açmak için true yapılır.
-  dosyaSesleri: false,
+  // Öğretmenin kararı: sözleri öğretmenin kendi kaydı (peri efektli) okur; false yapılırsa hepsini
+  // tarayıcının sesi okur.
+  dosyaSesleri: true,
 
   // Tarayıcılar sesi ancak ilk dokunuş / tuş basışından sonra açar. Telefonda ses ancak parmak
   // kalkınca açılabilir; o ana kadar istenen sesler bekletilir (bekleyenler) ve ses açılınca çalınır.

@@ -310,8 +310,8 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   bölüm bölüm ▶ ve "Beğenmedim"; işaretler localStorage'da; "Listeyi kopyala" Claude'a verilir,
   beğenilmeyenler öğretmenin kendi sesiyle kayit.html'de kaydedilir).
 - `sesler.js` – Oyun sesleri. Efektler tarayıcıda (Web Audio) üretilir.
-  Öğretmenin kararı: seslendirme en sona kaldı; şimdilik bütün sözleri tarayıcı okur
-  (`Sesler.dosyaSesleri = false`; ses dosyaları depoda duruyor, true yapılınca çalınır).
+  Sözler öğretmenin kendi sesi (kayit.html, 251 dosya; `araclar/peri_efekti.sh` ile peri efekti,
+  hecelerde az yankı, fırtına/ada sözlerinde rüzgâr/dalga; `Sesler.dosyaSesleri = true`).
   Sesli okuma `Sesler.soyle`: söz `sesler/liste.js`'de (`SES_DOSYALARI`, söz → dosya) varsa
   `sesler/<dosya>.mp3` çalınır (Web Audio; dosyalar ilk dokunuştan sonra arka planda yüklenir).
   Sesler Azure'un yapay zekâ sesleriyle üretildi (öğretmenin seçimi: harf, hece ve kelime
