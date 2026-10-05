@@ -33,9 +33,9 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
   gelmemiş doğru parça can götürmez; hece/kelime yoksa harf. İstisna: Tombala, Birleştir Büyüt, Harf Fırtınası.
 - Seviyeyle hece uzar: 1. seviye iki harfli, 2-3. seviye üç harfli (`heceUzunlugu`, `heceSorusu`).
 - Hece oyunlarında (`heceOyunu`) tek harf okunmaz; yalnızca hece ya da kelime söylenir.
-- Harfler `harfiSoyle` ile sesiyle okunur (n "nnn"). Sözleri öğretmenin kendi kaydı okur (peri efektli,
-  `sesler/liste.js`); kaydı olmayan sözü tarayıcı okur. Yeni söz: kayit.html'e ekle, öğretmen kaydeder,
-  `araclar/peri_efekti.sh` ile efekt verilip `sesler/`e konur.
+- Harfler `harfiSoyle` ile sesiyle okunur (n "nnn"). Sözleri öğretmenin kendi kaydı okur (`sesler/liste.js`);
+  kaydı olmayan sözü tarayıcı okur. Öğretmenin kararı: istisnasız her kayda peri efekti (yeni kayıtlar
+  da): kayit.html'e ekle, öğretmen kaydeder, `araclar/peri_efekti.sh` ile efekt verilip `sesler/`e konur.
 - Yeni mini oyun: `miniOyunKaydet`, `PLANLANAN_OYUNLAR`'a ekle (etiketler: "harf"/"hece"), index.html'e betik.
 
 ## Çalışma şekli
