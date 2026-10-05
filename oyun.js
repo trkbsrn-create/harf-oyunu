@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 141;
+const SURUM = 142;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -101,6 +101,7 @@ const BUYUME_ASAMASI = 3;
 const BITKI_RESIMLERI = [null, "bitki-filiz", "bitki-fidan", "bitki-sirik"];
 // Adadaki sırık kısa ve yukarı doğru solar; karakter bu kadar tırmanıp gökyüzünde kaybolur
 const SIRIK_TIRMANMA = 330;
+const SIRIK_YAKINLIGI = 170; // karakter sırığın dibine bu kadar yaklaşınca "Çık" düğmesi çıkar
 // Bulutların üstünde karakterin yürüyebildiği bant (ekran koordinatı)
 const BULUT_YURUME = new Phaser.Geom.Rectangle(80, 500, 1120, 150);
 // Sırıkta karakterin ayağının bulut zemininin üstüne çıktığı yer (ekran y'si)
@@ -384,6 +385,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.cameras.main.fadeIn(400, 251, 247, 236);
     this.tirmaniyor = false;
     this.sirigaGidiyor = null;
+    this.cikDugmesiKur();
     this.events.on("wake", (sys, veri) => {
       if (veri && veri.miniOyun) this.miniOyundanDon(veri);
       else if (veri && veri.final) {
@@ -397,6 +399,7 @@ class AdaSahnesi extends Phaser.Scene {
       if (this.tirmaniyor) return; // sırıkta tırmanırken dokunuş beklenmez
       if (this.menuTiklamasi(p)) return;
       if (this.tesisTiklamasi(p)) return;
+      if (this.cikTiklamasi(p)) return;
       if (!this.cantaAcik && this.yolaCikAlani && this.yolaCikAlani.contains(p.worldX, p.worldY)) {
         this.yolaCik();
         return;
@@ -412,12 +415,12 @@ class AdaSahnesi extends Phaser.Scene {
         this.tesiseGit();
         return;
       }
-      // Tırmanmak için sırığın dikildiği toprak karesine dokunulur (sırıklar üst üste
-      // binebilir ama kareler binmez)
+      // Sırığın dikildiği toprak karesine dokununca karakter sırığın dibine yürür; tırmanmak
+      // için orada çıkan "Çık" düğmesine basılır (sırıklar üst üste binebilir ama kareler binmez)
       const sirik = this.tarlaKareleri.find((k) => k.asama === BUYUME_ASAMASI
         && k.alan.contains(p.worldX, p.worldY));
       if (sirik) {
-        this.sirigaGit(sirik);
+        this.sirigaGit(sirik, false);
         return;
       }
       if (this.sandik && this.sandikGorundu && !this.sandikAcildi
@@ -762,20 +765,62 @@ class AdaSahnesi extends Phaser.Scene {
 
   // ---- Fasulye sırığına tırmanma: bulutların üstüne (BulutSahnesi) ----
 
-  // Karakter sırığın dibine yürür, varınca tırmanır
-  sirigaGit(kare) {
+  // Karakter sırığın dibine yürür; tirman ise varınca tırmanır ("Çık" düğmesi)
+  sirigaGit(kare, tirman = true) {
     // Seçilen sırık bir an parlar
     const bitki = kare.nesneler[0];
     bitki.setTint(0xfff3b0);
     this.time.delayedCall(350, () => bitki.clearTint());
     Sesler.pling();
     const dip = this.sirikDibi(kare);
-    if (Phaser.Math.Distance.BetweenPoints(this.cocuk, dip) < 12) {
+    if (tirman && Phaser.Math.Distance.BetweenPoints(this.cocuk, dip) < 12) {
       this.sirigaTirman(kare);
       return;
     }
     this.hedefBelirle(dip.x, dip.y, false);
-    this.sirigaGidiyor = kare;
+    this.sirigaGidiyor = tirman ? kare : null;
+  }
+
+  // "Çık" düğmesi: karakter bir sırığın dibine yaklaşınca sırığın yanında çıkar
+  cikDugmesiKur() {
+    this.cikDugmesi = this.add.container(0, 0, [
+      this.add.image(0, 0, "incele-dugmesi"),
+      doodleYazi(this, 0, -3, "Çık", 36).setOrigin(0.5),
+    ]).setVisible(false);
+    this.tweens.add({ targets: this.cikDugmesi, scale: 1.1, duration: 600, yoyo: true,
+      repeat: -1, ease: "Sine.InOut" });
+    this.cikSirigi = null;
+  }
+
+  // Her karede: yakında bir sırık varsa düğme onun yanında görünür
+  cikDugmesiniGuncelle() {
+    let yakin = null;
+    if (!this.tirmaniyor && !this.donuk && !this.cantaAcik && !this.menuAcik && !this.tesisAcik) {
+      let enAz = SIRIK_YAKINLIGI;
+      for (const k of this.tarlaKareleri) {
+        if (k.asama !== BUYUME_ASAMASI) continue;
+        const d = Phaser.Math.Distance.BetweenPoints(this.cocuk, this.sirikDibi(k));
+        if (d < enAz) {
+          enAz = d;
+          yakin = k;
+        }
+      }
+    }
+    this.cikSirigi = yakin;
+    this.cikDugmesi.setVisible(!!yakin);
+    if (yakin) {
+      const dip = this.sirikDibi(yakin);
+      this.cikDugmesi.setPosition(dip.x - 10, dip.y - 190).setDepth(dip.y + 400); // sırığın üstünde
+    }
+  }
+
+  cikTiklamasi(p) {
+    if (!this.cikSirigi || !this.cikDugmesi.visible) return false;
+    const d = this.cikDugmesi;
+    if (Math.abs(p.worldX - d.x) > 95 || Math.abs(p.worldY - d.y) > 40) return false;
+    this.tweens.add({ targets: d, scale: 0.9, duration: 90, yoyo: true });
+    this.sirigaGit(this.cikSirigi, true);
+    return true;
   }
 
   sirikDibi(kare) {
@@ -2563,6 +2608,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.kelebekleriUcur(zaman, fark);
     this.kuslariUcur(zaman, fark);
     this.bulutlariKaydir(fark);
+    this.cikDugmesiniGuncelle();
     let dx = 0;
     let dy = 0;
 
