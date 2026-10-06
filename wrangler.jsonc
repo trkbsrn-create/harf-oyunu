@@ -1,0 +1,7 @@
+// Cloudflare yayını: oyun dosyaları olduğu gibi (derleme yok) harf-oyunu.trkbsrn.workers.dev'e konur.
+// Yüklenmeyecek dosyalar .assetsignore'da.
+{
+  "name": "harf-oyunu",
+  "compatibility_date": "2026-10-01",
+  "assets": { "directory": "./" }
+}
