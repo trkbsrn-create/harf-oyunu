@@ -13,6 +13,15 @@ const BOYA_SEVIYELERI = {
   3: { resim: 3, benzer: true },
 };
 
+// Öğretmenin isteği: boyanmamış bölgeler beyaz; boyayınca beyaz ya da çok açık renk çıkmasın
+// (boyandığı anlaşılmıyordu). Çok açık renk koyulaşır, beyaz/gri tonlar açık mavi-gri olur.
+function boyaRengi(renk) {
+  const c = Phaser.Display.Color.IntegerToColor(renk);
+  if (c.v < 0.8 || c.s > 0.4) return renk;
+  if (c.s < 0.12) return 0x9fb3c8; // beyaz, kırık beyaz, açık gri
+  return Phaser.Display.Color.HSVToRGB(c.h, Math.max(c.s, 0.55), Math.min(c.v, 0.9)).color;
+}
+
 class HarfleBoyaSahnesi extends MiniOyunSahnesi {
   constructor() {
     super("harfle-boya");
@@ -123,7 +132,7 @@ class HarfleBoyaSahnesi extends MiniOyunSahnesi {
     g.bolge.boyandi = true;
     this.time.delayedCall(gecikme, () => {
       if (!g.active) return;
-      this.bolgeCiz(g, g.bolge.b.renk);
+      this.bolgeCiz(g, boyaRengi(g.bolge.b.renk));
       if (g.yazi) this.tweens.add({ targets: g.yazi, alpha: g.bolge.dogru ? 1 : 0.3, duration: 200 });
     });
   }
@@ -136,7 +145,7 @@ class HarfleBoyaSahnesi extends MiniOyunSahnesi {
       harfiSoyle(this.harf);
       this.add.particles(g.yazi.x, g.yazi.y, "parilti", {
         speed: { min: 60, max: 160 }, lifespan: 400, scale: { start: 1, end: 0 },
-        tint: [g.bolge.b.renk, 0xffffff], emitting: false,
+        tint: [boyaRengi(g.bolge.b.renk), 0xffffff], emitting: false,
       }).setDepth(20).explode(10);
       if (this.bolgeler.filter((b) => b.bolge.dogru).every((b) => b.bolge.boyandi)) this.resimBitti();
     } else {

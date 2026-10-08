@@ -38,6 +38,7 @@ class DuvardanGecmeSahnesi extends MiniOyunSahnesi {
     this.siraliKur();
     this.ilerlemeKur(this.tur === "harf" ? this.ayar.duvar : this.tur === "hece" ? 4 : 3);
     this.hedef = this.harf; // geçilecek kapının yazısı
+    this.sonDogruSerit = null; // önceki duvarda doğru kapının şeridi
     this.siraliYanlislar = [];
     if (this.tur !== "harf") {
       this.siraliPanelKur();
@@ -127,6 +128,15 @@ class DuvardanGecmeSahnesi extends MiniOyunSahnesi {
     if (this.bitti) return;
     this.uretilen++;
     const harfler = this.kapiYazilari();
+    // Öğretmenin isteği: doğru kapı her duvarda başka yerde; karakterin şimdi durduğu şeritte de
+    // olmaz (yerinde durarak kazanılmasın)
+    const dogruSira = harfler.indexOf(this.hedef);
+    if (dogruSira >= 0) {
+      const adaylar = [0, 1, 2].filter((i) => i - 1 !== this.sonDogruSerit && i - 1 !== this.serit);
+      const yer = Phaser.Utils.Array.GetRandom(adaylar.length ? adaylar : [0, 1, 2].filter((i) => i - 1 !== this.serit));
+      [harfler[dogruSira], harfler[yer]] = [harfler[yer], harfler[dogruSira]];
+      this.sonDogruSerit = yer - 1;
+    }
     const kap = this.add.container(640, DUVAR_UFUK).setDepth(10);
     const g = this.add.graphics();
     // Tuğla duvar (tam boyutta çizilir, uzaktayken küçültülür)

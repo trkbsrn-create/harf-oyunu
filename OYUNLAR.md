@@ -103,7 +103,8 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   duvardan-gecme (Duvardan Geçme: karakter (cocuk-tirman.svg, arkadan) yolda koşar; ufuktan üç
   kapılı tuğla duvarlar yaklaşır; istenen harfin kapısının şeridine geç (dokun ya da sürükle);
   yanlış kapıya çarpınca can gider; öğretmenin isteği: Kayak gibi 1. seviye harf, 2-3. seviyede
-  kapılarda Kazma düzeni (2. seviye hecenin harf kapıları, 3. seviye kelimenin hece kapıları sırayla)).
+  kapılarda Kazma düzeni (2. seviye hecenin harf kapıları, 3. seviye kelimenin hece kapıları sırayla);
+  öğretmenin isteği: doğru kapı ne önceki duvardakiyle ne karakterin şeridiyle aynı yerde (`sonDogruSerit`)).
   hece-muzigi (Hece Müziği: 1. seviye ksilofon: heceli tuşlar, oyun melodi çalar (tuş parlar,
   hece okunur), çocuk aynı sırayla basar; 2-3. seviye nota akışı: heceli notalar sağdan sola
   akar, istenen heceli notaya kırmızı çizgide dokunulur; notalar beşli (pentatonik) dizide;
@@ -132,15 +133,18 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   resim çıkar (KONUMLU_KELIMELER); yarısı kazınınca ad okunur, üç kutulu seçeneklerden harfin yeri
   seçilir (Resimden Sesi Bul'un tersi; 1. seviye başında/sonunda, 2-3. seviye üçü; `harfinYeri`:
   harf birden çok yerde geçen kelime sorulmaz)).
-  tombala (Tombala: resimli kart; torbadan harf topu çıkar (ünlü söylenir), o sesle başlayan
-  resme pul konur; 2-3. seviyede kartta olmayan ya da zaten kapatılmış harf de çıkar, "Kartımda
-  yok" düğmesine basılır; satır dolunca "Çinko!", kart dolunca "Tombala!").
+  tombala (Tombala: öğretmenin isteği: kartta resim, hece ve kelime kutuları (`kutulariSec`; 1. seviye 2 resim
+  2 hece, 2. 1 resim 2 hece 1 kelime, 3. 2+2+2); torbadan top çıkar: resim için harf (o sesle başlayan resme
+  pul), hece/kelime için aynısı (yazılı kutuya pul); resimler `basResimleri` (başında bilinen harf), hece
+  `heceHavuzu`, kelime `ogrenilmisKelimeler`; yetmezse kutular tekrar eder; 2-3. seviyede kartta olmayan
+  top da çıkar, "Kartımda yok" düğmesine basılır; satır dolunca "Çinko!", kart dolunca "Tombala!").
   arabayi-ulastir (Arabayı Ulaştır: arabadan başlayıp bitiş bayrağına parmakla yol çizilir;
   araba yolu izler, doğru harfli durakları toplar; yanlış durakta durur, can gider; bitişe varıp
   durak eksikse eksikler parlar, araba başa döner (can gitmez); Kazma gibi 2. seviye hecenin harf
   durakları, 3. seviye kelimenin hece durakları sırayla; sırası gelmemiş durakta başa döner).
   yakala-yaz (Yakala ve Yaz: kelime söylenir, çantada harf yerleri boş; uçuşan harf yaratıklarına
-  dokununca ağ iner (en yakın yaratık); gereken harf çantadaki yerine uçar, gerekmeyen can götürür;
+  dokununca ağ iner (en yakın yaratık); öğretmenin isteği: harfler sırayla yakalanır (`sirasiGelen`),
+  sırası gelmemiş harf yalnızca sallanır, kelimede olmayan can götürür;
   uçanlar arasında gereken harf hep bulunur).
   kirik-cam (Kırık Cam: her seviyede camı kır: buzlu camın üstündeki oyunun harflerine dokununca
   cam çatlar, hepsi bulununca kırılır, arkadaki resim (harfle başlayan kelime, KONUMLU_KELIMELER bas)
@@ -175,11 +179,13 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   seviye 1 ev/çiçek/ağaç/balık, 2 gemi/kelebek/araba/kedi, 3 fener/tren/kale/roket, seviyeyle daha çok
   bölge; `detay` harfsiz süs resim bitince boyanır, `cizgi` hep görünür) basit biçimlerden bölgeler; her
   bölgede harf; istenen harfli bölgeye dokununca boyanır; doğrular bitince kalan bölgeler sırayla
-  boyanır; üstte kalan bölgenin harfi görünmüyorsa `lx, ly` ile harf yeri verilir).
+  boyanır; üstte kalan bölgenin harfi görünmüyorsa `lx, ly` ile harf yeri verilir; öğretmenin isteği:
+  boyanmamış bölge beyaz, beyaz ya da çok açık boya rengi koyulaşır `boyaRengi`).
   harf-firtinasi (Harf Fırtınası: art arda kısa görevler; önce görevin adı büyükçe çıkar
   ("Dokun!", "Patlat!", "Seç!", "Resim!", "Yakala!"), sonra süre çubuğu akar; süre biterse ya da
   yanlış seçilirse can gider, sıradaki göreve geçilir; seviyeyle görev sayısı artar, süre kısalır,
-  3. seviyede benzer harfler).
+  3. seviyede benzer harfler; öğretmenin kuralı: sorulan yalnızca bilinen harflerden, "Resim!" resimleri
+  `basResimleri` (çoğunlukla oyunun harfi, arada önceki harfler); yanlış seçenekler önce bilinen harflerden).
   Hecelerine ayrılmış ortak kelime listesi `KELIMELER`, `ogrenilmisKelimeler(harf)` (ortak.js;
   yalnızca öğrenilmiş harflerle yazılabilen kelimeler).
   Hece havuzu ve seviyeye göre hece sorusu ortak: `heceHavuzu`, `heceSorusu` (ortak.js).

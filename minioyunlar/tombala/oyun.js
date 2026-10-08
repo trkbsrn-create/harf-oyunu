@@ -1,15 +1,18 @@
-// Mini oyun: Tombala (resimli tombala)
-// Çocuğun kartında resimler var (arı, nar, eşek...). Torbadan bir harf topu çıkar (ünlüyse
-// söylenir). Çocuk o sesle başlayan resme dokunur, resmin üstüne pul konur. Kart dolunca
-// "Tombala!". Üst seviyelerde torbadan karttaki resimlerin hiçbirine uymayan harf de çıkar;
-// o zaman "Kartımda yok" düğmesine basılır. Yanlış seçim bir can götürür.
-// Seviyeler: 1: 4 resim, hep karttaki harfler; 2: 4 resim, arada kartta olmayan harf;
-// 3: 6 resim, arada kartta olmayan ya da zaten kapatılmış harf, satır dolunca "Çinko!".
+// Mini oyun: Tombala (resimli, heceli, kelimeli tombala)
+// Öğretmenin isteği: kartta resimler, heceler ve kelimeler var. Torbadan bir top çıkar: resim
+// kutusu için harf (o sesle başlayan resme pul konur), hece kutusu için hece, kelime kutusu için
+// kelime (aynısının yazılı olduğu kutuya pul konur). Kart dolunca "Tombala!". Yalnızca bu harfe
+// kadar öğrenilmiş harfler (resimler başındaki harfe göre; yazılanlar yalnızca bilinen harflerle).
+// Yeterli resim/hece/kelime yoksa kutular tekrar eder. Üst seviyelerde kartta olmayan top da
+// çıkar; o zaman "Kartımda yok" düğmesine basılır. Yanlış seçim bir can götürür.
+// Seviyeler: 1: 4 kutu (2 resim, 2 hece); 2: 4 kutu (1 resim, 2 hece, 1 kelime), arada kartta
+// olmayan top; 3: 6 kutu (2 resim, 2 hece, 2 kelime), arada kartta olmayan ya da kapatılmış top,
+// satır dolunca "Çinko!".
 
 const TOMBALA_SEVIYELERI = {
-  1: { resim: 4, sutun: 2, sasirtma: 0 },
-  2: { resim: 4, sutun: 2, sasirtma: 2 },
-  3: { resim: 6, sutun: 3, sasirtma: 3 },
+  1: { kutular: { resim: 2, hece: 2, kelime: 0 }, sutun: 2, sasirtma: 0 },
+  2: { kutular: { resim: 1, hece: 2, kelime: 1 }, sutun: 2, sasirtma: 2 },
+  3: { kutular: { resim: 2, hece: 2, kelime: 2 }, sutun: 3, sasirtma: 3 },
 };
 
 const PUL_RENKLERI = [0xff6b5a, 0x7cc4ef, 0x8fd16a, 0xffc928, 0xc8a2ff];
@@ -21,7 +24,44 @@ class TombalaSahnesi extends MiniOyunSahnesi {
 
   preload() {
     super.preload();
-    for (const h of HARFLER) if (h.resim) this.load.svg(h.resim, `gorseller/${h.resim}.svg`);
+    for (const k of basResimleri(this.harf)) this.load.svg(kelimeResmi(k), `gorseller/${kelimeResmi(k)}.svg`);
+  }
+
+  // Kartın kutuları: { tur, cagri (topta çıkan), metin (kutuda yazan ya da resmin adı) }
+  kutulariSec() {
+    const harf = this.harf;
+    const icinde = (m) => m.includes(harf);
+    const karistir = (dizi) => {
+      const k = Phaser.Utils.Array.Shuffle(dizi.slice());
+      return [...k.filter(icinde), ...k.filter((m) => !icinde(m))]; // önce oyunun harfini içerenler
+    };
+    const uzunluk = this.seviye >= 3 ? null : 2;
+    const havuzlar = {
+      resim: karistir(basResimleri(harf)).map((k) => ({ tur: "resim", cagri: k[0], metin: k })),
+      hece: karistir([...new Set(heceHavuzu(harf).map((h) => h.hece))].filter((h) => !uzunluk || h.length === uzunluk))
+        .map((h) => ({ tur: "hece", cagri: h, metin: h })),
+      kelime: karistir(ogrenilmisKelimeler(harf).map((k) => k.kelime).filter((k) => k.length <= 5))
+        .map((k) => ({ tur: "kelime", cagri: k, metin: k })),
+    };
+    const secilen = [];
+    let eksik = 0;
+    for (const [tur, sayi] of Object.entries(this.ayar.kutular)) {
+      const havuz = havuzlar[tur];
+      for (let i = 0; i < sayi; i++) {
+        // Resimlerde başındaki harf farklı olsun (iki resim aynı topla kapanmasın); azsa olur
+        let oge = havuz.find((o) => !secilen.includes(o) && !(tur === "resim" && secilen.some((x) => x.cagri === o.cagri)));
+        if (!oge) oge = havuz.find((o) => !secilen.includes(o));
+        if (oge) secilen.push(oge); else eksik++;
+      }
+    }
+    // Eksikler önce öbür türlerden, o da yoksa var olanların tekrarıyla dolar (öğretmenin kararı)
+    const kalan = Object.values(havuzlar).flat().filter((o) => !secilen.includes(o));
+    while (eksik > 0 && kalan.length) { secilen.push(kalan.shift()); eksik--; }
+    const ilkler = secilen.slice();
+    for (let i = 0; eksik > 0 && ilkler.length; i++, eksik--) secilen.push({ ...ilkler[i % ilkler.length] });
+    this.disarida = [...new Set(kalan.map((o) => o.cagri))]
+      .filter((c) => !secilen.some((o) => o.cagri === c || o.metin === c)); // resmi kartta olan kelime de çıkmaz
+    return Phaser.Utils.Array.Shuffle(secilen);
   }
 
   create() {
@@ -33,13 +73,7 @@ class TombalaSahnesi extends MiniOyunSahnesi {
     this.top = null;
     this.cekilen = null;
     this.kilitli = true;
-    const ogrenilmis = ogrenilmisHarfler(this.harf);
-    const resimliler = HARFLER.filter((h) => h.resim && ogrenilmis.includes(h.kucuk));
-    // Kartta oyunun harfinin resmi her zaman var
-    const kendi = resimliler.find((h) => h.kucuk === this.harf);
-    const obur = Phaser.Utils.Array.Shuffle(resimliler.filter((h) => h !== kendi));
-    const karttakiler = Phaser.Utils.Array.Shuffle([kendi, ...obur].filter(Boolean).slice(0, this.ayar.resim));
-    this.disarida = resimliler.filter((h) => !karttakiler.includes(h)).map((h) => h.kucuk);
+    const karttakiler = this.kutulariSec();
     this.ilerlemeKur(karttakiler.length);
 
     // Kart
@@ -58,19 +92,29 @@ class TombalaSahnesi extends MiniOyunSahnesi {
     g.fillRoundedRect(560 - kartEn / 2, 400 - kartBoy / 2, kartEn, kartBoy, 24);
     g.lineStyle(5, 0x2b2b2b, 1);
     g.strokeRoundedRect(560 - kartEn / 2, 400 - kartBoy / 2, kartEn, kartBoy, 24);
-    karttakiler.forEach((h, i) => {
+    const ZEMIN = { resim: 0xf6efe0, hece: 0xfff1bf, kelime: 0xdcf0fb };
+    karttakiler.forEach((o, i) => {
       const x = solX + (i % sutun) * (kutuEn + 16);
       const y = ustY + Math.floor(i / sutun) * (kutuBoy + 16);
       const kap = this.add.container(x, y).setDepth(2);
       const kg = this.add.graphics();
-      kg.fillStyle(0xf6efe0, 1);
+      kg.fillStyle(ZEMIN[o.tur], 1);
       kg.fillRoundedRect(-kutuEn / 2, -kutuBoy / 2, kutuEn, kutuBoy, 16);
       kg.lineStyle(3, 0x2b2b2b, 1);
       kg.strokeRoundedRect(-kutuEn / 2, -kutuBoy / 2, kutuEn, kutuBoy, 16);
-      const resim = this.add.image(0, 0, h.resim);
-      resim.setScale(Math.min(150 / resim.width, 140 / resim.height));
-      kap.add([kg, resim]);
-      kap.kutu = { harf: h.kucuk, kelime: h.kelime, satir: Math.floor(i / sutun), dolu: false };
+      kap.add(kg);
+      if (o.tur === "resim") {
+        const resim = this.add.image(0, 0, kelimeResmi(o.metin));
+        resim.setScale(Math.min(150 / resim.width, 140 / resim.height));
+        kap.add(resim);
+      } else {
+        const yazi = boyaliOrtala(titret(this.add.text(0, 0, o.metin, {
+          fontFamily: "Andika", fontSize: o.tur === "hece" ? "72px" : "60px", color: "#2b2b2b", padding: { x: 4, y: 4 },
+        }), 1.4));
+        yazi.setScale(Math.min(1, 170 / yazi.width));
+        kap.add(yazi);
+      }
+      kap.kutu = { ...o, satir: Math.floor(i / sutun), dolu: false };
       kap.setSize(kutuEn, kutuBoy).setInteractive({ useHandCursor: true });
       kap.on("pointerdown", () => this.kutuyaDokun(kap));
       this.kutular.push(kap);
@@ -94,14 +138,14 @@ class TombalaSahnesi extends MiniOyunSahnesi {
       this.yokDugmesi.on("pointerdown", () => this.yokaBasildi());
     }
 
-    // Çekiliş sırası: karttaki harfler + şaşırtma harfleri (kartta olmayan ya da tekrar)
-    this.siradakiler = Phaser.Utils.Array.Shuffle(karttakiler.map((h) => h.kucuk));
+    // Çekiliş sırası: her kutunun topu + şaşırtma topları (kartta olmayan ya da tekrar)
+    this.siradakiler = Phaser.Utils.Array.Shuffle(karttakiler.map((o) => o.cagri));
     for (let i = 0; i < this.ayar.sasirtma; i++) {
       const tekrar = this.seviye >= 3 && i % 2 === 1;
-      const harf = tekrar || !this.disarida.length ? null : Phaser.Utils.Array.GetRandom(this.disarida);
+      const cagri = tekrar || !this.disarida.length ? null : Phaser.Utils.Array.GetRandom(this.disarida);
       // İlk çekiliş hep karttan (kolay başlangıç); şaşırtmalar araya
       const yer = Phaser.Math.Between(1, this.siradakiler.length);
-      this.siradakiler.splice(yer, 0, harf || "tekrar");
+      this.siradakiler.splice(yer, 0, cagri || "tekrar");
     }
     this.time.delayedCall(400, () => this.harfiTanit(() => this.topCek()));
   }
@@ -113,7 +157,7 @@ class TombalaSahnesi extends MiniOyunSahnesi {
     if (harf === undefined) return;
     if (harf === "tekrar") {
       const dolular = this.kutular.filter((k) => k.kutu.dolu);
-      harf = dolular.length ? Phaser.Utils.Array.GetRandom(dolular).kutu.harf : (this.disarida[0] || this.siradakiler.shift());
+      harf = dolular.length ? Phaser.Utils.Array.GetRandom(dolular).kutu.cagri : (this.disarida[0] || this.siradakiler.shift());
     }
     this.cekilen = harf;
     const kap = this.add.container(1070, 470).setDepth(6);
@@ -128,22 +172,23 @@ class TombalaSahnesi extends MiniOyunSahnesi {
       fontFamily: "Andika", fontSize: "64px", color: "#ffffff",
       stroke: "#3b2a1a", strokeThickness: 10, padding: { x: 4, y: 4 },
     }), 1.8));
+    yazi.setScale(Math.min(1, 96 / yazi.width)); // hece ve kelime topa sığsın
     kap.add([g, yazi]);
     kap.setScale(0.3);
     this.top = kap;
     Sesler.nota(700, 0, 0.1, 0.1, "sine");
     this.tweens.add({ targets: kap, y: 230, scale: 1, duration: 450, ease: "Back.Out",
       onComplete: () => {
-        harfiSoyle(harf);
+        if (harf.length === 1) harfiSoyle(harf); else Sesler.soyle(harf);
         this.kilitli = false;
-        const dogru = this.kutular.find((k) => k.kutu.harf === harf && !k.kutu.dolu);
+        const dogru = this.kutular.find((k) => k.kutu.cagri === harf && !k.kutu.dolu);
         this.elGoster(dogru || this.yokDugmesi);
       } });
   }
 
   kutuyaDokun(kap) {
     if (this.bitti || this.kilitli || kap.kutu.dolu) return;
-    if (kap.kutu.harf === this.cekilen) {
+    if (kap.kutu.cagri === this.cekilen) {
       this.kilitli = true;
       kap.kutu.dolu = true;
       // Pul konur
@@ -152,7 +197,7 @@ class TombalaSahnesi extends MiniOyunSahnesi {
       pul.setScale(0);
       this.tweens.add({ targets: pul, scale: 1, duration: 250, ease: "Back.Out" });
       Sesler.pling();
-      this.time.delayedCall(250, () => Sesler.soyle(kap.kutu.kelime));
+      this.time.delayedCall(250, () => Sesler.soyle(kap.kutu.metin));
       this.ilerlemeArtir(kap.x, kap.y);
       // Satır doldu mu? (çok satırlı kartta "Çinko!")
       const satirlar = new Set(this.kutular.map((k) => k.kutu.satir));
@@ -166,7 +211,7 @@ class TombalaSahnesi extends MiniOyunSahnesi {
 
   yokaBasildi() {
     if (this.bitti || this.kilitli) return;
-    const kartta = this.kutular.some((k) => k.kutu.harf === this.cekilen && !k.kutu.dolu);
+    const kartta = this.kutular.some((k) => k.kutu.cagri === this.cekilen && !k.kutu.dolu);
     if (!kartta) {
       this.kilitli = true;
       Sesler.pling();
@@ -181,7 +226,7 @@ class TombalaSahnesi extends MiniOyunSahnesi {
   yanlis(nesne) {
     this.tweens.add({ targets: nesne, angle: { from: -5, to: 5 }, duration: 70, yoyo: true, repeat: 2, onComplete: () => nesne.setAngle(0) });
     this.kalpEksilt();
-    this.ipucuGoster(this.kutular.find((k) => k.kutu.harf === this.cekilen && !k.kutu.dolu) || this.yokDugmesi);
+    this.ipucuGoster(this.kutular.find((k) => k.kutu.cagri === this.cekilen && !k.kutu.dolu) || this.yokDugmesi);
   }
 
   yaziPatlat(metin, x = 560, y0 = 400, derinlik = 20) {
