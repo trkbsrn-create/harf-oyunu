@@ -151,6 +151,9 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - İskelede karakter gidip geliyordu: tesisin resmi iskeleyi de kapsıyordu, iskeleye her dokunuşta önce
   iskelenin başına dönülüyordu. Dokunma alanı büyük bir resimse resmin hangi bölümüne dokunulduğuna bak.
 
+- Hikâyedeki mini oyunlarda bitiş yıldızları düz çıkıyordu: ada "yildiz" adıyla kendi dokusunu üretiyordu,
+  mini oyunun aynı adlı SVG'si yüklenmiyordu. Sahneler arasında doku adları ortaktır; yeni dokuya benzersiz ad ver.
+
 - Altın Madencisi'nde doğru külçenin önünde yanlış külçe olunca ona ulaşılamıyordu; köşedeki külçeler
   kancanın açısı dışındaydı. Nesneler rastgele yerleşirken doğru olana ulaşılabildiğini ölç.
 

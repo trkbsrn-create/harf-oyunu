@@ -321,9 +321,12 @@ class MiniOyunSahnesi extends Phaser.Scene {
   }
 
   preload() {
-    for (const ad of ["kalp", "kalp-bos", "onay-pencere", "incele-dugmesi", "doku-kagit", "el", "yildiz", "yildiz-bos"]) {
+    for (const ad of ["kalp", "kalp-bos", "onay-pencere", "incele-dugmesi", "doku-kagit", "el", "yildiz-bos"]) {
       this.load.svg(ad, `gorseller/${ad}.svg`);
     }
+    // Ödül yıldızı ayrı adla: ada sahnesi "yildiz" adıyla küçük düz bir yıldız üretiyor; aynı ad
+    // olunca hikâyedeki mini oyunlarda bitiş yıldızları o düz yıldızla çıkıyordu
+    this.load.svg("yildiz-odul", "gorseller/yildiz.svg");
   }
 
   ortakKur() {
@@ -445,7 +448,7 @@ class MiniOyunSahnesi extends Phaser.Scene {
       speed: { min: 80, max: 220 }, lifespan: 450, scale: { start: 1, end: 0 },
       tint: [0xffe680, 0xffffff, 0xffc928], emitting: false,
     }).setDepth(940).explode(12);
-    const yildiz = this.add.image(x, y, "yildiz").setScale(0.5).setDepth(941);
+    const yildiz = this.add.image(x, y, "yildiz-odul").setScale(0.5).setDepth(941);
     const hedefX = 862 + Math.max(26, (196 * Math.min(this.ilerleme, this.ilerlemeHedef)) / this.ilerlemeHedef);
     this.tweens.add({
       targets: yildiz, x: hedefX, y: 45, scale: 0.3, angle: 200, duration: 550, ease: "Cubic.In",
@@ -573,7 +576,7 @@ class MiniOyunSahnesi extends Phaser.Scene {
       const kazanilan = Math.max(1, this.canSayisi === undefined ? 3 : this.canSayisi);
       [[560, 214], [640, 196], [720, 214]].forEach(([x, y], i) => {
         const dolu = i < kazanilan;
-        const yildiz = this.add.image(x, y, dolu ? "yildiz" : "yildiz-bos").setDepth(1002)
+        const yildiz = this.add.image(x, y, dolu ? "yildiz-odul" : "yildiz-bos").setDepth(1002)
           .setScale(0).setAngle(i === 0 ? -12 : i === 2 ? 12 : 0);
         this.tweens.add({
           targets: yildiz, scale: i === 1 ? 1.15 : 0.95, duration: 380, delay: 350 + i * 280, ease: "Back.Out",
