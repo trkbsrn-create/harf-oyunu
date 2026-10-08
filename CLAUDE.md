@@ -18,7 +18,8 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
 - `gorseller/` kendi SVG'lerimiz, `araclar/doodle_ciz.py` ile üretilir (görsel değişikliği betikte yapılır).
 - `araclar/dene.js` mini oyun deneme aracı (aşağıda "Test").
 - Öğretmen sayfaları: `mikrofon.html`, `kayit.html`, `dinle.html`.
-- Phaser 3.90.0 jsDelivr'den (sürüm değiştirilmez). Yayın: GitHub Pages, kökte `.nojekyll`.
+- Phaser 3.90.0 jsDelivr'den (sürüm değiştirilmez). Yayın: Cloudflare Workers (harfavcisi.net; ana sürüme eklenince
+  kendiliğinden yüklenir, ayar `wrangler.jsonc` + `.assetsignore`). Eski GitHub Pages adresi de duruyor.
 
 ## Mini oyunların ortak kuralları (öğretmenin kararları)
 - Her oyunda 3 seviye; mini oyunlarda kaybetmek mümkün (3 can). Bitişte 1–3 yıldız.
