@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Ses Kayıtları</title>
   <!-- Öğretmenin kendi sesiyle oyunun sözlerini kaydettiği sayfa. Kayıtlar yalnızca bu
-       tarayıcıda (IndexedDB) durur; hiçbir yere gönderilmez. "Hepsini indir" bir zip dosyası
+       tarayıcıda (IndexedDB) durur; hiçbir yere gönderilmez. "Seçilenleri indir" bir zip dosyası
        verir; öğretmen bu dosyayı Claude'a verince sesler oyuna eklenir. -->
   <style>
     @font-face { font-family: "Andika"; src: url("yazitipi/Andika-Regular.ttf") format("truetype"); }
@@ -33,8 +33,9 @@
     button:disabled { opacity: 0.35; cursor: default; }
     .tik { font-size: 26px; width: 30px; text-align: center; }
     #indir { font-size: 22px; background: #b5e48c; }
-    #suzgecKutu { font-size: 20px; display: flex; align-items: center; gap: 8px; cursor: pointer; }
-    #suzgec { width: 26px; height: 26px; }
+    .sec { width: 30px; height: 30px; flex: none; cursor: pointer; }
+    .oyunda { color: #2e7d32; }
+    header button { font-size: 19px; }
     @media (max-width: 560px) { .metin b { font-size: 24px; } button { padding: 8px 10px; font-size: 18px; } }
   </style>
 </head>
@@ -42,8 +43,9 @@
   <header>
     <h1>Ses Kayıtları</h1>
     <span id="sayac"></span>
-    <label id="suzgecKutu"><input type="checkbox" id="suzgec" checked> Yalnızca beğenmediklerim</label>
-    <button id="indir">Hepsini indir</button>
+    <button id="yenileriSec" title="Kaydedilmiş ama oyunda henüz olmayan sesleri seçer">Yenileri seç</button>
+    <button id="secimiTemizle">Seçimi temizle</button>
+    <button id="indir">Seçilenleri indir</button>
   </header>
   <main>
     <div class="bilgi">
@@ -51,10 +53,11 @@
       beğenmezseniz yeniden kaydedin. Baştaki ve sondaki sessizlik kendiliğinden kesilir, ses
       yüksekliği eşitlenir.<br>
       Kayıtlar yalnızca bu tarayıcıda durur, bir yere gönderilmez; sayfayı kapatıp sonra devam
-      edebilirsiniz (aynı cihaz ve tarayıcıyla). İşiniz bitince <b>Hepsini indir</b> deyin ve
-      inen zip dosyasını bana verin.<br>
-      Şimdilik yalnızca <b>beğenmediğiniz</b> yapay zekâ sesleri görünüyor; hepsini görmek için üstteki
-      kutunun işaretini kaldırın.<br>
+      edebilirsiniz (aynı cihaz ve tarayıcıyla).<br>
+      Yalnızca <b>seçtiğiniz</b> sesler indirilir: satırın başındaki kutuyu işaretleyin. Yeni kaydettiğiniz
+      ses kendiliğinden seçilir. <b>Yenileri seç</b>, kaydedip henüz bana vermediğiniz (oyunda olmayan)
+      sesleri seçer. Sonra <b>Seçilenleri indir</b> deyin ve inen zip dosyasını bana verin.
+      Oyunda sesi olanların altında yeşil <span class="oyunda">“Oyunda var”</span> yazar.<br>
       Sessiz bir odada, mikrofona bir karış uzaktan, sakin ve neşeli bir sesle okuyun.
     </div>
     <div id="liste"></div>
@@ -64,6 +67,7 @@
   <script src="harfler.js"></script>
   <script src="minioyunlar/ortak.js"></script>
   <script src="minioyunlar/resimden-ses/kelimeler.js"></script>
+  <script src="sesler/liste.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
   <script>
     // ---- Kaydedilecek sözler (oyunda sesli okunanlar) ----
@@ -128,6 +132,10 @@
         "Fasulye sırığı oldu! Sırığın dibine git, Çık düğmesine bas.",
         "Parçayı aldın! Yelkenliye götür. Görev listesindeki yelkenliye dokun.",
       ].map((m) => ({ anahtar: `soz-${kisalt(m)}`, metin: m, not: "" })) },
+      { baslik: "Mini oyun yönergeleri (peri)", oge: [...new Set([
+        ...Object.values(YONERGELER).flatMap((y) => (typeof y === "object" ? Object.values(y) : [y])),
+        ...Object.values(SIRALI_YONERGELER),
+      ])].map((m) => ({ anahtar: `soz-${kisalt(m)}`, metin: m, not: "" })) },
       { baslik: "Ekrandaki uyarılar ve sözler", oge: [
         "Telefonu yan çevir", "Tohumu kazanmak için gücünü göster!", "Parçayı almak için gücünü göster!",
         "Damla kazandın!", "Tarlaya tohum ekince varili buraya gelir.", "Baştan başlasın mı?", "Çanta boşalır.",
@@ -138,12 +146,14 @@
     ];
     const HEPSI = BOLUMLER.flatMap((b) => b.oge);
 
-    // Öğretmenin dinle.html'de beğenmediği yapay zekâ sesleri: önce bunlar kaydedilecek
-    const BEGENILMEYENLER = new Set(["a", "e", "an", "na", "at", "ta", "al", "la", "en", "ne", "et",
-      "te", "el", "le", "in", "ni", "it", "ti", "il", "li", "lan", "nat", "ten", "let", "tel", "anne",
-      "nine", "elle", "ana", "ata", "ilan", "inat", "atlet", "ilet"]);
-    const suzgecAcik = () => document.getElementById("suzgec").checked;
-    const gorunenler = () => HEPSI.filter((o) => !suzgecAcik() || BEGENILMEYENLER.has(o.metin));
+    // Seçilen sesler (yalnızca bunlar indirilir); bu tarayıcıda hatırlanır
+    const SECIM_ANAHTARI = "harf-oyunu-kayit-secimi";
+    let secilenler = new Set();
+    try { secilenler = new Set(JSON.parse(localStorage.getItem(SECIM_ANAHTARI) || "[]")); } catch (e) { /* yok */ }
+    const secimiSakla = () => {
+      try { localStorage.setItem(SECIM_ANAHTARI, JSON.stringify([...secilenler])); } catch (e) { /* olmazsa olmasın */ }
+    };
+    const oyundaVar = (oge) => typeof SES_DOSYALARI !== "undefined" && !!SES_DOSYALARI[oge.metin];
 
     // ---- Tarayıcı içi depo (IndexedDB) ----
     const DB = new Promise((tamam, hata) => {
@@ -232,6 +242,8 @@
       satir.classList.remove("kaydediyor");
       satir.querySelector(".kaydet").textContent = "●";
       await kaydiYaz(oge.anahtar, await temizle(ham));
+      secilenler.add(oge.anahtar); // yeni kayıt kendiliğinden seçilir
+      secimiSakla();
       await guncelle();
       dinle(oge.anahtar);
     }
@@ -257,11 +269,20 @@
       for (const oge of b.oge) {
         const satir = document.createElement("div");
         satir.className = "satir";
-        satir.innerHTML = `<span class="tik"></span><div class="metin"><b></b><small></small></div>
+        satir.innerHTML = `<input type="checkbox" class="sec" title="İndirmek için seç"><span class="tik"></span>
+          <div class="metin"><b></b><small></small></div>
           <button class="kaydet" title="Kaydet">●</button><button class="dinle" title="Dinle">▶</button>
           <button class="sil" title="Sil">✕</button>`;
         satir.querySelector("b").textContent = oge.metin;
-        satir.querySelector("small").textContent = oge.not;
+        const notlar = [oge.not, oyundaVar(oge) ? "Oyunda var" : ""].filter(Boolean);
+        satir.querySelector("small").textContent = notlar.join(" · ");
+        if (oyundaVar(oge)) satir.querySelector("small").classList.add("oyunda");
+        satir.querySelector(".sec").onchange = (e) => {
+          if (e.target.checked) secilenler.add(oge.anahtar);
+          else secilenler.delete(oge.anahtar);
+          secimiSakla();
+          guncelle();
+        };
         satir.querySelector(".kaydet").onclick = () =>
           (kaydedilen && kaydedilen.oge === oge ? kaydiBitir() : kaydaBasla(oge, satir)).catch((e) => alert("Mikrofon açılamadı: " + e.message));
         satir.querySelector(".dinle").onclick = () => dinle(oge.anahtar);
@@ -282,26 +303,38 @@
         satir.querySelector(".dinle").disabled = !kayitli;
         satir.querySelector(".sil").disabled = !kayitli;
       }
-      // Süzgeç: yalnızca beğenilmeyenler görünür; içi boş kalan bölümün başlığı da gizlenir
-      const gorunen = gorunenler();
-      const goster = new Set(gorunen.map((o) => o.anahtar));
-      for (const [k, satir] of Object.entries(satirlar)) satir.style.display = goster.has(k) ? "" : "none";
-      for (const [h, b] of basliklar) h.style.display = b.oge.some((o) => goster.has(o.anahtar)) ? "" : "none";
-      const sayi = gorunen.filter((o) => var_.has(o.anahtar)).length;
-      document.getElementById("sayac").textContent = `${sayi} / ${gorunen.length} kaydedildi`;
+      for (const [k, satir] of Object.entries(satirlar)) satir.querySelector(".sec").checked = secilenler.has(k);
+      const sayi = HEPSI.filter((o) => var_.has(o.anahtar)).length;
+      const secili = HEPSI.filter((o) => secilenler.has(o.anahtar) && var_.has(o.anahtar)).length;
+      document.getElementById("sayac").textContent = `${sayi} / ${HEPSI.length} kaydedildi`;
+      document.getElementById("indir").textContent = `Seçilenleri indir (${secili})`;
     }
-    document.getElementById("suzgec").onchange = () => guncelle();
+
+
+    // Kaydedilmiş ama oyunda olmayan (bana henüz verilmemiş) sesler seçilir
+    document.getElementById("yenileriSec").onclick = async () => {
+      const var_ = new Set(await anahtarlar());
+      for (const oge of HEPSI) if (var_.has(oge.anahtar) && !oyundaVar(oge)) secilenler.add(oge.anahtar);
+      secimiSakla();
+      guncelle();
+    };
+    document.getElementById("secimiTemizle").onclick = () => {
+      secilenler.clear();
+      secimiSakla();
+      guncelle();
+    };
 
     document.getElementById("indir").onclick = async () => {
       const zip = new JSZip();
       const dizin = {};
       for (const oge of HEPSI) {
+        if (!secilenler.has(oge.anahtar)) continue;
         const blob = await kaydiAl(oge.anahtar);
         if (!blob) continue;
         zip.file(`sesler/${oge.anahtar}.wav`, blob);
         dizin[oge.anahtar] = oge.metin;
       }
-      if (!Object.keys(dizin).length) { alert("Henüz kayıt yok."); return; }
+      if (!Object.keys(dizin).length) { alert("Seçili kayıt yok. Satırların başındaki kutuları işaretleyin."); return; }
       zip.file("sesler/liste.json", JSON.stringify(dizin, null, 2));
       const a = document.createElement("a");
       a.href = URL.createObjectURL(await zip.generateAsync({ type: "blob" }));

@@ -39,7 +39,8 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
 - Harfler `harfiSoyle` ile sesiyle okunur (n "nnn"). Sözleri öğretmenin kendi kaydı okur (`sesler/liste.js`);
   kaydı olmayan sözü tarayıcı okur. Öğretmenin kararı: istisnasız her kayda peri efekti (yeni kayıtlar
   da): kayit.html'e ekle, öğretmen kaydeder, `araclar/peri_efekti.sh` ile efekt verilip `sesler/`e konur.
-- Yeni mini oyun: `miniOyunKaydet`, `PLANLANAN_OYUNLAR`'a ekle (etiketler: "harf"/"hece"), index.html'e betik.
+- Yeni mini oyun: `miniOyunKaydet`, `PLANLANAN_OYUNLAR`'a ekle (etiketler: "harf"/"hece"), `YONERGELER`'e
+  peri yönergesi, index.html'e betik.
 
 ## Çalışma şekli
 - Kullanıcı kodlama bilmiyor. Tüm açıklamaları Türkçe, kısa ve sade yaz.
@@ -118,6 +119,7 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
   (`s` = sahne, ör. `"s.ilerleme"`). Oyun adı `menu` menüyü, `ana` karşılama ekranını açar.
   Sahne adı da verilebilir (AdaSahnesi, HikayeSahnesi). Ada bu ortamda çok yavaş çizilir (saniyede
   birkaç kare): ada denemelerinde sonra_ms uzun tutulur (ör. 25000).
+  Mini oyun yönergesi denemelerde kapalı; görmek için başına `YONERGE=1` yazılır.
   Kurulum (yeni oturumda bir kez): `npm install --prefix araclar --no-save playwright phaser@3.90.0`.
 - Gerçek telefonda (özellikle iPhone) denenemeyen değişikliklerde bunu kullanıcıya açıkça söyle.
 
@@ -162,6 +164,6 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Bulut bölgelerinin içeriği; bilmeceler ("Hızlı koşar, yeleleri var." → at; "Türk bayrağında
   beni görürler, kırmızıyla eş derler." → al) nerede kullanılacak, sonra konuşulacak.
 - Kalan harf grupları ve 2. ada; yeni gruplarla 4-5 heceli kelimeler (Elektrik Devresi).
-- Peri rehber (öğretmenin fikri): görünüş, tanışma, anlatım penceresi, görev düğmesi ve omuzdaki peri
-  (her işi ilk kez gösterir) yapıldı. Sırada: her mini oyunun başında yönerge. Perinin adı yok (sorulabilir).
+- Peri rehber (öğretmenin fikri) tamam: tanışma, anlatım, görev düğmesi, omuzdaki peri, mini oyun
+  yönergeleri. Perinin adı yok (sorulabilir). Yeni mini oyuna `YONERGELER`'de yönerge yazılır.
 - Bulut Market (taslak proje): karakterin kıyafetini değiştirme, yeni eşyalar alma. Sonra başlanacak.

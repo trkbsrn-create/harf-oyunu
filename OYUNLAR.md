@@ -306,11 +306,11 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
 - `kayit.html` – Öğretmenin kendi sesiyle oyunun sözlerini kaydettiği sayfa (oyundaki bütün sözler: harf sesleri,
   heceler, kelimeler, resim adları, yönergeler, ekrandaki uyarılar, oyun sözleri, mini oyun adları; listeler harfler.js, ortak.js ve resimden-ses/kelimeler.js'den,
   oyun sözleri sayfada yazılı: oyuna yeni söz eklenince oraya da eklenmeli). Kayıtlar yalnızca
-  o tarayıcıda (IndexedDB) durur; sessizlik kesilir, ses eşitlenir, WAV (24 kHz). "Hepsini
-  indir" zip verir (sesler/<anahtar>.wav + liste.json); öğretmen verince sesler oyuna eklenecek.
-  Heceler: heceHavuzu + kelimelerin üç harfli heceleri (lan, nat...). Üstteki "Yalnızca
-  beğenmediklerim" kutusu (açık gelir) yalnızca `BEGENILMEYENLER`i gösterir (öğretmenin
-  dinle.html'den verdiği 34 söz; yapay zekâ sesi kalanlar oyunda öyle kalır).
+  o tarayıcıda (IndexedDB) durur; sessizlik kesilir, ses eşitlenir, WAV (24 kHz). Öğretmenin isteği:
+  yalnızca seçilenler indirilir (satır başındaki kutu; seçim localStorage'da; yeni kayıt kendiliğinden
+  seçilir; "Yenileri seç" kaydedilmiş ama `SES_DOSYALARI`'nda olmayanları seçer; oyunda olanlarda "Oyunda
+  var"). "Seçilenleri indir" zip verir (sesler/<anahtar>.wav + liste.json). Heceler: heceHavuzu +
+  kelimelerin üç harfli heceleri (lan, nat...). Mini oyun yönergeleri ortak.js `YONERGELER`'den.
 - `dinle.html` – Öğretmenin oyundaki yapay zekâ seslerini dinlediği sayfa (sesler/liste.js'den;
   bölüm bölüm ▶ ve "Beğenmedim"; işaretler localStorage'da; "Listeyi kopyala" Claude'a verilir,
   beğenilmeyenler öğretmenin kendi sesiyle kayit.html'de kaydedilir).
@@ -365,6 +365,10 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   parçayı yelkenliye). Peri küçük (`PERI_OMUZ_OLCEK`); balon söz bitince kaybolur, el iş yapılana kadar
   kalır, periye dokununca söz yeniden çıkar. İlk sulamadan sonra genel yönlendirmeyi yapıp uçup gider
   (`periAyril`); ilk bulut ziyaretinde orada buluşur (`periBulustur`, `periBalonu`), buluttan inince
-  yine omuzdadır. Peri balonunda "İleri"
+  yine omuzdadır.
+- Mini oyun yönergesi (ortak.js `YONERGELER`, `SIRALI_YONERGELER`, `YonergeSahnesi`): `ortakKur` oyunun
+  sözlerini bekletir (`Sesler.bekletme`); kurulum bitince (`yonergeBaslat`) oyun durur, üstte peri yönergeyi
+  söyler, "Başla" ile oyun sürer ve bekleyen sözler söylenir (`bekletmeyiBitir`). Sıralı oyunlarda hece/kelime
+  turunda sıralı yönerge. Her yönerge sayfa açık kaldıkça bir kez. dene.js'de kapalı (`YONERGE=1` ile açılır). Peri balonunda "İleri"
   düğmesi (son sözde "Tamam"); kendiliğinden geçmez, balona dokununca söz yeniden okunur. Konuşurken karakter yürümez.
   Sözler kayit.html "Peri" bölümünde (öğretmen kaydeder).
