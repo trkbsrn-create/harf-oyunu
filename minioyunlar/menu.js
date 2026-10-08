@@ -16,6 +16,7 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
 
   preload() {
     this.load.svg("oyun-karti", "gorseller/oyun-karti.svg");
+    oyunSimgeleriniYukle(this);
   }
 
   create() {
@@ -166,13 +167,14 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
       const acik = hazir && olur;
       const kart = this.add.container(x, y, [
         this.add.image(0, 0, "oyun-karti"),
-        doodleYazi(this, -3, acik ? -3 : -18, oyun.baslik, oyun.baslik.length > 15 ? 24 : 28).setOrigin(0.5),
+        this.add.image(-3, -44, `simge-${oyun.ad}`).setScale(0.56),
+        doodleYazi(this, -3, acik ? 6 : -6, oyun.baslik, oyun.baslik.length > 15 ? 24 : 28).setOrigin(0.5),
       ]).setSize(232, 152);
       // Etiketler (harf / hece): kartın altında küçük renkli rozetler
       const etiketler = oyun.etiketler || [];
       etiketler.forEach((e, j) => {
         const ex = (j - (etiketler.length - 1) / 2) * 74 - 3;
-        const ey = acik ? 48 : 58;
+        const ey = acik ? 50 : 60;
         const g = this.add.graphics();
         g.fillStyle(ETIKET_RENKLERI[e] || 0xdddddd, 1);
         g.fillRoundedRect(ex - 33, ey - 14, 66, 28, 14);
@@ -186,7 +188,7 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
         kart.setInteractive({ useHandCursor: true });
         kart.on("pointerdown", () => this.oyunuAc(oyun.ad));
       } else if (hazir) {
-        kart.add(this.add.text(-3, 24, "Bu harfte yok", {
+        kart.add(this.add.text(-3, 28, "Bu harfte yok", {
           fontFamily: "Andika", fontSize: "22px", color: "#8a7f6a",
         }).setOrigin(0.5));
         kart.setAlpha(0.45);

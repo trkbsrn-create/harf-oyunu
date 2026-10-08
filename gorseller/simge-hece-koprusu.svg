@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+  <!-- Mini oyun simgesi: Hece Köprüsü (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="206" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="su" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9ecff"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#7cc4ef" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="tahta" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(80)">
+      <rect width="6" height="6" fill="#e3b77e"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#c98f4f" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 84 q12 -8 24 0 t24 0 t24 0 t24 0" fill="none" stroke="#7cc4ef" stroke-width="4"/>
+    <path d="M8 56 q42 -30 84 0 v10 q-42 -28 -84 0z" fill="url(#tahta)"/>
+    <path d="M20 46 v30 M50 36 v40 M80 46 v30" fill="none" stroke-width="4"/>
+    <path d="M8 40 q42 -30 84 0" fill="none" stroke-width="3"/>
+  </g>
+</svg>

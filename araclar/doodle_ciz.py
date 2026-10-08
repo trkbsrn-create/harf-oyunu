@@ -1729,6 +1729,203 @@ yaz("seker-makinesi-kol.svg", 150, 60, "Şeker makinesinin kolu; mil sol uçta (
     <circle cx="124" cy="30" r="22" fill="url(#topuz)"/>
 '''), 62)
 
+# ---- Mini oyun simgeleri (öğretmenin isteği: lambalar ve Mini Games kartları; 100x100) ----
+def simge(ad, aciklama, desenler, govde, tohum):
+    yaz(f"simge-{ad}.svg", 100, 100, f"Mini oyun simgesi: {aciklama}", desenler, govde, tohum, 3)
+
+
+# Küçük "a" harfi (yazı tipi kullanılmaz; SVG resim olarak yüklenince yazı tipi gelmez)
+def harf_a(x, y, r, renk=KALEM, kalinlik=5):
+    return (f'    <circle cx="{x}" cy="{y}" r="{r}" fill="none" stroke="{renk}" stroke-width="{kalinlik}"/>\n'
+            f'    <path d="M{x + r} {y - r} v{2 * r + 2}" fill="none" stroke="{renk}" stroke-width="{kalinlik}"/>\n')
+
+
+S_SARI = tarama("sari", "#ffe680", "#ffc928", -40, 6, 3)
+S_SU = tarama("su", "#c9ecff", "#7cc4ef", 35, 6, 2.5)
+S_KIRMIZI = tarama("kirmizi", "#ff9c8a", "#e0533d", -35, 6, 3)
+S_YESIL = tarama("yesil", "#c9eba7", "#8fd16a", 35, 6, 3)
+S_TAHTA = tarama("tahta", "#e3b77e", "#c98f4f", 80, 6, 2.5)
+S_MOR = tarama("mor", "#d8c2f3", "#a77be0", -35, 6, 3)
+S_PEMBE = tarama("pembe", "#ffd2c8", "#ff9c8a", -35, 6, 2.5)
+S_TURUNCU = tarama("turuncu", "#ffc58f", "#f08a3c", -35, 6, 3)
+S_GRI = tarama("gri", "#e4e1da", "#b9b5ac", 30, 6, 3)
+S_MAVI = tarama("mavi", "#bfe3f5", "#7cc3e6", 30, 6, 3)
+S_TOPRAK = tarama("toprak", "#b98a5e", "#9a6c43", -30, 6, 3)
+
+simge("damla-yakala", "Damla Yakalama", S_SU, kalem("""    <path d="M50 8 q30 40 30 58 a30 30 0 0 1 -60 0 q0 -18 30 -58z" fill="url(#su)"/>
+""" + harf_a(46, 66, 11) + """    <path d="M14 30 v14 M86 30 v14" fill="none" stroke="#7cc4ef" stroke-width="4"/>
+"""), 201)
+simge("harf-balonlari", "Harf Balonları", S_KIRMIZI + S_SARI, kalem("""    <path d="M34 62 q4 16 -4 34 M66 58 q-4 18 4 38" fill="none" stroke-width="2.5"/>
+    <ellipse cx="34" cy="38" rx="22" ry="26" fill="url(#kirmizi)"/>
+    <path d="M30 64 l4 -4 l4 4z" fill="#e0533d" stroke-width="2.5"/>
+    <ellipse cx="68" cy="34" rx="22" ry="26" fill="url(#sari)"/>
+    <path d="M64 60 l4 -4 l4 4z" fill="#ffc928" stroke-width="2.5"/>
+    <path d="M24 26 q4 -8 10 -10 M58 22 q4 -8 10 -10" fill="none" stroke="#ffffff" stroke-width="4"/>
+"""), 202)
+simge("harfi-yaz", "Harfi Yaz", S_SARI + S_PEMBE, kalem("""    <path d="M14 70 q4 -26 24 -26 q16 0 16 20 v22" fill="none" stroke="#7cc3e6" stroke-width="5" stroke-dasharray="2 9"/>
+    <path d="M58 82 l26 -60 l12 6 l-26 60z" fill="url(#sari)"/>
+    <path d="M84 22 l4 -10 l12 6 l-4 10z" fill="url(#pembe)" stroke-width="3"/>
+    <path d="M58 82 l-2 14 l14 -8" fill="#f2d7b0" stroke-width="3"/>
+"""), 203)
+simge("resimden-ses", "Resimden Sesi Bul", S_KIRMIZI + S_TAHTA, kalem("""    <rect x="10" y="12" width="80" height="76" rx="8" fill="url(#tahta)"/>
+    <rect x="20" y="22" width="60" height="56" rx="4" fill="#fffdf6" stroke-width="3"/>
+    <path d="M50 36 q-2 -8 4 -12" fill="none" stroke-width="3.5"/>
+    <path d="M50 38 q-8 -6 -16 -2 q-12 6 -8 20 q4 16 14 18 q6 2 10 -2 q4 4 10 2 q10 -2 14 -18 q4 -14 -8 -20 q-8 -4 -16 2z" fill="url(#kirmizi)" stroke-width="3"/>
+"""), 204)
+simge("hafiza-kartlari", "Hafıza Kartları", S_MAVI + S_SARI, kalem("""    <rect x="8" y="20" width="44" height="62" rx="8" transform="rotate(-10 30 51)" fill="url(#mavi)"/>
+    <path d="M22 44 l16 16 M38 44 l-16 16" fill="none" stroke="#ffffff" stroke-width="4" transform="rotate(-10 30 51)"/>
+    <rect x="48" y="16" width="44" height="62" rx="8" transform="rotate(8 70 47)" fill="#fffdf6"/>
+    <polygon points="70,32 75,43 87,44 78,52 81,64 70,58 59,64 62,52 53,44 65,43" fill="url(#sari)" stroke-width="3" transform="rotate(8 70 47)"/>
+"""), 205)
+simge("hece-koprusu", "Hece Köprüsü", S_SU + S_TAHTA, kalem("""    <path d="M4 84 q12 -8 24 0 t24 0 t24 0 t24 0" fill="none" stroke="#7cc4ef" stroke-width="4"/>
+    <path d="M8 56 q42 -30 84 0 v10 q-42 -28 -84 0z" fill="url(#tahta)"/>
+    <path d="M20 46 v30 M50 36 v40 M80 46 v30" fill="none" stroke-width="4"/>
+    <path d="M8 40 q42 -30 84 0" fill="none" stroke-width="3"/>
+"""), 206)
+simge("heceyi-bul", "Heceyi Bul", S_TURUNCU + S_SU, kalem("""    <path d="M4 82 q12 -8 24 0 t24 0 t24 0 t24 0" fill="none" stroke="#7cc4ef" stroke-width="4"/>
+    <path d="M70 48 q-16 -24 -44 -14 q-16 6 -18 16 q2 10 18 16 q28 10 44 -14z" fill="url(#turuncu)"/>
+    <path d="M70 48 l22 -16 q-4 16 0 32z" fill="url(#turuncu)"/>
+    <circle cx="24" cy="44" r="3.5" fill="#2b2b2b"/>
+    <path d="M40 38 q6 10 0 20 M52 36 q6 12 0 24" fill="none" stroke-width="3"/>
+"""), 207)
+simge("labirent", "Labirent", S_YESIL + S_SARI, kalem("""    <rect x="10" y="10" width="80" height="80" rx="6" fill="url(#yesil)"/>
+    <path d="M10 30 h40 M70 10 v40 M30 50 h40 v20 M30 30 v40 M50 70 v20 M70 70 h20" fill="none" stroke-width="5"/>
+    <circle cx="20" cy="20" r="6" fill="url(#sari)" stroke-width="3"/>
+    <polygon points="80,76 82,82 88,82 83,86 85,92 80,88 75,92 77,86 72,82 78,82" fill="#ffc928" stroke-width="2"/>
+"""), 208)
+simge("seker-patlatma", "Şeker Patlatma", S_PEMBE + S_MOR, kalem("""    <path d="M30 50 l-22 -16 v32z" fill="url(#mor)"/>
+    <path d="M70 50 l22 -16 v32z" fill="url(#mor)"/>
+    <ellipse cx="50" cy="50" rx="24" ry="20" fill="url(#pembe)"/>
+    <path d="M38 40 q12 10 0 20 M52 34 q12 14 0 30" fill="none" stroke="#ffffff" stroke-width="4"/>
+    <path d="M18 14 l4 8 M50 6 v10 M82 14 l-4 8" fill="none" stroke="#ffc928" stroke-width="4"/>
+"""), 209)
+simge("kayak", "Kayak", S_MAVI + S_KIRMIZI, kalem("""    <path d="M4 78 l30 -50 l18 22 l12 -14 l32 42z" fill="url(#mavi)"/>
+    <path d="M26 42 l8 -14 l8 10 q-8 6 -16 4z" fill="#ffffff" stroke-width="3"/>
+    <path d="M14 92 l60 -16 q8 -2 8 -8 M22 96 l60 -16 q8 -2 8 -8" fill="none" stroke="#e0533d" stroke-width="5"/>
+"""), 210)
+simge("elektrik-devresi", "Elektrik Devresi", S_SARI + S_GRI, kalem("""    <path d="M50 10 a24 24 0 0 1 14 44 v10 h-28 v-10 a24 24 0 0 1 14 -44z" fill="url(#sari)"/>
+    <rect x="36" y="64" width="28" height="14" rx="3" fill="url(#gri)" stroke-width="3"/>
+    <path d="M44 50 l6 -12 l6 12" fill="none" stroke-width="3"/>
+    <path d="M44 78 q-10 16 -34 12 M56 78 q10 16 34 12" fill="none" stroke="#e0533d" stroke-width="4"/>
+    <path d="M18 18 l8 6 M82 18 l-8 6 M12 40 h10 M88 40 h-10" fill="none" stroke="#ffc928" stroke-width="4"/>
+"""), 211)
+simge("duvardan-gecme", "Duvardan Geçme", S_KIRMIZI + S_YESIL, kalem("""    <rect x="8" y="16" width="84" height="70" fill="url(#kirmizi)"/>
+    <path d="M8 32 h84 M8 48 h84 M8 64 h84 M30 16 v16 M62 16 v16 M18 32 v16 M48 32 v16 M78 32 v16 M30 48 v16 M62 48 v16" fill="none" stroke-width="3"/>
+    <path d="M36 86 v-24 q14 -16 28 0 v24z" fill="url(#yesil)"/>
+"""), 212)
+simge("hece-muzigi", "Hece Müziği", S_MOR + S_SARI, kalem("""    <path d="M34 72 v-50 l44 -10 v50" fill="none" stroke-width="5"/>
+    <path d="M34 24 l44 -10" fill="none" stroke-width="9"/>
+    <ellipse cx="24" cy="74" rx="12" ry="9" transform="rotate(-20 24 74)" fill="url(#mor)"/>
+    <ellipse cx="68" cy="64" rx="12" ry="9" transform="rotate(-20 68 64)" fill="url(#sari)"/>
+"""), 213)
+simge("scrabble", "Scrabble", S_TAHTA, kalem("""    <rect x="6" y="34" width="28" height="30" rx="5" fill="url(#tahta)" transform="rotate(-6 20 49)"/>
+    <rect x="36" y="30" width="28" height="30" rx="5" fill="url(#tahta)"/>
+    <rect x="66" y="34" width="28" height="30" rx="5" fill="url(#tahta)" transform="rotate(6 80 49)"/>
+""" + harf_a(48, 46, 6, kalinlik=4) + """    <path d="M14 44 v14 M14 50 q0 -6 6 -6 q6 0 6 6 v8 M78 38 v16 q0 5 6 5 M74 45 h10" fill="none" stroke-width="3.5"/>
+    <path d="M10 76 h80" fill="none" stroke="#c98f4f" stroke-width="7"/>
+"""), 214)
+simge("ordek-vurma", "Ördek Vurma", S_SARI + S_KIRMIZI, kalem("""    <path d="M18 72 q2 -14 22 -14 h26 q14 -6 18 -16 q4 24 -8 40 q-10 8 -32 8 q-28 0 -26 -18z" fill="url(#sari)"/>
+    <circle cx="28" cy="44" r="14" fill="url(#sari)"/>
+    <path d="M14 44 l-12 4 q6 8 14 2z" fill="#f08a3c" stroke-width="3"/>
+    <circle cx="26" cy="40" r="2.5" fill="#2b2b2b"/>
+    <circle cx="70" cy="30" r="18" fill="#ffffff" stroke="#e0533d" stroke-width="4"/>
+    <circle cx="70" cy="30" r="8" fill="url(#kirmizi)" stroke-width="3"/>
+    <path d="M70 6 v10 M70 44 v10 M46 30 h10 M84 30 h10" fill="none" stroke-width="3"/>
+"""), 215)
+simge("kazma", "Kazma", S_TAHTA + S_GRI + S_TOPRAK, kalem("""    <path d="M6 94 q10 -14 24 -10 q14 -12 30 -2 q18 -8 34 6 v6z" fill="url(#toprak)"/>
+    <path d="M30 84 l40 -60" fill="none" stroke="#c98f4f" stroke-width="10"/>
+    <path d="M30 84 l40 -60" fill="none" stroke-width="3"/>
+    <path d="M40 18 q30 -10 52 16 q-24 -14 -48 -6z" fill="url(#gri)"/>
+"""), 216)
+simge("altin-madencisi", "Altın Madencisi", S_SARI + S_GRI, kalem("""    <path d="M50 4 v40" fill="none" stroke-width="3"/>
+    <path d="M38 44 h24 M38 44 q-6 10 4 16 M62 44 q6 10 -4 16" fill="none" stroke="#7a7a7a" stroke-width="5"/>
+    <path d="M22 92 l6 -20 q14 -10 30 -4 l16 4 l6 20z" fill="url(#sari)"/>
+    <path d="M34 80 l6 -6 M58 76 l6 4" fill="none" stroke="#ffffff" stroke-width="4"/>
+    <path d="M12 66 l6 4 M86 62 l-6 6" fill="none" stroke="#ffc928" stroke-width="4"/>
+"""), 217)
+simge("kazi-kazan", "Kazı Kazan", S_GRI + S_SARI + S_PEMBE, kalem("""    <rect x="8" y="20" width="84" height="60" rx="8" fill="url(#pembe)"/>
+    <rect x="20" y="32" width="60" height="36" rx="6" fill="url(#gri)" stroke-width="3"/>
+    <path d="M24 50 q10 -10 20 0 t20 0" fill="none" stroke="#ffffff" stroke-width="6"/>
+    <circle cx="80" cy="76" r="14" fill="url(#sari)"/>
+    <path d="M74 76 h12" fill="none" stroke-width="3"/>
+"""), 218)
+simge("tombala", "Tombala", S_MAVI + S_KIRMIZI, kalem("""    <rect x="10" y="14" width="80" height="72" rx="8" fill="#fffdf6"/>
+    <path d="M10 38 h80 M10 62 h80 M36 14 v72 M63 14 v72" fill="none" stroke-width="3"/>
+    <circle cx="23" cy="26" r="7" fill="url(#kirmizi)" stroke-width="3"/>
+    <circle cx="50" cy="50" r="7" fill="url(#kirmizi)" stroke-width="3"/>
+    <circle cx="76" cy="74" r="7" fill="url(#kirmizi)" stroke-width="3"/>
+    <circle cx="76" cy="26" r="7" fill="url(#mavi)" stroke-width="3"/>
+"""), 219)
+simge("arabayi-ulastir", "Arabayı Ulaştır", S_KIRMIZI + S_MAVI, kalem("""    <path d="M74 50 v-42 M74 8 l20 6 l-20 8" fill="#ffc928" stroke-width="3.5"/>
+    <path d="M6 70 q6 -18 20 -20 l10 -14 h26 l12 14 q10 2 10 20z" fill="url(#kirmizi)"/>
+    <path d="M38 40 h10 v10 h-18z M52 40 h8 l8 10 h-16z" fill="url(#mavi)" stroke-width="2.5"/>
+    <circle cx="24" cy="72" r="9" fill="#555555"/>
+    <circle cx="64" cy="72" r="9" fill="#555555"/>
+    <path d="M4 90 q30 -6 46 0 t46 0" fill="none" stroke-width="3" stroke-dasharray="6 6"/>
+"""), 220)
+simge("yakala-yaz", "Yakala ve Yaz", S_TAHTA + S_MOR, kalem("""    <path d="M58 42 l34 52" fill="none" stroke="#c98f4f" stroke-width="8"/>
+    <path d="M58 42 l34 52" fill="none" stroke-width="2.5"/>
+    <ellipse cx="38" cy="30" rx="30" ry="22" fill="#fffdf6"/>
+    <path d="M14 36 q14 40 28 36 q12 -4 22 -30" fill="#fffdf6" stroke-width="3"/>
+    <path d="M22 32 l30 34 M36 26 l18 30 M50 22 l-28 40 M30 22 l-12 22" fill="none" stroke="#b9b5ac" stroke-width="2"/>
+    <path d="M78 16 q-8 -8 -6 4 q-6 -10 -8 2 q4 6 10 2 q8 4 4 -8" fill="url(#mor)" stroke-width="2.5"/>
+"""), 221)
+simge("kirik-cam", "Kırık Cam", S_MAVI + S_TAHTA, kalem("""    <rect x="10" y="10" width="80" height="80" rx="6" fill="url(#tahta)"/>
+    <rect x="20" y="20" width="60" height="60" fill="url(#mavi)" stroke-width="3"/>
+    <path d="M50 50 l-14 -30 M50 50 l26 -16 M50 50 l24 22 M50 50 l-6 30 M50 50 l-30 6 M36 34 l12 -2 M64 42 l2 14 M40 62 l14 4" fill="none" stroke-width="2.5"/>
+"""), 222)
+simge("bombayi-kurtar", "Bombayı Kurtar", S_GRI + S_SARI, kalem("""    <circle cx="44" cy="60" r="30" fill="#555555"/>
+    <rect x="52" y="24" width="16" height="12" rx="3" transform="rotate(30 60 30)" fill="url(#gri)" stroke-width="3"/>
+    <path d="M66 26 q8 -14 20 -12" fill="none" stroke="#c98f4f" stroke-width="4"/>
+    <polygon points="88,4 91,11 98,12 93,17 94,24 88,20 82,24 83,17 78,12 85,11" fill="url(#sari)" stroke-width="2.5"/>
+    <path d="M28 50 q4 -10 14 -12" fill="none" stroke="#ffffff" stroke-width="5"/>
+    <circle cx="34" cy="64" r="3" fill="#ffffff" stroke-width="0"/><circle cx="52" cy="64" r="3" fill="#ffffff" stroke-width="0"/>
+    <path d="M38 74 q5 5 10 0" fill="none" stroke="#ffffff" stroke-width="3"/>
+"""), 223)
+simge("yilan", "Yılan", S_YESIL + S_KIRMIZI, kalem("""    <path d="M12 84 q20 -20 36 0 q16 18 30 -6 q10 -22 -10 -36 q-22 -12 -14 -28" fill="none" stroke="#2b2b2b" stroke-width="18"/>
+    <path d="M12 84 q20 -20 36 0 q16 18 30 -6 q10 -22 -10 -36 q-22 -12 -14 -28" fill="none" stroke="#8fd16a" stroke-width="11" filter="none"/>
+    <ellipse cx="56" cy="16" rx="13" ry="10" fill="url(#yesil)"/>
+    <circle cx="60" cy="12" r="2.5" fill="#2b2b2b"/>
+    <path d="M68 18 l10 2 l-4 -4 M78 20 l-2 4" fill="none" stroke="#e0533d" stroke-width="2.5"/>
+"""), 224)
+simge("canavari-besle", "Canavarı Besle", S_YESIL + S_KIRMIZI, kalem("""    <path d="M26 30 l-8 -20 l16 12 M74 30 l8 -20 l-16 12" fill="#fffdf6" stroke-width="3"/>
+    <path d="M14 90 q-8 -60 36 -64 q44 4 36 64z" fill="url(#yesil)"/>
+    <circle cx="50" cy="44" r="12" fill="#ffffff" stroke-width="3"/>
+    <circle cx="52" cy="46" r="5" fill="#2b2b2b"/>
+    <path d="M30 66 q20 22 40 0z" fill="#7a2a2a" stroke-width="3"/>
+    <path d="M36 66 l4 6 l4 -6 M56 66 l4 6 l4 -6" fill="#ffffff" stroke-width="2"/>
+"""), 225)
+simge("harf-kesme", "Harf Kesme", S_KIRMIZI + S_YESIL, kalem("""    <path d="M10 46 a40 40 0 0 0 80 0z" fill="url(#yesil)"/>
+    <path d="M18 46 a32 32 0 0 0 64 0z" fill="url(#kirmizi)" stroke-width="3"/>
+    <path d="M36 58 v4 M50 62 v4 M64 58 v4" fill="none" stroke-width="4"/>
+    <path d="M8 88 l86 -80" fill="none" stroke="#7cc4ef" stroke-width="6"/>
+"""), 226)
+simge("hece-kulesi", "Hece Kulesi", S_SARI + S_MAVI + S_KIRMIZI + S_GRI, kalem("""    <path d="M50 4 v12" fill="none" stroke-width="3"/>
+    <rect x="34" y="16" width="32" height="18" rx="4" fill="url(#kirmizi)"/>
+    <rect x="24" y="48" width="52" height="20" rx="4" fill="url(#sari)"/>
+    <rect x="18" y="70" width="64" height="22" rx="4" fill="url(#mavi)"/>
+    <path d="M12 92 h76" fill="none" stroke-width="4"/>
+"""), 227)
+simge("birlestir-buyut", "Birleştir Büyüt", S_KIRMIZI + S_MAVI + S_SARI + S_YESIL, kalem("""    <rect x="10" y="10" width="38" height="38" rx="8" fill="url(#kirmizi)"/>
+    <rect x="52" y="10" width="38" height="38" rx="8" fill="url(#mavi)"/>
+    <rect x="10" y="52" width="38" height="38" rx="8" fill="url(#yesil)"/>
+    <rect x="52" y="52" width="38" height="38" rx="8" fill="url(#sari)"/>
+""" + harf_a(28, 30, 7, kalinlik=4) + """    <path d="M64 22 v18 M64 30 q0 -8 7 -8 q7 0 7 8 v10" fill="none" stroke-width="4"/>
+    <path d="M60 71 h20 M72 63 l8 8 l-8 8" fill="none" stroke-width="4"/>
+"""), 228)
+simge("harfle-boya", "Harfle Boya", S_TAHTA + S_MOR + S_SARI, kalem("""    <path d="M12 60 q-6 -40 36 -48 q42 -4 44 30 q0 16 -16 14 q-12 -2 -12 10 q2 18 -18 22 q-30 4 -34 -28z" fill="#fffdf6"/>
+    <circle cx="30" cy="38" r="7" fill="url(#mor)" stroke-width="3"/>
+    <circle cx="50" cy="26" r="7" fill="url(#sari)" stroke-width="3"/>
+    <circle cx="72" cy="30" r="7" fill="#ff9c8a" stroke-width="3"/>
+    <circle cx="30" cy="62" r="7" fill="#8fd16a" stroke-width="3"/>
+    <path d="M60 94 l30 -40" fill="none" stroke="#c98f4f" stroke-width="7"/>
+    <path d="M86 58 l8 -12 q6 -4 4 4 l-6 12z" fill="#7cc3e6" stroke-width="3"/>
+"""), 229)
+simge("harf-firtinasi", "Harf Fırtınası", S_GRI + S_SARI, kalem("""    <path d="M20 48 q-14 -2 -10 -16 q4 -12 18 -8 q4 -18 24 -16 q16 2 18 18 q16 -4 18 10 q2 14 -14 14z" fill="url(#gri)"/>
+    <polygon points="50,48 36,72 50,72 42,96 66,64 52,64 60,48" fill="url(#sari)" stroke-width="3"/>
+    <path d="M20 60 l-6 12 M80 60 l-6 12" fill="none" stroke="#7cc4ef" stroke-width="4"/>
+"""), 230)
+
 # ---- Zemin dokuları (kesintisiz döşenir; titreme süzgeci yok) ----
 def doku(ad, boy, zemin, cizgiler, aciklama):
     s = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{boy}" height="{boy}" viewBox="0 0 {boy} {boy}">

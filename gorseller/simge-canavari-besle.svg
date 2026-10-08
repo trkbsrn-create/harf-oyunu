@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+  <!-- Mini oyun simgesi: Canavarı Besle (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="225" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="yesil" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9eba7"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#8fd16a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="kirmizi" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="6" height="6" fill="#ff9c8a"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#e0533d" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M26 30 l-8 -20 l16 12 M74 30 l8 -20 l-16 12" fill="#fffdf6" stroke-width="3"/>
+    <path d="M14 90 q-8 -60 36 -64 q44 4 36 64z" fill="url(#yesil)"/>
+    <circle cx="50" cy="44" r="12" fill="#ffffff" stroke-width="3"/>
+    <circle cx="52" cy="46" r="5" fill="#2b2b2b"/>
+    <path d="M30 66 q20 22 40 0z" fill="#7a2a2a" stroke-width="3"/>
+    <path d="M36 66 l4 6 l4 -6 M56 66 l4 6 l4 -6" fill="#ffffff" stroke-width="2"/>
+  </g>
+</svg>

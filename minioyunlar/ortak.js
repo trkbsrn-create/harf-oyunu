@@ -45,6 +45,25 @@ const PLANLANAN_OYUNLAR = [
   { ad: "harf-firtinasi", baslik: "Harf Fırtınası", etiketler: ["harf", "hece"] },
 ];
 
+// Her mini oyunun simgesi (gorseller/simge-<ad>.svg; Oyun Lambaları ve Mini Games kartları)
+function oyunSimgeleriniYukle(sahne) {
+  for (const o of PLANLANAN_OYUNLAR) sahne.load.svg(`simge-${o.ad}`, `gorseller/simge-${o.ad}.svg`);
+}
+
+// Öğretmenin kuralı: bir harfin 1. damlası yalnızca harf oyunu, 2. damlası harf + hece oyunu,
+// 3. damlası (ve sonrası) yalnızca hece oyunu. Bu harfte hece oyunu yoksa (a, n) harf + hece oyunu
+// (onlar da bu harflerde harf sorar). oynananlar: bu harfte daha önce çıkanlar (yeniden çıkmasın).
+function damlaOyunlari(harf, damlaSirasi, oynananlar = []) {
+  const tur = (o) => (o.etiketler.includes("hece") ? (o.etiketler.includes("harf") ? "ikisi" : "hece") : "harf");
+  const istenen = ["harf", "ikisi", "hece"][Math.min(damlaSirasi, 2)];
+  const oynanabilir = PLANLANAN_OYUNLAR.filter((o) => MINI_OYUNLAR[o.ad] && miniOyunOlur(o.ad, harf));
+  let uygun = oynanabilir.filter((o) => tur(o) === istenen);
+  if (!uygun.length) uygun = oynanabilir.filter((o) => tur(o) === "ikisi");
+  if (!uygun.length) uygun = oynanabilir;
+  const yeni = uygun.filter((o) => !oynananlar.includes(o.ad));
+  return (yeni.length ? yeni : uygun).map((o) => o.ad);
+}
+
 // Yapılmış mini oyunlar: ad -> sahne sınıfı
 const MINI_OYUNLAR = {};
 
@@ -85,7 +104,7 @@ function kelimeOyunuOlur(harf) {
 }
 
 // Mini oyun bu harfte oynanabilir mi (PLANLANAN_OYUNLAR'daki gereken: "hece" / "kelime").
-// Oynanamayanlar menüde "Bu harfte yok" olur, Şans Çarkı'na girmez.
+// Oynanamayanlar menüde "Bu harfte yok" olur, Oyun Lambaları'nda yanmaz.
 function miniOyunOlur(ad, harf) {
   const oyun = PLANLANAN_OYUNLAR.find((o) => o.ad === ad);
   if (!oyun || !oyun.gereken) return true;

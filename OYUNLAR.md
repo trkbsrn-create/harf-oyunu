@@ -192,7 +192,7 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   heceHavuzu, ogrenilmisKelimeler, hece oyunlarının harf taşları). Yeterli hece/kelime yoksa oyun o
   harfte iptal: `PLANLANAN_OYUNLAR`'da `gereken: "hece" | "kelime"`, `miniOyunOlur(ad, harf)`
   (`heceOyunuOlur`: en az 3 iki harfli hece; `kelimeOyunuOlur`: en az 3 kelime) → a ve n'de hece
-  ve kelime oyunları yok; menüde kart soluk "Bu harfte yok", Şans Çarkı'na girmez. Yeniden
+  ve kelime oyunları yok; menüde kart soluk "Bu harfte yok", Oyun Lambaları'nda yanmaz. Yeniden
   düzenlemeler: o uzunlukta yeterli hece yoksa iki harfli sorulur (`heceSorusu`; e'de 2-3. seviye);
   Kayak ve Duvardan Geçme'de hece yoksa 2-3. seviye de harf; Harf Fırtınası'nda "Seç!" görevi
   çıkmaz; Elektrik Devresi 3. seviyede üç heceli kelime azsa iki heceli kelimeler.
@@ -208,7 +208,7 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   `secilenEtiketler`, `oyunListesi`): harf ve hece birlikte seçilebilir; oyunun etiketleri seçilenlerle
   tam aynı olmalı ("harf" yalnızca harf etiketliler, ikisi birden yalnızca iki etiketliler); hiçbiri
   seçili değilse "hepsi".
-  Menü sayfalıdır (sayfada 8 kart, oklar ya da parmak kaydırma); listede öğretmenin
+  Menü sayfalıdır (kartlarda oyunun simgesi; sayfada 8 kart, oklar ya da parmak kaydırma); listede öğretmenin
   fikirleri ve araştırmadan gelen fikirler "Yakında" olarak durur, sırayla yapılır.
 - Mini oyun ilkeleri (öğretmenin isteğiyle yapılan araştırmadan; her yeni mini oyunda uygulanır):
   1. Göster, anlatma: ilk turda gösteren el (el.svg) nereye dokunulacağını gösterir
@@ -240,8 +240,12 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   varil (su-tesisi.svg'deki boru ağızlarının altında, `VARIL_YERI`), panelde borunun altında
   büyük varil (`PANEL_VARIL_YERI`; yeni varil panel açılınca borudan iner). Harf düğmesi yok.
   Varilden damla iki aşamada alınır (`varileDokun`): 1) varil boşsa (ağzı koyu) ana tanktan boru
-  boyunca bir damla gelir, varil dolar (`tanktanVarile`); 2) varil doluysa Şans Çarkı açılır
-  (`minioyunlar/sans-carki.js`, `SansCarkiSahnesi`: en çok 8 oyunluk çark, "Çevir"), çıkan mini
+  boyunca bir damla gelir, varil dolar (`tanktanVarile`); 2) varil doluysa Oyun Lambaları açılır
+  (`minioyunlar/lambalar.js`, `OyunLambalariSahnesi`; öğretmenin fikri, çarkın yerine: her oyunun simgesi
+  bir lambada (gorseller/simge-<ad>.svg, doodle_ciz.py `simge`); uygun lambalar rastgele yanıp söner,
+  yavaşlar, seçilen yanık kalıp ortaya gelir, adı söylenir. Öğretmenin kuralı (`damlaOyunlari`, ortak.js;
+  `kazanilanDamla`): harfin 1. damlası yalnızca harf, 2. harf + hece, 3. yalnızca hece oyunu; hece oyunu
+  yoksa (a, n) harf + hece; bu harfte çıkan oyun yeniden çıkmaz (`oynananOyunlar`)), çıkan mini
   oyun o harfle 1, 2, 3. düzeyde art arda oynanır (`zincir`: kazanınca "Devam", sağ üstte
   "Düzey 1 / 3"; ada sahnesi uyur), 3. düzey bitince ada uyanır ve varilden şişeye bir damla
   akar (`miniOyundanDon`, `siseyeDamla`). Yarıda "Geri" denirse damla yok, varil dolu kalır.
