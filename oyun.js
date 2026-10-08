@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 159;
+const SURUM = 160;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -3446,7 +3446,8 @@ class KarsilamaSahnesi extends Phaser.Scene {
 
   preload() {
     for (const ad of ["doku-kagit", "doku-deniz", "doku-kum", "doku-cimen",
-      "agac-govde", "agac-tepe", "cocuk", "baslik-tabela", "dugme-baslat", "incele-dugmesi"]) {
+      "agac-govde", "agac-tepe", "cocuk", "baslik-tabela", "dugme-baslat", "incele-dugmesi",
+      ...PROFIL_HAYVANLARI, "yildiz"]) {
       this.load.svg(ad, `gorseller/${ad}.svg`);
     }
   }
@@ -3491,6 +3492,8 @@ class KarsilamaSahnesi extends Phaser.Scene {
     ]).setSize(396, 92).setInteractive({ useHandCursor: true });
     this.nabiz = this.tweens.add({ targets: dugme, scale: 1.06, duration: 650, yoyo: true,
       repeat: -1, ease: "Sine.InOut" });
+    // Ortada "Kim oynuyor?" paneli (profil.js): oyun da mini oyunlar da seçili profille açılır
+    this.profilPaneli = new ProfilPaneli(this, 640, 375);
     dugme.on("pointerdown", () => this.basla(dugme));
     this.input.keyboard.on("keydown-ENTER", () => this.basla(dugme));
     this.input.keyboard.on("keydown-SPACE", () => this.basla(dugme));
@@ -3508,7 +3511,8 @@ class KarsilamaSahnesi extends Phaser.Scene {
       doodleYazi(this, 0, -3, "Mini Games", 28).setOrigin(0.5),
     ]).setSize(170, 56).setInteractive({ useHandCursor: true });
     mini.on("pointerdown", () => {
-      if (this.basladi) return;
+      if (this.basladi || this.profilPaneli.acikMi()) return;
+      if (!Profil.aktifId) { this.profilPaneli.uyar(); return; }
       this.basladi = true;
       Sesler.ac();
       Sesler.pling();
@@ -3526,7 +3530,7 @@ class KarsilamaSahnesi extends Phaser.Scene {
 
   // Veli kapısı: şifre doğruysa karne açılır
   async karneKapisi(dugme) {
-    if (this.basladi || this.sifreSoruluyor) return;
+    if (this.basladi || this.sifreSoruluyor || this.profilPaneli.acikMi()) return;
     this.sifreSoruluyor = true;
     const sifre = await metinSor("Veli şifresi", { sifre: true, enUzun: 20 });
     this.sifreSoruluyor = false;
@@ -3576,7 +3580,8 @@ class KarsilamaSahnesi extends Phaser.Scene {
   }
 
   basla(dugme, tanriModu = false) {
-    if (this.basladi) return;
+    if (this.basladi || this.profilPaneli.acikMi()) return;
+    if (!tanriModu && !Profil.aktifId) { this.profilPaneli.uyar(); return; } // önce profil seçilmeli
     this.basladi = true;
     Sesler.ac();
     Sesler.pling();
@@ -3585,9 +3590,9 @@ class KarsilamaSahnesi extends Phaser.Scene {
     this.cameras.main.fadeOut(350, 251, 247, 236);
     // Öğretmenin deneme düğmesi (God mode) hikâyeyi atlar
     this.cameras.main.once("camerafadeoutcomplete", () => {
-      // Deneme (God mode) sayılmaz; çocuk önce profilini seçer (profil.js), sonra hikâye
+      // Deneme (God mode) sayılmaz (profil seçimi bırakılır)
       if (tanriModu) { Profil.sec(null); this.scene.start("AdaSahnesi", { tanriModu }); }
-      else this.scene.start("ProfilSahnesi"); // açılış videosu şimdilik kapalı (videoGoster)
+      else this.scene.start("HikayeSahnesi"); // açılış videosu şimdilik kapalı (videoGoster)
     });
   }
 
@@ -4192,6 +4197,6 @@ BulutSahnesi.prototype.bekle = AdaSahnesi.prototype.bekle;
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [KarsilamaSahnesi, ProfilSahnesi, KarneSahnesi, HikayeSahnesi, AdaSahnesi, FinalSahnesi, BulutSahnesi, MiniOyunlarSahnesi, OyunLambalariSahnesi, ...Object.values(MINI_OYUNLAR), YonergeSahnesi],
+    scene: [KarsilamaSahnesi, KarneSahnesi, HikayeSahnesi, AdaSahnesi, FinalSahnesi, BulutSahnesi, MiniOyunlarSahnesi, OyunLambalariSahnesi, ...Object.values(MINI_OYUNLAR), YonergeSahnesi],
   });
 });

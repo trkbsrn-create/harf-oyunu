@@ -14,7 +14,7 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
 - `oyun.js` ana oyun sahneleri (karşılama, hikâye, ada, bulut, final), `SURUM`.
 - `minioyunlar/<ad>/oyun.js` her mini oyun; `ortak.js` ortak sınıf `MiniOyunSahnesi`, `PLANLANAN_OYUNLAR`,
   hece/kelime yardımcıları; `menu.js` deneme menüsü; `lambalar.js` Oyun Lambaları (çarkın yerine).
-- `profil.js` profil (hayvan resmi + takma ad), istatistik, karne (`ProfilSahnesi`, `KarneSahnesi`).
+- `profil.js` profil (hayvan resmi + takma ad; ilk sayfada `ProfilPaneli`), istatistik, karne (`KarneSahnesi`).
 - `harfler.js` harf verisi; `canta.js` çanta; `sesler.js` efekt ve sesli okuma; `dinleyici.js` mikrofon.
 - `gorseller/` kendi SVG'lerimiz, `araclar/doodle_ciz.py` ile üretilir (görsel değişikliği betikte yapılır).
 - `araclar/dene.js` mini oyun deneme aracı (aşağıda "Test").
@@ -163,6 +163,8 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Altın Madencisi'nde doğru külçenin önünde yanlış külçe olunca ona ulaşılamıyordu; köşedeki külçeler
   kancanın açısı dışındaydı. Nesneler rastgele yerleşirken doğru olana ulaşılabildiğini ölç.
 
+- Oyunun üstüne açılan HTML kutusuna (metinSor) yapılan dokunuş alttaki oyuna da geçiyordu ("Tamam"
+  alttaki resme basmış sayıldı, kutu tekrar açıldı). HTML katmanında dokunuş olaylarını durdur.
 - Chrome'un internet sesi (Google Türkçe) bazen hiç başlamıyor, bütün sözler susuyordu (Brave'de
   sorun yoktu). Söz 1,5 saniyede başlamazsa cihazın kendi sesine geçilir (`uzakSesBozuk`).
 
