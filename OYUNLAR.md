@@ -233,7 +233,8 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   iskele için geniş deniz var. Ada, süs ve sandık yerleri ADA_YUKSEKLIK ile hesaplanır.
 - Su arıtma tesisi: alt kıyıda, başlangıcın güneyinde (`tesisKur`, su-tesisi.svg); kıyıdan
   uzun bir iskeleyle (`ISKELE_EK`, doodle_ciz.py'de de aynı) ulaşılır, karakter iskelede
-  yürüyebilir. Tesise dokununca karakter iskelenin ucuna yürür, panel açılır
+  yürüyebilir. İskeleye dokununca karakter iskelede oraya yürür (`iskeledeYuru`; iskeledeyse doğrudan,
+  değilse önce başına); tesise dokununca iskelenin ucuna yürür, panel açılır
   (tesis-pencere.svg: solda su tankı, üstte boru). Her harfin bir varili var (varil.svg,
   musluklu): varil, o harfin tohumu tarlaya ekilince belirir (`varilGetir`); güvertede küçük
   varil (su-tesisi.svg'deki boru ağızlarının altında, `VARIL_YERI`), panelde borunun altında
@@ -361,6 +362,9 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   izler (`omuzPerisiniGuncelle`) ve her işi ilk kez gösterir (`rehberOlay`, `rehberSec`): olay gelince
   balon (ekran katmanı, dokununca yeniden okunur) ve gösteren el; ipucu "tamam" olayına kadar başlangıç
   olayında yeniden çıkar (yürü, sandık, tohumu çantadan tarlaya, tesis, varil, şişeyle sula, sırık "Çık",
-  parçayı yelkenliye). Peri balonunda "İleri"
+  parçayı yelkenliye). Peri küçük (`PERI_OMUZ_OLCEK`); balon söz bitince kaybolur, el iş yapılana kadar
+  kalır, periye dokununca söz yeniden çıkar. İlk sulamadan sonra genel yönlendirmeyi yapıp uçup gider
+  (`periAyril`); ilk bulut ziyaretinde orada buluşur (`periBulustur`, `periBalonu`), buluttan inince
+  yine omuzdadır. Peri balonunda "İleri"
   düğmesi (son sözde "Tamam"); kendiliğinden geçmez, balona dokununca söz yeniden okunur. Konuşurken karakter yürümez.
   Sözler kayit.html "Peri" bölümünde (öğretmen kaydeder).
