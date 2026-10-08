@@ -159,8 +159,6 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Bulut bölgelerinin içeriği; bilmeceler ("Hızlı koşar, yeleleri var." → at; "Türk bayrağında
   beni görürler, kırmızıyla eş derler." → al) nerede kullanılacak, sonra konuşulacak.
 - Kalan harf grupları ve 2. ada; yeni gruplarla 4-5 heceli kelimeler (Elektrik Devresi).
-- Peri rehber (öğretmenin fikri): görünüş, tanışma, 8 sayfalık anlatım penceresi ("İleri" düğmeli) ve sol üstteki görev
-  kartı (dokununca liste açılır) yapıldı. Sırada: peri karakterin omzunda uçar, her işi ilk kez yaparken
-  gösterir (sandıktan sonra ne yapılır, tohum nasıl ekilir, tesis, sulama, sırık, parça); sonra her mini oyunun
-  başında yönerge. Perinin adı yok (sorulabilir).
+- Peri rehber (öğretmenin fikri): görünüş, tanışma, anlatım penceresi, görev düğmesi ve omuzdaki peri
+  (her işi ilk kez gösterir) yapıldı. Sırada: her mini oyunun başında yönerge. Perinin adı yok (sorulabilir).
 - Bulut Market (taslak proje): karakterin kıyafetini değiştirme, yeni eşyalar alma. Sonra başlanacak.
