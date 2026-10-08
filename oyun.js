@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 163;
+const SURUM = 164;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -3586,6 +3586,19 @@ class KarsilamaSahnesi extends Phaser.Scene {
       doodleYazi(this, 0, -3, "Karne", 30).setOrigin(0.5),
     ]).setSize(170, 56).setInteractive({ useHandCursor: true });
     karne.on("pointerdown", () => this.karneKapisi(karne));
+
+    // Telefona uygulama olarak ekleme (Android Chrome izin verince görünür; index.html yuklemeIstegi)
+    const yukle = this.add.container(110, 186, [
+      this.add.image(0, 0, "incele-dugmesi"),
+      doodleYazi(this, 0, -3, "Telefona ekle", 24).setOrigin(0.5),
+    ]).setSize(170, 56).setInteractive({ useHandCursor: true }).setVisible(!!window.yuklemeIstegi);
+    window.yuklemeHazir = () => { if (yukle.active) yukle.setVisible(true); };
+    yukle.on("pointerdown", () => {
+      const istek = window.yuklemeIstegi;
+      if (!istek || this.basladi || this.profilPaneli.acikMi()) return;
+      istek.prompt();
+      istek.userChoice.finally(() => { window.yuklemeIstegi = null; yukle.setVisible(false); });
+    });
   }
 
   // Seçili profilin hayvanı adada çocuğun yanında (adı altında); düğme yazısı profile göre
@@ -4298,7 +4311,7 @@ BulutSahnesi.prototype.bekle = AdaSahnesi.prototype.bekle;
 
 // Yazı tipi (index.html'deki yaziTipiHazir) yüklendikten sonra oyunu başlat (yoksa yazı yanlış görünür).
 (window.yaziTipiHazir || Promise.resolve()).then(() => document.fonts.load('72px "Andika"')).finally(() => {
-  new Phaser.Game({
+  window.oyunNesnesi = new Phaser.Game({ // index.html telefon dönünce yeniden yerleştirir
     type: Phaser.AUTO,
     parent: "oyun",
     width: 1280,
