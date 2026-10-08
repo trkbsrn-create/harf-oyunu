@@ -1,8 +1,9 @@
 // Mini oyun: Yakala ve Yaz (ağla yakala)
 // Oyun bir kelime söyler; alttaki çantada kelimenin harf yerleri boş durur. Ekranda harf
-// yaratıkları uçuşur. Çocuk yaratığa dokununca ağ iner ve yaratığı yakalar: harfi kelimede
-// gerekiyorsa çantadaki yerine uçar. Kelimede olmayan (ya da artık gerekmeyen) harf bir can
-// götürür, yaratık kaçar. Bütün yerler dolunca kelime okunur.
+// yaratıkları uçuşur. Çocuk yaratığa dokununca ağ iner ve yaratığı yakalar. Öğretmenin isteği:
+// harfler sırayla (soldan sağa) yakalanır; sırası gelen harf çantadaki yerine uçar, sırası
+// gelmemiş harf yalnızca sallanır, kelimede olmayan harf bir can götürür (yaratık kaçar).
+// Bütün yerler dolunca kelime okunur.
 // Seviyeler: 1: 3 kelime, kısa kelimeler, yavaş; 2: 4 kelime; 3: 4 kelime, hızlı, benzer harfler.
 
 const YAKALA_SEVIYELERI = {
@@ -95,14 +96,28 @@ class YakalaYazSahnesi extends MiniOyunSahnesi {
     this.time.delayedCall(700, () => this.elGoster(this.yaratiklar.find((y) => this.gerekli(y.yaratik.harf))));
   }
 
-  // Bu harfe kelimede hâlâ ihtiyaç var mı?
+  // Öğretmenin isteği: kelimenin harfleri sırayla yakalanır (soldan sağa). Sırası gelen boş yer:
+  sirasiGelen() {
+    return this.yerler.find((y) => !y.dolu);
+  }
+
+  // Bu harf şimdi yakalanacak harf mi?
   gerekli(harf) {
+    const yer = this.sirasiGelen();
+    return !!yer && yer.harf === harf;
+  }
+
+  // Kelimede ileride gereken harf (sırası gelmemiş: can götürmez)
+  kelimede(harf) {
     return this.yerler.some((y) => !y.dolu && y.harf === harf);
   }
 
   yeniHarf(gerekliOlsun) {
-    const gerekenler = this.yerler.filter((y) => !y.dolu).map((y) => y.harf);
-    if (gerekenler.length && (gerekliOlsun || Math.random() < 0.6)) return Phaser.Utils.Array.GetRandom(gerekenler);
+    const sirasi = this.sirasiGelen();
+    const zar = Math.random();
+    if (sirasi && (gerekliOlsun || zar < 0.45)) return sirasi.harf;
+    const kalanlar = this.yerler.filter((y) => !y.dolu).map((y) => y.harf);
+    if (kalanlar.length && zar < 0.65) return Phaser.Utils.Array.GetRandom(kalanlar);
     const ogrenilmis = bilinenHarfler(this.harf);
     let havuz = ogrenilmis.filter((h) => !this.kelime.includes(h));
     if (this.ayar.benzer) {
@@ -192,7 +207,7 @@ class YakalaYazSahnesi extends MiniOyunSahnesi {
     const harf = y.yaratik.harf;
     if (this.gerekli(harf)) {
       y.yaratik.yakalandi = true;
-      const yer = this.yerler.find((x) => !x.dolu && x.harf === harf);
+      const yer = this.sirasiGelen();
       yer.dolu = true;
       Sesler.pling();
       // Yaratık çantaya uçar, yerine harf oturur
@@ -208,6 +223,11 @@ class YakalaYazSahnesi extends MiniOyunSahnesi {
         if (this.yerler.every((x) => x.dolu)) this.kelimeBitti();
         else { this.yaratikYap(); this.ihtiyacKontrol(); }
       } });
+    } else if (this.kelimede(harf)) {
+      // Sırası gelmemiş harf: yaratık yalnızca sallanır, can gitmez; sıradaki gösterilir
+      this.tweens.add({ targets: y, angle: { from: -12, to: 12 }, duration: 80, yoyo: true, repeat: 2, onComplete: () => y.setAngle(0) });
+      Sesler.nota(330, 0, 0.08, 0.06, "sine");
+      this.ipucuGoster(this.yaratiklar.find((x) => !x.yaratik.yakalandi && this.gerekli(x.yaratik.harf)));
     } else {
       // Gerekmeyen harf: yaratık kaçar, bir can gider
       y.yaratik.vx *= -2.5;

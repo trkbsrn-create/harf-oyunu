@@ -28,7 +28,7 @@ class HarfFirtinasiSahnesi extends MiniOyunSahnesi {
     super.preload();
     this.load.svg("balon", "gorseller/balon.svg");
     this.load.svg("damla", "gorseller/damla.svg");
-    for (const h of HARFLER) if (h.resim) this.load.svg(h.resim, `gorseller/${h.resim}.svg`);
+    for (const k of basResimleri(this.harf)) this.load.svg(kelimeResmi(k), `gorseller/${kelimeResmi(k)}.svg`);
   }
 
   create() {
@@ -37,8 +37,8 @@ class HarfFirtinasiSahnesi extends MiniOyunSahnesi {
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.hedef);
     this.heceler = heceHavuzu(this.harf);
-    const ogrenilmis = ogrenilmisHarfler(this.harf);
-    this.resimliler = HARFLER.filter((h) => h.resim && h.harfKelimeBasinda !== false && ogrenilmis.includes(h.kucuk));
+    // Öğretmenin kuralı: sorulan yalnızca bu harfe kadar öğrenilmiş harflerden (a'da n sorulmaz)
+    this.resimliler = basResimleri(this.harf);
     this.oncekiGorev = null;
     this.gorevKap = null;
     this.baslikYazi = null;
@@ -48,11 +48,14 @@ class HarfFirtinasiSahnesi extends MiniOyunSahnesi {
     this.time.delayedCall(400, () => this.harfiTanit(() => this.yeniGorev()));
   }
 
+  // Yanlış seçenekler: önce öğrenilmiş harfler, yetmezse grubun öbür harfleri
   yanlisHarfler(dogru, sayi) {
-    const ogrenilmis = ogrenilmisHarfler(this.harf).filter((h) => h !== dogru);
-    const benzer = this.ayar.benzer ? (BENZER_HARFLER[dogru] || []).filter((h) => ogrenilmis.includes(h)) : [];
+    const bilinen = bilinenHarfler(this.harf).filter((h) => h !== dogru);
+    const ogrenilmis = ogrenilmisHarfler(this.harf).filter((h) => h !== dogru && !bilinen.includes(h));
+    const benzer = this.ayar.benzer ? (BENZER_HARFLER[dogru] || []).filter((h) => bilinen.includes(h)) : [];
     const sonuc = [];
-    for (const h of [...Phaser.Utils.Array.Shuffle(benzer.slice()), ...Phaser.Utils.Array.Shuffle(ogrenilmis.slice())]) {
+    for (const h of [...Phaser.Utils.Array.Shuffle(benzer.slice()), ...Phaser.Utils.Array.Shuffle(bilinen.slice()),
+      ...Phaser.Utils.Array.Shuffle(ogrenilmis.slice())]) {
       if (sonuc.length < sayi && !sonuc.includes(h)) sonuc.push(h);
     }
     return sonuc;
@@ -152,7 +155,11 @@ class HarfFirtinasiSahnesi extends MiniOyunSahnesi {
   }
 
   resimKur() {
-    const bilgi = Phaser.Utils.Array.GetRandom(this.resimliler);
+    // Çoğunlukla oyunun harfiyle başlayan resim, arada önceki harflerinki
+    const kendi = this.resimliler.filter((k) => k[0] === this.harf);
+    const eski = this.resimliler.filter((k) => k[0] !== this.harf);
+    const kelime = Phaser.Utils.Array.GetRandom(eski.length && Math.random() < ESKI_HECE_ORANI ? eski : kendi);
+    const bilgi = { kucuk: kelime[0], kelime, resim: kelimeResmi(kelime) };
     const r = this.add.image(640, 290, bilgi.resim);
     r.setScale(Math.min(200 / r.width, 170 / r.height));
     this.gorevKap.add(r);

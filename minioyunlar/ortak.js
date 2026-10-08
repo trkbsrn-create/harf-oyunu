@@ -136,6 +136,14 @@ function ogrenilmisKelimeler(harf) {
   return harfli.length >= 3 ? harfli : uygun;
 }
 
+// Başında bu harfe kadar öğrenilmiş bir harf olan resimli kelimeler (resimden-ses/kelimeler.js;
+// resim adı yazılmaz, yalnızca resim gösterilir). Tombala ve Harf Fırtınası kullanır.
+function basResimleri(harf) {
+  const kelimeler = bilinenHarfler(harf).flatMap((h) => (KONUMLU_KELIMELER[h] ? KONUMLU_KELIMELER[h].bas : [])
+    .filter((k) => k[0] === h));
+  return [...new Set(kelimeler)];
+}
+
 // Hecenin harf sayısı seviyeye göre (öğretmenin kararı; bütün hece oyunlarında): 1. seviye iki
 // harfli (an, na), 2. seviye üç harfli (tat, lal), 3. seviye dört harfli. İlk harf grubunda
 // (a n e t i l) dört harfli hece yok; 3. seviyede üç harfli heceler zor seçeneklerle sorulur.
@@ -245,11 +253,11 @@ const YONERGELER = {
   "kazma": "Kazarak ilerle, söylenen harfin taşlarını topla!",
   "altin-madencisi": "Kanca doğru harfe bakınca dokun, altını çek!",
   "kazi-kazan": "Gümüşü parmağınla kazı. Resim çıkınca harfin yerini seç!",
-  "tombala": { 1: "Torbadan çıkan harfle başlayan resme pul koy!",
-    2: "Çıkan harfle başlayan resme pul koy. Kartında yoksa, kartımda yok düğmesine bas!",
-    3: "Çıkan harfle başlayan resme pul koy. Kartında yoksa, kartımda yok düğmesine bas!" },
+  "tombala": { 1: "Torbadan çıkanı kartında bul, üstüne pul koy!",
+    2: "Torbadan çıkanı kartında bul. Kartında yoksa, kartımda yok düğmesine bas!",
+    3: "Torbadan çıkanı kartında bul. Kartında yoksa, kartımda yok düğmesine bas!" },
   "arabayi-ulastir": "Parmağınla yol çiz. Araba doğru harflerden geçip bayrağa ulaşsın!",
-  "yakala-yaz": "Söylenen kelimenin harflerini ağla yakala!",
+  "yakala-yaz": "Söylenen kelimenin harflerini sırayla ağla yakala!",
   "kirik-cam": "Camdaki harfleri bul, camı kır!",
   "bombayi-kurtar": "Söylenen harfin kablosunu kes, bombayı kurtar!",
   "yilan": "Yılanı yönlendir, söylenen harfi ye!",
