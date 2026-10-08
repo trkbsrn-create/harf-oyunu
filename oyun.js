@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 156;
+const SURUM = 157;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -3559,7 +3559,7 @@ class KarsilamaSahnesi extends Phaser.Scene {
     // Öğretmenin deneme düğmesi (God mode) hikâyeyi atlar
     this.cameras.main.once("camerafadeoutcomplete", () => {
       if (tanriModu) this.scene.start("AdaSahnesi", { tanriModu });
-      else this.videoGoster();
+      else this.scene.start("HikayeSahnesi"); // açılış videosu şimdilik kapalı (videoGoster)
     });
   }
 
