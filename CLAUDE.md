@@ -10,7 +10,8 @@ mini oyunlarla damla kazanıp sular, fasulye sırığından bulutlara çıkar, y
 altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik yalnızca 1. ada.
 
 ## Dosya rehberi (ayrıntı: OYUNLAR.md)
-- `index.html` ana sayfa (derleme yok; telefon ayarları, yazı tipi yükleme `yaziTipiHazir`).
+- `index.html` ana sayfa (derleme yok; telefon ayarları, yazı tipi yükleme `yaziTipiHazir`, dönünce
+  yeniden yerleştirme). Uygulama olarak ekleme: `manifest.webmanifest`, `sw.js` (önbellek yok), `simge/`.
 - `oyun.js` ana oyun sahneleri (karşılama, hikâye, ada, bulut, final), `SURUM`.
 - `minioyunlar/<ad>/oyun.js` her mini oyun; `ortak.js` ortak sınıf `MiniOyunSahnesi`, `PLANLANAN_OYUNLAR`,
   hece/kelime yardımcıları; `menu.js` deneme menüsü; `lambalar.js` Oyun Lambaları (çarkın yerine).
