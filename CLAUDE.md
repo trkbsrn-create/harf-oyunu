@@ -100,6 +100,9 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
 3. Hâlâ olmazsa birkaç saniye sonra oyun kendiliğinden onaylar ve o harf
    "tekrar edilecek" olarak işaretlenir.
 - Tanıma bazen hiç sonuç döndürmez, bu yüzden zaman aşımı mutlaka olsun.
+- Öğretmenin isteği: oyuna başlarken "Mikrofon var mı?" sorulur (Var / Yok). "Yok" ise `Dinleyici.kapali`:
+  mikrofon hiç açılmaz; sandıkta harf sesli okunup tohum verilir, bulutta balon kendiliğinden patlar.
+  Karnede "Mikrofonsuz oynadı" (eksik sayılmaz). Yeni mikrofonlu bölümde de `Dinleyici.kapali`'ya bak.
 - Hata mesajı veya başarısızlık ekranı yok. (Mini oyunlar hariç: orada kaybetmek mümkün.)
 
 ## Gizlilik

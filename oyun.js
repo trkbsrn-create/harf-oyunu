@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 165;
+const SURUM = 166;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -2355,6 +2355,21 @@ class AdaSahnesi extends Phaser.Scene {
   async harfiDinle(harfBilgisi, yazi, hale, isik) {
     const harf = harfBilgisi.kucuk;
     const kelime = harfBilgisi.kelime;
+    // Mikrofon yok denildiyse: harf sesli okunur, kutlanır, tohum çantaya girer (dinleme yok)
+    if (Dinleyici.kapali) {
+      harfiSoyle(harf);
+      await this.bekle(1400);
+      Sesler.dogru();
+      this.tweens.add({ targets: yazi, scale: 1.35, duration: 180, yoyo: true, repeat: 1 });
+      this.add.particles(yazi.x, yazi.y, "yildiz", {
+        speed: { min: 150, max: 350 }, lifespan: 900, scale: { start: 0.8, end: 0 },
+        tint: [0xffcf3f, 0xffffff, 0x9fe870], emitting: false,
+      }).setDepth(6003).explode(25);
+      await this.bekle(900);
+      Profil.sesSonucu(harf, 0); // karne: mikrofonsuz oynadı
+      this.tohumuKazan(harf, yazi, hale, isik, false);
+      return;
+    }
     const mikrofon = this.add.image(yazi.x + 160, yazi.y - 10, "mikrofon")
       .setDepth(6002).setScale(0);
     this.tweens.add({ targets: mikrofon, scale: 1, duration: 300, ease: "Back.Out" });
@@ -3710,11 +3725,17 @@ class KarsilamaSahnesi extends Phaser.Scene {
     this.tepe.setAngle(Math.sin(zaman / 700) * 2.5);
   }
 
-  basla(dugme, tanriModu = false) {
-    if (this.basladi || this.profilPaneli.acikMi()) return;
+  async basla(dugme, tanriModu = false) {
+    if (this.basladi || this.sifreSoruluyor || this.profilPaneli.acikMi()) return;
     if (!tanriModu && !Profil.aktifId) { this.profilPaneli.ac(); return; } // "Profil oluştur"
-    this.basladi = true;
+    // Öğretmenin isteği: başlarken mikrofon sorulur; "Yok" ise mikrofonlu bölümler atlanır (Dinleyici.kapali)
     Sesler.ac();
+    this.sifreSoruluyor = true;
+    const mikrofonVar = await onaySor("Mikrofon var mı?", { evet: "Var", hayir: "Yok" });
+    this.sifreSoruluyor = false;
+    if (this.basladi || !this.scene.isActive()) return;
+    Dinleyici.kapali = !mikrofonVar;
+    this.basladi = true;
     Sesler.pling();
     this.nabiz.stop();
     this.tweens.add({ targets: dugme, scale: 0.92, duration: 90, yoyo: true });
@@ -4234,6 +4255,13 @@ class BulutSahnesi extends Phaser.Scene {
     this.hazir = false;
     this.hedef = null;
     this.cocuk.setTexture("cocuk").setScale(1).setFlipX(false);
+    // Mikrofon yok denildiyse: harf sesli okunur, balon kendiliğinden patlar
+    if (Dinleyici.kapali) {
+      harfiSoyle(this.harf);
+      await this.bekle(1500);
+      this.balonuPatlat();
+      return;
+    }
     const yazi = this.harfYazi;
     const mikrofon = this.add.image(yazi.x - 200, yazi.y - 120, "mikrofon").setDepth(6002).setScale(0);
     this.tweens.add({ targets: mikrofon, scale: 1, duration: 300, ease: "Back.Out" });

@@ -8,6 +8,9 @@
 const Dinleyici = {
   Tanima: window.SpeechRecognition || window.webkitSpeechRecognition,
   izinYok: false, // mikrofon izni verilmediyse true olur
+  // Öğretmenin isteği: oyuna başlarken "Mikrofon var mı?" sorulur; "Yok" denirse mikrofon hiç açılmaz,
+  // mikrofonlu bölümler (sandıkta harfi söyleme, bulutta gücünü göster) atlanır
+  kapali: false,
   enIyi: "", // son dinlemede en iyi tahmin
   sonSesSuresi: 0, // son dinlemede net ses duyulan toplam süre (milisaniye)
   olcer: null, // ses ölçer (mikrofon izni alınınca kurulur)
@@ -19,6 +22,7 @@ const Dinleyici = {
   // Ses ölçeri bir kez kurar. Mikrofon izni yoksa ya da izin sorusu 8 saniyede
   // cevaplanmazsa sessizce vazgeçer (oyun takılmasın).
   async olcerHazirla() {
+    if (this.kapali) return false;
     if (this.olcer) return true;
     try {
       const akis = await Promise.race([
@@ -187,7 +191,7 @@ const Dinleyici = {
   },
 
   get destekleniyor() {
-    return Boolean(this.Tanima) && !this.izinYok;
+    return Boolean(this.Tanima) && !this.izinYok && !this.kapali;
   },
 
   // Bir kez dinler; duyduğu metinleri (tüm tahminleriyle) bir dizi olarak verir.
