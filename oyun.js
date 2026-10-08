@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 158;
+const SURUM = 159;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -2314,6 +2314,7 @@ class AdaSahnesi extends Phaser.Scene {
       const kaldir = [mikrofon, ...sonuc.ipucu];
       this.tweens.add({ targets: kaldir, scale: 0, alpha: 0, duration: 250,
         onComplete: () => kaldir.forEach((n) => n.destroy()) });
+      Profil.sesSonucu(harf, !sonuc.dogru ? 3 : sonuc.ipucu.length ? 2 : 1); // karne
       this.tohumuKazan(harf, yazi, hale, isik, !sonuc.dogru);
       return;
     }
@@ -2358,6 +2359,7 @@ class AdaSahnesi extends Phaser.Scene {
     const kaldir = [mikrofon, ...ipucu];
     this.tweens.add({ targets: kaldir, scale: 0, alpha: 0, duration: 250,
       onComplete: () => kaldir.forEach((n) => n.destroy()) });
+    Profil.sesSonucu(harf, !dogru ? 3 : ipucu.length ? 2 : 1); // karne
     this.tohumuKazan(harf, yazi, hale, isik, !dogru);
   }
 
@@ -3451,6 +3453,7 @@ class KarsilamaSahnesi extends Phaser.Scene {
 
   create() {
     this.basladi = false; // menüden geri dönülünce düğmeler yeniden çalışsın
+    this.sifreSoruluyor = false;
     // "Oyunu yeniden başlat"tan geliyorsak doğrudan adaya geç
     let hemen = false;
     try {
@@ -3512,6 +3515,30 @@ class KarsilamaSahnesi extends Phaser.Scene {
       this.cameras.main.fadeOut(300, 251, 247, 236);
       this.cameras.main.once("camerafadeoutcomplete", () => this.scene.start("MiniOyunlarSahnesi"));
     });
+
+    // Veli ve öğretmen için karne (profil.js): şifreli kapı
+    const karne = this.add.container(110, 186, [
+      this.add.image(0, 0, "incele-dugmesi"),
+      doodleYazi(this, 0, -3, "Karne", 30).setOrigin(0.5),
+    ]).setSize(170, 56).setInteractive({ useHandCursor: true });
+    karne.on("pointerdown", () => this.karneKapisi(karne));
+  }
+
+  // Veli kapısı: şifre doğruysa karne açılır
+  async karneKapisi(dugme) {
+    if (this.basladi || this.sifreSoruluyor) return;
+    this.sifreSoruluyor = true;
+    const sifre = await metinSor("Veli şifresi", { sifre: true, enUzun: 20 });
+    this.sifreSoruluyor = false;
+    if (sifre === null || this.basladi) return;
+    if (sifre.toLocaleLowerCase("tr-TR") !== VELI_SIFRESI) {
+      this.tweens.add({ targets: dugme, angle: { from: -8, to: 8 }, duration: 70, yoyo: true, repeat: 2,
+        onComplete: () => dugme.setAngle(0) });
+      return;
+    }
+    this.basladi = true;
+    Sesler.ac();
+    this.scene.start("KarneSahnesi");
   }
 
   // Küçük doodle ada: taranmış kum ve çimen, titrek kalem kıyısı
@@ -3558,8 +3585,9 @@ class KarsilamaSahnesi extends Phaser.Scene {
     this.cameras.main.fadeOut(350, 251, 247, 236);
     // Öğretmenin deneme düğmesi (God mode) hikâyeyi atlar
     this.cameras.main.once("camerafadeoutcomplete", () => {
-      if (tanriModu) this.scene.start("AdaSahnesi", { tanriModu });
-      else this.scene.start("HikayeSahnesi"); // açılış videosu şimdilik kapalı (videoGoster)
+      // Deneme (God mode) sayılmaz; çocuk önce profilini seçer (profil.js), sonra hikâye
+      if (tanriModu) { Profil.sec(null); this.scene.start("AdaSahnesi", { tanriModu }); }
+      else this.scene.start("ProfilSahnesi"); // açılış videosu şimdilik kapalı (videoGoster)
     });
   }
 
@@ -4164,6 +4192,6 @@ BulutSahnesi.prototype.bekle = AdaSahnesi.prototype.bekle;
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [KarsilamaSahnesi, HikayeSahnesi, AdaSahnesi, FinalSahnesi, BulutSahnesi, MiniOyunlarSahnesi, OyunLambalariSahnesi, ...Object.values(MINI_OYUNLAR), YonergeSahnesi],
+    scene: [KarsilamaSahnesi, ProfilSahnesi, KarneSahnesi, HikayeSahnesi, AdaSahnesi, FinalSahnesi, BulutSahnesi, MiniOyunlarSahnesi, OyunLambalariSahnesi, ...Object.values(MINI_OYUNLAR), YonergeSahnesi],
   });
 });

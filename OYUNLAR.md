@@ -382,3 +382,11 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   turunda sıralı yönerge. Her yönerge sayfa açık kaldıkça bir kez. dene.js'de kapalı (`YONERGE=1` ile açılır). Peri balonunda "İleri"
   düğmesi (son sözde "Tamam"); kendiliğinden geçmez, balona dokununca söz yeniden okunur. Konuşurken karakter yürümez.
   Sözler kayit.html "Peri" bölümünde (öğretmen kaydeder).
+
+## Profil ve karne (profil.js)
+- "Oyunu başlat" → `ProfilSahnesi` ("Kim oynuyor?"): telefondaki profiller (hayvan resmi + takma ad, altında
+  sesi denenmiş harfler ve toplam yıldız) ve "+" (hayvan seç, takma adı veli yazar: `metinSor`); seçince hikâye.
+  God mode profil seçmez, sayılmaz. Veri: `ilerlemeArtir` doğru, `kalpEksilt` yanlış, `bitir` oyun sonucu
+  (ortak.js), `harfiDinle` ses sonucu (1 kendisi, 2 ipucuyla, 3 oyun onayladı).
+- Karşılamada "Karne" → şifre (karnebak) → `KarneSahnesi`: profil seçilir; her harfin sesi, mini oyun
+  doğru/yanlış, eksikse "Tekrar edilecek"; zorlandığı oyunlar; "Karneyi kaydet" (resim indirir), "Profili sil".

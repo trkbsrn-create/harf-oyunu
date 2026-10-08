@@ -14,6 +14,7 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
 - `oyun.js` ana oyun sahneleri (karşılama, hikâye, ada, bulut, final), `SURUM`.
 - `minioyunlar/<ad>/oyun.js` her mini oyun; `ortak.js` ortak sınıf `MiniOyunSahnesi`, `PLANLANAN_OYUNLAR`,
   hece/kelime yardımcıları; `menu.js` deneme menüsü; `lambalar.js` Oyun Lambaları (çarkın yerine).
+- `profil.js` profil (hayvan resmi + takma ad), istatistik, karne (`ProfilSahnesi`, `KarneSahnesi`).
 - `harfler.js` harf verisi; `canta.js` çanta; `sesler.js` efekt ve sesli okuma; `dinleyici.js` mikrofon.
 - `gorseller/` kendi SVG'lerimiz, `araclar/doodle_ciz.py` ile üretilir (görsel değişikliği betikte yapılır).
 - `araclar/dene.js` mini oyun deneme aracı (aşağıda "Test").
@@ -102,6 +103,10 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
 
 ## Gizlilik
 - Ses kaydı tutma, kişisel veri toplama, sunucu kullanma.
+- Öğretmenin izniyle: çocuk hayvan resmi + takma adla girer (adı veli yazar). Profil ve istatistik
+  yalnızca cihazda (localStorage), sunucuya gitmez. Karne veli kapısının arkasında (şifre: karnebak;
+  şifre kodda açık, yalnızca çocukları durdurmak için). Karne yetişkin içindir: öğrenilmemiş harfli
+  yazı kuralı orada ve takma adda uygulanmaz.
 - İlerleme sadece tarayıcının yerel hafızasında (localStorage) tutulur.
 
 ## Görseller ve sesler
@@ -128,6 +133,7 @@ Her hatadan sonra buraya yeni bir kural ekle.
 
 - Kullanıcı istemedikçe ilerlemeyi kalıcı saklama. Sayfa yenilenince oyun baştan
   başlar (çanta boşalır, sandıklar kapanır). Kalıcı kayıt gerekirse önce kullanıcıya sor.
+  (Öğretmen izin verdi: yalnızca profil ve istatistik saklanır, `profil.js`.)
 - Kullanıcıya görünen her şey Türkçe olsun: iş arasındaki kısa notlar, komut
   açıklamaları, kayıt (commit) mesajları, çekme isteği açıklamaları ve kod içi notlar.
   İngilizce yazma.
