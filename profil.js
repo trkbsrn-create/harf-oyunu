@@ -154,6 +154,31 @@ function metinSor(baslik, { sifre = false, enUzun = 14 } = {}) {
   });
 }
 
+// "Emin misin?" kutusu (Evet / Hayır). Evet: true. Dokunuşlar alttaki oyuna geçmez.
+function onaySor(soru) {
+  return new Promise((sonuc) => {
+    const zemin = document.createElement("div");
+    zemin.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;"
+      + "align-items:center;justify-content:center;z-index:50";
+    const dugme = "font:inherit;font-size:24px;padding:8px 26px;border:3px solid #2b2b2b;border-radius:14px;";
+    zemin.innerHTML = `<div style="background:#fffdf6;border:4px solid #2b2b2b;border-radius:22px;
+      padding:24px 28px;font-family:Andika,sans-serif;text-align:center;max-width:90vw">
+      <div class="soru" style="font-size:26px;margin-bottom:18px"></div>
+      <div style="display:flex;gap:16px;justify-content:center">
+        <button data-c="0" style="${dugme}background:#fff">Hayır</button>
+        <button data-c="1" style="${dugme}background:#ffd34d">Evet</button>
+      </div></div>`;
+    zemin.querySelector(".soru").textContent = soru;
+    for (const olay of ["pointerdown", "pointerup", "mousedown", "mouseup", "touchstart", "touchend", "click"]) {
+      zemin.addEventListener(olay, (e) => e.stopPropagation());
+    }
+    zemin.querySelectorAll("button").forEach((b) => {
+      b.onclick = () => { zemin.remove(); sonuc(b.dataset.c === "1"); };
+    });
+    document.body.appendChild(zemin);
+  });
+}
+
 // Profil kartı: hayvan resmi, takma ad; ayrintili ise altında öğrendiği harfler ve yıldızları
 function profilKartiYap(sahne, x, y, p, en = 230, boy = 250, ayrintili = true) {
   const kap = sahne.add.container(x, y);

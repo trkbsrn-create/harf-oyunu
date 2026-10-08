@@ -2,7 +2,8 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 162;
+const SURUM = 163;
+const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -3510,6 +3511,7 @@ class KarsilamaSahnesi extends Phaser.Scene {
   create() {
     this.basladi = false; // menüden geri dönülünce düğmeler yeniden çalışsın
     this.sifreSoruluyor = false;
+    this.bastanDugmesi = null; // önceki açılıştan kalan (silinmiş) düğme kullanılmasın
 
     this.add.tileSprite(0, 0, 1280, 720, "doku-kagit").setOrigin(0);
     this.deniz = this.add.tileSprite(0, 0, 1280, 720, "doku-deniz").setOrigin(0).setAlpha(0.85);
@@ -3525,7 +3527,7 @@ class KarsilamaSahnesi extends Phaser.Scene {
       this.add.image(0, 0, "baslik-tabela"),
       doodleYazi(this, 0, 4, "Harf Avcısı", 92, "mavi").setOrigin(0.5),
     ]);
-    doodleYazi(this, 1262, 14, `Sürüm ${SURUM}`, 30).setOrigin(1, 0);
+    doodleYazi(this, 1266, 712, `Sürüm ${SURUM}`, 26).setOrigin(1, 1); // sağ alt (öğretmenin isteği)
     this.tweens.add({ targets: tabela, angle: { from: -1.2, to: 1.2 }, duration: 1800,
       yoyo: true, repeat: -1, ease: "Sine.InOut" });
 
@@ -3546,15 +3548,25 @@ class KarsilamaSahnesi extends Phaser.Scene {
     this.input.keyboard.on("keydown-ENTER", () => this.basla(dugme));
     this.input.keyboard.on("keydown-SPACE", () => this.basla(dugme));
 
-    // Deneme için: bütün sandıklar açılmış, tohumlar çantada başlar
-    const tanri = this.add.container(110, 46, [
+    // God mode (öğretmenin deneme düğmesi): sol altta yazısız küçük daire, şifreyle girilir.
+    // Bütün sandıklar açılmış, tohumlar çantada başlar.
+    const tanriCizim = this.add.graphics();
+    tanriCizim.fillStyle(0xffd34d, 1);
+    tanriCizim.fillCircle(0, 0, 16);
+    tanriCizim.lineStyle(3, 0x2b2b2b, 1);
+    tanriCizim.strokeCircle(0, 0, 16);
+    const tanri = this.add.container(34, 686, [tanriCizim]).setSize(48, 48).setInteractive({ useHandCursor: true });
+    tanri.on("pointerdown", () => this.tanriKapisi(tanri));
+
+    // Kaydı olan profilde "Baştan başla" (emin misin sorulur; karne silinmez)
+    this.bastanDugmesi = this.add.container(1010, 640, [
       this.add.image(0, 0, "incele-dugmesi"),
-      doodleYazi(this, 0, -3, "God mode", 30).setOrigin(0.5),
-    ]).setSize(170, 56).setInteractive({ useHandCursor: true });
-    tanri.on("pointerdown", () => this.basla(tanri, true));
+      doodleYazi(this, 0, -3, "Baştan başla", 26).setOrigin(0.5),
+    ]).setSize(170, 56).setInteractive({ useHandCursor: true }).setVisible(!!Profil.oyunKaydi());
+    this.bastanDugmesi.on("pointerdown", () => this.bastanBasla(dugme));
 
     // Mini oyunları ayrı ayrı açıp denemek için menü (minioyunlar/menu.js)
-    const mini = this.add.container(110, 116, [
+    const mini = this.add.container(110, 46, [
       this.add.image(0, 0, "incele-dugmesi"),
       doodleYazi(this, 0, -3, "Mini Games", 28).setOrigin(0.5),
     ]).setSize(170, 56).setInteractive({ useHandCursor: true });
@@ -3569,7 +3581,7 @@ class KarsilamaSahnesi extends Phaser.Scene {
     });
 
     // Veli ve öğretmen için karne (profil.js): şifreli kapı
-    const karne = this.add.container(110, 186, [
+    const karne = this.add.container(110, 116, [
       this.add.image(0, 0, "incele-dugmesi"),
       doodleYazi(this, 0, -3, "Karne", 30).setOrigin(0.5),
     ]).setSize(170, 56).setInteractive({ useHandCursor: true });
@@ -3583,6 +3595,7 @@ class KarsilamaSahnesi extends Phaser.Scene {
     const p = Profil.aktifId && Profil.liste().find((x) => x.id === Profil.aktifId);
     // Kaydı varsa "Devam et" (oyun kaldığı yerden sürer)
     this.dugmeYazi.setText(!p ? "Profil oluştur" : p.kayit ? "Devam et" : "Oyunu başlat");
+    if (this.bastanDugmesi) this.bastanDugmesi.setVisible(!!(p && p.kayit));
     if (!p) return;
     const resim = this.add.image(0, 0, p.hayvan).setOrigin(0.5, 1);
     resim.setScale(Math.min(150 / resim.width, 150 / resim.height));
@@ -3595,6 +3608,33 @@ class KarsilamaSahnesi extends Phaser.Scene {
     this.profilResmi.on("pointerdown", () => { if (!this.basladi && !this.profilPaneli.acikMi()) this.profilPaneli.ac(); });
     this.profilResmi.setScale(0);
     this.tweens.add({ targets: this.profilResmi, scale: 1, duration: 350, ease: "Back.Out" });
+  }
+
+  // God mode: şifre doğruysa deneme oyunu açılır
+  async tanriKapisi(dugme) {
+    if (this.basladi || this.sifreSoruluyor || this.profilPaneli.acikMi()) return;
+    this.sifreSoruluyor = true;
+    const sifre = await metinSor("Şifre", { sifre: true, enUzun: 20 });
+    this.sifreSoruluyor = false;
+    if (sifre === null || this.basladi) return;
+    if (sifre.toLocaleLowerCase("tr-TR") !== TANRI_SIFRESI) {
+      this.tweens.add({ targets: dugme, angle: { from: -15, to: 15 }, duration: 70, yoyo: true, repeat: 2,
+        onComplete: () => dugme.setAngle(0) });
+      return;
+    }
+    this.basla(dugme, true);
+  }
+
+  // Baştan başla: emin misin sorulur; evetse kayıt silinir (istatistik ve karne kalır), hikâye başlar
+  async bastanBasla(dugme) {
+    if (this.basladi || this.sifreSoruluyor || this.profilPaneli.acikMi()) return;
+    this.sifreSoruluyor = true;
+    const evet = await onaySor("Emin misin? Oyun baştan başlar, çanta boşalır.");
+    this.sifreSoruluyor = false;
+    if (!evet || this.basladi) return;
+    Profil.oyunuKaydet(null);
+    this.profilGoster();
+    this.basla(dugme);
   }
 
   // Veli kapısı: şifre doğruysa karne açılır
