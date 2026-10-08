@@ -356,6 +356,11 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   Hikâyeden sonra (`periTanisma: true`) sağdan uçarak gelir, konuşma balonuyla kendini tanıtır,
   sonra ortada anlatım penceresi açılır (`anlatimAc`, `PERI_ANLATIM` 8 sayfa: yelkenli, sandık,
   radar canlandırması `anlatimRadari`, tarla, su tesisi, şişeyle sulama, bulut, görev düğmesi (gerçek
-  düğme parlar, el gösterir); peri her sayfayı söyler, sonra uçup gider. Peri balonunda "İleri"
+  düğme parlar, el gösterir); peri her sayfayı söyler, sonra karakterin omzuna
+  uçar (`periOmzaUc`; yeniden başlatta doğrudan omuzda `omuzPerisiYap`, God mode'da yok). Omuzda karakteri
+  izler (`omuzPerisiniGuncelle`) ve her işi ilk kez gösterir (`rehberOlay`, `rehberSec`): olay gelince
+  balon (ekran katmanı, dokununca yeniden okunur) ve gösteren el; ipucu "tamam" olayına kadar başlangıç
+  olayında yeniden çıkar (yürü, sandık, tohumu çantadan tarlaya, tesis, varil, şişeyle sula, sırık "Çık",
+  parçayı yelkenliye). Peri balonunda "İleri"
   düğmesi (son sözde "Tamam"); kendiliğinden geçmez, balona dokununca söz yeniden okunur. Konuşurken karakter yürümez.
   Sözler kayit.html "Peri" bölümünde (öğretmen kaydeder).
