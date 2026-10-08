@@ -30,7 +30,7 @@ class SekillerleYazmaSahnesi extends MiniOyunSahnesi {
     this.ortakKur();
     this.ayar = SEKIL_AYAR;
     this.ilerlemeKur(this.ayar.tur);
-    this.hedefPaneliKur("Doldur:");
+    this.hedefPaneli = this.hedefPaneliKur("Doldur:");
     this.dokulerUret();
     this.yerlesenler = [];
     this.tepsi = [];
@@ -163,7 +163,7 @@ class SekillerleYazmaSahnesi extends MiniOyunSahnesi {
 
   // Harf yolları büyütülüp eşit aralıklı yerlere bölünür (yazılış sırasında)
   yerleriHesapla() {
-    const yollar = (HARF_YOLLARI[this.harf] || HARF_YOLLARI.a).map((yol) => yol.map((n) => ({
+    const yollar = harfiYazYollari(this.harf, this.buyuk).map((yol) => yol.map((n) => ({
       x: SEKIL_MERKEZ.x + (n.x - 640) * SEKIL_OLCEK,
       y: SEKIL_MERKEZ.y + (n.y - 400) * SEKIL_OLCEK,
     })));
@@ -198,6 +198,8 @@ class SekillerleYazmaSahnesi extends MiniOyunSahnesi {
     this.tepsi = [];
     this.dusenler = [];
     this.malzeme = SEKIL_MALZEMELER[this.turNo % SEKIL_MALZEMELER.length];
+    this.buyuk = this.turNo % 2 === 1; // öğretmenin isteği: 2. harf büyük harf
+    harfiYazPaneli(this, this.buyuk);
     this.turNo++;
     const { yollar, yerler } = this.yerleriHesapla();
     this.yerler = yerler;

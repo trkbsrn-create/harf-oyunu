@@ -38,6 +38,33 @@ const HARF_YOLLARI = {
   l: [birlestir(cizgiNoktalari(630, 250, 630, 440), yayNoktalari(660, 440, 30, 30, 180, 90))],
 };
 
+// Büyük harfler (öğretmenin isteği; dik temel harf yazılış sırası, öğretmen kontrol edecek):
+// tavan 250, taban 470. A: sol eğik, sağ eğik, orta çizgi; N: sol dikey, çapraz, sağ dikey;
+// E: dikey, üst, orta, alt; T: üst çizgi, dikey; İ: dikey, nokta; L: dikey ve alt (tek çizgi).
+const BUYUK_HARF_YOLLARI = {
+  a: [cizgiNoktalari(640, 250, 570, 470), cizgiNoktalari(640, 250, 710, 470), cizgiNoktalari(593, 398, 687, 398)],
+  n: [cizgiNoktalari(580, 250, 580, 470), cizgiNoktalari(580, 250, 700, 470), cizgiNoktalari(700, 250, 700, 470)],
+  e: [cizgiNoktalari(590, 250, 590, 470), cizgiNoktalari(590, 250, 690, 250),
+    cizgiNoktalari(590, 360, 675, 360), cizgiNoktalari(590, 470, 690, 470)],
+  t: [cizgiNoktalari(570, 250, 710, 250), cizgiNoktalari(640, 250, 640, 470)],
+  i: [cizgiNoktalari(640, 250, 640, 470), cizgiNoktalari(640, 204, 640, 218)],
+  l: [birlestir(cizgiNoktalari(595, 250, 595, 470), cizgiNoktalari(595, 470, 690, 470))],
+};
+
+// Her turda küçük mü büyük mü yazılacak: 2. tur büyük harf (küçük, BÜYÜK, küçük)
+function harfiYazYollari(harf, buyuk) {
+  const tablo = buyuk && BUYUK_HARF_YOLLARI[harf] ? BUYUK_HARF_YOLLARI : HARF_YOLLARI;
+  return tablo[harf] || HARF_YOLLARI.a;
+}
+
+// Üstteki "Yaz:" panelindeki harfi küçük/büyük yapar
+function harfiYazPaneli(sahne, buyuk) {
+  const yazi = sahne.hedefPaneli.list[2];
+  yazi.setText(buyuk ? sahne.harf.toLocaleUpperCase("tr-TR") : sahne.harf);
+  boyaliOrtala(yazi);
+  sahne.tweens.add({ targets: sahne.hedefPaneli, scale: 1.15, duration: 160, yoyo: true });
+}
+
 const HARFI_CIZ_SEVIYELERI = {
   2: { yol: 46, oklar: true, numara: true, baslangic: true, tolerans: 44, sapma: 100 },
   3: { yol: 28, oklar: false, numara: false, baslangic: true, tolerans: 36, sapma: 85 },
@@ -55,8 +82,8 @@ class HarfiCizSahnesi extends MiniOyunSahnesi {
     this.ayar = HARFI_CIZ_SEVIYELERI[this.seviye] || HARFI_CIZ_SEVIYELERI[2];
     this.kalpleriKur(3);
     this.ilerlemeKur(HARFI_CIZ_TEKRAR);
-    this.hedefPaneliKur("Yaz:");
-    this.yollar = HARF_YOLLARI[this.harf] || HARF_YOLLARI.a;
+    this.hedefPaneli = this.hedefPaneliKur("Yaz:");
+    this.yollar = harfiYazYollari(this.harf, false);
 
     // Defter satır çizgileri
     const satir = this.add.graphics().setDepth(1);
@@ -91,6 +118,9 @@ class HarfiCizSahnesi extends MiniOyunSahnesi {
   // Harf baştan: iz temizlenir, ilk çizgi
   harfiBaslat() {
     if (this.bitti) return;
+    this.buyuk = this.ilerleme === 1; // 2. tur büyük harf
+    this.yollar = harfiYazYollari(this.harf, this.buyuk);
+    harfiYazPaneli(this, this.buyuk);
     this.cizgiNo = 0;
     this.nokta = 0;
     this.yolCiz();

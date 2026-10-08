@@ -56,7 +56,8 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   yeniden çekilir; malzeme yazılış sırasındaki sıradaki yere oturur (dokunmak da yeter); 2 harf;
   can yok. 2-3. düzey: harfin ipucu resmi yazılış yönünde yol boyunca götürülür, sarı iz kalır;
   sapınca çizgi baştan, can gider; harf 3 kez; yollar `HARF_YOLLARI` dik temel harf yönüne göre;
-  2. düzey kalın yol, oklar, numaralar; 3. düzey ince yol, yalnızca başlangıç noktası); resimden-ses (Resimden Sesi
+  2. düzey kalın yol, oklar, numaralar; 3. düzey ince yol, yalnızca başlangıç noktası; öğretmenin
+  isteği: büyük harf de var, `BUYUK_HARF_YOLLARI`, `harfiYazYollari`: 1. düzeyde 2. harf, 2-3. düzeyde 2. tur büyük); resimden-ses (Resimden Sesi
   Bul: düzeye göre harfin kelimedeki yeri: 1. başında, 2. sonunda, 3. ortasında olan resmi seç
   (öğretmenin isteği). Oyun başında önce harf gelir (ünlüyse söylenir), sonra üç kutuda harfin
   yeri gösterilir ve söylenir ("Başında a olan resimleri bul!"; ünsüzde harf okunur, cümlede "bu harf"), sonra üstteki
@@ -153,7 +154,7 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   (yanlış harf yalnızca uyarı), 2. seviye hecenin harflerini, 3. seviye kelimenin hecelerini sırayla
   ye (sırası gelmemiş yem kaçar, başkası can götürür); yenen gövdede görünür; duvar/kendine çarpma yok).
   Ortak sıralı düzen: `siraliKur`, `siraliSoruSec`, `siraliParcaAl` (ortak.js).
-  canavari-besle (Canavarı Besle: canavar konuşma balonunda harf ister (ünlü söylenir); masadaki
+  canavari-besle (Canavarı Besle: canavar konuşma balonunda harf ister (ünlü söylenir; başka harf yalnızca önceki harflerden, a'da hep a); masadaki
   harfli meyve canavara doğru sürüklenip bırakılır (1. seviyede dokunmak yeter), kavisle ağzına
   uçar; doğruysa yer ve büyür, yanlışsa yüzünü buruşturup tükürür, can gider; Kazma düzeni: 2. seviye
   hece, 3. seviye kelime istenir (balonda hoparlör), parçalı meyveler sırayla; sırası gelmemiş meyve geri döner; her seviyede
@@ -224,6 +225,7 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
 - `canta.js` – Karakterin çantası (envanter). Kaydedilmez; sayfa yenilenince oyun baştan başlar.
 - Tarla: karakterin başladığı yerin üstünde çitli tarla, 6 kare yan yana tek sıra
   (`tarlaKur`, tarla.svg).
+  Çanta yalnızca sağdaki simgeden açılır (karaktere dokununca açılmaz; öğretmenin isteği).
   Çanta açıkken bir tohum tutulunca pencere silikleşir; tohum boş bir kareye bırakılırsa
   ekilir (ekili-tohum.svg), kare doluysa ya da tarla dışına bırakılırsa çantaya döner.
   Tarla da kaydedilmez.

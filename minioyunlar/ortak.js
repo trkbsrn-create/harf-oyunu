@@ -152,6 +152,7 @@ function heceHavuzu(harf) {
 // hece karışık (acikOrani ile, en az 0.4). 2. seviye (üç harfli): az ortak harfli seçenekler.
 // 3. seviye (üç harfli, zor): tek harfi değişen ve ters heceler (tal / lat / tel).
 // secenekSayisi: doğru dahil kaç seçenek; onceki: üst üste aynı hece sorulmasın.
+const ESKI_HECE_ORANI = 0.25;
 function heceSorusu(hepsi, harf, seviye, secenekSayisi, acikOrani, onceki) {
   let uzunluk = heceUzunlugu(seviye);
   // Bu harfte o uzunlukta yeterli hece yoksa (ör. e'de üç harfli yalnızca nan, nen) iki harfli
@@ -160,9 +161,13 @@ function heceSorusu(hepsi, harf, seviye, secenekSayisi, acikOrani, onceki) {
   const havuz = hepsi.filter((h) => h.hece.length === uzunluk);
   const acikOran = Math.max(acikOrani || 0, 0.4);
   const harfli = havuz.filter((h) => h.hece.includes(harf));
-  const adaylar = harfli.filter((h) => h.hece !== onceki
+  // Öğretmenin kuralı: çoğunlukla oyunun harfini içeren hece, arada (ESKI_HECE_ORANI) daha önce
+  // öğrenilen harflerin hecesi (e'de çoğunlukla en/ne, arada an/na)
+  const eskiler = havuz.filter((h) => !h.hece.includes(harf) && h.hece !== onceki);
+  const kaynak = eskiler.length && Math.random() < ESKI_HECE_ORANI ? eskiler : harfli;
+  const adaylar = kaynak.filter((h) => h.hece !== onceki
     && (uzunluk !== 2 || (Math.random() < acikOran ? h.acik : !h.acik)));
-  const hedef = Phaser.Utils.Array.GetRandom(adaylar.length ? adaylar : harfli);
+  const hedef = Phaser.Utils.Array.GetRandom(adaylar.length ? adaylar : kaynak);
   const digerleri = havuz.filter((h) => h.hece !== hedef.hece);
   const karistir = (dizi) => Phaser.Utils.Array.Shuffle(dizi.slice());
   // Ortak harf sayısı (aynı yerde aynı harf) ve ters hece
