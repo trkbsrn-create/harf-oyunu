@@ -349,4 +349,8 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   rastgele değiştirilmez.
 - Yayın: GitHub Pages (kök klasörden). Kökteki `.nojekyll` Jekyll derlemesini kapatır (dosyalar olduğu gibi
   yayınlanır; Jekyll adımı GitHub'da zaman aşımına düşüp yayını durdurmuştu).
-
+- Peri rehber (`oyun.js`, AdaSahnesi `periYap`, `periSoyle`, `periTanisma`; `PERI_TANISMA` sözleri):
+  yaprak perisi (gorseller/peri.svg + peri-kanat.svg, elle çizildi; kanatlar çırpar, peri süzülür).
+  Hikâyeden sonra (`periTanisma: true`) sağdan uçarak gelir, konuşma balonuyla kendini tanıtır,
+  sonra uçup gider. Konuşurken karakter yürümez; ekrana dokununca sıradaki söze geçilir.
+  Sözler kayit.html "Peri" bölümünde (öğretmen kaydeder).

@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="160" viewBox="0 0 130 160">
+  <!-- Adanın perisi (yaprak perisi; öğretmenin seçimi C). Kanatlar ayrı: peri-kanat.svg (kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="7" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="elbise" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#c5ea9e"/><line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#8fd16a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="tohum" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-20)">
+      <rect width="7" height="7" fill="#e8c79a"/><line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#c49a6c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="63" cy="154" rx="20" ry="4" fill="#000" fill-opacity="0.12"/>
+  <g filter="url(#titrek)">
+    <path d="M63 72 C44 96 40 120 50 132 Q63 126 76 132 C86 120 82 96 63 72Z" fill="url(#elbise)" stroke="#2b2b2b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M63 80 L63 124" fill="none" stroke="#3f8f2f" stroke-width="2.5" stroke-linecap="round"/>
+    <line x1="56" y1="132" x2="54" y2="146" stroke="#2b2b2b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/><line x1="70" y1="132" x2="72" y2="146" stroke="#2b2b2b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <line x1="52" y1="86" x2="36" y2="104" stroke="#2b2b2b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <line x1="74" y1="86" x2="82" y2="104" stroke="#2b2b2b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <line x1="82" y1="104" x2="92" y2="76" stroke="#2b2b2b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M92 62 l4 9 10 1 -7 7 2 10 -9 -5 -9 5 2 -10 -7 -7 10 -1z" fill="#ffd34d" stroke="#2b2b2b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M46 46 Q63 18 80 46Z" fill="url(#tohum)" stroke="#2b2b2b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M63 33 q2 -6 4 -9" fill="none" stroke="#2b2b2b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <path d="M66 25 q6 -12 16 -11 q-4 10 -16 11" fill="#8fd16a" stroke="#2b2b2b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="63" cy="56" r="17" fill="#ffe0c2" stroke="#2b2b2b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+    <circle cx="57" cy="55" r="2.6" fill="#2b2b2b"/><circle cx="69" cy="55" r="2.6" fill="#2b2b2b"/>
+    <circle cx="52" cy="61" r="3.5" fill="#ff9c8a" fill-opacity="0.7"/><circle cx="74" cy="61" r="3.5" fill="#ff9c8a" fill-opacity="0.7"/>
+    <path d="M58 63 Q63 68 68 63" fill="none" stroke="#2b2b2b" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+  </g>
+</svg>

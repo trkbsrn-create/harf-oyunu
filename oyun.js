@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 145;
+const SURUM = 146;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -285,6 +285,8 @@ class AdaSahnesi extends Phaser.Scene {
     this.load.svg("cocuk-adim1", "gorseller/cocuk-adim1.svg");
     this.load.svg("cocuk-adim2", "gorseller/cocuk-adim2.svg");
     this.load.svg("cocuk-tirman", "gorseller/cocuk-tirman.svg");
+    this.load.svg("peri", "gorseller/peri.svg");
+    this.load.svg("peri-kanat", "gorseller/peri-kanat.svg");
     this.load.svg("agac-govde", "gorseller/agac-govde.svg");
     this.load.svg("agac-tepe", "gorseller/agac-tepe.svg");
     this.load.svg("cali", "gorseller/cali.svg");
@@ -396,6 +398,7 @@ class AdaSahnesi extends Phaser.Scene {
 
     this.input.on("pointerdown", (p) => {
       Sesler.ac();
+      if (this.periKonusuyor) { if (this.periIleri) this.periIleri(); return; } // dokununca sıradaki söz
       if (this.tirmaniyor) return; // sırıkta tırmanırken dokunuş beklenmez
       if (this.menuTiklamasi(p)) return;
       if (this.tesisTiklamasi(p)) return;
@@ -447,7 +450,7 @@ class AdaSahnesi extends Phaser.Scene {
         this.parcayiTasi(p);
         return;
       }
-      if (p.isDown && !this.cantaAcik && !this.menuAcik && !this.tesisAcik) this.hedefBelirle(p.worldX, p.worldY, false);
+      if (p.isDown && !this.cantaAcik && !this.menuAcik && !this.tesisAcik && !this.periKonusuyor) this.hedefBelirle(p.worldX, p.worldY, false);
     });
     this.input.on("pointerup", (p) => this.birak(p));
     this.input.on("pointerupoutside", (p) => this.birak(p));
@@ -456,6 +459,77 @@ class AdaSahnesi extends Phaser.Scene {
     this.input.keyboard.on("keydown-SPACE", () => {
       if (!this.menuAcik && !this.tesisAcik) this.cantayiAcKapat();
     });
+    this.periKonusuyor = false;
+    if (veri.periTanisma) this.time.delayedCall(700, () => this.periTanisma());
+  }
+
+  // ---- Peri rehber (öğretmenin fikri; 2. aşama: tanışma) ----
+  // Peri: gövde + iki kanat (peri-kanat.svg, sol kanat aynalı). Ekran katmanında durur.
+  periYap(x, y) {
+    const sol = this.add.image(-7, 6, "peri-kanat").setOrigin(0.93, 0.66).setFlipX(true);
+    const sag = this.add.image(3, 6, "peri-kanat").setOrigin(0.07, 0.66);
+    const govde = this.add.image(0, 0, "peri");
+    const peri = this.add.container(x, y, [sol, sag, govde]).setScrollFactor(0).setDepth(5000).setScale(1.3);
+    this.tweens.add({ targets: [sol, sag], scaleX: 0.55, duration: 150, yoyo: true, repeat: -1 });
+    peri.tabanY = y;
+    peri.salinma = this.tweens.add({ targets: peri, y: y - 10, duration: 900, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+    return peri;
+  }
+
+  // Peri konuşma balonu (sözü yazar ve söyler); dokununca ya da söz bitince sıradaki söze geçer
+  periSoyle(sozler, bitince) {
+    const peri = this.peri;
+    let i = 0;
+    const sonraki = () => {
+      if (this.periBalon) this.periBalon.destroy();
+      this.periBalon = null;
+      if (i >= sozler.length) { this.periKonusuyor = false; bitince(); return; }
+      const soz = sozler[i++];
+      const yazi = this.add.text(0, 0, soz, {
+        fontFamily: "Andika", fontSize: "30px", color: "#2b2b2b", align: "center",
+        wordWrap: { width: 380 }, padding: { x: 4, y: 4 },
+      }).setOrigin(0.5);
+      const en = yazi.width + 48;
+      const boy = yazi.height + 36;
+      const g = this.add.graphics();
+      g.fillStyle(0xfffdf6, 1);
+      g.lineStyle(4, 0x2b2b2b, 1);
+      g.fillRoundedRect(-en / 2, -boy / 2, en, boy, 22);
+      g.strokeRoundedRect(-en / 2, -boy / 2, en, boy, 22);
+      g.fillTriangle(-en / 2 + 10, 0, -en / 2 - 26, 24, -en / 2 + 10, 22);
+      g.lineBetween(-en / 2, 4, -en / 2 - 26, 24);
+      g.lineBetween(-en / 2 - 26, 24, -en / 2 + 6, 22);
+      this.periBalon = this.add.container(peri.x + 90 + en / 2, peri.tabanY - 40, [g, yazi])
+        .setScrollFactor(0).setDepth(5001).setScale(0);
+      this.tweens.add({ targets: this.periBalon, scale: 1, duration: 220, ease: "Back.Out" });
+      let gecti = false;
+      this.periIleri = () => {
+        if (gecti) return;
+        gecti = true;
+        this.time.delayedCall(400, sonraki);
+      };
+      Sesler.soyle(soz, () => this.periIleri());
+      this.time.delayedCall(6000, () => this.periIleri()); // söz bitmezse de devam
+    };
+    this.periKonusuyor = true;
+    sonraki();
+  }
+
+  // Oyunun en başında (hikâyeden sonra) peri uçarak gelir, kendini tanıtır, sonra uçup gider
+  periTanisma() {
+    this.peri = this.periYap(1400, 260);
+    this.peri.salinma.pause();
+    Sesler.nota(1320, 0, 0.2, 0.08, "sine");
+    Sesler.nota(1760, 0.12, 0.25, 0.06, "sine");
+    this.tweens.add({ targets: this.peri, x: 300, y: 300, duration: 1300, ease: "Sine.Out", onComplete: () => {
+      this.peri.tabanY = 300;
+      this.peri.salinma.remove();
+      this.peri.salinma = this.tweens.add({ targets: this.peri, y: 290, duration: 900, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+      this.periSoyle(PERI_TANISMA, () => {
+        this.tweens.add({ targets: this.peri, x: -150, y: 120, duration: 1100, ease: "Sine.In",
+          onComplete: () => { this.peri.destroy(); this.peri = null; } });
+      });
+    } });
   }
 
   // ---- Çanta (envanter) ----
@@ -2980,6 +3054,12 @@ class FinalSahnesi extends Phaser.Scene {
   }
 }
 
+// Perinin tanışma sözleri (öğretmen kaydeder: kayit.html "Peri")
+const PERI_TANISMA = [
+  "Merhaba! Ben bu adanın perisiyim.",
+  "Adadan kurtulman için sana yardım edeceğim.",
+];
+
 class HikayeSahnesi extends Phaser.Scene {
   constructor() {
     super("HikayeSahnesi");
@@ -3119,7 +3199,7 @@ class HikayeSahnesi extends Phaser.Scene {
     this.bitti = true;
     Sesler.sustur();
     this.cameras.main.fadeOut(400, 251, 247, 236);
-    this.cameras.main.once("camerafadeoutcomplete", () => this.scene.start("AdaSahnesi"));
+    this.cameras.main.once("camerafadeoutcomplete", () => this.scene.start("AdaSahnesi", { periTanisma: true }));
   }
 }
 

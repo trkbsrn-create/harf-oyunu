@@ -1,7 +1,8 @@
 // Mini oyun deneme aracı (Claude'un testleri için; oyunun parçası değil).
-// Kullanım: node araclar/dene.js <oyun> [harf] [seviye] [bekleme_ms] ["kod"]
+// Kullanım: node araclar/dene.js <oyun> [harf] [seviye] [bekleme_ms] ["kod"] [sonra_ms]
 //   oyun: mini oyunun adı (kazma, hece-muzigi...), "menu" (Mini Games) ya da "ana" (karşılama)
 //   kod: bekleme bittikten sonra sahnede çalışır; s = sahne (ör. "s.ilerleme"), sonucu yazılır
+//   sonra_ms: koddan sonra ekran görüntüsüne kadar beklenecek süre (varsayılan 500)
 // Kendi küçük sunucusunu açar, işi bitince kapatır. Çıktı: hatalar, söylenen sözler,
 // araclar/cikti/<oyun>.png ekran görüntüsü.
 // Kurulum (bir kez): npm install --prefix araclar --no-save playwright phaser@3.90.0
@@ -10,7 +11,7 @@ const fs = require("fs");
 const path = require("path");
 const { chromium } = require("playwright");
 
-const [oyun = "ana", harf = "a", seviye = "1", bekleme = "4000", kod] = process.argv.slice(2);
+const [oyun = "ana", harf = "a", seviye = "1", bekleme = "4000", kod, sonra = "500"] = process.argv.slice(2);
 const KOK = path.join(__dirname, "..");
 const PHASER = path.join(__dirname, "node_modules/phaser/dist/phaser.min.js");
 const TURLER = { ".html": "text/html", ".js": "application/javascript", ".svg": "image/svg+xml",
@@ -33,6 +34,7 @@ const sunucu = http.createServer((istek, cevap) => {
   const sayfa = await (await tarayici.newContext({ viewport: { width: 1280, height: 720 } })).newPage();
   const hatalar = [];
   sayfa.on("pageerror", (e) => hatalar.push(e.message));
+  sayfa.on("console", (m) => { if (m.type() === "error") hatalar.push("konsol: " + m.text()); });
   if (fs.existsSync(PHASER)) {
     await sayfa.route("https://cdn.jsdelivr.net/**", (r) => r.fulfill({ path: PHASER, contentType: "application/javascript" }));
   }
@@ -65,7 +67,7 @@ const sunucu = http.createServer((istek, cevap) => {
       try { return JSON.stringify(eval(kod)); } catch (e) { return "kod hatası: " + e.message; }
     }, [oyun, kod]);
     console.log("kod sonucu:", sonuc);
-    await sayfa.waitForTimeout(500);
+    await sayfa.waitForTimeout(Number(sonra));
   }
   fs.mkdirSync(path.join(__dirname, "cikti"), { recursive: true });
   const resim = path.join(__dirname, "cikti", `${oyun}.png`);

@@ -112,10 +112,12 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
 
 ## Test
 - Ses özellikleri sadece Chrome'da test edilir.
-- Mini oyun denemesi: `node araclar/dene.js <oyun> [harf] [seviye] [bekleme_ms] ["kod"]`
+- Mini oyun denemesi: `node araclar/dene.js <oyun> [harf] [seviye] [bekleme_ms] ["kod"] [sonra_ms]`
   (ör. `node araclar/dene.js kazma l 3`). Kendi sunucusunu açar ve kapatır; hataları, söylenen
   sözleri ve `araclar/cikti/<oyun>.png` ekran görüntüsünü verir. "kod" sahnede çalıştırılır
   (`s` = sahne, ör. `"s.ilerleme"`). Oyun adı `menu` menüyü, `ana` karşılama ekranını açar.
+  Sahne adı da verilebilir (AdaSahnesi, HikayeSahnesi). Ada bu ortamda çok yavaş çizilir (saniyede
+  birkaç kare): ada denemelerinde sonra_ms uzun tutulur (ör. 25000).
   Kurulum (yeni oturumda bir kez): `npm install --prefix araclar --no-save playwright phaser@3.90.0`.
 - Gerçek telefonda (özellikle iPhone) denenemeyen değişikliklerde bunu kullanıcıya açıkça söyle.
 
@@ -157,6 +159,7 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Bulut bölgelerinin içeriği; bilmeceler ("Hızlı koşar, yeleleri var." → at; "Türk bayrağında
   beni görürler, kırmızıyla eş derler." → al) nerede kullanılacak, sonra konuşulacak.
 - Kalan harf grupları ve 2. ada; yeni gruplarla 4-5 heceli kelimeler (Elektrik Devresi).
-- Peri rehber (öğretmenin fikri): oyun başında adanın perisi gelir, her aşamada ve her mini
-  oyunun başında ne yapılacağını anlatır. Plan aşama aşama yapılacak (önce taslak).
+- Peri rehber (öğretmenin fikri): 1) görünüş (yaprak perisi, seçim C) ve 2) tanışma yapıldı. Sırada:
+  3) ilk adımlar (yürüme, sandık, çanta; parmakla gösterir), 4) ada aşamaları (tohum, tesis, sulama,
+  sırık, parça; ilk kez gerekince bir kez), 5) her mini oyunun başında yönerge. Perinin adı yok (sorulabilir).
 - Bulut Market (taslak proje): karakterin kıyafetini değiştirme, yeni eşyalar alma. Sonra başlanacak.
