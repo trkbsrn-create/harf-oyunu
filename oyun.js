@@ -3559,7 +3559,7 @@ class KarsilamaSahnesi extends Phaser.Scene {
     // Öğretmenin deneme düğmesi (God mode) hikâyeyi atlar
     this.cameras.main.once("camerafadeoutcomplete", () => {
       if (tanriModu) this.scene.start("AdaSahnesi", { tanriModu });
-      else this.videoGoster();
+      else this.scene.start("HikayeSahnesi"); // açılış videosu şimdilik kapalı (videoGoster)
     });
   }
 
