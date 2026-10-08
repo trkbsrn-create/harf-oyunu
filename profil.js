@@ -72,11 +72,13 @@ const Profil = {
   dogru(harf) { this.degistir((p) => { this.harfKaydi(p, harf).dogru++; }); },
   yanlis(harf) { this.degistir((p) => { this.harfKaydi(p, harf).yanlis++; }); },
 
-  // Harf sesi: 1 kendisi söyledi, 2 ipucuyla söyledi, 3 oyun onayladı (tekrar edilecek)
+  // Harf sesi: 1 kendisi söyledi, 2 ipucuyla söyledi, 3 oyun onayladı (tekrar edilecek),
+  // 0 mikrofonsuz oynadı (ses denenmedi; karnede eksik sayılmaz)
   sesSonucu(harf, adim) {
     this.degistir((p) => {
       const k = this.harfKaydi(p, harf);
-      if (adim === 1) k.ses1++;
+      if (adim === 0) k.mikrofonsuz = (k.mikrofonsuz || 0) + 1;
+      else if (adim === 1) k.ses1++;
       else if (adim === 2) k.ses2++;
       else k.sesTekrar++;
     });
@@ -106,7 +108,7 @@ const Profil = {
   ogrendigiHarfler(p) {
     return HARFLER.map((h) => h.kucuk).filter((h) => {
       const k = p.harfler[h];
-      return k && k.ses1 + k.ses2 + k.sesTekrar > 0;
+      return k && k.ses1 + k.ses2 + k.sesTekrar + (k.mikrofonsuz || 0) > 0;
     });
   },
 
@@ -155,7 +157,7 @@ function metinSor(baslik, { sifre = false, enUzun = 14 } = {}) {
 }
 
 // "Emin misin?" kutusu (Evet / Hayır). Evet: true. Dokunuşlar alttaki oyuna geçmez.
-function onaySor(soru) {
+function onaySor(soru, { evet = "Evet", hayir = "Hayır" } = {}) {
   return new Promise((sonuc) => {
     const zemin = document.createElement("div");
     zemin.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;"
@@ -165,10 +167,12 @@ function onaySor(soru) {
       padding:24px 28px;font-family:Andika,sans-serif;text-align:center;max-width:90vw">
       <div class="soru" style="font-size:26px;margin-bottom:18px"></div>
       <div style="display:flex;gap:16px;justify-content:center">
-        <button data-c="0" style="${dugme}background:#fff">Hayır</button>
-        <button data-c="1" style="${dugme}background:#ffd34d">Evet</button>
+        <button data-c="0" style="${dugme}background:#fff"></button>
+        <button data-c="1" style="${dugme}background:#ffd34d"></button>
       </div></div>`;
     zemin.querySelector(".soru").textContent = soru;
+    zemin.querySelector('[data-c="0"]').textContent = hayir;
+    zemin.querySelector('[data-c="1"]').textContent = evet;
     for (const olay of ["pointerdown", "pointerup", "mousedown", "mouseup", "touchstart", "touchend", "click"]) {
       zemin.addEventListener(olay, (e) => e.stopPropagation());
     }
@@ -449,7 +453,8 @@ class KarneSahnesi extends Phaser.Scene {
     harfler.forEach((h, i) => {
       const y = 140 + i * 50;
       const k = p.harfler[h] || { dogru: 0, yanlis: 0, ses1: 0, ses2: 0, sesTekrar: 0 };
-      const ses = k.ses1 ? "Kendisi söyledi" : k.ses2 ? "İpucuyla söyledi" : k.sesTekrar ? "Söyleyemedi" : "Henüz denenmedi";
+      const ses = k.ses1 ? "Kendisi söyledi" : k.ses2 ? "İpucuyla söyledi" : k.sesTekrar ? "Söyleyemedi"
+        : k.mikrofonsuz ? "Mikrofonsuz oynadı" : "Henüz denenmedi";
       const eksik = (k.sesTekrar > 0 && !k.ses1) || (k.yanlis >= 3 && k.yanlis > k.dogru / 2);
       yazi(330, y, h, 32);
       yazi(400, y + 4, ses, 24, k.sesTekrar && !k.ses1 && !k.ses2 ? "#d9473a" : "#2b2b2b");

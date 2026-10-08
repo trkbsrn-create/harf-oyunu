@@ -16,7 +16,7 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   "Geç"): fırtına, sal kırılır, kumsalda uyanma, silik yelkenliyi görme (hikaye-*.svg). God
   mode ve "Devam et" hikâyeyi atlar.
   Sol üstteki menüde "Ana menüye dön" (`anaMenuyeDon`): oyun profile kaydedilir, karşılamaya dönülür;
-  orada düğme "Devam et" olur ve kaldığı yerden sürer; yanında "Baştan başla" (`onaySor` "Emin misin?";
+  orada düğme "Devam et" olur ve kaldığı yerden sürer (başlarken her seferinde "Mikrofon var mı?" sorulur); yanında "Baştan başla" (`onaySor` "Emin misin?";
   evetse kayıt silinir, karne kalır, hikâye başlar). Sürüm yazısı sağ altta. Kayıt (`durumuKaydet`, 4 sn'de bir de; profil.js
   `oyunKaydi`): çanta, tarla (harf, büyüme aşaması), takılan yelkenli parçaları, kazanılan damlalar,
   oynanan oyunlar, rehber, çocuğun yeri; açılan sandıklar ve variller bunlardan çıkarılır (`durumuYukle`).
