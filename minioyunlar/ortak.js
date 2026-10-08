@@ -202,6 +202,110 @@ function harfiSoyle(harf, bitince) {
 // Gösteren el her mini oyunda (sayfa açık kaldıkça) bir kez çıkar
 const MINI_OYUN_ELI_GOSTERILDI = {};
 
+// Mini oyun yönergeleri (öğretmenin fikri): oyun başında peri ne yapılacağını söyler. Metin ya da
+// düzeye göre { 1: ..., 2: ..., 3: ... }. Sıralı oyunlarda (Kazma düzeni) hece/kelime turunda
+// SIRALI_YONERGELER söylenir. Sözler kayit.html'de ("Mini oyun yönergeleri").
+const YONERGELER = {
+  "damla-yakala": "Söylenen harfin damlalarına dokun!",
+  "harf-balonlari": "Söylenen harfin balonlarını patlat!",
+  "harfi-yaz": { 1: "Kola bas, malzemeleri harfin üstüne diz!", 2: "Resmi harfin yolunda götür, harfi yaz!",
+    3: "Resmi harfin yolunda götür, harfi yaz!" },
+  "resimden-ses": "Harfin yerine bak, doğru resimlere dokun!",
+  "hafiza-kartlari": "Kartları ikişer aç, eşlerini bul!",
+  "hece-koprusu": "Söylenen heceyi taşlarla yaz, köprüyü kur!",
+  "heceyi-bul": "Söylenen hecenin yazılı olduğu balığa dokun!",
+  "labirent": "Söylenen hecenin kapısını seç, çıkışı bul!",
+  "seker-patlatma": "Söylenen hecenin harflerini sırayla seç, şekerleri patlat!",
+  "kayak": "Sağa sola dokun. Söylenen harfin toplarını topla, kayalardan kaç!",
+  "elektrik-devresi": "Söyleneni bul. Parçaları soldan sağa kabloyla bağla!",
+  "duvardan-gecme": "Söylenen harfin kapısına geç! Dokun ya da sürükle.",
+  "hece-muzigi": { 1: "Melodiyi dinle, tuşlara aynı sırayla bas!",
+    2: "Söylenen hecenin notası çizgiye gelince dokun!", 3: "Söylenen hecenin notası çizgiye gelince dokun!" },
+  "scrabble": "Söylenen kelimeyi harf taşlarıyla yaz!",
+  "ordek-vurma": "Söylenen harfli ördekleri vur!",
+  "kazma": "Kazarak ilerle, söylenen harfin taşlarını topla!",
+  "altin-madencisi": "Kanca doğru harfe bakınca dokun, altını çek!",
+  "kazi-kazan": "Gümüşü parmağınla kazı. Resim çıkınca harfin yerini seç!",
+  "tombala": { 1: "Torbadan çıkan harfle başlayan resme pul koy!",
+    2: "Çıkan harfle başlayan resme pul koy. Kartında yoksa, kartımda yok düğmesine bas!",
+    3: "Çıkan harfle başlayan resme pul koy. Kartında yoksa, kartımda yok düğmesine bas!" },
+  "arabayi-ulastir": "Parmağınla yol çiz. Araba doğru harflerden geçip bayrağa ulaşsın!",
+  "yakala-yaz": "Söylenen kelimenin harflerini ağla yakala!",
+  "kirik-cam": "Camdaki harfleri bul, camı kır!",
+  "bombayi-kurtar": "Söylenen harfin kablosunu kes, bombayı kurtar!",
+  "yilan": "Yılanı yönlendir, söylenen harfi ye!",
+  "canavari-besle": "Canavarın istediği harfli meyveyi ağzına götür!",
+  "harf-kesme": "Parmağını kaydır, söylenen harfli meyveleri kes!",
+  "hece-kulesi": "Söylenen heceyi seç, sonra bloğu kulenin üstüne bırak!",
+  "birlestir-buyut": "Taşları kaydır, harfleri yan yana getirip hece kur!",
+  "harfle-boya": "Söylenen harfin olduğu yerlere dokun, resmi boya!",
+  "harf-firtinasi": "Hızlı ol! Her görevde söyleneni yap!",
+};
+const SIRALI_YONERGELER = {
+  hece: "Şimdi söylenen hecenin harflerini sırayla bul!",
+  kelime: "Şimdi söylenen kelimenin hecelerini sırayla bul!",
+};
+const YONERGE_GOSTERILDI = {}; // sayfa açık kaldıkça her yönerge bir kez
+
+function yonergeMetni(ad, seviye, tur) {
+  if (tur && SIRALI_YONERGELER[tur]) return SIRALI_YONERGELER[tur];
+  const y = YONERGELER[ad];
+  return typeof y === "object" && y ? y[seviye] || y[1] : y;
+}
+
+// Yönerge penceresi: mini oyun durur, peri yönergeyi söyler, "Başla" ile oyun sürer
+class YonergeSahnesi extends Phaser.Scene {
+  constructor() {
+    super("YonergeSahnesi");
+  }
+
+  preload() {
+    for (const ad of ["peri", "peri-kanat", "incele-dugmesi"]) this.load.svg(ad, `gorseller/${ad}.svg`);
+  }
+
+  create(veri) {
+    this.add.rectangle(0, 0, 1280, 720, 0x000000, 0.3).setOrigin(0).setInteractive();
+    const peri = AdaSahnesi.prototype.periYap.call(this, 330, 460);
+    peri.setScale(0).setDepth(10);
+    this.tweens.add({ targets: peri, scale: 1.2, duration: 400, ease: "Back.Out" });
+    const yazi = this.add.text(0, 0, veri.metin, {
+      fontFamily: "Andika", fontSize: "36px", color: "#2b2b2b", align: "center",
+      wordWrap: { width: 520 }, padding: { x: 4, y: 4 },
+    }).setOrigin(0.5);
+    const en = yazi.width + 60;
+    const boy = yazi.height + 44;
+    const g = this.add.graphics();
+    g.fillStyle(0xfffdf6, 1);
+    g.lineStyle(5, 0x2b2b2b, 1);
+    g.fillRoundedRect(-en / 2, -boy / 2, en, boy, 26);
+    g.strokeRoundedRect(-en / 2, -boy / 2, en, boy, 26);
+    g.fillTriangle(-en / 2 + 12, 10, -en / 2 - 34, 40, -en / 2 + 12, 36);
+    g.lineBetween(-en / 2, 14, -en / 2 - 34, 40);
+    g.lineBetween(-en / 2 - 34, 40, -en / 2 + 8, 36);
+    const bx = 430 + en / 2;
+    const by = 380;
+    const balon = this.add.container(bx, by, [g, yazi]).setDepth(11).setScale(0)
+      .setSize(en, boy).setInteractive({ useHandCursor: true });
+    this.tweens.add({ targets: balon, scale: 1, duration: 260, delay: 200, ease: "Back.Out" });
+    // Balona dokununca yönerge yeniden okunur
+    balon.on("pointerdown", () => Sesler.soyle(veri.metin, null, true));
+    const dugme = this.add.container(bx + en / 2 - 90, by + boy / 2 + 60, [
+      this.add.image(0, 0, "incele-dugmesi"),
+      doodleYazi(this, 0, -3, "Başla", 34).setOrigin(0.5),
+    ]).setDepth(11).setSize(200, 90).setInteractive({ useHandCursor: true });
+    this.tweens.add({ targets: dugme, scale: 1.1, duration: 550, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+    dugme.on("pointerdown", () => {
+      Sesler.ac();
+      Sesler.pling();
+      Sesler.sustur();
+      this.scene.stop();
+      this.scene.resume(veri.sahne);
+      Sesler.bekletmeyiBitir();
+    });
+    this.time.delayedCall(450, () => Sesler.soyle(veri.metin, null, true));
+  }
+}
+
 // Bütün mini oyunların ortak parçaları: kâğıt zemin, geri düğmesi, canlar (kalpler),
 // ilerleme çubuğu ve bitiş penceresi ("Aferin!" ya da "Bir daha dene").
 class MiniOyunSahnesi extends Phaser.Scene {
@@ -224,6 +328,12 @@ class MiniOyunSahnesi extends Phaser.Scene {
 
   ortakKur() {
     this.cameras.main.fadeIn(300, 251, 247, 236);
+    // Yönerge: oyun kurulurken söylenen sözler bekletilir; kurulum bitince (tur belli olunca)
+    // yönerge gösterilir ya da (gösterildiyse) sözler hemen söylenir
+    if (!window.YONERGE_KAPALI) {
+      Sesler.bekletme = [];
+      this.events.once("create", () => this.yonergeBaslat());
+    }
     this.add.tileSprite(0, 0, 1280, 720, "doku-kagit").setOrigin(0).setDepth(-10);
     const geri = this.add.container(1176, 48, [
       this.add.image(0, 0, "incele-dugmesi").setScale(0.9),
@@ -241,6 +351,20 @@ class MiniOyunSahnesi extends Phaser.Scene {
       g.generateTexture("parilti", 10, 10);
       g.destroy();
     }
+  }
+
+  yonergeBaslat() {
+    const ad = this.sys.settings.key;
+    const metin = yonergeMetni(ad, this.seviye, this.tur);
+    if (!metin || YONERGE_GOSTERILDI[`${ad}|${metin}`] || this.bitti) {
+      Sesler.bekletmeyiBitir();
+      return;
+    }
+    YONERGE_GOSTERILDI[`${ad}|${metin}`] = true;
+    this.cameras.main.resetFX(); // açılış kararması dururken oyun görünmezdi
+    this.scene.pause();
+    this.scene.launch("YonergeSahnesi", { sahne: ad, metin });
+    this.scene.bringToTop("YonergeSahnesi");
   }
 
   // ---- Araştırmadan gelen ortak ilkeler ----

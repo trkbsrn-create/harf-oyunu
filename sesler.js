@@ -201,7 +201,13 @@ const Sesler = {
   // (yoksa yeni söz kesilir ya da hiç çıkmaz); söz nesnesi saklanır (yoksa tarayıcı onu
   // silebilir, söz yarıda kalır). Güvence süresi, ses gerçekten başladığında yeniden
   // kurulur: yavaş telefonda ses geç başlasa da sonraki adım onu kesmez.
-  soyle(metin, bitince) {
+  // oncelikli: yönerge sözü (bekletme sırasında da söylenir)
+  soyle(metin, bitince, oncelikli = false) {
+    // Mini oyun yönergesi sürerken oyunun sözleri bekler; yönerge bitince sırayla söylenir
+    if (this.bekletme && !oncelikli) {
+      this.bekletme.push([metin, bitince]);
+      return;
+    }
     const dosya = this.dosyaSesleri && typeof SES_DOSYALARI !== "undefined" && SES_DOSYALARI[metin];
     if (dosya && this.baglam) this.dosyaCal(dosya, metin, bitince);
     else this.tarayiciylaSoyle(metin, bitince);
@@ -306,6 +312,21 @@ const Sesler = {
   },
 
   // Söyleneni keser (sıradaki söz de söylenmez)
+  // Bekleyen sözleri sırayla söyler ve bekletmeyi bitirir
+  bekletmeyiBitir() {
+    const sira = this.bekletme || [];
+    this.bekletme = null;
+    const sonraki = (i) => {
+      if (i >= sira.length) return;
+      const [metin, bitince] = sira[i];
+      this.soyle(metin, () => {
+        if (bitince) bitince();
+        sonraki(i + 1);
+      });
+    };
+    sonraki(0);
+  },
+
   sustur() {
     this.sozNo = (this.sozNo || 0) + 1;
     if (this.calan) {

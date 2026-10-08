@@ -38,9 +38,12 @@ const sunucu = http.createServer((istek, cevap) => {
   if (fs.existsSync(PHASER)) {
     await sayfa.route("https://cdn.jsdelivr.net/**", (r) => r.fulfill({ path: PHASER, contentType: "application/javascript" }));
   }
+  if (process.env.YONERGE) await sayfa.addInitScript(() => { window.__yonergeAcik = true; });
   await sayfa.addInitScript(() => {
     // Sesli okuma: söylenenler kaydedilir, söz kısa sürede biter
     window.__sozler = [];
+    // Mini oyun yönergesi (peri) denemelerde kapalı; görmek için: YONERGE=1 node araclar/dene.js ...
+    window.YONERGE_KAPALI = !window.__yonergeAcik;
     if (window.speechSynthesis) {
       window.speechSynthesis.speak = (s) => { window.__sozler.push(s.text); setTimeout(() => s.onend && s.onend(), 200); };
     }

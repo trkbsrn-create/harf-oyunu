@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 150;
+const SURUM = 151;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -4158,6 +4158,6 @@ BulutSahnesi.prototype.bekle = AdaSahnesi.prototype.bekle;
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [KarsilamaSahnesi, HikayeSahnesi, AdaSahnesi, FinalSahnesi, BulutSahnesi, MiniOyunlarSahnesi, SansCarkiSahnesi, ...Object.values(MINI_OYUNLAR)],
+    scene: [KarsilamaSahnesi, HikayeSahnesi, AdaSahnesi, FinalSahnesi, BulutSahnesi, MiniOyunlarSahnesi, SansCarkiSahnesi, ...Object.values(MINI_OYUNLAR), YonergeSahnesi],
   });
 });
