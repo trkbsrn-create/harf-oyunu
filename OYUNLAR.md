@@ -384,9 +384,11 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   Sözler kayit.html "Peri" bölümünde (öğretmen kaydeder).
 
 ## Profil ve karne (profil.js)
-- İlk sayfanın ortasında `ProfilPaneli` ("Kim oynuyor?"): telefondaki profiller (hayvan resmi + takma ad,
-  altında sesi denenmiş harfler ve toplam yıldız) ve "+" (hayvan seç, takma adı veli yazar: `metinSor`;
-  kutuya dokunuş oyuna geçmez). "Oyunu başlat" ve "Mini Games" seçili profil ister (yoksa panel sallanır).
+- İlk ekranda profil yoksa ana düğme "Profil oluştur": `ProfilPaneli` penceresi ("Kim oynuyor?") açılır:
+  profiller (hayvan + takma ad, altında sesi denenmiş harfler ve toplam yıldız), "+" (hayvan seç, takma adı
+  veli yazar: `metinSor`; kutuya dokunuş oyuna geçmez), kart köşesindeki kırmızı "x" siler (onaylı).
+  Seçilen profilin hayvanı adını taşıyarak adada çocuğun yanında durur (`profilGoster`), dokununca pencere
+  açılır (profil değiştirme); düğme "Oyunu başlat" olur. "Mini Games" de profilsizse pencereyi açar.
   God mode profil seçmez, sayılmaz. Veri: `ilerlemeArtir` doğru, `kalpEksilt` yanlış, `bitir` oyun sonucu
   (ortak.js), `harfiDinle` ses sonucu (1 kendisi, 2 ipucuyla, 3 oyun onayladı).
 - Karşılamada "Karne" → şifre (karnebak) → `KarneSahnesi`: profil seçilir; her harfin sesi, mini oyun

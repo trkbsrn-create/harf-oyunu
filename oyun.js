@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 160;
+const SURUM = 161;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -3486,14 +3486,19 @@ class KarsilamaSahnesi extends Phaser.Scene {
     this.tweens.add({ targets: tabela, angle: { from: -1.2, to: 1.2 }, duration: 1800,
       yoyo: true, repeat: -1, ease: "Sine.InOut" });
 
+    // Profil seçilmemişse "Profil oluştur" (profil penceresini açar), seçiliyse "Oyunu başlat"
+    this.dugmeYazi = doodleYazi(this, 40, -6, "Oyunu başlat", 46).setOrigin(0.5);
     const dugme = this.add.container(640, 630, [
       this.add.image(0, 0, "dugme-baslat"),
-      doodleYazi(this, 40, -6, "Oyunu başlat", 46).setOrigin(0.5),
+      this.dugmeYazi,
     ]).setSize(396, 92).setInteractive({ useHandCursor: true });
     this.nabiz = this.tweens.add({ targets: dugme, scale: 1.06, duration: 650, yoyo: true,
       repeat: -1, ease: "Sine.InOut" });
-    // Ortada "Kim oynuyor?" paneli (profil.js): oyun da mini oyunlar da seçili profille açılır
-    this.profilPaneli = new ProfilPaneli(this, 640, 375);
+    // "Kim oynuyor?" penceresi (profil.js). Seçilen profilin hayvanı adada çocuğun yanında durur;
+    // ona dokununca pencere yeniden açılır (profil değiştirme)
+    this.profilPaneli = new ProfilPaneli(this, () => this.profilGoster());
+    this.profilResmi = null;
+    this.profilGoster();
     dugme.on("pointerdown", () => this.basla(dugme));
     this.input.keyboard.on("keydown-ENTER", () => this.basla(dugme));
     this.input.keyboard.on("keydown-SPACE", () => this.basla(dugme));
@@ -3512,7 +3517,7 @@ class KarsilamaSahnesi extends Phaser.Scene {
     ]).setSize(170, 56).setInteractive({ useHandCursor: true });
     mini.on("pointerdown", () => {
       if (this.basladi || this.profilPaneli.acikMi()) return;
-      if (!Profil.aktifId) { this.profilPaneli.uyar(); return; }
+      if (!Profil.aktifId) { this.profilPaneli.ac(); return; } // önce profil seçilmeli
       this.basladi = true;
       Sesler.ac();
       Sesler.pling();
@@ -3526,6 +3531,26 @@ class KarsilamaSahnesi extends Phaser.Scene {
       doodleYazi(this, 0, -3, "Karne", 30).setOrigin(0.5),
     ]).setSize(170, 56).setInteractive({ useHandCursor: true });
     karne.on("pointerdown", () => this.karneKapisi(karne));
+  }
+
+  // Seçili profilin hayvanı adada çocuğun yanında (adı altında); düğme yazısı profile göre
+  profilGoster() {
+    if (this.profilResmi) this.profilResmi.destroy();
+    this.profilResmi = null;
+    const p = Profil.aktifId && Profil.liste().find((x) => x.id === Profil.aktifId);
+    this.dugmeYazi.setText(p ? "Oyunu başlat" : "Profil oluştur");
+    if (!p) return;
+    const resim = this.add.image(0, 0, p.hayvan).setOrigin(0.5, 1);
+    resim.setScale(Math.min(150 / resim.width, 150 / resim.height));
+    const ad = this.add.text(0, 14, p.ad, {
+      fontFamily: "Andika", fontSize: "30px", color: "#2b2b2b", stroke: "#fffdf6", strokeThickness: 6,
+    }).setOrigin(0.5, 0);
+    // Dokunma alanı resmi ve adı kapsar (kutu kabın ortasına göre: üstte resim, altta ad)
+    this.profilResmi = this.add.container(850, 450, [resim.setY(55), ad.setY(69)]).setSize(180, 230)
+      .setInteractive({ useHandCursor: true });
+    this.profilResmi.on("pointerdown", () => { if (!this.basladi && !this.profilPaneli.acikMi()) this.profilPaneli.ac(); });
+    this.profilResmi.setScale(0);
+    this.tweens.add({ targets: this.profilResmi, scale: 1, duration: 350, ease: "Back.Out" });
   }
 
   // Veli kapısı: şifre doğruysa karne açılır
@@ -3581,7 +3606,7 @@ class KarsilamaSahnesi extends Phaser.Scene {
 
   basla(dugme, tanriModu = false) {
     if (this.basladi || this.profilPaneli.acikMi()) return;
-    if (!tanriModu && !Profil.aktifId) { this.profilPaneli.uyar(); return; } // önce profil seçilmeli
+    if (!tanriModu && !Profil.aktifId) { this.profilPaneli.ac(); return; } // "Profil oluştur"
     this.basladi = true;
     Sesler.ac();
     Sesler.pling();
