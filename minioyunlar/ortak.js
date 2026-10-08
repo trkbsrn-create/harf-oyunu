@@ -513,6 +513,7 @@ class MiniOyunSahnesi extends Phaser.Scene {
   kalpEksilt() {
     if (this.bitti || this.canSayisi <= 0) return;
     this.canSayisi--;
+    if (typeof Profil !== "undefined") Profil.yanlis(this.harf); // karne için (profil.js)
     const kalp = this.kalpler[this.canSayisi];
     kalp.setTexture("kalp-bos");
     this.tweens.add({ targets: kalp, scale: 1.4, duration: 120, yoyo: true });
@@ -570,6 +571,7 @@ class MiniOyunSahnesi extends Phaser.Scene {
   ilerlemeArtir(x, y) {
     if (this.bitti || this.ilerleme >= this.ilerlemeHedef) return;
     this.ilerleme++;
+    if (typeof Profil !== "undefined") Profil.dogru(this.harf); // karne için (profil.js)
     if (x !== undefined) this.odulUcur(x, y);
     this.ilerlemeyiCiz();
     if (this.ilerleme >= this.ilerlemeHedef) this.time.delayedCall(400, () => this.bitir(true));
@@ -579,6 +581,9 @@ class MiniOyunSahnesi extends Phaser.Scene {
   bitir(basarili) {
     if (this.bitti) return;
     this.bitti = true;
+    if (typeof Profil !== "undefined") {
+      Profil.oyunSonu(this.sys.settings.key, basarili ? Math.max(1, this.canSayisi === undefined ? 3 : this.canSayisi) : 0, basarili);
+    }
     this.oyunBitti(basarili); // her oyun kendi hareketlerini durdurur
     if (basarili) Sesler.dogru();
     const kap = this.add.container(0, 0).setDepth(1000).setAlpha(0);
