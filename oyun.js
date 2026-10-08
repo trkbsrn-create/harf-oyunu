@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 149;
+const SURUM = 150;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -403,6 +403,7 @@ class AdaSahnesi extends Phaser.Scene {
         Sesler.soyle(this.rehberIpucu.soz);
         return;
       }
+      if (this.periyeDokunus(p)) return;
       if (this.tirmaniyor) return; // sırıkta tırmanırken dokunuş beklenmez
       if (this.menuTiklamasi(p)) return;
       if (this.tesisTiklamasi(p)) return;
@@ -415,7 +416,9 @@ class AdaSahnesi extends Phaser.Scene {
       if (!this.cantaAcik && this.haritaAlani.contains(p.x, p.y)) return; // haritaya dokununca yürümez
       if (this.cantaTiklamasi(p)) return;
       if (this.tesis.getBounds().contains(p.worldX, p.worldY)) {
-        this.tesiseGit();
+        // İskelenin üstüne dokununca karakter iskelede oraya yürür; tesise dokununca ucuna
+        if (p.worldY < ISKELE_SONU.y - 30) this.iskeledeYuru(p.worldY);
+        else this.tesiseGit();
         return;
       }
       // Sırığın dikildiği toprak karesine dokununca karakter sırığın dibine yürür; tırmanmak
@@ -463,6 +466,8 @@ class AdaSahnesi extends Phaser.Scene {
     this.omuzPerisi = null;
     this.rehberIpucu = null;
     this.rehberBitti = {};
+    PERI_DURUMU.ayrildi = false;
+    PERI_DURUMU.bulutta = false;
     if (veri.periTanisma) this.time.delayedCall(700, () => this.periTanisma());
     else if (!veri.tanriModu) this.time.delayedCall(700, () => this.omuzPerisiYap());
   }
@@ -608,8 +613,8 @@ class AdaSahnesi extends Phaser.Scene {
     const kamera = this.cameras.main;
     if (peri.salinma) peri.salinma.remove();
     this.tweens.add({
-      targets: peri, x: this.cocuk.x + 46 - kamera.scrollX, y: this.cocuk.y - 120 - kamera.scrollY,
-      scale: 0.65, duration: 1000, ease: "Sine.InOut",
+      targets: peri, x: this.cocuk.x + 38 - kamera.scrollX, y: this.cocuk.y - 112 - kamera.scrollY,
+      scale: PERI_OMUZ_OLCEK, duration: 1000, ease: "Sine.InOut",
       onComplete: () => {
         peri.setPosition(peri.x + kamera.scrollX, peri.y + kamera.scrollY)
           .setScrollFactor(1, 1, true).setDepth(7000);
@@ -620,15 +625,15 @@ class AdaSahnesi extends Phaser.Scene {
   }
 
   // "Oyunu yeniden başlat"tan gelince peri doğrudan omuzda belirir
-  omuzPerisiYap() {
+  omuzPerisiYap(olay = "basla") {
     const peri = this.periYap(0, 0);
     peri.salinma.remove();
-    peri.setPosition(this.cocuk.x + 46, this.cocuk.y - 120).setScrollFactor(1, 1, true)
+    peri.setPosition(this.cocuk.x + 38, this.cocuk.y - 112).setScrollFactor(1, 1, true)
       .setDepth(7000).setScale(0);
-    this.tweens.add({ targets: peri, scale: 0.65, duration: 500, ease: "Back.Out" });
+    this.tweens.add({ targets: peri, scale: PERI_OMUZ_OLCEK, duration: 500, ease: "Back.Out" });
     this.peri = peri;
     this.omuzPerisi = peri;
-    this.rehberOlay("basla");
+    this.rehberOlay(olay);
   }
 
   // Her karede: peri karakterin omzuna doğru süzülür, hafifçe iner kalkar; balon ve el onu izler
@@ -636,8 +641,8 @@ class AdaSahnesi extends Phaser.Scene {
     const peri = this.omuzPerisi;
     if (!peri) return;
     const yon = this.cocuk.flipX ? -1 : 1;
-    const hx = this.cocuk.x + 46 * yon;
-    const hy = this.cocuk.y - 120 + Math.sin(zaman / 300) * 6;
+    const hx = this.cocuk.x + 38 * yon;
+    const hy = this.cocuk.y - 112 + Math.sin(zaman / 300) * 5;
     const k = 1 - Math.exp(-fark / 140);
     peri.x += (hx - peri.x) * k;
     peri.y += (hy - peri.y) * k;
@@ -645,8 +650,8 @@ class AdaSahnesi extends Phaser.Scene {
     if (this.rehberBalon) {
       const kamera = this.cameras.main;
       const b = this.rehberBalon;
-      const x = Phaser.Math.Clamp(peri.x - kamera.scrollX + 40 + b.en / 2, b.en / 2 + 8, 1272 - b.en / 2);
-      const y = Phaser.Math.Clamp(peri.y - kamera.scrollY - 70, b.boy / 2 + 8, 712 - b.boy / 2);
+      const x = Phaser.Math.Clamp(peri.x - kamera.scrollX + 30 + b.en / 2, b.en / 2 + 8, 1272 - b.en / 2);
+      const y = Phaser.Math.Clamp(peri.y - kamera.scrollY - 40 - b.boy / 2 + 30, b.boy / 2 + 8, 712 - b.boy / 2);
       b.setPosition(x, y);
       this.rehberBalonAlani = new Phaser.Geom.Rectangle(x - b.en / 2, y - b.boy / 2, b.en, b.boy);
     }
@@ -723,8 +728,9 @@ class AdaSahnesi extends Phaser.Scene {
       return { ad: "sulaCanta", soz: "Damla şişene aktı! Tarlaya git, çantandaki şişeyle tohumu sula.",
         tamam: ["sulandi"], gizle: ["cantaAcildi"], ekran: { x: this.cantaDugmesi.x, y: this.cantaDugmesi.y + 30 } };
     }
-    if (olay === "sulandi" && veri < BUYUME_ASAMASI) {
-      return { ad: "dahaSula", soz: "Aferin, tohum büyüdü! Fasulye sırığı olana kadar sula.", tamam: [], gecici: true, birKez: true };
+    if (olay === "sulandi") {
+      return { ad: "genel", soz: "Aferin! Şimdi bütün tohumları bul, sula ve fasulye sırığına dönüştür. Sırığa tırman, bulutların üstünde tekrar buluşalım!",
+        tamam: [], gecici: true, birKez: true, sonra: () => this.periAyril() };
     }
     if (olay === "sirikOldu") {
       return { ad: "cik", soz: "Fasulye sırığı oldu! Sırığın dibine git, Çık düğmesine bas.", tamam: ["tirmandi"],
@@ -762,7 +768,23 @@ class AdaSahnesi extends Phaser.Scene {
     this.rehberBalon = balon;
     this.omuzPerisiniGuncelle(this.time.now, 1000);
     this.tweens.add({ targets: balon, scale: 1, duration: 220, ease: "Back.Out" });
-    Sesler.soyle(ip.soz);
+    // Söz bitince balon kaybolur (öğretmenin isteği: ekranda durmasın); el iş yapılana kadar kalır.
+    // Periye ya da balona dokununca söz yeniden çıkar.
+    let kapandi = false;
+    const kapat = () => {
+      if (kapandi || this.rehberBalon !== balon) return;
+      kapandi = true;
+      this.time.delayedCall(1200, () => {
+        if (this.rehberBalon !== balon) return;
+        this.rehberBalon = null;
+        this.rehberBalonAlani = null;
+        this.tweens.add({ targets: balon, scale: 0, duration: 150, onComplete: () => balon.destroy() });
+        if (ip.gecici && this.rehberIpucu === ip) this.rehberGizle();
+        if (ip.sonra) ip.sonra();
+      });
+    };
+    Sesler.soyle(ip.soz, kapat);
+    this.time.delayedCall(Math.max(5000, ip.soz.length * 110), kapat);
     // Gösteren el: dünyadaki bir yer (sandık, tesis, sırık) ya da ekrandaki bir düğme/kutucuk
     const hedef = ip.dunya || ip.ekran;
     if (hedef) {
@@ -775,12 +797,28 @@ class AdaSahnesi extends Phaser.Scene {
         : { targets: el, y: hedef.y + 16, duration: 450, yoyo: true, repeat: -1, ease: "Sine.InOut" });
       this.rehberEl = el;
     }
-    if (ip.gecici) {
-      const bu = ip;
-      this.time.delayedCall(Math.max(5000, ip.soz.length * 110), () => {
-        if (this.rehberIpucu === bu) this.rehberGizle();
-      });
-    }
+  }
+
+  // Periye dokununca şimdiki ipucu yeniden söylenir
+  periyeDokunus(p) {
+    const peri = this.omuzPerisi;
+    if (!peri || !this.rehberIpucu || this.rehberBalon) return false;
+    if (Phaser.Math.Distance.Between(p.worldX, p.worldY, peri.x, peri.y) > 45) return false;
+    this.rehberGoster(this.rehberIpucu);
+    return true;
+  }
+
+  // İlk sulamadan sonra peri genel yönlendirmeyi yapar ve uçup gider; bulutlarda buluşulur
+  periAyril() {
+    const peri = this.omuzPerisi;
+    if (!peri) return;
+    this.rehberGizle();
+    this.omuzPerisi = null;
+    PERI_DURUMU.ayrildi = true;
+    this.tweens.add({ targets: peri, y: peri.y - 500, x: peri.x + 200, alpha: 0, duration: 1400, ease: "Sine.In",
+      onComplete: () => peri.destroy() });
+    Sesler.nota(1760, 0, 0.2, 0.06, "sine");
+    Sesler.nota(1320, 0.12, 0.25, 0.05, "sine");
   }
 
   rehberGizle() {
@@ -1337,7 +1375,10 @@ class AdaSahnesi extends Phaser.Scene {
     tirmanmaHareketi(this, c, dip.y, () => {
       c.setTexture("cocuk");
       this.tirmaniyor = false;
-      this.rehberOlay("buluttanDonus");
+      if (PERI_DURUMU.ayrildi && !this.omuzPerisi) {
+        PERI_DURUMU.ayrildi = false;
+        this.omuzPerisiYap("buluttanDonus");
+      } else this.rehberOlay("buluttanDonus");
     });
   }
 
@@ -1950,9 +1991,17 @@ class AdaSahnesi extends Phaser.Scene {
       this.tesisiAcKapat();
       return;
     }
-    this.hedef = { ...ISKELE_BASI };
-    this.yolSirasi = [{ ...ISKELE_SONU }];
+    this.iskeledeYuru(ISKELE_SONU.y);
     this.tesiseGidiyor = true;
+  }
+
+  // İskelede bir noktaya yürür: karakter iskeledeyse doğrudan (ileri ya da geri), değilse önce
+  // iskelenin başına. (Eskiden her seferinde önce başa dönüyordu; karakter gidip geliyordu.)
+  iskeledeYuru(y) {
+    const nokta = { x: TESIS_X, y: Phaser.Math.Clamp(y, ISKELE_BASI.y, ISKELE_SONU.y) };
+    const iskelede = ISKELE_ALANI.contains(this.cocuk.x, this.cocuk.y);
+    this.hedefBelirle(iskelede ? nokta.x : ISKELE_BASI.x, iskelede ? nokta.y : ISKELE_BASI.y, true);
+    if (!iskelede) this.yolSirasi = [nokta];
   }
 
   tesisiAcKapat() {
@@ -3642,6 +3691,42 @@ const PERI_TANISMA = [
   "Adadan kurtulman için sana yardım edeceğim.",
 ];
 
+// Omuzdaki peri küçük durur (öğretmenin isteği); ayrildi: ilk sulamadan sonra uçup gitti,
+// bulutta: bulutların üstünde buluşma yapıldı
+const PERI_OMUZ_OLCEK = 0.38;
+const PERI_DURUMU = { ayrildi: false, bulutta: false };
+
+// Bulutların üstünde perinin balonu (ekran katmanı); söz bitince kaybolur
+function periBalonu(sahne, peri, soz) {
+  if (sahne.periBalonNesnesi) sahne.periBalonNesnesi.destroy();
+  const yazi = sahne.add.text(0, 0, soz, {
+    fontFamily: "Andika", fontSize: "26px", color: "#2b2b2b", align: "center",
+    wordWrap: { width: 320 }, padding: { x: 4, y: 4 },
+  }).setOrigin(0.5);
+  const en = yazi.width + 40;
+  const boy = yazi.height + 30;
+  const g = sahne.add.graphics();
+  g.fillStyle(0xfffdf6, 1);
+  g.lineStyle(4, 0x2b2b2b, 1);
+  g.fillRoundedRect(-en / 2, -boy / 2, en, boy, 20);
+  g.strokeRoundedRect(-en / 2, -boy / 2, en, boy, 20);
+  const balon = sahne.add.container(Phaser.Math.Clamp(peri.x + 30 + en / 2, en / 2 + 8, 1272 - en / 2),
+    Math.max(boy / 2 + 8, peri.y - 60), [g, yazi]).setDepth(50).setScale(0);
+  sahne.periBalonNesnesi = balon;
+  sahne.tweens.add({ targets: balon, scale: 1, duration: 220, ease: "Back.Out" });
+  let kapandi = false;
+  const kapat = () => {
+    if (kapandi) return;
+    kapandi = true;
+    sahne.time.delayedCall(1200, () => {
+      if (!balon.active) return;
+      sahne.tweens.add({ targets: balon, scale: 0, duration: 150, onComplete: () => balon.destroy() });
+    });
+  };
+  Sesler.soyle(soz, kapat);
+  sahne.time.delayedCall(Math.max(5000, soz.length * 110), kapat);
+}
+
 // Perinin anlatım penceresindeki sözler (sırayla 8 sayfa; öğretmen onayladı)
 const PERI_ANLATIM = [
   "Adadan kurtulmak için yelkenlinin 6 parçasını bulmalısın.",
@@ -3810,6 +3895,8 @@ class BulutSahnesi extends Phaser.Scene {
     this.load.svg("bulut", "gorseller/bulut.svg");
     this.load.svg("bulut-zemin", "gorseller/bulut-zemin.svg");
     this.load.svg("bulut-sirik", "gorseller/bulut-sirik.svg");
+    this.load.svg("peri", "gorseller/peri.svg");
+    this.load.svg("peri-kanat", "gorseller/peri-kanat.svg");
   }
 
   create(veri) {
@@ -3861,6 +3948,7 @@ class BulutSahnesi extends Phaser.Scene {
       this.ziplat(this.sirik.x + 50, BULUT_YURUME.y + 40, () => {
         this.hazir = true;
         Sesler.pling();
+        if (PERI_DURUMU.ayrildi && !PERI_DURUMU.bulutta && this.balon) this.periBulustur();
       });
     });
 
@@ -3882,7 +3970,27 @@ class BulutSahnesi extends Phaser.Scene {
     });
   }
 
+  // Peri bulutların üstünde karakterle buluşur (öğretmenin fikri), parçayı nasıl alacağını söyler
+  periBulustur() {
+    PERI_DURUMU.bulutta = true;
+    const peri = AdaSahnesi.prototype.periYap.call(this, 1350, 120);
+    peri.salinma.remove();
+    peri.setScrollFactor(1).setDepth(40).setScale(PERI_OMUZ_OLCEK);
+    this.bulutPerisi = peri;
+    this.tweens.add({ targets: peri, x: this.cocuk.x + 38, y: this.cocuk.y - 112, duration: 1200, ease: "Sine.Out",
+      onComplete: () => {
+        this.periTakip = true;
+        periBalonu(this, peri, `Yine buluştuk! ${this.harf} tabelasına yürü, parçanı al.`);
+      } });
+  }
+
   update(zaman, fark) {
+    if (this.periTakip && this.bulutPerisi) {
+      const k = 1 - Math.exp(-fark / 140);
+      const yon = this.cocuk.flipX ? -1 : 1;
+      this.bulutPerisi.x += (this.cocuk.x + 38 * yon - this.bulutPerisi.x) * k;
+      this.bulutPerisi.y += (this.cocuk.y - 112 + Math.sin(zaman / 300) * 5 - this.bulutPerisi.y) * k;
+    }
     for (const b of this.bulutlar) {
       b.nesne.x += (b.hiz * fark) / 1000;
       if (b.nesne.x > 1400) b.nesne.x = -120;
@@ -3989,6 +4097,7 @@ class BulutSahnesi extends Phaser.Scene {
     parca.setPosition(b.x, b.y).setDepth(6006);
     b.destroy();
     Canta.parcaEkle(this.parca.harf, this.parca.ad);
+    if (this.bulutPerisi) this.time.delayedCall(2500, () => periBalonu(this, this.bulutPerisi, "Harika! Şimdi sırığa dokun, aşağı in."));
     this.tweens.chain({ targets: parca, tweens: [
       { scale: 2, duration: 350, ease: "Back.Out" },
       { x: 1200, y: 70, scale: 0.6, angle: 360, duration: 800, delay: 400, ease: "Cubic.In" },

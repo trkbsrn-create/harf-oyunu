@@ -146,6 +146,9 @@ Her hatadan sonra buraya yeni bir kural ekle.
   e harfinde bilinmeyen "el" hecesi kalmıştı). Görsel değişiklikte görsel sonucu da ölç (notalar
   üst üste binmişti).
 
+- İskelede karakter gidip geliyordu: tesisin resmi iskeleyi de kapsıyordu, iskeleye her dokunuşta önce
+  iskelenin başına dönülüyordu. Dokunma alanı büyük bir resimse resmin hangi bölümüne dokunulduğuna bak.
+
 - Altın Madencisi'nde doğru külçenin önünde yanlış külçe olunca ona ulaşılamıyordu; köşedeki külçeler
   kancanın açısı dışındaydı. Nesneler rastgele yerleşirken doğru olana ulaşılabildiğini ölç.
 
