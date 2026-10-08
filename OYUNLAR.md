@@ -270,11 +270,11 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   `YELKENLI_ALANI`nda süs yok. Parça takma: çanta açıkken parça tutulur (`parcayiTut`; pencere
   silikleşir, yelkenlide parçanın yeri sarı parlar), yerinin üstüne (`alan`, parçanın kutusu +
   80 px) bırakılınca takılır (`parcayiTak`: dolu hâli, koyu harf, parıltı); başka yere
-  bırakılırsa çantaya döner. Sol üstte, menünün altında görev kartı (`yelkenliKartiKur`):
-  "Görev", küçük yelkenli (takılanlar renkli), "2 / 6". Dokununca görev listesi açılır/kapanır
-  (`gorevListesiniCiz`): başlamış her harf için 5 adım simgesi (sandık, tohum, damla, bulut, parça;
-  biten tikli, şimdiki zıplar) ve kısa yazı; sulamada 3 damla. Satıra dokununca yazı okunur; parça
-  takılacaksa karakter yelkenliye yürür (`YELKENLI_DURAK`). Altı parça takılınca kutlama ("Yelkenli hazır! Aferin!") ve
+  bırakılırsa çantaya döner. Sol üstte, menünün altında "Görev" düğmesi (`yelkenliKartiKur`; yelkenli resmi yok).
+  Dokununca görev listesi açılır/kapanır (`gorevListesiniCiz`): başlamış her harf için 4 adım simgesi
+  (sandık, tohum, damla, parça; biten tikli, şimdiki zıplar) ve kısa yazı; sulamada 3 damla. Bir parça
+  alınınca ayrı "yelkenli" satırı çıkar (6 parça simgesi, "Parçaları yelkenliye tak. 2 / 6"). Satıra
+  dokununca yazı okunur; yelkenli satırında karakter yelkenliye yürür (`YELKENLI_DURAK`). Altı parça takılınca kutlama ("Yelkenli hazır! Aferin!") ve
   yelkenlinin altında, denizde parlayan "Yola çık" düğmesi (`yelkenliHazir`; öğretmenin seçimi B).
   Basınca ada uyur, final sahnesi açılır (`FinalSahnesi`: çocuk biner, yelkenli suya kayar;
   gün batımı; adalar haritası "2. ada yakında"; sözler sesli; hikaye-gunbatimi.svg,
@@ -354,7 +354,8 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
 - Peri rehber (`oyun.js`, AdaSahnesi `periYap`, `periSoyle`, `periTanisma`; `PERI_TANISMA` sözleri):
   yaprak perisi (gorseller/peri.svg + peri-kanat.svg, elle çizildi; kanatlar çırpar, peri süzülür).
   Hikâyeden sonra (`periTanisma: true`) sağdan uçarak gelir, konuşma balonuyla kendini tanıtır,
-  sonra ortada anlatım penceresi açılır (`anlatimAc`, `PERI_ANLATIM` 6 sayfa: yelkenli, sandık,
-  radar canlandırması `anlatimRadari`, tarla, sulama, bulut); peri her sayfayı söyler, sonra uçup
-  gider. Konuşurken karakter yürümez; ekrana dokununca sıradaki söze geçilir.
+  sonra ortada anlatım penceresi açılır (`anlatimAc`, `PERI_ANLATIM` 8 sayfa: yelkenli, sandık,
+  radar canlandırması `anlatimRadari`, tarla, su tesisi, şişeyle sulama, bulut, görev düğmesi (gerçek
+  düğme parlar, el gösterir); peri her sayfayı söyler, sonra uçup gider. Peri balonunda "İleri"
+  düğmesi (son sözde "Tamam"); kendiliğinden geçmez, balona dokununca söz yeniden okunur. Konuşurken karakter yürümez.
   Sözler kayit.html "Peri" bölümünde (öğretmen kaydeder).
