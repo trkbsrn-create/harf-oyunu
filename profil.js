@@ -182,23 +182,47 @@ function profilKartiYap(sahne, x, y, p, en = 230, boy = 250, ayrintili = true) {
   return kap;
 }
 
-// "Kim oynuyor?" paneli (karşılama ekranının ortasında; öğretmenin isteği: yalnızca mini oyunlar için
-// girenler de profil seçsin). Telefondaki profiller (hayvan + takma ad) ve "+" kartı; dokunulan profil
-// seçilir (Profil.sec). Oyun da mini oyunlar da seçili profille açılır.
+// "Kim oynuyor?" penceresi (öğretmenin isteği): ilk ekranda "Profil oluştur" düğmesiyle ya da adadaki
+// profil resmine dokununca açılır. Telefondaki profiller (hayvan + takma ad) ve "+" kartı; dokunulan
+// profil seçilir (Profil.sec), pencere kapanır, secince() çağrılır. Kartın köşesindeki "x" profili
+// siler (yanlış açılan ya da vazgeçilen profil için; onay sorulur). Oyun da mini oyunlar da seçili profille açılır.
 class ProfilPaneli {
-  constructor(sahne, x, y) {
+  constructor(sahne, secince) {
     this.sahne = sahne;
-    this.kap = sahne.add.container(x, y).setDepth(20);
+    this.secince = secince;
+    this.kap = sahne.add.container(640, 375).setDepth(60).setVisible(false);
     this.kartlar = [];
     this.secici = null;
     this.adSoruluyor = false;
     const g = sahne.add.graphics();
-    g.fillStyle(0xfffdf6, 0.92);
-    g.fillRoundedRect(-430, -190, 860, 380, 26);
+    g.fillStyle(0x000000, 0.35);
+    g.fillRect(-640, -375, 1280, 720);
+    // Arka plan dokunuşu alttaki düğmelere geçmesin
+    g.setInteractive(new Phaser.Geom.Rectangle(-640, -375, 1280, 720), Phaser.Geom.Rectangle.Contains);
+    g.fillStyle(0xfffdf6, 1);
+    g.fillRoundedRect(-430, -230, 860, 460, 26);
     g.lineStyle(5, 0x2b2b2b, 1);
-    g.strokeRoundedRect(-430, -190, 860, 380, 26);
-    this.kap.add([g, doodleYazi(sahne, 0, -160, "Kim oynuyor?", 40, "mavi").setOrigin(0.5)]);
+    g.strokeRoundedRect(-430, -230, 860, 460, 26);
+    const kapat = sahne.add.container(0, 190, [
+      sahne.add.image(0, 0, "incele-dugmesi").setScale(0.9),
+      doodleYazi(sahne, 0, -3, "Kapat", 28).setOrigin(0.5),
+    ]).setSize(200, 80).setInteractive({ useHandCursor: true });
+    kapat.on("pointerdown", () => { if (!this.secici && !this.adSoruluyor) this.kapat(); });
+    this.kap.add([g, doodleYazi(sahne, 0, -195, "Kim oynuyor?", 40, "mavi").setOrigin(0.5), kapat]);
+  }
+
+  ac() {
+    if (this.kap.visible) return;
+    Sesler.ac();
+    Sesler.pling();
     this.ciz();
+    this.kap.setVisible(true).setAlpha(0);
+    this.sahne.tweens.add({ targets: this.kap, alpha: 1, duration: 200 });
+  }
+
+  kapat() {
+    this.seciciKapat();
+    this.kap.setVisible(false);
   }
 
   ciz() {
@@ -213,15 +237,38 @@ class ProfilPaneli {
       const sira = Math.floor(i / 4);
       const satirdaki = Math.min(4, ogeler.length - sira * 4);
       const x = ((i % 4) - (satirdaki - 1) / 2) * 190;
-      const y = 20 - (satir - 1) * 82 + sira * 164;
+      const y = -10 - (satir - 1) * 82 + sira * 164;
       const kart = p ? profilKartiYap(this.sahne, x, y, p) : this.artiKarti(x, y);
       kart.setScale(satir > 1 ? 0.6 : 0.68);
-      if (p) kart.setAlpha(!Profil.aktifId || Profil.aktifId === p.id ? 1 : 0.5);
       if (p && Profil.aktifId === p.id) kart.setScale(kart.scale * 1.1);
       kart.on("pointerdown", () => (p ? this.sec(p) : this.hayvanSec()));
+      if (p) kart.add(this.silDugmesi(p));
       this.kap.add(kart);
       this.kartlar.push(kart);
     });
+  }
+
+  // Kartın sağ üst köşesinde kırmızı "x": profili siler (onay sorulur)
+  silDugmesi(p) {
+    const s = this.sahne;
+    const g = s.add.graphics();
+    g.fillStyle(0xff8a7a, 1);
+    g.fillCircle(0, 0, 26);
+    g.lineStyle(4, 0x2b2b2b, 1);
+    g.strokeCircle(0, 0, 26);
+    g.lineStyle(6, 0x2b2b2b, 1);
+    g.lineBetween(-10, -10, 10, 10);
+    g.lineBetween(10, -10, -10, 10);
+    const d = s.add.container(100, -110, [g]).setSize(64, 64).setInteractive({ useHandCursor: true });
+    d.on("pointerdown", (isaretci, x, y, olay) => {
+      olay.stopPropagation(); // kart seçilmesin
+      if (this.secici || this.adSoruluyor) return;
+      if (!window.confirm(`"${p.ad}" profili ve karnesi silinsin mi?`)) return;
+      Profil.sil(p.id);
+      this.ciz();
+      if (this.secince) this.secince(null);
+    });
+    return d;
   }
 
   artiKarti(x, y) {
@@ -240,17 +287,10 @@ class ProfilPaneli {
 
   sec(p) {
     if (this.secici || this.adSoruluyor) return;
-    Sesler.ac();
     Sesler.pling();
     Profil.sec(p.id);
-    this.ciz();
-  }
-
-  // Seçili profil yoksa panel sallanır (başlamadan önce profil seçilmeli)
-  uyar() {
-    Sesler.calabilir(() => Sesler.yanlis());
-    this.sahne.tweens.add({ targets: this.kap, angle: { from: -2, to: 2 }, duration: 70, yoyo: true, repeat: 2,
-      onComplete: () => this.kap.setAngle(0) });
+    this.kapat();
+    if (this.secince) this.secince(p);
   }
 
   // Yeni profil: önce hayvan seçilir, sonra veli takma adı yazar
@@ -300,13 +340,13 @@ class ProfilPaneli {
     if (!this.kap.active) return; // bu arada sahne değişti
     this.seciciKapat();
     if (!ad) return;
-    Profil.sec(Profil.ekle(hayvan, ad)); // yeni profil seçili gelir
-    Sesler.pling();
-    this.ciz();
+    // Yeni profil seçili gelir, pencere kapanır
+    const id = Profil.ekle(hayvan, ad);
+    this.sec(Profil.liste().find((x) => x.id === id));
   }
 
   acikMi() {
-    return !!this.secici || this.adSoruluyor;
+    return this.kap.visible || !!this.secici || this.adSoruluyor;
   }
 }
 
