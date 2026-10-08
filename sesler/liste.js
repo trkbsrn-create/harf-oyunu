@@ -313,5 +313,11 @@ const SES_DOSYALARI = {
  "Söylenen harfin olduğu yerlere dokun, resmi boya!": "soz-soylenen-harfin-oldugu-yerlere-dokun-resmi-boya",
  "Hızlı ol! Her görevde söyleneni yap!": "soz-hizli-ol-her-gorevde-soyleneni-yap",
  "Şimdi söylenen hecenin harflerini sırayla bul!": "soz-simdi-soylenen-hecenin-harflerini-sirayla-bul",
- "Şimdi söylenen kelimenin hecelerini sırayla bul!": "soz-simdi-soylenen-kelimenin-hecelerini-sirayla-bul"
+ "Şimdi söylenen kelimenin hecelerini sırayla bul!": "soz-simdi-soylenen-kelimenin-hecelerini-sirayla-bul",
+ "Yine buluştuk! a tabelasına yürü, parçanı al.": "soz-yine-bulustuk-a-tabelasina-yuru-parcani-al",
+ "Yine buluştuk! n tabelasına yürü, parçanı al.": "soz-yine-bulustuk-n-tabelasina-yuru-parcani-al",
+ "Yine buluştuk! e tabelasına yürü, parçanı al.": "soz-yine-bulustuk-e-tabelasina-yuru-parcani-al",
+ "Yine buluştuk! t tabelasına yürü, parçanı al.": "soz-yine-bulustuk-t-tabelasina-yuru-parcani-al",
+ "Yine buluştuk! i tabelasına yürü, parçanı al.": "soz-yine-bulustuk-i-tabelasina-yuru-parcani-al",
+ "Yine buluştuk! l tabelasına yürü, parçanı al.": "soz-yine-bulustuk-l-tabelasina-yuru-parcani-al"
 };
