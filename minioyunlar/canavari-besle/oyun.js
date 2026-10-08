@@ -306,8 +306,10 @@ class CanavariBesleSahnesi extends MiniOyunSahnesi {
     this.meyveler = [];
     if (this.tur !== "harf") { this.siraliIstek(); return; }
     const ogrenilmis = ogrenilmisHarfler(this.harf);
-    this.istenen = Math.random() < this.ayar.kendiOrani ? this.harf
-      : Phaser.Utils.Array.GetRandom(ogrenilmis.filter((h) => h !== this.harf));
+    // Başka harf istenecekse yalnızca daha önce öğrenilmiş harflerden (a'da hep a; öğretmenin isteği)
+    const oncekiler = bilinenHarfler(this.harf).filter((h) => h !== this.harf);
+    this.istenen = !oncekiler.length || Math.random() < this.ayar.kendiOrani ? this.harf
+      : Phaser.Utils.Array.GetRandom(oncekiler);
     this.canavarCiz("bekle");
 
     // Konuşma balonu

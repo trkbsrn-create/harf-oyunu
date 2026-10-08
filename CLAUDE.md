@@ -33,6 +33,8 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
   sonra üç harfli: `siraliHeceSec`), 3. seviye hecelerle kelime; sırası
   gelmemiş doğru parça can götürmez; hece/kelime yoksa harf. İstisna: Tombala, Birleştir Büyüt, Harf Fırtınası.
 - Seviyeyle hece uzar: 1. seviye iki harfli, 2-3. seviye üç harfli (`heceUzunlugu`, `heceSorusu`).
+- Sorulan hece çoğunlukla oyunun harfini içerir, arada (`ESKI_HECE_ORANI` %25) önceki harflerin
+  hecesi gelir (e'de çoğunlukla en/ne, arada an/na). Başka harf istenirse yalnızca önceki harflerden.
 - Hece oyunlarında (`heceOyunu`) tek harf okunmaz; yalnızca hece ya da kelime söylenir.
 - Harfler `harfiSoyle` ile sesiyle okunur (n "nnn"). Sözleri öğretmenin kendi kaydı okur (`sesler/liste.js`);
   kaydı olmayan sözü tarayıcı okur. Öğretmenin kararı: istisnasız her kayda peri efekti (yeni kayıtlar
@@ -155,3 +157,6 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Bulut bölgelerinin içeriği; bilmeceler ("Hızlı koşar, yeleleri var." → at; "Türk bayrağında
   beni görürler, kırmızıyla eş derler." → al) nerede kullanılacak, sonra konuşulacak.
 - Kalan harf grupları ve 2. ada; yeni gruplarla 4-5 heceli kelimeler (Elektrik Devresi).
+- Peri rehber (öğretmenin fikri): oyun başında adanın perisi gelir, her aşamada ve her mini
+  oyunun başında ne yapılacağını anlatır. Plan aşama aşama yapılacak (önce taslak).
+- Bulut Market (taslak proje): karakterin kıyafetini değiştirme, yeni eşyalar alma. Sonra başlanacak.

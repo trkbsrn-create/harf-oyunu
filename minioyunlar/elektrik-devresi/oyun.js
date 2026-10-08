@@ -72,8 +72,12 @@ class ElektrikDevresiSahnesi extends MiniOyunSahnesi {
       return [...karisik.filter((k) => k.metin.includes(this.harf)), ...karisik.filter((k) => !k.metin.includes(this.harf))];
     };
     if (this.ayar.tur2 === "harf") {
-      const heceler = heceHavuzu(this.harf).filter((h) => h.hece.length === 2 && h.hece.includes(this.harf));
-      return Phaser.Utils.Array.Shuffle(heceler.map((h) => ({ metin: h.hece, parcalar: [...h.hece] })));
+      const ikili = heceHavuzu(this.harf).filter((h) => h.hece.length === 2);
+      const heceler = Phaser.Utils.Array.Shuffle(ikili.filter((h) => h.hece.includes(this.harf)));
+      // Öğretmenin kuralı: arada bir, önceki harflerin hecesi (3. turda)
+      const eski = Phaser.Utils.Array.GetRandom(ikili.filter((h) => !h.hece.includes(this.harf)));
+      if (eski) heceler.splice(2, 0, eski);
+      return heceler.map((h) => ({ metin: h.hece, parcalar: [...h.hece] }));
     }
     let liste = KELIMELER.filter(yazilabilir);
     if (this.ayar.tur2 === "uc") {

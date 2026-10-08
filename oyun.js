@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 144;
+const SURUM = 145;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -511,8 +511,8 @@ class AdaSahnesi extends Phaser.Scene {
       }
       return true; // çanta açıkken karakter yürümez
     }
-    if (this.cantaDugmesi.getBounds().contains(p.x, p.y)
-        || this.cocuk.getBounds().contains(p.worldX, p.worldY)) {
+    // Öğretmenin isteği: çanta yalnızca sağdaki simgeden açılır (karaktere dokununca açılmaz)
+    if (this.cantaDugmesi.getBounds().contains(p.x, p.y)) {
       this.cantayiAcKapat();
       return true;
     }
