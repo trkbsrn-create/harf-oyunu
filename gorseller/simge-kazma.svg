@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+  <!-- Mini oyun simgesi: Kazma (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="216" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="tahta" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(80)">
+      <rect width="6" height="6" fill="#e3b77e"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#c98f4f" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="gri" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="6" height="6" fill="#e4e1da"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#b9b5ac" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="toprak" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)">
+      <rect width="6" height="6" fill="#b98a5e"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#9a6c43" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 94 q10 -14 24 -10 q14 -12 30 -2 q18 -8 34 6 v6z" fill="url(#toprak)"/>
+    <path d="M30 84 l40 -60" fill="none" stroke="#c98f4f" stroke-width="10"/>
+    <path d="M30 84 l40 -60" fill="none" stroke-width="3"/>
+    <path d="M40 18 q30 -10 52 16 q-24 -14 -48 -6z" fill="url(#gri)"/>
+  </g>
+</svg>

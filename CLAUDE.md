@@ -13,7 +13,7 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
 - `index.html` ana sayfa (derleme yok; telefon ayarları, yazı tipi yükleme `yaziTipiHazir`).
 - `oyun.js` ana oyun sahneleri (karşılama, hikâye, ada, bulut, final), `SURUM`.
 - `minioyunlar/<ad>/oyun.js` her mini oyun; `ortak.js` ortak sınıf `MiniOyunSahnesi`, `PLANLANAN_OYUNLAR`,
-  hece/kelime yardımcıları; `menu.js` deneme menüsü; `sans-carki.js` Şans Çarkı.
+  hece/kelime yardımcıları; `menu.js` deneme menüsü; `lambalar.js` Oyun Lambaları (çarkın yerine).
 - `harfler.js` harf verisi; `canta.js` çanta; `sesler.js` efekt ve sesli okuma; `dinleyici.js` mikrofon.
 - `gorseller/` kendi SVG'lerimiz, `araclar/doodle_ciz.py` ile üretilir (görsel değişikliği betikte yapılır).
 - `araclar/dene.js` mini oyun deneme aracı (aşağıda "Test").

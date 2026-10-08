@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 100 100">
+  <!-- Mini oyun simgesi: Tombala (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="219" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="mavi" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="6" height="6" fill="#bfe3f5"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#7cc3e6" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="kirmizi" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="6" height="6" fill="#ff9c8a"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#e0533d" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <rect x="10" y="14" width="80" height="72" rx="8" fill="#fffdf6"/>
+    <path d="M10 38 h80 M10 62 h80 M36 14 v72 M63 14 v72" fill="none" stroke-width="3"/>
+    <circle cx="23" cy="26" r="7" fill="url(#kirmizi)" stroke-width="3"/>
+    <circle cx="50" cy="50" r="7" fill="url(#kirmizi)" stroke-width="3"/>
+    <circle cx="76" cy="74" r="7" fill="url(#kirmizi)" stroke-width="3"/>
+    <circle cx="76" cy="26" r="7" fill="url(#mavi)" stroke-width="3"/>
+  </g>
+</svg>

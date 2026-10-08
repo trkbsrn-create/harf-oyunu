@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 152;
+const SURUM = 153;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -463,6 +463,8 @@ class AdaSahnesi extends Phaser.Scene {
       if (!this.menuAcik && !this.tesisAcik) this.cantayiAcKapat();
     });
     this.periKonusuyor = false;
+    this.kazanilanDamla = {}; // harf -> kazanılan damla sayısı (hangi tür oyun çıkacağını belirler)
+    this.oynananOyunlar = {}; // harf -> bu harfte çıkan oyunlar
     this.omuzPerisi = null;
     this.rehberIpucu = null;
     this.rehberBitti = {};
@@ -2058,7 +2060,7 @@ class AdaSahnesi extends Phaser.Scene {
 
   // Varile dokununca iki aşama (öğretmenin tarifi):
   // 1) Varil boşsa ana tanktan boru boyunca bir damla gelir, varil dolar.
-  // 2) Varil doluysa Şans Çarkı açılır; çıkan mini oyun 1, 2, 3. düzeyde art arda oynanır,
+  // 2) Varil doluysa Oyun Lambaları açılır; çıkan mini oyun 1, 2, 3. düzeyde art arda oynanır,
   //    hepsi bitince varilden şişeye bir damla akar (miniOyundanDon).
   // Şişede o harf için 3 damla varsa varil yalnızca sallanır.
   varileDokun(dugme) {
@@ -2102,18 +2104,21 @@ class AdaSahnesi extends Phaser.Scene {
     });
   }
 
-  // Şans Çarkı ada sahnesinin üstünde açılır; çıkan oyuna gidilir (ada uyur, durumu korunur)
+  // Oyun Lambaları ada sahnesinin üstünde açılır; çıkan oyuna gidilir (ada uyur, durumu korunur)
   carkiAc(dugme) {
     this.rehberOlay("carkAcildi");
     this.input.enabled = false;
-    // Bu harfte oynanamayan hece/kelime oyunları çarka girmez (a, n'de hece yok)
-    const oyunlar = PLANLANAN_OYUNLAR.filter((o) => MINI_OYUNLAR[o.ad] && miniOyunOlur(o.ad, dugme.harf));
-    this.scene.launch("SansCarkiSahnesi", { harf: dugme.harf, oyunlar, bitince: (ad) => {
+    // Öğretmenin kuralı: kaçıncı damlaysa ona göre oyun (1. harf, 2. harf + hece, 3. hece)
+    const harf = dugme.harf;
+    const oynananlar = this.oynananOyunlar[harf] || (this.oynananOyunlar[harf] = []);
+    const uygunlar = damlaOyunlari(harf, this.kazanilanDamla[harf] || 0, oynananlar);
+    this.scene.launch("OyunLambalariSahnesi", { harf, uygunlar, bitince: (ad) => {
+      oynananlar.push(ad);
       const kamera = this.cameras.main;
       kamera.fadeOut(400, 251, 247, 236);
       kamera.once("camerafadeoutcomplete", () => {
         this.scene.sleep();
-        this.scene.run(ad, { harf: dugme.harf, seviye: 1, donus: "AdaSahnesi", zincir: true });
+        this.scene.run(ad, { harf, seviye: 1, donus: "AdaSahnesi", zincir: true });
       });
     } });
   }
@@ -2123,6 +2128,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.input.enabled = true;
     this.cameras.main.fadeIn(400, 251, 247, 236);
     if (!veri.kazandi) return;
+    this.kazanilanDamla[veri.harf] = (this.kazanilanDamla[veri.harf] || 0) + 1;
     const dugme = this.tesisDugmeleri.find((d) => d.harf === veri.harf);
     this.time.delayedCall(600, () => this.siseyeDamla(dugme));
   }
@@ -4158,6 +4164,6 @@ BulutSahnesi.prototype.bekle = AdaSahnesi.prototype.bekle;
       mode: Phaser.Scale.FIT,
       autoCenter: Phaser.Scale.CENTER_BOTH,
     },
-    scene: [KarsilamaSahnesi, HikayeSahnesi, AdaSahnesi, FinalSahnesi, BulutSahnesi, MiniOyunlarSahnesi, SansCarkiSahnesi, ...Object.values(MINI_OYUNLAR), YonergeSahnesi],
+    scene: [KarsilamaSahnesi, HikayeSahnesi, AdaSahnesi, FinalSahnesi, BulutSahnesi, MiniOyunlarSahnesi, OyunLambalariSahnesi, ...Object.values(MINI_OYUNLAR), YonergeSahnesi],
   });
 });
