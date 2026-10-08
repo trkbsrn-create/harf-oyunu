@@ -173,6 +173,9 @@ Her hatadan sonra buraya yeni bir kural ekle.
   dinleyiciyi önce kaldır.
 - HTML kutusunda `querySelector("div div")` kutunun kendisini buldu, yazı düğmeleri sildi (onaySor). Kutudaki
   öğeyi sınıf adıyla seç.
+- iPhone'da ada açılınca sayfa çöküyordu ("birçok kez sorun oluştu"): dünya boyutundaki 4 desen
+  (tileSprite 6400x4200) her biri ~107 MB bellek tutuyordu. tileSprite ekran boyutunda olsun, kamerayla
+  kaysın (`zeminiKaydir`). Yeni büyük görselde bellek ölç (doku boyutları toplamı).
 - Chrome'un internet sesi (Google Türkçe) bazen hiç başlamıyor, bütün sözler susuyordu (Brave'de
   sorun yoktu). Söz 1,5 saniyede başlamazsa cihazın kendi sesine geçilir (`uzakSesBozuk`).
 
