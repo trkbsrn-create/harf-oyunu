@@ -14,9 +14,11 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   "Oyunu başlat"tan sonra önce açılış hikâyesi (`HikayeSahnesi`, `HIKAYE_KARELERI`; öğretmenin
   seçimi A: kendiliğinden akan ~15 sn'lik canlı sahne, sözleri tarayıcı sesli okur, sağ üstte
   "Geç"): fırtına, sal kırılır, kumsalda uyanma, silik yelkenliyi görme (hikaye-*.svg). God
-  mode ve "Oyunu yeniden başlat" hikâyeyi atlar.
-  Sol üstteki menüde "Oyunu yeniden başlat" sayfayı yeniler; karşılama ekranını atlamak
-  için tek seferlik bir not (sessionStorage) bırakır, ilerleme saklanmaz.
+  mode ve "Devam et" hikâyeyi atlar.
+  Sol üstteki menüde "Ana menüye dön" (`anaMenuyeDon`): oyun profile kaydedilir, karşılamaya dönülür;
+  orada düğme "Devam et" olur ve kaldığı yerden sürer. Kayıt (`durumuKaydet`, 4 sn'de bir de; profil.js
+  `oyunKaydi`): çanta, tarla (harf, büyüme aşaması), takılan yelkenli parçaları, kazanılan damlalar,
+  oynanan oyunlar, rehber, çocuğun yeri; açılan sandıklar ve variller bunlardan çıkarılır (`durumuYukle`).
   Karşılama ekranının sol üstünde öğretmenin deneme düğmesi "God mode" var (öğretmen
   bu adla istedi): oyun bütün sandıklar açılmış, altı harf tarlada fasulye sırığına
   dönüşmüş ve altı yelkenli parçası çantada olarak başlar (`hepsiniAc`).
@@ -368,7 +370,7 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   sonra ortada anlatım penceresi açılır (`anlatimAc`, `PERI_ANLATIM` 8 sayfa: yelkenli, sandık,
   radar canlandırması `anlatimRadari`, tarla, su tesisi, şişeyle sulama, bulut, görev düğmesi (gerçek
   düğme parlar, el gösterir); peri her sayfayı söyler, sonra karakterin omzuna
-  uçar (`periOmzaUc`; yeniden başlatta doğrudan omuzda `omuzPerisiYap`, God mode'da yok). Omuzda karakteri
+  uçar (`periOmzaUc`; "Devam et"te doğrudan omuzda `omuzPerisiYap`, God mode'da yok). Omuzda karakteri
   izler (`omuzPerisiniGuncelle`) ve her işi ilk kez gösterir (`rehberOlay`, `rehberSec`): olay gelince
   balon (ekran katmanı, dokununca yeniden okunur) ve gösteren el; ipucu "tamam" olayına kadar başlangıç
   olayında yeniden çıkar (yürü, sandık, tohumu çantadan tarlaya, tesis, varil, şişeyle sula, sırık "Çık",

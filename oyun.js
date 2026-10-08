@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 161;
+const SURUM = 162;
 
 const DUNYA_GENISLIK = 6400;
 // Dünya adadan uzun: altta iskele ve su tesisi için geniş deniz var. Ada, üstteki
@@ -90,8 +90,6 @@ const SENSOR_MENZILI = 1600; // sandığa bu kadar yaklaşınca bip sesi başlar
 const PUSULA_ORTA = 1900;
 const PUSULA_YAKIN = 640;
 const SANDIK_CIKMA_UZAKLIGI = 110; // sandık ancak saklandığı yerin bu kadar yanında çıkar
-// "Oyunu yeniden başlat" deyince sayfa yenilenir; bu tek seferlik not karşılama ekranını atlatır
-const HEMEN_BASLA = "harfAvcisiHemenBasla";
 // Uzatılamayan ünsüzler ("t"): ilk aşamada bu kadar net ses yeter (ms);
 // güç aşamasında harf bu kadar ayrı kısa sesle dolar
 const KISA_SES_SURESI = 120;
@@ -326,6 +324,9 @@ class AdaSahnesi extends Phaser.Scene {
   // veri.tanriModu: karşılama ekranındaki "God mode" düğmesiyle (deneme için) bütün
   // sandıklar açılmış ve tohumlar çantada başlar
   create(veri = {}) {
+    // Öğretmenin isteği: oyun profile kaydedilir; "Devam et" ile kayıttan (veri.devam) sürer
+    if (veri.devam) Canta.yukle(veri.devam.canta);
+    else Canta.sifirla();
     this.dokulariUret();
     this.denizKur();
     this.adayiCiz();
@@ -354,6 +355,7 @@ class AdaSahnesi extends Phaser.Scene {
 
     this.sandigiSakla(susler);
     if (veri.tanriModu) this.hepsiniAc();
+    else if (veri.devam) this.durumuYukle(veri.devam);
     this.cicekleriEk();
     this.kelebekleriKur();
     this.kuslar = [];
@@ -363,7 +365,8 @@ class AdaSahnesi extends Phaser.Scene {
     this.tekAdim = false;
     this.donuk = false; // sandık açılırken karakter kısa bir süre durur
 
-    this.cocuk = this.add.image(BASLANGIC_X, BASLANGIC_Y, "cocuk")
+    const yer = (veri.devam && veri.devam.cocuk) || { x: BASLANGIC_X, y: BASLANGIC_Y };
+    this.cocuk = this.add.image(yer.x, yer.y, "cocuk")
       .setOrigin(0.5, 1);
     this.hedef = null;
     this.sensorKur();
@@ -383,11 +386,14 @@ class AdaSahnesi extends Phaser.Scene {
     this.tesisPaneliKur();
     // God mode: ekili harflerin varilleri tesiste hazır durur
     for (const k of this.tarlaKareleri) if (k.ekili) this.varilGetir(k.ekili.harf, true);
+    if (veri.devam) this.damlaNoktalariniCiz(); // kayıttan: şişedeki damlalar varil panelinde
     this.siseKur();
     this.cameras.main.fadeIn(400, 251, 247, 236);
     this.tirmaniyor = false;
     this.sirigaGidiyor = null;
     this.cikDugmesiKur();
+    // Sahne yeniden açılınca (Devam et) eski dinleyici kalmasın; yoksa dönüşler iki kez işlenir
+    this.events.off("wake");
     this.events.on("wake", (sys, veri) => {
       if (veri && veri.miniOyun) this.miniOyundanDon(veri);
       else if (veri && veri.final) {
@@ -468,6 +474,14 @@ class AdaSahnesi extends Phaser.Scene {
     this.omuzPerisi = null;
     this.rehberIpucu = null;
     this.rehberBitti = {};
+    if (veri.devam) {
+      this.kazanilanDamla = veri.devam.kazanilanDamla || {};
+      this.oynananOyunlar = veri.devam.oynananOyunlar || {};
+      this.rehberBitti = veri.devam.rehberBitti || {};
+    }
+    // Profil seçiliyse oyun birkaç saniyede bir kaydedilir (sekme kapansa da kaldığı yer kalır)
+    this.kayitAcik = !veri.tanriModu && !!Profil.aktifId;
+    if (this.kayitAcik) this.time.addEvent({ delay: 4000, loop: true, callback: () => this.durumuKaydet() });
     PERI_DURUMU.ayrildi = false;
     PERI_DURUMU.bulutta = false;
     if (veri.periTanisma) this.time.delayedCall(700, () => this.periTanisma());
@@ -626,7 +640,7 @@ class AdaSahnesi extends Phaser.Scene {
     });
   }
 
-  // "Oyunu yeniden başlat"tan gelince peri doğrudan omuzda belirir
+  // "Devam et" ile kayıttan gelince peri doğrudan omuzda belirir
   omuzPerisiYap(olay = "basla") {
     const peri = this.periYap(0, 0);
     peri.salinma.remove();
@@ -1567,12 +1581,12 @@ class AdaSahnesi extends Phaser.Scene {
   }
 
   // Parça yerine oturur: dolu hâli görünür, harf yuvarlağı koyulaşır, parıltı
-  parcayiTak(parca) {
+  parcayiTak(parca, sessiz = false) {
     parca.takildi = true;
-    this.rehberOlay("parcaTakildi");
+    if (!sessiz) this.rehberOlay("parcaTakildi");
     parca.silik.setVisible(false);
-    parca.dolu.setVisible(true).setAlpha(0);
-    this.tweens.add({ targets: parca.dolu, alpha: 1, duration: 400 });
+    parca.dolu.setVisible(true).setAlpha(sessiz ? 1 : 0);
+    if (!sessiz) this.tweens.add({ targets: parca.dolu, alpha: 1, duration: 400 });
     const x = YELKENLI_X + parca.x;
     const y = YELKENLI_Y + parca.y;
     parca.yuvarlak.clear();
@@ -1582,6 +1596,10 @@ class AdaSahnesi extends Phaser.Scene {
     parca.yuvarlak.strokeCircle(x, y, 22);
     parca.yazi.setColor("#ffffff").setStroke("#3b2a1a", 6);
     boyaliOrtala(titret(parca.yazi, 1.2));
+    if (sessiz) { // kayıttan geri yükleme: efekt yok
+      if (this.yelkenliParcalari.every((y) => y.takildi)) this.yelkenliHazir(true);
+      return;
+    }
     this.tweens.add({ targets: parca.yazi, scale: 1.5, duration: 200, yoyo: true });
     const [kx, ky, ken, kboy] = parca.kutu;
     this.add.particles(YELKENLI_X + kx + ken / 2, YELKENLI_Y + ky + kboy / 2, "parilti", {
@@ -2209,48 +2227,23 @@ class AdaSahnesi extends Phaser.Scene {
     g.strokeCircle(x, y, 6);
   }
 
-  // ---- Menü (sol üst): oyunu yeniden başlat ----
+  // ---- Menü (sol üst): ana menüye dön (öğretmenin isteği; oyun kaydedilir, "Devam et" ile sürer) ----
 
   menuKur() {
     this.menuAcik = false;
     this.menuDugmesi = this.add.image(64, 64, "menu-dugmesi")
       .setScrollFactor(0).setDepth(9200);
 
-    // Açılınca düğmenin altında "Oyunu yeniden başlat" satırı çıkar
+    // Açılınca düğmenin altında "Ana menüye dön" satırı çıkar
     this.menuPenceresi = this.add.container(0, 0).setScrollFactor(0).setDepth(9200).setVisible(false);
     const satir = this.add.image(20, 118, "menu-pencere").setOrigin(0);
-    const yazi = doodleYazi(this, 114, 168, "Oyunu yeniden başlat", 36).setOrigin(0, 0.5);
+    const yazi = doodleYazi(this, 114, 168, "Ana menüye dön", 36).setOrigin(0, 0.5);
     this.menuPenceresi.add([satir, yazi]);
-    this.yenidenBaslatAlani = new Phaser.Geom.Rectangle(26, 124, 480, 90);
-
-    // Kazara basılmasın diye önce sorulur
-    this.onayPenceresi = this.add.container(0, 0).setScrollFactor(0).setDepth(9300).setVisible(false);
-    const karartma = this.add.graphics();
-    karartma.fillStyle(0x000000, 0.35);
-    karartma.fillRect(0, 0, 1280, 720);
-    const kart = this.add.image(370, 200, "onay-pencere").setOrigin(0);
-    const soru = doodleYazi(this, 640, 290, "Baştan başlasın mı?", 48).setOrigin(0.5);
-    const not = titret(this.add.text(640, 348, "Çanta boşalır.", {
-      fontFamily: "Andika", fontSize: "28px", color: "#6b6b6b",
-    }).setOrigin(0.5), 1.2);
-    const evet = doodleYazi(this, 525, 438, "Evet", 42).setOrigin(0.5);
-    const hayir = doodleYazi(this, 755, 438, "Hayır", 42).setOrigin(0.5);
-    this.onayPenceresi.add([karartma, kart, soru, not, evet, hayir]);
-    this.evetAlani = new Phaser.Geom.Rectangle(430, 400, 190, 80);
-    this.hayirAlani = new Phaser.Geom.Rectangle(660, 400, 190, 80);
+    this.anaMenuAlani = new Phaser.Geom.Rectangle(26, 124, 480, 90);
   }
 
   // Dokunuş menüyle ilgiliyse işler ve true döner.
   menuTiklamasi(p) {
-    if (this.onayPenceresi.visible) {
-      if (this.evetAlani.contains(p.x, p.y)) {
-        this.oyunuYenidenBaslat();
-      } else if (this.hayirAlani.contains(p.x, p.y)) {
-        this.onayPenceresi.setVisible(false);
-        this.menuyuAcKapat();
-      }
-      return true;
-    }
     if (this.menuDugmesi.getBounds().contains(p.x, p.y)) {
       if (this.siseAcik) this.siseyiAcKapat();
       if (this.cantaAcik) this.cantayiAcKapat();
@@ -2259,10 +2252,9 @@ class AdaSahnesi extends Phaser.Scene {
       return true;
     }
     if (this.menuAcik) {
-      if (this.yenidenBaslatAlani.contains(p.x, p.y)) {
+      if (this.anaMenuAlani.contains(p.x, p.y)) {
         Sesler.pling();
-        this.onayPenceresi.setVisible(true).setAlpha(0);
-        this.tweens.add({ targets: this.onayPenceresi, alpha: 1, duration: 180 });
+        this.anaMenuyeDon();
       } else {
         this.menuyuAcKapat(); // menünün dışına dokununca kapanır
       }
@@ -2283,16 +2275,76 @@ class AdaSahnesi extends Phaser.Scene {
     }
   }
 
-  // Sayfa yeniden yüklenir: çanta boşalır, sandıklar kapanır, mikrofon da baştan
-  // kurulur. Karşılama ekranı bu sefer atlanır (tek seferlik not; ilerleme saklanmaz).
-  oyunuYenidenBaslat() {
-    try {
-      sessionStorage.setItem(HEMEN_BASLA, "1");
-    } catch (e) {
-      // Not tutulamazsa karşılama ekranı yeniden görünür; sorun değil
-    }
+  // Oyun kaydedilir, karşılama ekranına dönülür (orada "Devam et" kaldığı yerden sürdürür)
+  anaMenuyeDon() {
+    this.durumuKaydet();
+    this.kayitAcik = false;
+    this.input.enabled = false;
+    Sesler.sustur();
     this.cameras.main.fadeOut(300, 251, 247, 236);
-    this.cameras.main.once("camerafadeoutcomplete", () => window.location.reload());
+    this.cameras.main.once("camerafadeoutcomplete", () => this.scene.start("KarsilamaSahnesi"));
+  }
+
+  // ---- Kayıt: oyunun kaldığı yer profile yazılır (profil.js Profil.oyunuKaydet) ----
+  // Saklananlar: çanta, tarlada ekili tohumlar ve büyüme aşamaları, takılan yelkenli parçaları,
+  // kazanılan damlalar, oynanan oyunlar, rehber ipuçları, çocuğun yeri. Açılan sandıklar ve
+  // tesisteki variller bunlardan çıkarılır.
+  durumuKaydet() {
+    if (!this.kayitAcik || this.tirmaniyor) return;
+    Profil.oyunuKaydet({
+      canta: Canta.durum(),
+      tarla: this.tarlaKareleri.map((k) => (k.ekili
+        ? { harf: k.ekili.harf, tekrarEdilecek: !!k.ekili.tekrarEdilecek, asama: k.asama || 0 } : null)),
+      parcalar: this.yelkenliParcalari.filter((y) => y.takildi).map((y) => y.harf),
+      kazanilanDamla: this.kazanilanDamla,
+      oynananOyunlar: this.oynananOyunlar,
+      rehberBitti: this.rehberBitti,
+      cocuk: { x: Math.round(this.cocuk.x), y: Math.round(this.cocuk.y) },
+      tarih: Date.now(),
+    });
+  }
+
+  // Kayıttan geri yükleme (create içinde, sandıklardan sonra; efekt ve ses yok)
+  durumuYukle(k) {
+    // Tarla: ekili tohumlar ve büyüme aşamaları (tesisteki variller create'te ekili karelerden gelir)
+    (k.tarla || []).forEach((t, i) => {
+      const kare = this.tarlaKareleri[i];
+      if (!t || !kare) return;
+      kare.ekili = { tur: "tohum", harf: t.harf, tekrarEdilecek: t.tekrarEdilecek };
+      kare.asama = t.asama || 0;
+      if (kare.asama > 0) {
+        kare.nesneler = this.bitkiCiz(kare);
+      } else {
+        const x = kare.alan.centerX;
+        const y = kare.alan.centerY - 4;
+        const resim = this.add.image(x, y, "ekili-tohum").setDepth(-0.8);
+        const harf = this.add.text(x, y + 3, t.harf, {
+          fontFamily: "Andika", fontSize: "26px", color: "#ffffff",
+          stroke: "#3b2a1a", strokeThickness: 5, padding: { x: 3, y: 3 },
+        }).setDepth(-0.79);
+        boyaliOrtala(titret(harf, 1.2));
+        kare.nesneler = [resim, harf];
+      }
+    });
+    // Sandıklar: tohumu kazanılmış harflerin sandıkları açık (sırayla açılırlar)
+    const kazanilan = new Set([
+      ...Canta.esyalar.filter((e) => e.tur === "tohum").map((e) => e.harf),
+      ...this.tarlaKareleri.filter((t) => t.ekili).map((t) => t.ekili.harf),
+    ]);
+    let acilan = 0;
+    while (acilan < this.sandiklar.length && kazanilan.has(this.sandiklar[acilan].harfBilgisi.kucuk)) {
+      const s = this.sandiklar[acilan++];
+      s.acildi = true;
+      s.nesne.setTexture("sandik-acik").setPosition(s.cali.x + 100, s.cali.y + 45)
+        .setDepth(s.cali.y + 45).setAlpha(0.6).setScale(0.65).setTint(0xc8bca8);
+    }
+    this.siradakiSira = acilan;
+    this.siradakiSandik();
+    // Takılmış yelkenli parçaları
+    for (const harf of k.parcalar || []) {
+      const parca = this.yelkenliParcalari.find((y) => y.harf === harf);
+      if (parca && !parca.takildi) this.parcayiTak(parca, true);
+    }
   }
 
   // ---- Ses doğrulama (3 basamak) ----
@@ -2763,6 +2815,8 @@ class AdaSahnesi extends Phaser.Scene {
     g.destroy();
 
     // Aura için yumuşak, ortası parlak bir ışık bulutu
+    // Ada sahnesi aynı sayfada yeniden açılabilir ("Ana menüye dön" → "Devam et"): eski doku silinir
+    if (this.textures.exists("aura")) this.textures.remove("aura");
     const tuval = this.textures.createCanvas("aura", 256, 256);
     const ctx = tuval.getContext();
     const renk = ctx.createRadialGradient(128, 128, 0, 128, 128, 128);
@@ -3208,6 +3262,7 @@ class AdaSahnesi extends Phaser.Scene {
 
   // Görünmeyen bulutların adanın üstünde yavaşça kayan gölgeleri
   bulutGolgeleriKur() {
+    if (this.textures.exists("bulut-golge")) this.textures.remove("bulut-golge"); // yeniden açılınca
     const tuval = this.textures.createCanvas("bulut-golge", 512, 256);
     const ctx = tuval.getContext();
     for (const [x, y, r] of [[150, 140, 110], [260, 110, 120], [370, 145, 100], [250, 170, 90]]) {
@@ -3455,18 +3510,6 @@ class KarsilamaSahnesi extends Phaser.Scene {
   create() {
     this.basladi = false; // menüden geri dönülünce düğmeler yeniden çalışsın
     this.sifreSoruluyor = false;
-    // "Oyunu yeniden başlat"tan geliyorsak doğrudan adaya geç
-    let hemen = false;
-    try {
-      hemen = sessionStorage.getItem(HEMEN_BASLA) === "1";
-      sessionStorage.removeItem(HEMEN_BASLA);
-    } catch (e) {
-      hemen = false;
-    }
-    if (hemen) {
-      this.scene.start("AdaSahnesi");
-      return;
-    }
 
     this.add.tileSprite(0, 0, 1280, 720, "doku-kagit").setOrigin(0);
     this.deniz = this.add.tileSprite(0, 0, 1280, 720, "doku-deniz").setOrigin(0).setAlpha(0.85);
@@ -3538,7 +3581,8 @@ class KarsilamaSahnesi extends Phaser.Scene {
     if (this.profilResmi) this.profilResmi.destroy();
     this.profilResmi = null;
     const p = Profil.aktifId && Profil.liste().find((x) => x.id === Profil.aktifId);
-    this.dugmeYazi.setText(p ? "Oyunu başlat" : "Profil oluştur");
+    // Kaydı varsa "Devam et" (oyun kaldığı yerden sürer)
+    this.dugmeYazi.setText(!p ? "Profil oluştur" : p.kayit ? "Devam et" : "Oyunu başlat");
     if (!p) return;
     const resim = this.add.image(0, 0, p.hayvan).setOrigin(0.5, 1);
     resim.setScale(Math.min(150 / resim.width, 150 / resim.height));
@@ -3616,7 +3660,9 @@ class KarsilamaSahnesi extends Phaser.Scene {
     // Öğretmenin deneme düğmesi (God mode) hikâyeyi atlar
     this.cameras.main.once("camerafadeoutcomplete", () => {
       // Deneme (God mode) sayılmaz (profil seçimi bırakılır)
-      if (tanriModu) { Profil.sec(null); this.scene.start("AdaSahnesi", { tanriModu }); }
+      if (tanriModu) { Profil.sec(null); this.scene.start("AdaSahnesi", { tanriModu }); return; }
+      const kayit = Profil.oyunKaydi();
+      if (kayit) this.scene.start("AdaSahnesi", { devam: kayit }); // "Devam et": hikâye atlanır
       else this.scene.start("HikayeSahnesi"); // açılış videosu şimdilik kapalı (videoGoster)
     });
   }

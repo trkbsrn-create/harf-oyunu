@@ -1,5 +1,5 @@
-// Karakterin çantası (envanter). İçindekiler hiçbir yere kaydedilmez:
-// sayfa yenilenince oyun baştan başlar ve çanta boşalır.
+// Karakterin çantası (envanter). Öğretmenin isteği: oyun profile kaydedilir, "Devam et" ile kaldığı
+// yerden sürer (profil.js oyunKaydi; durum()/yukle() ile çanta da kaydın parçası).
 
 const Canta = {
   BOYUT: 8, // çantadaki kutucuk sayısı
@@ -53,5 +53,23 @@ const Canta = {
   // Sıradaki eşyayı çantadan çıkarır ve verir (ör. tohum tarlaya ekilince).
   cikar(sira) {
     return this.esyalar.splice(sira, 1)[0];
+  },
+
+  // Yeni oyun: çanta boş
+  sifirla() {
+    this.esyalar = [];
+    this.damlalar = {};
+    this.alinanParcalar = {};
+  },
+
+  // Kayıt için çantanın kopyası / kayıttan geri yükleme
+  durum() {
+    return JSON.parse(JSON.stringify({ esyalar: this.esyalar, damlalar: this.damlalar, alinanParcalar: this.alinanParcalar }));
+  },
+
+  yukle(d) {
+    this.esyalar = (d && d.esyalar) || [];
+    this.damlalar = (d && d.damlalar) || {};
+    this.alinanParcalar = (d && d.alinanParcalar) || {};
   },
 };

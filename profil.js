@@ -2,7 +2,7 @@
 // çocuklar veli gözetiminde oynar). Oyundaki doğru/yanlışlar ve harf sesi sonuçları çocuğun
 // profiline yazılır; veli şifreli kapıdan (karnebak) karneye bakar, yalnızca eksikler gösterilir.
 // Veri yalnızca bu cihazda (localStorage) durur, sunucuya gitmez. Oyunun kaldığı yer (çanta,
-// sandıklar) saklanmaz; yalnızca profil ve istatistik (öğretmenin izni).
+// sandıklar, tarla, yelkenli) de profile kaydedilir, "Devam et" ile sürer (öğretmenin isteği).
 
 const PROFIL_HAYVANLARI = ["resim-kedi", "ari", "resim-aslan", "resim-panda", "resim-tavsan",
   "resim-kurbaga", "resim-fil", "tilki"];
@@ -90,6 +90,16 @@ const Profil = {
       else o.kaybetti++;
       o.enIyiYildiz = Math.max(o.enIyiYildiz, yildiz);
     });
+  },
+
+  // Oyunun kaldığı yer (öğretmenin isteği: "Devam et"); AdaSahnesi.durumuKaydet yazar
+  oyunKaydi() {
+    const p = this.aktifId && this.oku().profiller[this.aktifId];
+    return (p && p.kayit) || null;
+  },
+
+  oyunuKaydet(kayit) {
+    this.degistir((p) => { p.kayit = kayit; });
   },
 
   // Çocuğa gösterilen: sesi denenmiş harfler ve toplam yıldız

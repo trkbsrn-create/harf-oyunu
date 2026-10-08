@@ -133,7 +133,8 @@ Her hatadan sonra buraya yeni bir kural ekle.
 
 - Kullanıcı istemedikçe ilerlemeyi kalıcı saklama. Sayfa yenilenince oyun baştan
   başlar (çanta boşalır, sandıklar kapanır). Kalıcı kayıt gerekirse önce kullanıcıya sor.
-  (Öğretmen izin verdi: yalnızca profil ve istatistik saklanır, `profil.js`.)
+  (Öğretmen izin verdi: profil, istatistik ve oyunun kaldığı yer profile saklanır, `profil.js`;
+  "Ana menüye dön" → "Devam et".)
 - Kullanıcıya görünen her şey Türkçe olsun: iş arasındaki kısa notlar, komut
   açıklamaları, kayıt (commit) mesajları, çekme isteği açıklamaları ve kod içi notlar.
   İngilizce yazma.
@@ -165,6 +166,9 @@ Her hatadan sonra buraya yeni bir kural ekle.
 
 - Oyunun üstüne açılan HTML kutusuna (metinSor) yapılan dokunuş alttaki oyuna da geçiyordu ("Tamam"
   alttaki resme basmış sayıldı, kutu tekrar açıldı). HTML katmanında dokunuş olaylarını durdur.
+- Ada sahnesi aynı sayfada yeniden açılınca (Devam et) tuval dokusu zaten vardı, sahne çöktü; sahne
+  olay dinleyicileri (`this.events.on`) de üst üste biner. Yeniden açılabilen sahnede eski dokuyu sil,
+  dinleyiciyi önce kaldır.
 - Chrome'un internet sesi (Google Türkçe) bazen hiç başlamıyor, bütün sözler susuyordu (Brave'de
   sorun yoktu). Söz 1,5 saniyede başlamazsa cihazın kendi sesine geçilir (`uzakSesBozuk`).
 
