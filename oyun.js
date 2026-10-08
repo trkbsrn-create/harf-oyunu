@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 164;
+const SURUM = 165;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -3121,11 +3121,13 @@ class AdaSahnesi extends Phaser.Scene {
 
   // Deniz: kıyıya doğru açılan renkler, gelip giden köpük, kayan dalgalar
   denizKur() {
-    // Doodle: kareli defter kâğıdının üstüne boya kalemiyle taranmış deniz
-    this.add.tileSprite(0, 0, DUNYA_GENISLIK, DUNYA_YUKSEKLIK, "doku-kagit")
-      .setOrigin(0).setDepth(-6);
-    this.add.tileSprite(0, 0, DUNYA_GENISLIK, DUNYA_YUKSEKLIK, "doku-deniz")
-      .setOrigin(0).setDepth(-5).setAlpha(0.85);
+    // Doodle: kareli defter kâğıdının üstüne boya kalemiyle taranmış deniz.
+    // Desenler ekran boyutunda (dünya boyutunda olunca her biri ~107 MB bellek tutuyordu, iPhone
+    // sayfayı kapatıyordu); ekranda sabit durur, deseni kamerayla kayar (zeminiKaydir).
+    this.zeminDesenleri = [
+      this.add.tileSprite(0, 0, 1280, 720, "doku-kagit").setOrigin(0).setScrollFactor(0).setDepth(-6),
+      this.add.tileSprite(0, 0, 1280, 720, "doku-deniz").setOrigin(0).setScrollFactor(0).setDepth(-5).setAlpha(0.85),
+    ];
 
     this.kopuk = this.add.graphics().setDepth(-2);
     this.kopukNoktalari = adaNoktalari(1);
@@ -3337,8 +3339,8 @@ class AdaSahnesi extends Phaser.Scene {
       const kalip = this.make.graphics({ add: false });
       kalip.fillStyle(0xffffff);
       kalip.fillPoints(noktalar, true);
-      this.add.tileSprite(0, 0, DUNYA_GENISLIK, DUNYA_YUKSEKLIK, doku)
-        .setOrigin(0).setDepth(derinlik).setMask(kalip.createGeometryMask());
+      this.zeminDesenleri.push(this.add.tileSprite(0, 0, 1280, 720, doku).setOrigin(0).setScrollFactor(0)
+        .setDepth(derinlik).setMask(kalip.createGeometryMask()));
     };
     boya(kum, "doku-kum", -1.5);
     boya(cimen, "doku-cimen", -1.4);
@@ -3369,7 +3371,14 @@ class AdaSahnesi extends Phaser.Scene {
     }
   }
 
+  // Ekranda sabit desenler kamerayla birlikte kayar (dünyaya yapışık görünür)
+  zeminiKaydir() {
+    const k = this.cameras.main;
+    for (const d of this.zeminDesenleri) d.setTilePosition(k.scrollX, k.scrollY);
+  }
+
   update(zaman, fark) {
+    this.zeminiKaydir();
     this.haritayiGuncelle(zaman);
     this.canlandir(zaman, fark);
     this.kelebekleriUcur(zaman, fark);
