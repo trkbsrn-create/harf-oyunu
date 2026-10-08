@@ -106,7 +106,8 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
 - Öğretmenin izniyle: çocuk hayvan resmi + takma adla girer (adı veli yazar). Profil ve istatistik
   yalnızca cihazda (localStorage), sunucuya gitmez. Karne veli kapısının arkasında (şifre: karnebak;
   şifre kodda açık, yalnızca çocukları durdurmak için). Karne yetişkin içindir: öğrenilmemiş harfli
-  yazı kuralı orada ve takma adda uygulanmaz.
+  yazı kuralı orada ve takma adda uygulanmaz. God mode da şifreli (sol altta yazısız küçük daire; şifre:
+  trkbsrn35, `TANRI_SIFRESI`, kodda açık).
 - İlerleme sadece tarayıcının yerel hafızasında (localStorage) tutulur.
 
 ## Görseller ve sesler
@@ -169,6 +170,8 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Ada sahnesi aynı sayfada yeniden açılınca (Devam et) tuval dokusu zaten vardı, sahne çöktü; sahne
   olay dinleyicileri (`this.events.on`) de üst üste biner. Yeniden açılabilen sahnede eski dokuyu sil,
   dinleyiciyi önce kaldır.
+- HTML kutusunda `querySelector("div div")` kutunun kendisini buldu, yazı düğmeleri sildi (onaySor). Kutudaki
+  öğeyi sınıf adıyla seç.
 - Chrome'un internet sesi (Google Türkçe) bazen hiç başlamıyor, bütün sözler susuyordu (Brave'de
   sorun yoktu). Söz 1,5 saniyede başlamazsa cihazın kendi sesine geçilir (`uzakSesBozuk`).
 
