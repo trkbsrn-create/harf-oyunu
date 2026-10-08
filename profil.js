@@ -1,4 +1,4 @@
-// Profil ve karne (öğretmenin isteği). Her çocuk hayvan resmi + takma adla girer (takma adı veli yazar;
+// Profil ve karne (öğretmenin isteği). Her çocuk ilk sayfada hayvan resmi + takma adla girer (takma adı veli yazar;
 // çocuklar veli gözetiminde oynar). Oyundaki doğru/yanlışlar ve harf sesi sonuçları çocuğun
 // profiline yazılır; veli şifreli kapıdan (karnebak) karneye bakar, yalnızca eksikler gösterilir.
 // Veri yalnızca bu cihazda (localStorage) durur, sunucuya gitmez. Oyunun kaldığı yer (çanta,
@@ -131,6 +131,11 @@ function metinSor(baslik, { sifre = false, enUzun = 14 } = {}) {
     // Oyunun klavye dinleyicisi (boşluk, ok tuşları) yazıyı engellemesin
     girdi.addEventListener("keydown", (e) => e.stopPropagation());
     girdi.addEventListener("keyup", (e) => e.stopPropagation());
+    // Kutuya yapılan dokunuşlar alttaki oyuna geçmesin (yoksa alttaki resim de basılmış sayılıyordu:
+    // "Tamam"a basınca kutu yeniden açılıyor, ekran her basışta biraz daha kararıyordu)
+    for (const olay of ["pointerdown", "pointerup", "mousedown", "mouseup", "touchstart", "touchend", "click"]) {
+      zemin.addEventListener(olay, (e) => e.stopPropagation());
+    }
     const bitir = (deger) => { zemin.remove(); sonuc(deger); };
     zemin.querySelector("form").onsubmit = (e) => { e.preventDefault(); bitir(girdi.value.trim()); };
     zemin.querySelector('button[type="button"]').onclick = () => bitir(null);
@@ -177,100 +182,107 @@ function profilKartiYap(sahne, x, y, p, en = 230, boy = 250, ayrintili = true) {
   return kap;
 }
 
-// "Kim oynuyor?": telefondaki profiller (hayvan + takma ad) ve "+" kartı. Seçince hikâye başlar.
-class ProfilSahnesi extends Phaser.Scene {
-  constructor() {
-    super("ProfilSahnesi");
-  }
-
-  preload() {
-    for (const ad of [...PROFIL_HAYVANLARI, "doku-kagit", "incele-dugmesi", "yildiz"]) {
-      this.load.svg(ad, `gorseller/${ad}.svg`);
-    }
-  }
-
-  create() {
-    this.secildi = false;
+// "Kim oynuyor?" paneli (karşılama ekranının ortasında; öğretmenin isteği: yalnızca mini oyunlar için
+// girenler de profil seçsin). Telefondaki profiller (hayvan + takma ad) ve "+" kartı; dokunulan profil
+// seçilir (Profil.sec). Oyun da mini oyunlar da seçili profille açılır.
+class ProfilPaneli {
+  constructor(sahne, x, y) {
+    this.sahne = sahne;
+    this.kap = sahne.add.container(x, y).setDepth(20);
     this.kartlar = [];
     this.secici = null;
-    this.cameras.main.fadeIn(300, 251, 247, 236);
-    this.add.tileSprite(0, 0, 1280, 720, "doku-kagit").setOrigin(0);
-    doodleYazi(this, 640, 70, "Kim oynuyor?", 60, "mavi").setOrigin(0.5);
-    const geri = this.add.container(1176, 48, [
-      this.add.image(0, 0, "incele-dugmesi").setScale(0.9),
-      doodleYazi(this, 0, -3, "Geri", 28).setOrigin(0.5),
-    ]).setSize(200, 96).setInteractive({ useHandCursor: true });
-    geri.on("pointerdown", () => { if (!this.secici) this.scene.start("KarsilamaSahnesi"); });
-    this.kartlariCiz();
+    this.adSoruluyor = false;
+    const g = sahne.add.graphics();
+    g.fillStyle(0xfffdf6, 0.92);
+    g.fillRoundedRect(-430, -190, 860, 380, 26);
+    g.lineStyle(5, 0x2b2b2b, 1);
+    g.strokeRoundedRect(-430, -190, 860, 380, 26);
+    this.kap.add([g, doodleYazi(sahne, 0, -160, "Kim oynuyor?", 40, "mavi").setOrigin(0.5)]);
+    this.ciz();
   }
 
-  kartlariCiz() {
+  ciz() {
     for (const k of this.kartlar) k.destroy();
     this.kartlar = [];
     const profiller = Profil.liste();
+    if (Profil.aktifId && !profiller.some((p) => p.id === Profil.aktifId)) Profil.sec(null);
     const ogeler = [...profiller];
     if (profiller.length < PROFIL_EN_COK) ogeler.push(null); // "+" kartı
+    const satir = Math.ceil(ogeler.length / 4);
     ogeler.forEach((p, i) => {
       const sira = Math.floor(i / 4);
       const satirdaki = Math.min(4, ogeler.length - sira * 4);
-      const x = 640 + ((i % 4) - (satirdaki - 1) / 2) * 260;
-      const y = 370 - (Math.ceil(ogeler.length / 4) - 1) * 140 + sira * 280; // satırlar dikeyde ortada
-      const kart = p ? profilKartiYap(this, x, y, p) : this.artiKarti(x, y);
-      kart.on("pointerdown", () => (p ? this.sec(p, kart) : this.hayvanSec()));
+      const x = ((i % 4) - (satirdaki - 1) / 2) * 190;
+      const y = 20 - (satir - 1) * 82 + sira * 164;
+      const kart = p ? profilKartiYap(this.sahne, x, y, p) : this.artiKarti(x, y);
+      kart.setScale(satir > 1 ? 0.6 : 0.68);
+      if (p) kart.setAlpha(!Profil.aktifId || Profil.aktifId === p.id ? 1 : 0.5);
+      if (p && Profil.aktifId === p.id) kart.setScale(kart.scale * 1.1);
+      kart.on("pointerdown", () => (p ? this.sec(p) : this.hayvanSec()));
+      this.kap.add(kart);
       this.kartlar.push(kart);
     });
   }
 
   artiKarti(x, y) {
-    const kap = this.add.container(x, y);
-    const g = this.add.graphics();
+    const kap = this.sahne.add.container(x, y);
+    const g = this.sahne.add.graphics();
+    g.fillStyle(0xffffff, 0.6);
+    g.fillRoundedRect(-115, -125, 230, 250, 22);
     g.lineStyle(4, 0x2b2b2b, 0.6);
     g.strokeRoundedRect(-115, -125, 230, 250, 22);
-    g.lineStyle(10, 0x8fd16a, 1);
-    g.lineBetween(-40, 0, 40, 0);
-    g.lineBetween(0, -40, 0, 40);
+    g.lineStyle(12, 0x8fd16a, 1);
+    g.lineBetween(-44, 0, 44, 0);
+    g.lineBetween(0, -44, 0, 44);
     kap.add(g);
     return kap.setSize(230, 250).setInteractive({ useHandCursor: true });
   }
 
-  sec(p, kart) {
-    if (this.secildi || this.secici) return;
-    this.secildi = true;
+  sec(p) {
+    if (this.secici || this.adSoruluyor) return;
     Sesler.ac();
     Sesler.pling();
     Profil.sec(p.id);
-    this.tweens.add({ targets: kart, scale: 1.1, duration: 150, yoyo: true });
-    this.cameras.main.fadeOut(350, 251, 247, 236);
-    this.cameras.main.once("camerafadeoutcomplete", () => this.scene.start("HikayeSahnesi"));
+    this.ciz();
+  }
+
+  // Seçili profil yoksa panel sallanır (başlamadan önce profil seçilmeli)
+  uyar() {
+    Sesler.calabilir(() => Sesler.yanlis());
+    this.sahne.tweens.add({ targets: this.kap, angle: { from: -2, to: 2 }, duration: 70, yoyo: true, repeat: 2,
+      onComplete: () => this.kap.setAngle(0) });
   }
 
   // Yeni profil: önce hayvan seçilir, sonra veli takma adı yazar
   hayvanSec() {
-    if (this.secici) return;
+    if (this.secici || this.adSoruluyor) return;
     Sesler.ac();
-    const kap = this.add.container(0, 0).setDepth(100);
-    const g = this.add.graphics();
+    const s = this.sahne;
+    const kap = s.add.container(0, 0).setDepth(100);
+    const g = s.add.graphics();
     g.fillStyle(0x000000, 0.35);
     g.fillRect(0, 0, 1280, 720);
     g.fillStyle(0xfffdf6, 1);
     g.fillRoundedRect(190, 110, 900, 520, 26);
     g.lineStyle(5, 0x2b2b2b, 1);
     g.strokeRoundedRect(190, 110, 900, 520, 26);
+    // Arka plan dokunuşları alttaki düğmelere geçmesin
+    g.setInteractive(new Phaser.Geom.Rectangle(0, 0, 1280, 720), Phaser.Geom.Rectangle.Contains);
     kap.add(g);
     PROFIL_HAYVANLARI.forEach((ad, i) => {
       const x = 640 + ((i % 4) - 1.5) * 200;
-      const y = 260 + Math.floor(i / 4) * 220;
-      const resim = this.add.image(x, y, ad);
+      const y = 250 + Math.floor(i / 4) * 200;
+      const resim = s.add.image(x, y, ad);
       resim.setScale(Math.min(160 / resim.width, 160 / resim.height));
       resim.setInteractive({ useHandCursor: true });
       resim.on("pointerdown", () => this.adSor(ad));
       kap.add(resim);
     });
-    const vazgec = this.add.container(640, 600, [
-      this.add.image(0, 0, "incele-dugmesi").setScale(0.9),
-      doodleYazi(this, 0, -3, "Vazgeç", 28).setOrigin(0.5),
+    const vazgec = s.add.container(640, 580, [
+      s.add.image(0, 0, "incele-dugmesi").setScale(0.9),
+      doodleYazi(s, 0, -3, "Vazgeç", 28).setOrigin(0.5),
     ]).setSize(200, 96).setInteractive({ useHandCursor: true });
-    vazgec.on("pointerdown", () => this.seciciKapat());
+    vazgec.on("pointerdown", () => { if (!this.adSoruluyor) this.seciciKapat(); });
     kap.add(vazgec);
     this.secici = kap;
   }
@@ -281,13 +293,20 @@ class ProfilSahnesi extends Phaser.Scene {
   }
 
   async adSor(hayvan) {
+    if (this.adSoruluyor) return; // kutu açıkken ikinci kez açılmasın
+    this.adSoruluyor = true;
     const ad = await metinSor("Takma ad (veli yazar)");
-    if (!this.scene.isActive()) return;
+    this.adSoruluyor = false;
+    if (!this.kap.active) return; // bu arada sahne değişti
     this.seciciKapat();
     if (!ad) return;
-    Profil.ekle(hayvan, ad);
+    Profil.sec(Profil.ekle(hayvan, ad)); // yeni profil seçili gelir
     Sesler.pling();
-    this.kartlariCiz();
+    this.ciz();
+  }
+
+  acikMi() {
+    return !!this.secici || this.adSoruluyor;
   }
 }
 

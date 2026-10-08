@@ -384,8 +384,9 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   Sözler kayit.html "Peri" bölümünde (öğretmen kaydeder).
 
 ## Profil ve karne (profil.js)
-- "Oyunu başlat" → `ProfilSahnesi` ("Kim oynuyor?"): telefondaki profiller (hayvan resmi + takma ad, altında
-  sesi denenmiş harfler ve toplam yıldız) ve "+" (hayvan seç, takma adı veli yazar: `metinSor`); seçince hikâye.
+- İlk sayfanın ortasında `ProfilPaneli` ("Kim oynuyor?"): telefondaki profiller (hayvan resmi + takma ad,
+  altında sesi denenmiş harfler ve toplam yıldız) ve "+" (hayvan seç, takma adı veli yazar: `metinSor`;
+  kutuya dokunuş oyuna geçmez). "Oyunu başlat" ve "Mini Games" seçili profil ister (yoksa panel sallanır).
   God mode profil seçmez, sayılmaz. Veri: `ilerlemeArtir` doğru, `kalpEksilt` yanlış, `bitir` oyun sonucu
   (ortak.js), `harfiDinle` ses sonucu (1 kendisi, 2 ipucuyla, 3 oyun onayladı).
 - Karşılamada "Karne" → şifre (karnebak) → `KarneSahnesi`: profil seçilir; her harfin sesi, mini oyun
