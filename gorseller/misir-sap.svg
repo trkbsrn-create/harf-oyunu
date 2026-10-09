@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="380" viewBox="0 0 240 380">
+  <!-- Mısır sapı: tarlada son aşama, gökyüzüne doğru solar (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="316" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="koyuToprak" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#8e6340"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#6f4a2c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="misirYaprak" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9eba7"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#8fd16a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="sari" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+      <rect width="6" height="6" fill="#ffe680"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffc928" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <linearGradient id="solma" x1="0" y1="0" x2="0" y2="380" gradientUnits="userSpaceOnUse">
+      <stop offset="0.04" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="1"/>
+    </linearGradient>
+    <mask id="sol"><rect width="240" height="380" fill="url(#solma)"/></mask>
+  </defs>
+  <g mask="url(#sol)">
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M120 374 V285" fill="none" stroke="#2b2b2b" stroke-width="23"/>
+    <path d="M120 285 V190" fill="none" stroke="#2b2b2b" stroke-width="20"/>
+    <path d="M120 190 V95" fill="none" stroke="#2b2b2b" stroke-width="17"/>
+    <path d="M120 95 V10" fill="none" stroke="#2b2b2b" stroke-width="14"/>
+    <path d="M120 374 V285" fill="none" stroke="#6fbf4a" stroke-width="18"/>
+    <path d="M120 285 V190" fill="none" stroke="#6fbf4a" stroke-width="15"/>
+    <path d="M120 190 V95" fill="none" stroke="#6fbf4a" stroke-width="12"/>
+    <path d="M120 95 V10" fill="none" stroke="#6fbf4a" stroke-width="9"/>
+    <path d="M0 0 q40 -6 62 -40 q-30 10 -62 30z" fill="url(#misirYaprak)" stroke-width="3" transform="translate(120 330) scale(1.39)"/>
+    <path d="M0 0 q-40 -6 -62 -40 q30 10 62 30z" fill="url(#misirYaprak)" stroke-width="3" transform="translate(120 274) scale(1.28)"/>
+    <path d="M0 0 q-16 -6 -16 -34 q-2 -14 12 -8 q6 16 4 42z" fill="url(#sari)" stroke-width="2.5" transform="translate(126 268) scale(1.28)"/>
+    <path d="M0 0 q40 -6 62 -40 q-30 10 -62 30z" fill="url(#misirYaprak)" stroke-width="3" transform="translate(120 218) scale(1.16)"/>
+    <path d="M0 0 q-40 -6 -62 -40 q30 10 62 30z" fill="url(#misirYaprak)" stroke-width="3" transform="translate(120 162) scale(1.04)"/>
+    <path d="M0 0 q40 -6 62 -40 q-30 10 -62 30z" fill="url(#misirYaprak)" stroke-width="3" transform="translate(120 106) scale(0.92)"/>
+    <path d="M0 0 q16 -6 16 -34 q-2 -14 -12 -8 q-6 16 -4 42z" fill="url(#sari)" stroke-width="2.5" transform="translate(114 100) scale(0.92)"/>
+    <path d="M0 0 q-40 -6 -62 -40 q30 10 62 30z" fill="url(#misirYaprak)" stroke-width="3" transform="translate(120 50) scale(0.81)"/>
+    <path d="M65.0 374 q55.0 -22 110 0z" fill="url(#koyuToprak)" stroke-width="3.5"/>
+  </g>
+  </g>
+  <g opacity="0.55">
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="78" cy="52" r="28" fill="#ffffff" stroke-width="2.5"/>
+    <circle cx="120" cy="34" r="34" fill="#ffffff" stroke-width="2.5"/>
+    <circle cx="162" cy="54" r="28" fill="#ffffff" stroke-width="2.5"/>
+    <circle cx="100" cy="70" r="24" fill="#ffffff" stroke-width="2.5"/>
+    <circle cx="142" cy="72" r="24" fill="#ffffff" stroke-width="2.5"/>
+    <path d="M74 72 q46 14 92 0" fill="none" stroke="#ffffff" stroke-width="14"/>
+  </g>
+  </g>
+</svg>

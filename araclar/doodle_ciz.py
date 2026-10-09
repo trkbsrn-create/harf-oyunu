@@ -686,6 +686,11 @@ yaz("harita-karti.svg", 250, 175, "Mini harita kartı: ada ve tarla",
 ''', 2.5) +
     '''  <rect x="2" y="0" width="50" height="16" fill="#f6e27a" opacity="0.85" transform="rotate(-12 27 8)"/>
 ''', 63, 2.5)
+# 2. ada (sonbahar) için aynı kart, çimen yerine sonbahar renkleri
+with open(os.path.join(KLASOR, "harita-karti.svg"), encoding="utf-8") as f:
+    _kart = f.read()
+with open(os.path.join(KLASOR, "harita-karti2.svg"), "w", encoding="utf-8") as f:
+    f.write(_kart.replace("#c9eba7", "#f2d29a").replace("#a3d97c", "#e0b66b").replace("Mini harita kartı", "Mini harita kartı (2. ada)"))
 
 # ---- Ekran pencereleri ----
 # Çanta penceresi: 700x480, sol üst köşesi oyunda (300,120). İçinde 8 kutucuk ve çarpı.
@@ -2218,129 +2223,170 @@ doku("doku-kum.svg", 64, "#fbe8b0", capraz(64, 16, "#f3cf6a", 4, 1) + capraz(64,
 doku("doku-cimen.svg", 64, "#c9eba7", capraz(64, 16, "#b4e190", 4, -1), "Çimen taraması")
 print("tamam")
 
-# ---- TASLAK (öğretmen onayı bekliyor): 2. ada, sonbahar. Kuşbakışı tek resim; oyuna eklenmedi.
-# Tarlada mısır sapı (fasulye sırığının yerine). Sağda 3. adaya giden yarım köprü: 6 parça
-# (2 ayak, 2 halat, 2 tahta öbeği; parçalarda harf yok), başta silik.
-def _sonbahar_agac(x, y, renk, olcek=1.0):
-    return (f'    <g transform="translate({x} {y}) scale({olcek})">\n'
-            '    <path d="M-8 60 l3 -50 h10 l3 50z" fill="url(#kahve)"/>\n'
-            f'    <path d="M-40 10 q-18 -4 -10 -24 q-8 -22 16 -26 q6 -22 32 -14 q20 -14 36 6 q22 2 16 24 q14 20 -8 30 q-6 18 -30 12 q-18 14 -36 2 q-14 6 -16 -10z" fill="url(#{renk})"/>\n'
-            '    <path d="M-20 -14 q10 -10 22 -2 M8 -26 q10 -6 18 4" fill="none" stroke-width="2.5"/>\n'
-            '    </g>\n')
+# ==== 2. ada (sonbahar; öğretmen taslağı onayladı) ====
+# Zemin taraması, sonbahar ağaç tepeleri (agac-tepe.svg ile aynı biçim ve boy), çalı, yerdeki
+# süsler (yaprak, mantar, kabak, sarı ot), uçan yaprak, hayvanlar (sincap, kirpi, baykuş).
+doku("doku-sonbahar.svg", 64, "#f2d29a", capraz(64, 16, "#e6bd73", 4, -1), "Sonbahar zemini taraması")
+AGAC_TEPE_YOLU = "M32 112 q-28 -6 -18 -34 q-16 -32 18 -42 q6 -32 42 -26 q24 -24 52 2 q34 -2 30 32 q24 26 -4 46 q-2 28 -36 24 q-22 22 -50 6 q-28 10 -34 -8z"
+for ad, zemin, cizgi, tohum in [("turuncu", "#ffc58f", "#f08a3c", 301), ("kirmizi", "#ff9c8a", "#e0533d", 302),
+                                ("sari", "#ffe680", "#ffc928", 303)]:
+    yaz(f"agac-tepe-{ad}.svg", 160, 140, f"Sonbahar ağacının tepesi ({ad}); gövdesi agac-govde.svg",
+        tarama("tepe", zemin, cizgi, 35),
+        kalem('    <g transform="translate(9 8) scale(0.88)">\n'
+              f'    <path d="{AGAC_TEPE_YOLU}" fill="url(#tepe)"/>\n'
+              '    <path d="M48 70 q14 -16 32 -4 M86 56 q16 -10 28 6 M60 96 q16 -10 30 2" fill="none" stroke-width="3"/>\n'
+              '    <path d="M38 88 q-6 -12 6 -20" fill="none" stroke-width="2.5"/>\n    </g>\n'), tohum)
+yaz("cali-sonbahar.svg", 140, 90, "Sonbahar çalısı (kızıl)", tarama("kizil", "#ffb08a", "#d9653a", -35),
+    golge(70, 84, 56, 5) + kalem('''    <path d="M22 80 q-18 -2 -12 -22 q-8 -22 16 -26 q4 -22 30 -18 q14 -18 36 -4 q24 -6 28 18 q20 6 14 26 q4 26 -20 26z" fill="url(#kizil)"/>
+    <path d="M44 50 q10 -10 22 0 M76 46 q10 -8 20 4" fill="none" stroke-width="3"/>
+'''), 304)
+yaz("yaprak-yigini.svg", 70, 34, "Yerde yaprak yığını", TURUNCU,
+    kalem('''    <path d="M4 32 q6 -24 31 -26 q25 2 31 26z" fill="url(#turuncu)" stroke-width="3"/>
+    <path d="M18 20 l6 -4 M38 14 l4 6 M50 22 l6 -2" fill="none" stroke="#e0533d" stroke-width="3"/>
+''', 3), 305, 2.5)
+yaz("mantar-kucuk.svg", 36, 34, "Küçük mantar", KIRMIZI,
+    kalem('''    <path d="M14 32 v-12 h8 v12z" fill="#fff6e0" stroke-width="2.5"/>
+    <path d="M4 20 q14 -22 28 0z" fill="url(#kirmizi)" stroke-width="2.5"/>
+    <circle cx="13" cy="14" r="2" fill="#ffffff" stroke="none"/><circle cx="22" cy="12" r="2" fill="#ffffff" stroke="none"/>
+''', 2.5), 306, 2.5)
+yaz("kabak-kucuk.svg", 48, 40, "Bal kabağı", TURUNCU,
+    kalem('''    <ellipse cx="24" cy="26" rx="20" ry="13" fill="url(#turuncu)" stroke-width="3"/>
+    <path d="M15 15 q-4 11 0 22 M33 15 q4 11 0 22" fill="none" stroke-width="2"/>
+    <path d="M24 14 q2 -8 7 -10" fill="none" stroke="#5f9e3c" stroke-width="4"/>
+''', 3), 307, 2.5)
+yaz("ot-sari.svg", 44, 34, "Sararmış ot öbeği", "",
+    kalem('''    <path d="M8 32 q-4 -14 -6 -24 M16 32 q0 -16 4 -28 M24 32 q4 -14 12 -24 M32 32 q4 -8 9 -12" fill="none" stroke="#c9952f"/>
+''', 3), 308, 2.5)
+# Uçan yaprak (beyaz; oyunda sonbahar renkleriyle boyanır)
+yaz("yaprak-ucan.svg", 30, 22, "Rüzgârda uçan yaprak", "",
+    kalem('''    <path d="M3 11 q12 -14 24 0 q-12 14 -24 0z" fill="#ffffff" stroke-width="2.5"/>
+    <path d="M3 11 h22" fill="none" stroke-width="1.5"/>
+''', 2.5), 309, 2)
+yaz("sincap.svg", 70, 70, "Sincap (oturan, palamut tutuyor)", TURUNCU + KAHVE,
+    golge(32, 66, 22, 4) + kalem('''    <path d="M36 64 q30 -4 26 -36 q-2 -22 -20 -20 q12 12 2 26 q-8 12 -16 14z" fill="url(#turuncu)" stroke-width="3"/>
+    <ellipse cx="26" cy="50" rx="13" ry="15" fill="url(#turuncu)" stroke-width="3"/>
+    <circle cx="22" cy="28" r="11" fill="url(#turuncu)" stroke-width="3"/>
+    <path d="M14 20 l-3 -9 l7 5 M22 18 l1 -9 l4 7" fill="url(#turuncu)" stroke-width="2.5"/>
+    <circle cx="18" cy="27" r="2" fill="#2b2b2b" stroke="none"/><circle cx="12" cy="31" r="1.6" fill="#2b2b2b" stroke="none"/>
+    <ellipse cx="15" cy="46" rx="5" ry="6" fill="url(#kahve)" stroke-width="2.5"/><path d="M11 41 h8" fill="none" stroke-width="2.5"/>
+''', 3), 310)
+yaz("kirpi.svg", 80, 50, "Kirpi (yandan)", KAHVE,
+    golge(38, 46, 32, 4) + kalem('''    <path d="M8 42 q-4 -14 4 -20 l-2 -8 l9 4 l2 -10 l8 8 l6 -10 l5 10 l9 -6 l1 10 l9 -3 l-2 10 q8 8 0 15z" fill="url(#kahve)" stroke-width="2.5"/>
+    <path d="M56 40 q14 -2 18 4 q-8 6 -18 2z" fill="#f2d7b0" stroke-width="2.5"/>
+    <circle cx="64" cy="40" r="1.8" fill="#2b2b2b" stroke="none"/><circle cx="74" cy="43" r="2.2" fill="#2b2b2b" stroke="none"/>
+    <path d="M24 44 v4 M46 44 v4" fill="none" stroke-width="3"/>
+''', 3), 311)
+yaz("baykus.svg", 60, 70, "Baykuş (önden, dalda)", KAHVE + tarama("gogus", "#f2d7b0", "#d9b07a", -30, 6, 2.5),
+    kalem('''    <path d="M4 66 h52" fill="none" stroke="#8e6340" stroke-width="7"/>
+    <ellipse cx="30" cy="38" rx="20" ry="26" fill="url(#kahve)" stroke-width="3"/>
+    <path d="M12 18 l-4 -12 l12 8 M48 18 l4 -12 l-12 8" fill="url(#kahve)" stroke-width="2.5"/>
+    <ellipse cx="30" cy="48" rx="11" ry="13" fill="url(#gogus)" stroke-width="2"/>
+    <circle cx="22" cy="28" r="7" fill="#fff6e0" stroke-width="2.5"/><circle cx="38" cy="28" r="7" fill="#fff6e0" stroke-width="2.5"/>
+    <circle cx="22" cy="28" r="3" fill="#2b2b2b" stroke="none"/><circle cx="38" cy="28" r="3" fill="#2b2b2b" stroke="none"/>
+    <path d="M27 34 l3 6 l3 -6z" fill="#ffc928" stroke-width="2"/>
+''', 3), 312)
 
-def _yaprak(x, y, aci, renk):
-    return (f'    <path d="M0 0 q6 -8 12 0 q-6 8 -12 0z" transform="translate({x} {y}) rotate({aci})" '
-            f'fill="{renk}" stroke-width="1.5"/>\n')
+# ---- 2. ada: mısır sapı (fasulye sırığının yerine; aynı boylar ve tabanlar) ----
+MISIR_YESIL = tarama("misirYaprak", "#c9eba7", "#8fd16a", 35, 6, 3)
+yaz("misir-filiz.svg", 100, 110, "Mısır filizi: tohum bir kez sulanınca", KOYU_TOPRAK + MISIR_YESIL,
+    kalem('''    <path d="M50 100 v-60" fill="none" stroke="#6fbf4a" stroke-width="6"/>
+    <path d="M50 100 v-60" fill="none" stroke-width="2"/>
+    <path d="M50 74 q-30 -2 -40 -26 q26 2 40 20z M50 60 q30 -4 38 -30 q-26 4 -38 24z M50 42 q-6 -20 2 -36 q8 16 -2 36z" fill="url(#misirYaprak)" stroke-width="3"/>
+''' + tumsek(50, 106, 70)), 313)
+yaz("misir-fidan.svg", 130, 150, "Genç mısır sapı: tohum iki kez sulanınca", KOYU_TOPRAK + MISIR_YESIL + SARI2,
+    kalem('''    <path d="M65 140 v-120" fill="none" stroke="#6fbf4a" stroke-width="9"/>
+    <path d="M65 140 v-120" fill="none" stroke-width="2"/>
+    <path d="M65 116 q-36 -2 -52 -32 q30 4 52 22z M65 92 q36 -6 50 -38 q-30 6 -50 28z M65 66 q-30 -8 -38 -40 q24 10 38 30z M65 44 q20 -16 20 -40 q-16 16 -20 30z" fill="url(#misirYaprak)" stroke-width="3"/>
+    <path d="M70 84 q14 -6 14 -28 q-2 -12 -10 -6 q-6 14 -4 34z" fill="url(#sari)" stroke-width="2.5"/>
+''' + tumsek(65, 146, 80)), 314)
 
-def _kabak(x, y, r=16):
-    return (f'    <g transform="translate({x} {y})"><ellipse cx="0" cy="0" rx="{r}" ry="{r*0.8:.1f}" fill="url(#turuncu)"/>'
-            f'<path d="M-{r*0.45:.1f} -{r*0.7:.1f} q-4 {r*0.7:.1f} 0 {r*1.4:.1f} M{r*0.45:.1f} -{r*0.7:.1f} q4 {r*0.7:.1f} 0 {r*1.4:.1f}" fill="none" stroke-width="2"/>'
-            f'<path d="M0 -{r*0.8:.1f} q2 -8 6 -10" fill="none" stroke="#5f9e3c" stroke-width="4"/></g>\n')
 
-def _mantar(x, y):
-    return (f'    <g transform="translate({x} {y})"><path d="M-4 0 v-10 h8 v10z" fill="#fff6e0" stroke-width="2.5"/>'
-            '<path d="M-14 -10 q14 -20 28 0z" fill="url(#kirmizi)" stroke-width="2.5"/>'
-            '<circle cx="-4" cy="-15" r="2" fill="#fff" stroke="none"/><circle cx="5" cy="-13" r="2" fill="#fff" stroke="none"/></g>\n')
+def misir_sapi(boy, y_ust, yaprak_araligi):
+    # Kalın tek sap (yukarı doğru incelir), iki yana uzun yapraklar, arada sarı koçanlar
+    c = ""
+    parcalar = [(boy - 6, boy * 0.75, 18), (boy * 0.75, boy * 0.5, 15), (boy * 0.5, boy * 0.25, 12), (boy * 0.25, y_ust, 9)]
+    for y1, y2, k in parcalar:
+        c += f'    <path d="M120 {y1:.0f} V{y2:.0f}" fill="none" stroke="{KALEM}" stroke-width="{k + 5}"/>\n'
+    for y1, y2, k in parcalar:
+        c += f'    <path d="M120 {y1:.0f} V{y2:.0f}" fill="none" stroke="#6fbf4a" stroke-width="{k}"/>\n'
+    for i, y in enumerate(range(int(boy - 50), int(y_ust + 30), -yaprak_araligi)):
+        yon = 1 if i % 2 == 0 else -1
+        olcek = 0.7 + 0.8 * (y / boy)
+        c += (f'    <path d="M0 0 q{yon*40} -6 {yon*62} -40 q{-yon*30} 10 {-yon*62} 30z" fill="url(#misirYaprak)" stroke-width="3" '
+              f'transform="translate(120 {y}) scale({olcek:.2f})"/>\n')
+        if i % 3 == 1:
+            c += (f'    <path d="M0 0 q{yon*16} -6 {yon*16} -34 q-2 -14 {-yon*12} -8 q{-yon*6} 16 {-yon*4} 42z" '
+                  f'fill="url(#sari)" stroke-width="2.5" transform="translate({120 - yon*6} {y - 6}) scale({olcek:.2f})"/>\n')
+    return c
 
-def _sincap(x, y):
-    return (f'    <g transform="translate({x} {y})">'
-            '<path d="M10 0 q26 -4 22 -30 q-2 -18 -16 -16 q10 10 2 22 q-6 10 -14 12z" fill="url(#turuncu)" stroke-width="3"/>'
-            '<ellipse cx="0" cy="-8" rx="10" ry="12" fill="url(#turuncu)" stroke-width="3"/>'
-            '<circle cx="-4" cy="-24" r="8" fill="url(#turuncu)" stroke-width="3"/>'
-            '<path d="M-8 -30 l-2 -7 l5 4 M-2 -31 l1 -7 l3 5" fill="url(#turuncu)" stroke-width="2"/>'
-            '<circle cx="-7" cy="-25" r="1.6" fill="#2b2b2b" stroke="none"/>'
-            '<ellipse cx="-11" cy="-10" rx="4" ry="5" fill="url(#kahve)" stroke-width="2"/></g>\n')
 
-def _kirpi(x, y):
-    return (f'    <g transform="translate({x} {y})">'
-            '<path d="M-20 0 q-2 -10 4 -14 l-2 -6 l7 3 l2 -8 l6 6 l5 -8 l4 8 l7 -5 l1 8 l7 -2 l-2 8 q6 6 0 10z" fill="url(#kahve)" stroke-width="2.5"/>'
-            '<path d="M18 -2 q10 -2 12 4 q-6 4 -12 0z" fill="#f2d7b0" stroke-width="2.5"/>'
-            '<circle cx="24" cy="-1" r="1.5" fill="#2b2b2b" stroke="none"/><circle cx="31" cy="2" r="2" fill="#2b2b2b" stroke="none"/></g>\n')
+yaz("bulut-misir.svg", SIRIK_EN, SIRIK_BOY, "Mısır sapı: bulutların üstünde, tepesi bulutta", KOYU_TOPRAK + MISIR_YESIL + SARI2,
+    kalem(misir_sapi(SIRIK_BOY, 90, 70) + bulut +
+          '    <path d="M64 104 q56 14 112 0" fill="none" stroke="#ffffff" stroke-width="16"/>\n'
+          + tumsek(120, 774, 110), 3.5)
+    + '''  <path d="M40 20 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4z M206 30 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3z" fill="#ffe680" stroke="#2b2b2b" stroke-width="2"/>
+''', 315)
+yaz("misir-sap.svg", SIRIK_EN, KISA_BOY, "Mısır sapı: tarlada son aşama, gökyüzüne doğru solar",
+    KOYU_TOPRAK + MISIR_YESIL + SARI2 + SOLMA,
+    '  <g mask="url(#sol)">\n' + kalem(misir_sapi(KISA_BOY, 10, 56) + tumsek(120, 374, 110), 3.5) + '  </g>\n'
+    + '  <g opacity="0.55">\n' + kalem("".join(
+        f'    <circle cx="{x}" cy="{y}" r="{r}" fill="#ffffff" stroke-width="2.5"/>\n'
+        for x, y, r in [(78, 52, 28), (120, 34, 34), (162, 54, 28), (100, 70, 24), (142, 72, 24)])
+        + '    <path d="M74 72 q46 14 92 0" fill="none" stroke="#ffffff" stroke-width="14"/>\n', 2.5) + '  </g>\n', 316)
 
-def _baykus(x, y):
-    return (f'    <g transform="translate({x} {y})">'
-            '<ellipse cx="0" cy="0" rx="13" ry="16" fill="url(#kahve)" stroke-width="2.5"/>'
-            '<path d="M-12 -12 l-3 -8 l9 5 M12 -12 l3 -8 l-9 5" fill="url(#kahve)" stroke-width="2"/>'
-            '<circle cx="-5" cy="-6" r="5" fill="#fff6e0" stroke-width="2"/><circle cx="5" cy="-6" r="5" fill="#fff6e0" stroke-width="2"/>'
-            '<circle cx="-5" cy="-6" r="2" fill="#2b2b2b" stroke="none"/><circle cx="5" cy="-6" r="2" fill="#2b2b2b" stroke="none"/>'
-            '<path d="M-2 0 l2 4 l2 -4z" fill="#ffc928" stroke-width="1.5"/></g>\n')
+# ---- 2. ada: köprü (3. adaya geçmek için; adanın alt kıyısından denize uzanır) ----
+# Bütün köprü resimleri aynı 680x900 tuvalde, oyunda sol üst köşeleri (YELKENLI_X, YELKENLI_Y).
+# Üstte kumsaldaki taş baş ve altta karşı kıyı (kopru-temel.svg) hep görünür. Parçalar
+# (öğretmenin kararı; parçalarda harf yok): o, k ayaklar; u, r halatlar; ı, m tahtalar.
+KOPRU_DESEN = (TAHTA + tarama("koyuTahta", "#b07a42", "#8e6340", 80, 7, 2.5)
+               + tarama("halat", "#f2d7b0", "#c99a63", 45, 5, 2.5))
 
-def _taslak_ada2():
-    p = []
-    # ada
-    p.append('    <path d="M90 360 q-20 -170 160 -230 q170 -70 380 -40 q200 -40 360 30 q110 60 100 180 q20 140 -110 210 '
-             'q-190 90 -420 70 q-220 20 -360 -60 q-120 -60 -110 -160z" fill="url(#sonbaharCimen)"/>\n')
-    # patika
-    p.append('    <path d="M300 560 q60 -80 180 -90 q140 -10 220 -60 q80 -40 200 -40 q60 0 110 -10" fill="none" stroke="#e3c08f" stroke-width="26" stroke-linecap="round"/>\n')
-    # tarla (6 kare, kabak/mısır yerleri)
-    p.append('    <path d="M380 380 h300 v60 h-300z" fill="url(#toprak)"/>\n')
-    for i in range(6):
-        p.append(f'    <path d="M{385+i*50} 386 h40 v48 h-40z" fill="#9a6c43" stroke-width="2.5"/>\n')
-    p.append('    <path d="M372 372 h316 M372 448 h316 M372 372 v76 M688 372 v76" fill="none" stroke="#c98f4f" stroke-width="5"/>\n')
-    # mısır sapları (öğretmenin seçimi): 1. karede bulutlara uzanan sap (yukarı doğru solar),
-    # 2. karede genç sap, 3. karede filiz
-    p.append('    <path d="M405 412 v-300" fill="none" stroke="url(#misirSolma)" stroke-width="9"/>\n')
-    for k, (y, yon) in enumerate([(380, 1), (340, -1), (300, 1), (255, -1), (210, 1)]):
-        op = 1 - k * 0.18
-        p.append(f'    <path d="M405 {y} q{yon*26} -6 {yon*34} -30 q{-yon*20} 8 {-yon*34} 18z" fill="url(#yesil)" opacity="{op:.2f}" stroke-width="2.5"/>\n')
-    p.append('    <path d="M408 330 q14 -6 14 -30 q-2 -12 -10 -6 q-6 14 -4 36z" fill="url(#sari)" stroke-width="2.5"/>\n')
-    p.append('    <path d="M455 412 v-70" fill="none" stroke="#8fd16a" stroke-width="7"/>\n')
-    p.append('    <path d="M455 392 q18 -4 24 -22 q-14 4 -24 12z M455 370 q-18 -4 -22 -22 q12 4 22 12z" fill="url(#yesil)" stroke-width="2.5"/>\n')
-    p.append('    <path d="M505 412 v-20 M505 400 q10 -2 12 -12 M505 404 q-10 -2 -12 -12" fill="none" stroke="#5f9e3c" stroke-width="4"/>\n')
-    # ağaçlar (turuncu, kırmızı, sarı)
-    renkler = ["turuncu", "kirmizi", "sari", "turuncu", "kirmizi", "sari", "turuncu", "sari", "kirmizi", "turuncu"]
-    yerler = [(180, 260), (260, 190), (380, 160), (520, 140), (660, 150), (800, 170), (930, 230), (150, 420), (850, 330), (980, 400)]
-    for (x, y), r in zip(yerler, renkler):
-        p.append(_sonbahar_agac(x, y, r, 0.9))
-    # düşen ve yerdeki yapraklar
-    yr = ["#f08a3c", "#e0533d", "#ffc928", "#c56a2a"]
-    import random
-    rnd = random.Random(5)
-    for k in range(70):
-        x = rnd.randint(170, 1000); y = rnd.randint(230, 540)
-        p.append(_yaprak(x, y, rnd.randint(0, 360), yr[k % 4]))
-    # yaprak yığınları
-    for x, y in [(300, 470), (760, 500), (560, 540)]:
-        p.append(f'    <path d="M{x-34} {y} q4 -22 34 -24 q30 2 34 24z" fill="url(#turuncu)" stroke-width="3"/>\n')
-    # kabaklar, mantarlar, saman balyası
-    for x, y, r in [(220, 520, 18), (250, 540, 13), (720, 470, 16), (900, 470, 20), (930, 495, 13)]:
-        p.append(_kabak(x, y, r))
-    for x, y in [(330, 300), (345, 310), (620, 330), (1000, 470), (470, 520)]:
-        p.append(_mantar(x, y))
-    p.append('    <path d="M600 470 h70 v36 h-70z" fill="url(#sari)" stroke-width="3"/><path d="M600 482 h70 M600 494 h70" fill="none" stroke-width="2"/>\n')
-    # sandıklar
-    for x, y in [(240, 330), (700, 250), (900, 560)]:
-        p.append(f'    <g transform="translate({x} {y})"><path d="M-18 -10 h36 v22 h-36z" fill="url(#kahve)" stroke-width="3"/>'
-                 '<path d="M-18 -10 q18 -14 36 0" fill="url(#kahve)" stroke-width="3"/><path d="M-3 -2 h6 v6 h-6z" fill="#ffc928" stroke-width="2"/></g>\n')
-    # hayvanlar
-    p.append(_sincap(560, 250))
-    p.append(_kirpi(330, 495))
-    p.append(_baykus(668, 112))
-    # göçmen kuşlar (V)
-    for i in range(5):
-        dx = (i - 2) * 26; dy = abs(i - 2) * 14
-        p.append(f'    <path d="M{620+dx} {50+dy} q6 -6 12 0 q6 -6 12 0" fill="none" stroke-width="2.5"/>\n')
-    # 3. ada (uzakta, silik)
-    p.append('    <path d="M1180 210 q40 -60 100 -50 v130 q-60 10 -100 -80z" fill="#eeeeee" stroke="#8a8a8a" stroke-dasharray="12 8"/>\n')
-    # yarım köprü: kıyıdan 3. adaya. 6 parça (2 ayak, 2 halat, 2 tahta öbeği; harf yazılmaz),
-    # başta hepsi silik (kesik çizgili)
-    silik = 'fill="#f2d7b0" fill-opacity="0.4" stroke="#8a8a8a" stroke-dasharray="6 5" stroke-width="2.5"'
-    for x, y in [(1078, 318), (1150, 280)]:  # ayaklar
-        p.append(f'    <path d="M{x-7} {y-14} h14 v58 h-14z" {silik}/>\n')
-    for k in range(2):  # tahta öbekleri (her biri 4 tahta)
-        for t in range(4):
-            x = 1062 + (k * 4 + t) * 17; y = 322 - (k * 4 + t) * 9
-            p.append(f'    <path d="M{x} {y-14} l15 -8 v20 l-15 8z" {silik}/>\n')
-    for dy in (-30, -4):  # halatlar (alt kenar ve üst korkuluk)
-        p.append(f'    <path d="M1062 {300+dy} q60 -10 136 -72" fill="none" stroke="#8a8a8a" stroke-width="3" stroke-dasharray="8 6"/>\n')
-    # su tesisi yerine iskele (aynı yerde)
-    p.append('    <path d="M600 640 v70 h24 v-70" fill="url(#tahta)" stroke-width="3"/>\n')
-    # karakter başlangıç noktası (küçük yıldız)
-    p.append('    <path d="M300 560 l4 9 l10 1 l-8 6 l3 10 l-9 -6 l-9 6 l3 -10 l-8 -6 l10 -1z" fill="#ffe680" stroke-width="2"/>\n')
-    return "".join(p)
 
-yaz("taslak-ada2.svg", 1280, 720, "TASLAK: 2. ada (sonbahar), kuşbakışı; yarım köprü 3. adaya",
-    SU + tarama("sonbaharCimen", "#f2d29a", "#e0b66b", 35, 8, 3) + TOPRAK + TAHTA + TURUNCU + KIRMIZI + SARI2 + KAHVE
-    + YESIL2 + '    <linearGradient id="misirSolma" x1="0" y1="412" x2="0" y2="112" gradientUnits="userSpaceOnUse">'
-    '<stop offset="0" stop-color="#8fd16a"/><stop offset="1" stop-color="#8fd16a" stop-opacity="0"/></linearGradient>\n',
-    '  <rect width="1280" height="720" fill="url(#su)"/>\n' + kalem(_taslak_ada2(), 3.5), 300)
+def kopru_tahtalari(y1, y2):
+    return "".join(f"M262 {y} h116 v16 h-116z " for y in range(y1, y2, 24))
+
+
+KOPRU_PARCALARI = [
+    ("ayak1", "M232 380 h22 v110 h-22z M386 380 h22 v110 h-22z", "koyuTahta"),
+    ("ayak2", "M232 610 h22 v110 h-22z M386 610 h22 v110 h-22z", "koyuTahta"),
+    ("halat1", "M243 230 q-14 95 0 160 q-14 115 0 230 q-14 125 0 240 v6 h-6 v-6 q-14 -125 0 -240 q-14 -115 0 -230 q-14 -65 0 -160z", "halat"),
+    ("halat2", "M397 230 q14 95 0 160 q14 115 0 230 q14 125 0 240 v6 h6 v-6 q14 -125 0 -240 q14 -115 0 -230 q14 -65 0 -160z", "halat"),
+    ("tahta1", kopru_tahtalari(240, 550), "tahta"),
+    ("tahta2", kopru_tahtalari(552, 860), "tahta"),
+]
+KOPRU_KUTU = {"ayak1": (232, 380, 176, 110), "ayak2": (232, 610, 176, 110), "halat1": (229, 230, 20, 636),
+              "halat2": (391, 230, 20, 636), "tahta1": (262, 240, 116, 310), "tahta2": (262, 552, 116, 310)}
+for ad, yol, desen in KOPRU_PARCALARI:
+    yaz(f"kopru-{ad}.svg", 680, 900, f"Köprü parçası: {ad}", KOPRU_DESEN,
+        kalem(f'    <path d="{yol}" fill="url(#{desen})"/>\n'), 320)
+    yaz(f"kopru-{ad}-silik.svg", 680, 900, f"Köprü parçasının silik yeri: {ad}", "",
+        f'  <path d="{yol}" fill="#ffffff" fill-opacity="0.25" stroke="#8a8a8a" stroke-width="3.5" '
+        'stroke-dasharray="10 8" stroke-linecap="round" stroke-linejoin="round"/>\n', 320)
+    x, y, en, boy = KOPRU_KUTU[ad]
+    olcek = 96 / max(en, boy)
+    tx = 60 - (x + en / 2) * olcek
+    ty = 60 - (y + boy / 2) * olcek
+    yaz(f"kopru-{ad}-simge.svg", 120, 120, f"Köprü parçasının çanta simgesi: {ad}", KOPRU_DESEN,
+        kalem(f'    <path d="{yol}" fill="url(#{desen})" transform="translate({tx:.1f} {ty:.1f}) scale({olcek:.3f})" '
+              'vector-effect="non-scaling-stroke"/>\n', 3.5), 321, 2.5)
+# Temel: kumsalda taş baş (üstte), denizde karşı kıyı (altta, 3. ada)
+yaz("kopru-temel.svg", 680, 900, "Köprünün iki ucu: kumsaldaki taş baş, karşıda 3. adanın kıyısı",
+    tarama("tas", "#d6d3cc", "#a9a59c", 25, 7, 3) + tarama("karsiKum", "#fbe8b0", "#f3cf6a", -35, 8, 3)
+    + tarama("karsiCimen", "#d8f0c0", "#bfe39f", 35, 8, 3),
+    kalem('''    <path d="M220 170 h200 l14 70 h-228z" fill="url(#tas)"/>
+    <path d="M240 190 h40 M300 205 h50 M360 190 h40 M250 222 h60" fill="none" stroke-width="2.5"/>
+    <path d="M0 880 q120 -40 240 -24 q80 10 160 -6 q140 -26 280 10 v40 h-680z" fill="url(#karsiKum)"/>
+    <path d="M0 900 q140 -20 260 -12 q120 6 220 -8 q110 -12 200 4 v16z" fill="url(#karsiCimen)" stroke-width="3"/>
+    <path d="M226 852 h188 l-10 30 h-168z" fill="url(#tas)"/>
+''', 4), 322)
+# 2. adanın sonu: adalar haritası (1. ada yeşil, 2. ada sonbahar, 3. ada kesik çizgili)
+yaz("hikaye-harita2.svg", 1280, 720, "Final 2: adalar haritası (1. yeşil, 2. sonbahar, 3. kesik çizgili)",
+    tarama("kagit", "#fbf4e2", "#f1e6c8", 30, 8, 3) + tarama("cimen", "#d8f0c0", "#bfe39f", 35, 8, 3)
+    + tarama("sonbahar", "#f2d29a", "#e0b66b", 35, 8, 3) + SU,
+    '  <rect width="1280" height="720" fill="url(#kagit)"/>\n'
+    '  <rect x="60" y="60" width="1160" height="600" rx="30" fill="url(#su)" opacity="0.6"/>\n'
+    + kalem('    <path d="M110 440 q90 -120 230 -16 q-90 96 -230 16z" fill="url(#cimen)"/>\n'
+            '    <path d="M470 330 q130 -150 300 -16 q-130 110 -300 16z" fill="url(#sonbahar)"/>\n'
+            '    <path d="M900 420 q130 -150 290 -10 q-140 106 -290 10z" fill="#eeeeee" stroke="#8a8a8a" stroke-dasharray="14 10"/>\n'
+            '    <path d="M330 420 q80 -80 150 -90" fill="none" stroke="#9a8f7a" stroke-dasharray="10 10"/>\n'
+            '    <path d="M770 330 q90 -10 140 70" fill="none" stroke="#e0533d" stroke-dasharray="16 12"/>\n', 4), 323)
