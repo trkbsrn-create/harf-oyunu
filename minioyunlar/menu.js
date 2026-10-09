@@ -1,11 +1,13 @@
 // Mini oyunlar menüsü: karşılama ekranındaki "Mini Games" düğmesiyle açılır.
-// Üstte harf seçici (ilk harf grubu), altında her mini oyunun kartı. Hazır olan oyunun
-// kartına dokununca o oyun seçilen harfle açılır; hazır olmayanlarda "Yakında" yazar.
+// Üstte harf grupları, altında seçilen grubun harfleri, sonra her mini oyunun kartı. Hazır olan
+// oyunun kartına dokununca seviye sorulur, oyun seçilen harfle açılır; hazır olmayanlarda "Yakında".
 // Mini oyunları ayrı ayrı geliştirip denemek için. Öğretmenin isteği: kartlar etikete göre
-// süzülebilir (seviye seçicinin sağında): "harf" yalnızca harf etiketliler, "hece" yalnızca hece
+// süzülebilir (harflerin sağında): "harf" yalnızca harf etiketliler, "hece" yalnızca hece
 // etiketliler, ikisi birden seçiliyse yalnızca iki etiketi de olanlar, "hepsi" bütün oyunlar.
 
 const MENU_SAYFA_KART = 8;
+// Mini oyunlarda hazır olan son harf grubu (sonrakiler menüde silik, "Yakında")
+const MENU_HAZIR_GRUP = 2;
 // Etiket rozetlerinin renkleri (harf: kırmızımsı, hece: sarı; Birleştir Büyüt taşlarıyla aynı)
 const ETIKET_RENKLERI = { harf: 0xff9c8a, hece: 0xffe680 };
 
@@ -34,47 +36,35 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
       this.scene.start("KarsilamaSahnesi");
     });
 
-    // Harf seçici
-    // İki harf grubu (a n e t i l | o k u r ı m); gruplar arasında küçük boşluk
-    const harfler = HARFLER.filter((h) => h.grup <= 2);
-    if (!this.secilenHarf) this.secilenHarf = harfler[0].kucuk;
+    // Harf grubu seçici (öğretmenin isteği): 1. grup ... 5. grup. Gruba dokununca altında o grubun
+    // harfleri çıkar. Henüz hazır olmayan gruplar ve harfleri silik, "Yakında" yazılı.
+    this.seviyePaneli = null;
+    if (!this.secilenHarf) this.secilenHarf = HARFLER[0].kucuk;
+    if (!this.gosterilenGrup) this.gosterilenGrup = HARFLER.find((h) => h.kucuk === this.secilenHarf).grup;
     this.harfCizimi = this.add.graphics();
-    this.harfDugmeleri = harfler.map((h, i) => {
-      const x = 640 + (i - 5.5) * 88 + (h.grup === 1 ? -18 : 18);
-      const y = 150;
-      const yazi = this.add.text(x, y, h.kucuk, {
-        fontFamily: "Andika", fontSize: "48px", color: "#ffffff",
-        stroke: "#3b2a1a", strokeThickness: 8, padding: { x: 4, y: 4 },
-      }).setDepth(1);
-      boyaliOrtala(titret(yazi, 1.5));
-      const alan = this.add.circle(x, y, 44).setInteractive({ useHandCursor: true });
+    const gruplar = [...new Set(HARFLER.map((h) => h.grup))];
+    this.grupDugmeleri = gruplar.map((grup, i) => {
+      const x = 640 + (i - (gruplar.length - 1) / 2) * 200;
+      const y = 140;
+      const hazir = grup <= MENU_HAZIR_GRUP;
+      const kap = this.add.container(x, y).setDepth(1);
+      kap.add(doodleYazi(this, 0, hazir ? -2 : -10, `${grup}. grup`, 28).setOrigin(0.5));
+      if (!hazir) {
+        kap.add(this.add.text(0, 16, "Yakında", { fontFamily: "Andika", fontSize: "18px", color: "#6b6b6b" }).setOrigin(0.5));
+      }
+      const alan = this.add.rectangle(x, y, 176, 72).setInteractive({ useHandCursor: true });
       alan.on("pointerdown", () => {
+        if (this.gosterilenGrup === grup) return;
         Sesler.ac();
         Sesler.nota(660, 0, 0.08, 0.12);
-        this.secilenHarf = h.kucuk;
-        this.harfleriCiz();
-        this.sayfayiKur(); // bazı oyunlar bu harfte oynanamaz (miniOyunOlur)
-      });
-      return { harf: h.kucuk, x, y };
-    });
-    // Seviye seçici (1, 2, 3)
-    if (!this.secilenSeviye) this.secilenSeviye = 1;
-    doodleYazi(this, 470, 232, "Seviye:", 30).setOrigin(0.5);
-    this.seviyeDugmeleri = [1, 2, 3].map((seviye, i) => {
-      const x = 580 + i * 80;
-      const y = 232;
-      this.add.text(x, y, String(seviye), {
-        fontFamily: "Andika", fontSize: "34px", color: "#2b2b2b",
-      }).setOrigin(0.5).setDepth(1);
-      const alan = this.add.circle(x, y, 40).setInteractive({ useHandCursor: true });
-      alan.on("pointerdown", () => {
-        Sesler.ac();
-        Sesler.nota(660, 0, 0.08, 0.12);
-        this.secilenSeviye = seviye;
+        this.gosterilenGrup = grup;
+        this.harfSirasiKur();
         this.harfleriCiz();
       });
-      return { seviye, x, y };
+      return { grup, x, y, hazir };
     });
+    this.harfSirasi = this.add.container(0, 0).setDepth(1);
+    this.harfSirasiKur();
     // Etiket süzgeci: hepsi / harf / hece (harf ve hece birlikte seçilebilir; hiçbiri = hepsi)
     if (!this.secilenEtiketler) this.secilenEtiketler = [];
     this.etiketDugmeleri = ["hepsi", "harf", "hece"].map((etiket, i) => {
@@ -112,6 +102,7 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
       fontFamily: "Andika", fontSize: "22px", color: "#6b6b6b",
     }).setOrigin(0.5);
     this.input.on("pointerup", (p) => {
+      if (this.seviyePaneli) return;
       const dx = p.upX - p.downX;
       if (Math.abs(dx) > 90 && Math.abs(p.upY - p.downY) < 80 && p.downY > 290) this.sayfaDegistir(dx < 0 ? 1 : -1);
     });
@@ -187,7 +178,7 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
       });
       if (hazir && olur) {
         kart.setInteractive({ useHandCursor: true });
-        kart.on("pointerdown", () => this.oyunuAc(oyun.ad));
+        kart.on("pointerdown", () => this.seviyeSor(oyun));
       } else if (hazir) {
         kart.add(this.add.text(-3, 28, "Bu harfte yok", {
           fontFamily: "Andika", fontSize: "22px", color: "#8a7f6a",
@@ -211,23 +202,58 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
     this.sayfaYazisi.setText(`${this.sayfa + 1} / ${this.sayfaSayisi}`);
   }
 
-  // Seçilen harfin dairesi sarı, öbürleri soluk mavi
+  // Gösterilen grubun harfleri (ikinci sıra, solda). Hazır olmayan grupta silik, dokunulmaz.
+  harfSirasiKur() {
+    this.harfSirasi.removeAll(true);
+    const hazir = this.gosterilenGrup <= MENU_HAZIR_GRUP;
+    const harfler = HARFLER.filter((h) => h.grup === this.gosterilenGrup);
+    this.harfDugmeleri = harfler.map((h, i) => {
+      const x = 150 + i * 88;
+      const y = 232;
+      const yazi = this.add.text(x, y, h.kucuk, {
+        fontFamily: "Andika", fontSize: "48px", color: "#ffffff",
+        stroke: "#3b2a1a", strokeThickness: 8, padding: { x: 4, y: 4 },
+      }).setAlpha(hazir ? 1 : 0.4);
+      boyaliOrtala(titret(yazi, 1.5));
+      this.harfSirasi.add(yazi);
+      if (hazir) {
+        const alan = this.add.circle(x, y, 44).setInteractive({ useHandCursor: true });
+        alan.on("pointerdown", () => {
+          Sesler.ac();
+          Sesler.nota(660, 0, 0.08, 0.12);
+          this.secilenHarf = h.kucuk;
+          this.harfleriCiz();
+          this.sayfayiKur(); // bazı oyunlar bu harfte oynanamaz (miniOyunOlur)
+        });
+        this.harfSirasi.add(alan);
+      }
+      return { harf: h.kucuk, x, y, hazir };
+    });
+    if (!hazir) {
+      const x = 150 + harfler.length * 88;
+      this.harfSirasi.add(this.add.text(x, 232, "Yakında", {
+        fontFamily: "Andika", fontSize: "26px", color: "#9a8f7a",
+      }).setOrigin(0, 0.5));
+    }
+  }
+
+  // Seçilen grup ve harf sarı, öbürleri soluk mavi; hazır olmayanlar silik
   harfleriCiz() {
     const g = this.harfCizimi;
     g.clear();
+    for (const d of this.grupDugmeleri) {
+      const secili = d.grup === this.gosterilenGrup;
+      g.fillStyle(secili ? 0xffe680 : 0xc9ecff, d.hazir ? 1 : 0.4);
+      g.fillRoundedRect(d.x - 80, d.y - 30, 160, 60, 24);
+      g.lineStyle(secili ? 6 : 4, 0x2b2b2b, d.hazir ? 1 : 0.35);
+      g.strokeRoundedRect(d.x - 80, d.y - 30, 160, 60, 24);
+    }
     for (const d of this.harfDugmeleri) {
       const secili = d.harf === this.secilenHarf;
-      g.fillStyle(secili ? 0xffe680 : 0xc9ecff, 1);
+      g.fillStyle(secili ? 0xffe680 : 0xc9ecff, d.hazir ? 1 : 0.4);
       g.fillCircle(d.x, d.y, 38);
-      g.lineStyle(secili ? 6 : 4, 0x2b2b2b, 1);
+      g.lineStyle(secili ? 6 : 4, 0x2b2b2b, d.hazir ? 1 : 0.35);
       g.strokeCircle(d.x, d.y, 38);
-    }
-    for (const d of this.seviyeDugmeleri || []) {
-      const secili = d.seviye === this.secilenSeviye;
-      g.fillStyle(secili ? 0xffe680 : 0xffffff, 1);
-      g.fillCircle(d.x, d.y, 28);
-      g.lineStyle(secili ? 5 : 3, 0x2b2b2b, 1);
-      g.strokeCircle(d.x, d.y, 28);
     }
     // Etiket süzgeci: seçili olan kendi renginde ve kalın çizgili, öbürleri beyaz
     for (const d of this.etiketDugmeleri || []) {
@@ -237,6 +263,52 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
       g.lineStyle(secili ? 5 : 3, 0x2b2b2b, 1);
       g.strokeRoundedRect(d.x - 42, d.y - 20, 84, 40, 20);
     }
+  }
+
+  // Oyun kartına dokununca en son seviye sorulur (öğretmenin isteği): 1, 2, 3 ya da Vazgeç
+  seviyeSor(oyun) {
+    Sesler.ac();
+    Sesler.nota(660, 0, 0.08, 0.12);
+    if (this.seviyePaneli) this.seviyePaneli.destroy();
+    const perde = this.add.rectangle(640, 360, 1280, 720, 0x2b2b2b, 0.35).setInteractive();
+    const g = this.add.graphics();
+    g.fillStyle(0xfbf7ec, 1);
+    g.fillRoundedRect(-300, -170, 600, 340, 30);
+    g.lineStyle(5, 0x2b2b2b, 1);
+    g.strokeRoundedRect(-300, -170, 600, 340, 30);
+    const panel = this.add.container(640, 360, [g,
+      doodleYazi(this, 0, -120, oyun.baslik, 34, "mavi").setOrigin(0.5),
+      doodleYazi(this, 0, -62, "Seviye seç", 30).setOrigin(0.5)]);
+    [1, 2, 3].forEach((seviye, i) => {
+      const x = (i - 1) * 150;
+      const d = this.add.graphics();
+      d.fillStyle(seviye === this.secilenSeviye ? 0xffe680 : 0xc9ecff, 1);
+      d.fillCircle(x, 30, 52);
+      d.lineStyle(5, 0x2b2b2b, 1);
+      d.strokeCircle(x, 30, 52);
+      const alan = this.add.circle(x, 30, 56).setInteractive({ useHandCursor: true });
+      alan.on("pointerdown", () => {
+        this.secilenSeviye = seviye;
+        this.oyunuAc(oyun.ad);
+      });
+      panel.add([d, this.add.text(x, 30, String(seviye), {
+        fontFamily: "Andika", fontSize: "48px", color: "#2b2b2b",
+      }).setOrigin(0.5), alan]);
+    });
+    const vazgec = this.add.text(0, 128, "Vazgeç", {
+      fontFamily: "Andika", fontSize: "26px", color: "#6b6b6b", padding: { x: 20, y: 8 },
+    }).setOrigin(0.5).setInteractive({ useHandCursor: true });
+    panel.add(vazgec);
+    this.seviyePaneli = this.add.container(0, 0, [perde, panel]).setDepth(2000);
+    const kapat = () => {
+      Sesler.nota(560, 0, 0.08, 0.1);
+      this.seviyePaneli.destroy();
+      this.seviyePaneli = null;
+    };
+    vazgec.on("pointerdown", kapat);
+    perde.on("pointerdown", kapat);
+    panel.setScale(0.8);
+    this.tweens.add({ targets: panel, scale: 1, duration: 180, ease: "Back.Out" });
   }
 
   oyunuAc(ad) {

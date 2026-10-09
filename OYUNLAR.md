@@ -30,7 +30,8 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   Phaser sahnesi; `ortak.js`'deki `miniOyunKaydet(ad, sınıf)` ile kaydolur, `index.html`'e
   betiği eklenir. Sahne `{ harf, seviye, donus }` bilgisiyle açılır. `PLANLANAN_OYUNLAR`
   menüdeki sırayı tutar. `menu.js`: karşılama ekranındaki "Mini Games" düğmesiyle açılan
-  deneme menüsü (harf seçici + oyun kartları; hazır olmayanlarda "Yakında").
+  deneme menüsü (harf grupları → grubun harfleri → oyun kartı → seviye sorusu; hazır olmayan grup, harf ve
+  oyunlar silik, "Yakında").
   Öğretmenin kararları: mini oyunlarda kaybetmek mümkün (canlar biterse parça yok, "Bir
   daha dene"); her damla 3 parça, her kazanılan mini oyun 1 parça verir; harfler ve
   heceler sesli okunur (`Sesler.soyle`: seslendirilmiş dosya, yoksa tarayıcının Türkçe sesi); mikrofonlu mini
