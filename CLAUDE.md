@@ -20,8 +20,9 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
 - `gorseller/` kendi SVG'lerimiz, `araclar/doodle_ciz.py` ile üretilir (görsel değişikliği betikte yapılır).
 - `araclar/dene.js` mini oyun deneme aracı (aşağıda "Test").
 - Öğretmen sayfaları: `mikrofon.html`, `kayit.html`, `dinle.html`.
-- Phaser 3.90.0 jsDelivr'den (sürüm değiştirilmez). Yayın: Cloudflare Workers (harfavcisi.net; ana sürüme eklenince
-  kendiliğinden yüklenir, ayar `wrangler.jsonc` + `.assetsignore`). Eski GitHub Pages adresi de duruyor.
+- Phaser 3.90.0 jsDelivr'den (sürüm değiştirilmez). Yayın: Cloudflare Workers (harfavcisi.net; `main`e eklenince
+  kendiliğinden yüklenir, ayar `wrangler.jsonc` + `.assetsignore`). Deneme sitesi: GitHub Pages
+  (trkbsrn-create.github.io/harf-oyunu, `gelistirme` dalından).
 
 ## Mini oyunların ortak kuralları (öğretmenin kararları)
 - Her oyunda 3 seviye; mini oyunlarda kaybetmek mümkün (3 can). Bitişte 1–3 yıldız.
@@ -52,6 +53,12 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
 - Her güncellemede sürüm numarasını artır: `oyun.js`'deki `SURUM` ve `index.html`'deki
   betik eklerindeki `?s=` sayısı, o güncellemenin çekme isteği numarası olsun. Sürüm,
   karşılama ekranının sağ üstünde görünür; öğretmen son güncellemenin geldiğini buradan anlar.
+- **İki site (öğretmenin kararı; oyunu 20-30 aile oynuyor):** harfavcisi.net canlı sitedir (`main`).
+  Bütün yeni işler `gelistirme` dalına yapılır: dal `origin/gelistirme`'den açılır, çekme isteği
+  `gelistirme`'ye açılıp birleştirilir; öğretmen deneme sitesinde (trkbsrn-create.github.io/harf-oyunu)
+  görür. Öğretmen "siteye güncelle / yayınla" deyince `gelistirme` → `main` çekme isteği açılıp
+  birleştirilir. Öğretmenin açık onayı olmadan `main`e hiçbir şey birleştirme (acil hata düzeltmesi de
+  önce sorulur). Canlıda çocukların profil ve kayıtları var: kayıt biçimi değişirse eski kayıtlar bozulmasın.
 - GitHub işlerini (kaydetme, gönderme, çekme isteği açma, ana sürüme ekleme/merge)
   Claude yapar. Kullanıcıdan GitHub'da düğmeye basmasını isteme; bu terimleri
   kullanıcıya açıklamak gerekirse sade Türkçe kullan.
