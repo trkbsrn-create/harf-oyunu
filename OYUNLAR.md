@@ -21,8 +21,14 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   `oyunKaydi`): çanta, tarla (harf, büyüme aşaması), takılan yelkenli parçaları, kazanılan damlalar,
   oynanan oyunlar, rehber, çocuğun yeri; açılan sandıklar ve variller bunlardan çıkarılır (`durumuYukle`).
   Karşılama ekranının sol altında öğretmenin deneme düğmesi "God mode" var (yazısız küçük daire, şifreli; öğretmen
-  bu adla istedi): oyun bütün sandıklar açılmış, altı harf tarlada fasulye sırığına
-  dönüşmüş ve altı yelkenli parçası çantada olarak başlar (`hepsiniAc`).
+  bu adla istedi): şifreden sonra seçim paneli (`tanriSecenekleri`): Hikâye, Mini Games; 1. ve 2. ada için
+  Baştan / Tohumlar çantada / Sırıklar (mısır sapları) büyümüş (`hepsiniAc`) / Yelkenli (köprü) tamam /
+  Yolculuk (köprüden geçiş) (`tanriAsamasi`, `tanriFinal`).
+- 2. ada (sonbahar, `ADALAR[2]`): sonbahar zemini (doku-sonbahar), turuncu/kırmızı/sarı ağaçlar, kızıl çalı,
+  yaprak yığını, mantar, kabak, sarı ot; uçan yapraklar; sincap (zıplar), kirpi (gidip gelir), ağaçta baykuş.
+  Tarlada mısır sapı (misir-filiz/fidan/sap, bulutta bulut-misir). Yelkenlinin yerinde köprü (680x900 tuval,
+  kopru-temel + kopru-<parça>; o, k ayak; u, r halat; ı, m tahta; harf yuvarlağı yok); "Köprüden geç" →
+  `FinalSahnesi` (`kopruFinali`: harita, "3. ada yakında"). 1. adanın finalinde "2. adaya git" düğmesi.
   Yazılar da doodle: `doodleYazi` (başlık, düğme, pencere yazıları: boya kalemi taraması,
   kalem çerçevesi, titrek kenar) ve `titret` (öğretilen harfler: biçim aynı, yalnızca
   kenar titrer). Harf biçimi her zaman aynı yazı tipidir (kodda adı hep "Andika"; aşağıya bkz.).

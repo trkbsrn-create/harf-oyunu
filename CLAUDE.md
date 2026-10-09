@@ -8,13 +8,15 @@ Oyunların ayrıntılı tarifi `OYUNLAR.md`'de: yalnızca üzerinde çalışıla
 tarayıcı oyunu ("Harf Avcısı"). Çocuk adaya düşmüştür: sandıkta harf tohumu bulur, tarlaya eker,
 mini oyunlarla damla kazanıp sular, fasulye sırığından bulutlara çıkar, yelkenli parçasını alır;
 altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik yalnızca 1. ada.
-Mini oyunlar 2. harf grubuyla (o k u r ı m; kelimeleri otobüs, kedi, uçak, robot, ıspanak, maymun) da
-oynanır (deneme menüsü); 2. adanın hikâyesi sonra yapılacak.
+2. ada sonbahar adasıdır (o k u r ı m; kelimeleri otobüs, kedi, uçak, robot, ıspanak, maymun): aynı akış,
+fasulye sırığı yerine mısır sapı, yelkenli yerine köprü (o, k ayak; u, r halat; ı, m tahta; parçalarda harf
+yok); köprü bitince "3. ada yakında". Adalar `AdaSahnesi`nde `ADALAR` ayarıyla (`veri.ada`, kayıtta `ada`).
 
 ## Dosya rehberi (ayrıntı: OYUNLAR.md)
 - `index.html` ana sayfa (derleme yok; telefon ayarları, yazı tipi yükleme `yaziTipiHazir`, dönünce
   yeniden yerleştirme). Uygulama olarak ekleme: `manifest.webmanifest`, `sw.js` (önbellek yok), `simge/`.
-- `oyun.js` ana oyun sahneleri (karşılama, hikâye, ada, bulut, final), `SURUM`.
+- `oyun.js` ana oyun sahneleri (karşılama, hikâye, ada, bulut, final), `SURUM`. God mode (şifreli) bir
+  seçim paneli açar: hikâye, Mini Games ya da 1./2. adanın bir aşaması (`tanriSecenekleri`, `tanriAsamasi`).
 - `minioyunlar/<ad>/oyun.js` her mini oyun; `ortak.js` ortak sınıf `MiniOyunSahnesi`, `PLANLANAN_OYUNLAR`,
   hece/kelime yardımcıları; `menu.js` deneme menüsü; `lambalar.js` Oyun Lambaları (çarkın yerine).
 - `profil.js` profil (hayvan resmi + takma ad; ilk ekranda "Profil oluştur" → `ProfilPaneli`), istatistik, karne (`KarneSahnesi`).
@@ -200,7 +202,8 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - iPhone'da efekt sesi düzeltmesinin (`iosSesiniAc`) öğretmenden onayı bekleniyor.
 - Bulut bölgelerinin içeriği; bilmeceler ("Hızlı koşar, yeleleri var." → at; "Türk bayrağında
   beni görürler, kırmızıyla eş derler." → al) nerede kullanılacak, sonra konuşulacak.
-- 2. harf grubu (öğretmenle konuşulan sıra): 3. seviyede dört harfli heceler, bütün oyunların kontrolü, yeni seslerin kaydı; sonra 2. adanın hikâyesi.
+- 2. harf grubu: 3. seviyede dört harfli heceler, yeni seslerin kaydı (kayit.html "2. ada"); bulut bölgeleri.
+- 3. ada (köprünün karşısı) henüz yok.
 - Kalan harf grupları; yeni gruplarla 4-5 heceli kelimeler (Elektrik Devresi).
 - Peri rehber (öğretmenin fikri) tamam: tanışma, anlatım, görev düğmesi, omuzdaki peri, mini oyun
   yönergeleri. Perinin adı yok (sorulabilir). Yeni mini oyuna `YONERGELER`'de yönerge yazılır.

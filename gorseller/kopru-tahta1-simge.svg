@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+  <!-- Köprü parçasının çanta simgesi: tahta1 (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="321" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="tahta" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(80)">
+      <rect width="7" height="7" fill="#e3b77e"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#c98f4f" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="koyuTahta" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(80)">
+      <rect width="7" height="7" fill="#b07a42"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#8e6340" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="halat" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+      <rect width="5" height="5" fill="#f2d7b0"/>
+      <line x1="0" y1="2.5" x2="5" y2="2.5" stroke="#c99a63" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M262 240 h116 v16 h-116z M262 264 h116 v16 h-116z M262 288 h116 v16 h-116z M262 312 h116 v16 h-116z M262 336 h116 v16 h-116z M262 360 h116 v16 h-116z M262 384 h116 v16 h-116z M262 408 h116 v16 h-116z M262 432 h116 v16 h-116z M262 456 h116 v16 h-116z M262 480 h116 v16 h-116z M262 504 h116 v16 h-116z M262 528 h116 v16 h-116z " fill="url(#tahta)" transform="translate(-39.1 -62.3) scale(0.310)" vector-effect="non-scaling-stroke"/>
+  </g>
+</svg>
