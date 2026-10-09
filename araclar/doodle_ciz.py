@@ -2217,3 +2217,118 @@ doku("doku-deniz.svg", 64, "#cfe9f5", capraz(64, 16, "#7cc3e6", 5, -1) + capraz(
 doku("doku-kum.svg", 64, "#fbe8b0", capraz(64, 16, "#f3cf6a", 4, 1) + capraz(64, 16, "#f7dc8e", 2, -1), "Kum taraması")
 doku("doku-cimen.svg", 64, "#c9eba7", capraz(64, 16, "#b4e190", 4, -1), "Çimen taraması")
 print("tamam")
+
+# ---- TASLAK (öğretmen onayı bekliyor): 2. ada, sonbahar. Kuşbakışı tek resim; oyuna eklenmedi.
+# Sağda 3. adaya giden yarım köprü: 6 parça (o k u r ı m), başta silik.
+def _sonbahar_agac(x, y, renk, olcek=1.0):
+    return (f'    <g transform="translate({x} {y}) scale({olcek})">\n'
+            '    <path d="M-8 60 l3 -50 h10 l3 50z" fill="url(#kahve)"/>\n'
+            f'    <path d="M-40 10 q-18 -4 -10 -24 q-8 -22 16 -26 q6 -22 32 -14 q20 -14 36 6 q22 2 16 24 q14 20 -8 30 q-6 18 -30 12 q-18 14 -36 2 q-14 6 -16 -10z" fill="url(#{renk})"/>\n'
+            '    <path d="M-20 -14 q10 -10 22 -2 M8 -26 q10 -6 18 4" fill="none" stroke-width="2.5"/>\n'
+            '    </g>\n')
+
+def _yaprak(x, y, aci, renk):
+    return (f'    <path d="M0 0 q6 -8 12 0 q-6 8 -12 0z" transform="translate({x} {y}) rotate({aci})" '
+            f'fill="{renk}" stroke-width="1.5"/>\n')
+
+def _kabak(x, y, r=16):
+    return (f'    <g transform="translate({x} {y})"><ellipse cx="0" cy="0" rx="{r}" ry="{r*0.8:.1f}" fill="url(#turuncu)"/>'
+            f'<path d="M-{r*0.45:.1f} -{r*0.7:.1f} q-4 {r*0.7:.1f} 0 {r*1.4:.1f} M{r*0.45:.1f} -{r*0.7:.1f} q4 {r*0.7:.1f} 0 {r*1.4:.1f}" fill="none" stroke-width="2"/>'
+            f'<path d="M0 -{r*0.8:.1f} q2 -8 6 -10" fill="none" stroke="#5f9e3c" stroke-width="4"/></g>\n')
+
+def _mantar(x, y):
+    return (f'    <g transform="translate({x} {y})"><path d="M-4 0 v-10 h8 v10z" fill="#fff6e0" stroke-width="2.5"/>'
+            '<path d="M-14 -10 q14 -20 28 0z" fill="url(#kirmizi)" stroke-width="2.5"/>'
+            '<circle cx="-4" cy="-15" r="2" fill="#fff" stroke="none"/><circle cx="5" cy="-13" r="2" fill="#fff" stroke="none"/></g>\n')
+
+def _sincap(x, y):
+    return (f'    <g transform="translate({x} {y})">'
+            '<path d="M10 0 q26 -4 22 -30 q-2 -18 -16 -16 q10 10 2 22 q-6 10 -14 12z" fill="url(#turuncu)" stroke-width="3"/>'
+            '<ellipse cx="0" cy="-8" rx="10" ry="12" fill="url(#turuncu)" stroke-width="3"/>'
+            '<circle cx="-4" cy="-24" r="8" fill="url(#turuncu)" stroke-width="3"/>'
+            '<path d="M-8 -30 l-2 -7 l5 4 M-2 -31 l1 -7 l3 5" fill="url(#turuncu)" stroke-width="2"/>'
+            '<circle cx="-7" cy="-25" r="1.6" fill="#2b2b2b" stroke="none"/>'
+            '<ellipse cx="-11" cy="-10" rx="4" ry="5" fill="url(#kahve)" stroke-width="2"/></g>\n')
+
+def _kirpi(x, y):
+    return (f'    <g transform="translate({x} {y})">'
+            '<path d="M-20 0 q-2 -10 4 -14 l-2 -6 l7 3 l2 -8 l6 6 l5 -8 l4 8 l7 -5 l1 8 l7 -2 l-2 8 q6 6 0 10z" fill="url(#kahve)" stroke-width="2.5"/>'
+            '<path d="M18 -2 q10 -2 12 4 q-6 4 -12 0z" fill="#f2d7b0" stroke-width="2.5"/>'
+            '<circle cx="24" cy="-1" r="1.5" fill="#2b2b2b" stroke="none"/><circle cx="31" cy="2" r="2" fill="#2b2b2b" stroke="none"/></g>\n')
+
+def _baykus(x, y):
+    return (f'    <g transform="translate({x} {y})">'
+            '<ellipse cx="0" cy="0" rx="13" ry="16" fill="url(#kahve)" stroke-width="2.5"/>'
+            '<path d="M-12 -12 l-3 -8 l9 5 M12 -12 l3 -8 l-9 5" fill="url(#kahve)" stroke-width="2"/>'
+            '<circle cx="-5" cy="-6" r="5" fill="#fff6e0" stroke-width="2"/><circle cx="5" cy="-6" r="5" fill="#fff6e0" stroke-width="2"/>'
+            '<circle cx="-5" cy="-6" r="2" fill="#2b2b2b" stroke="none"/><circle cx="5" cy="-6" r="2" fill="#2b2b2b" stroke="none"/>'
+            '<path d="M-2 0 l2 4 l2 -4z" fill="#ffc928" stroke-width="1.5"/></g>\n')
+
+def _taslak_ada2():
+    p = []
+    # ada
+    p.append('    <path d="M90 360 q-20 -170 160 -230 q170 -70 380 -40 q200 -40 360 30 q110 60 100 180 q20 140 -110 210 '
+             'q-190 90 -420 70 q-220 20 -360 -60 q-120 -60 -110 -160z" fill="url(#sonbaharCimen)"/>\n')
+    # patika
+    p.append('    <path d="M300 560 q60 -80 180 -90 q140 -10 220 -60 q80 -40 200 -40 q60 0 110 -10" fill="none" stroke="#e3c08f" stroke-width="26" stroke-linecap="round"/>\n')
+    # tarla (6 kare, kabak/mısır yerleri)
+    p.append('    <path d="M380 380 h300 v60 h-300z" fill="url(#toprak)"/>\n')
+    for i in range(6):
+        p.append(f'    <path d="M{385+i*50} 386 h40 v48 h-40z" fill="#9a6c43" stroke-width="2.5"/>\n')
+    p.append('    <path d="M372 372 h316 M372 448 h316 M372 372 v76 M688 372 v76" fill="none" stroke="#c98f4f" stroke-width="5"/>\n')
+    # ağaçlar (turuncu, kırmızı, sarı)
+    renkler = ["turuncu", "kirmizi", "sari", "turuncu", "kirmizi", "sari", "turuncu", "sari", "kirmizi", "turuncu"]
+    yerler = [(180, 260), (260, 190), (380, 160), (520, 140), (660, 150), (800, 170), (930, 230), (150, 420), (850, 330), (980, 400)]
+    for (x, y), r in zip(yerler, renkler):
+        p.append(_sonbahar_agac(x, y, r, 0.9))
+    # düşen ve yerdeki yapraklar
+    yr = ["#f08a3c", "#e0533d", "#ffc928", "#c56a2a"]
+    import random
+    rnd = random.Random(5)
+    for k in range(70):
+        x = rnd.randint(170, 1000); y = rnd.randint(230, 540)
+        p.append(_yaprak(x, y, rnd.randint(0, 360), yr[k % 4]))
+    # yaprak yığınları
+    for x, y in [(300, 470), (760, 500), (560, 540)]:
+        p.append(f'    <path d="M{x-34} {y} q4 -22 34 -24 q30 2 34 24z" fill="url(#turuncu)" stroke-width="3"/>\n')
+    # kabaklar, mantarlar, saman balyası
+    for x, y, r in [(220, 520, 18), (250, 540, 13), (720, 470, 16), (900, 470, 20), (930, 495, 13)]:
+        p.append(_kabak(x, y, r))
+    for x, y in [(330, 300), (345, 310), (620, 330), (1000, 470), (470, 520)]:
+        p.append(_mantar(x, y))
+    p.append('    <path d="M600 470 h70 v36 h-70z" fill="url(#sari)" stroke-width="3"/><path d="M600 482 h70 M600 494 h70" fill="none" stroke-width="2"/>\n')
+    # sandıklar
+    for x, y in [(240, 330), (700, 250), (900, 560)]:
+        p.append(f'    <g transform="translate({x} {y})"><path d="M-18 -10 h36 v22 h-36z" fill="url(#kahve)" stroke-width="3"/>'
+                 '<path d="M-18 -10 q18 -14 36 0" fill="url(#kahve)" stroke-width="3"/><path d="M-3 -2 h6 v6 h-6z" fill="#ffc928" stroke-width="2"/></g>\n')
+    # hayvanlar
+    p.append(_sincap(560, 250))
+    p.append(_kirpi(330, 495))
+    p.append(_baykus(668, 112))
+    # göçmen kuşlar (V)
+    for i in range(5):
+        dx = (i - 2) * 26; dy = abs(i - 2) * 14
+        p.append(f'    <path d="M{620+dx} {50+dy} q6 -6 12 0 q6 -6 12 0" fill="none" stroke-width="2.5"/>\n')
+    # 3. ada (uzakta, silik)
+    p.append('    <path d="M1180 210 q40 -60 100 -50 v130 q-60 10 -100 -80z" fill="#eeeeee" stroke="#8a8a8a" stroke-dasharray="12 8"/>\n')
+    # yarım köprü: kıyıdan 3. adaya; 6 parça (o k u r ı m), başta silik
+    p.append('    <path d="M1050 300 q70 -40 140 -60" fill="none" stroke="#b07a42" stroke-width="5" stroke-dasharray="10 8"/>\n')
+    p.append('    <path d="M1050 340 q70 -40 140 -60" fill="none" stroke="#b07a42" stroke-width="5" stroke-dasharray="10 8"/>\n')
+    for i, h in enumerate("okurım"):
+        x = 1050 + i * 24; y = 318 - i * 13
+        p.append(f'    <path d="M{x} {y-20} l20 -7 v40 l-20 7z" fill="#f2d7b0" fill-opacity="0.45" stroke="#8a8a8a" stroke-dasharray="5 4" stroke-width="2.5"/>\n')
+    for i, h in enumerate("okurım"):
+        x = 1060 + i * 24; y = 314 - i * 13
+        p.append(f'    <text x="{x}" y="{y+6}" text-anchor="middle" font-family="Andika, sans-serif" font-size="18" fill="#6b6b6b" stroke="none">{h}</text>\n')
+    # köprü ayakları
+    for x, y in [(1060, 345), (1180, 285)]:
+        p.append(f'    <path d="M{x} {y} v40" fill="none" stroke="#9b6a38" stroke-width="8"/>\n')
+    # su tesisi yerine iskele (aynı yerde)
+    p.append('    <path d="M600 640 v70 h24 v-70" fill="url(#tahta)" stroke-width="3"/>\n')
+    # karakter başlangıç noktası (küçük yıldız)
+    p.append('    <path d="M300 560 l4 9 l10 1 l-8 6 l3 10 l-9 -6 l-9 6 l3 -10 l-8 -6 l10 -1z" fill="#ffe680" stroke-width="2"/>\n')
+    return "".join(p)
+
+yaz("taslak-ada2.svg", 1280, 720, "TASLAK: 2. ada (sonbahar), kuşbakışı; yarım köprü 3. adaya",
+    SU + tarama("sonbaharCimen", "#f2d29a", "#e0b66b", 35, 8, 3) + TOPRAK + TAHTA + TURUNCU + KIRMIZI + SARI2 + KAHVE,
+    '  <rect width="1280" height="720" fill="url(#su)"/>\n' + kalem(_taslak_ada2(), 3.5), 300)
