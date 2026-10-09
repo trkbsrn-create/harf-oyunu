@@ -76,15 +76,12 @@ function miniOyunKaydet(ad, sahneSinifi) {
 const BENZER_HARFLER = {
   a: ["e", "o"], e: ["a", "o"], i: ["l", "ı", "t"], l: ["i", "t", "ı"], t: ["l", "i"],
   n: ["m", "u", "r"], o: ["a", "e", "ö"], k: ["t", "l"], u: ["n", "ü"], r: ["n"],
-  ı: ["l", "t"], m: ["n", "u"], // ı ile i okumada karışır: birbirine seçenek olmaz
 };
 
-// Bu harfin grubuna kadar öğrenilmiş harfler (o harfin kendisi dahil). Okumada bu harfle
-// karışan ses (ı sorulurken i) yanlış seçenek olmasın diye çıkarılır (KARISAN_SESLER).
+// Bu harfin grubuna kadar öğrenilmiş harfler (o harfin kendisi dahil)
 function ogrenilmisHarfler(harf) {
   const grup = HARFLER.find((h) => h.kucuk === harf).grup;
-  const karisan = KARISAN_SESLER[harf] || [];
-  return HARFLER.filter((h) => h.grup <= grup && !karisan.includes(h.kucuk)).map((h) => h.kucuk);
+  return HARFLER.filter((h) => h.grup <= grup).map((h) => h.kucuk);
 }
 
 // Öğretmenin kuralı: harfler sırayla öğrenilir (a, n, e, t, i, l, ...). Hece ve kelime oyunlarında

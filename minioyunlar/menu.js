@@ -35,19 +35,18 @@ class MiniOyunlarSahnesi extends Phaser.Scene {
     });
 
     // Harf seçici
-    // İki harf grubu (a n e t i l | o k u r ı m); gruplar arasında küçük boşluk
-    const harfler = HARFLER.filter((h) => h.grup <= 2);
+    const harfler = HARFLER.filter((h) => h.grup === 1);
     if (!this.secilenHarf) this.secilenHarf = harfler[0].kucuk;
     this.harfCizimi = this.add.graphics();
     this.harfDugmeleri = harfler.map((h, i) => {
-      const x = 640 + (i - 5.5) * 88 + (h.grup === 1 ? -18 : 18);
+      const x = 640 - 2.5 * 96 + i * 96;
       const y = 150;
       const yazi = this.add.text(x, y, h.kucuk, {
         fontFamily: "Andika", fontSize: "48px", color: "#ffffff",
         stroke: "#3b2a1a", strokeThickness: 8, padding: { x: 4, y: 4 },
       }).setDepth(1);
       boyaliOrtala(titret(yazi, 1.5));
-      const alan = this.add.circle(x, y, 44).setInteractive({ useHandCursor: true });
+      const alan = this.add.circle(x, y, 48).setInteractive({ useHandCursor: true });
       alan.on("pointerdown", () => {
         Sesler.ac();
         Sesler.nota(660, 0, 0.08, 0.12);
