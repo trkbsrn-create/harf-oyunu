@@ -28,12 +28,12 @@ const HARFLER = [
   { kucuk: "l", buyuk: "L", unlu: false, grup: 1, kelime: "leylek",   harfKelimeBasinda: true, resim: "leylek", hece: "al", tekBasinaDenenir: true, okunus: "lll" },
 
   // Grup 2
-  { kucuk: "o", buyuk: "O", unlu: true,  grup: 2, kelime: "okul",     harfKelimeBasinda: true },
-  { kucuk: "k", buyuk: "K", unlu: false, grup: 2, kelime: "kedi",     harfKelimeBasinda: true },
-  { kucuk: "u", buyuk: "U", unlu: true,  grup: 2, kelime: "uçak",     harfKelimeBasinda: true },
-  { kucuk: "r", buyuk: "R", unlu: false, grup: 2, kelime: "robot",    harfKelimeBasinda: true },
-  { kucuk: "ı", buyuk: "I", unlu: true,  grup: 2, kelime: "ışık",     harfKelimeBasinda: true },
-  { kucuk: "m", buyuk: "M", unlu: false, grup: 2, kelime: "maymun",   harfKelimeBasinda: true },
+  { kucuk: "o", buyuk: "O", unlu: true,  grup: 2, kelime: "otobüs",   harfKelimeBasinda: true, resim: "resim-otobus" },
+  { kucuk: "k", buyuk: "K", unlu: false, grup: 2, kelime: "kedi",     harfKelimeBasinda: true, resim: "resim-kedi", hece: "ak", tekBasinaDenenir: true, kisaSes: true, okunus: "k" },
+  { kucuk: "u", buyuk: "U", unlu: true,  grup: 2, kelime: "uçak",     harfKelimeBasinda: true, resim: "resim-ucak" },
+  { kucuk: "r", buyuk: "R", unlu: false, grup: 2, kelime: "robot",    harfKelimeBasinda: true, resim: "resim-robot", hece: "ar", tekBasinaDenenir: true, okunus: "rrr" },
+  { kucuk: "ı", buyuk: "I", unlu: true,  grup: 2, kelime: "ıspanak",  harfKelimeBasinda: true, resim: "resim-ispanak" },
+  { kucuk: "m", buyuk: "M", unlu: false, grup: 2, kelime: "maymun",   harfKelimeBasinda: true, resim: "resim-maymun", hece: "am", tekBasinaDenenir: true, okunus: "mmm" },
 
   // Grup 3
   { kucuk: "ü", buyuk: "Ü", unlu: true,  grup: 3, kelime: "üzüm",     harfKelimeBasinda: true },

@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Maymun (yüzü, önden) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="262" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kahve" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#d9a46b"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#b07a42" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="acik" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)">
+      <rect width="6" height="6" fill="#f2d7b0"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#d9b07a" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="116" rx="40" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="22" cy="58" r="16" fill="url(#kahve)"/><circle cx="22" cy="58" r="8" fill="url(#acik)" stroke-width="3"/>
+    <circle cx="108" cy="58" r="16" fill="url(#kahve)"/><circle cx="108" cy="58" r="8" fill="url(#acik)" stroke-width="3"/>
+    <circle cx="65" cy="60" r="44" fill="url(#kahve)"/>
+    <path d="M65 46 q-10 -14 -24 -8 q-14 8 -8 26 q-10 10 -4 24 q10 22 36 22 q26 0 36 -22 q6 -14 -4 -24 q6 -18 -8 -26 q-14 -6 -24 8z" fill="url(#acik)"/>
+    <circle cx="51" cy="54" r="5" fill="#2b2b2b"/><circle cx="79" cy="54" r="5" fill="#2b2b2b"/>
+    <circle cx="60" cy="74" r="2.5" fill="#2b2b2b"/><circle cx="70" cy="74" r="2.5" fill="#2b2b2b"/>
+    <path d="M50 86 q15 12 30 0" fill="none" stroke-width="3.5"/>
+  </g>
+</svg>
