@@ -191,14 +191,16 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Chrome'un internet sesi (Google Türkçe) bazen hiç başlamıyor, bütün sözler susuyordu (Brave'de
   sorun yoktu). Söz 1,5 saniyede başlamazsa cihazın kendi sesine geçilir (`uzakSesBozuk`).
 
+- Sürüm 168 onaysız canlıya (main) gitti: oturum eski CLAUDE.md ile başlamıştı. Her işten önce
+  `origin/gelistirme`'deki CLAUDE.md'yi oku; çekme isteğinin hedefi `gelistirme` mi, kontrol et.
+
 ## Bekleyen işler
 - TTKB Dik Temel Abece yazı tipi: yazardan izin bekleniyor; izin gelirse dosya depoya eklenir.
 - Ekrandaki 10 uyarı ("Telefonu yan çevir" vb.) henüz kaydedilmedi (kayit.html'de duruyor).
 - iPhone'da efekt sesi düzeltmesinin (`iosSesiniAc`) öğretmenden onayı bekleniyor.
 - Bulut bölgelerinin içeriği; bilmeceler ("Hızlı koşar, yeleleri var." → at; "Türk bayrağında
   beni görürler, kırmızıyla eş derler." → al) nerede kullanılacak, sonra konuşulacak.
-- 2. harf grubu (öğretmenle konuşulan sıra): kelime listesi (KELIMELER), 3. seviyede dört harfli
-  heceler, bütün oyunların kontrolü, yeni seslerin kaydı; sonra 2. adanın hikâyesi.
+- 2. harf grubu (öğretmenle konuşulan sıra): 3. seviyede dört harfli heceler, bütün oyunların kontrolü, yeni seslerin kaydı; sonra 2. adanın hikâyesi.
 - Kalan harf grupları; yeni gruplarla 4-5 heceli kelimeler (Elektrik Devresi).
 - Peri rehber (öğretmenin fikri) tamam: tanışma, anlatım, görev düğmesi, omuzdaki peri, mini oyun
   yönergeleri. Perinin adı yok (sorulabilir). Yeni mini oyuna `YONERGELER`'de yönerge yazılır.
