@@ -24,6 +24,7 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   bu adla istedi): şifreden sonra seçim paneli (`tanriSecenekleri`): Hikâye, Mini Games; 1. ve 2. ada için
   Baştan / Tohumlar çantada / Sırıklar (mısır sapları) büyümüş (`hepsiniAc`) / Yelkenli (köprü) tamam /
   Yolculuk (köprüden geçiş) (`tanriAsamasi`, `tanriFinal`).
+  God mode'da çantanın altında "Damla ver" düğmesi (damla ve artı): adanın bütün harflerinin damlaları dolar (`tanriDamlaKur`).
 - 2. ada (sonbahar, `ADALAR[2]`): sonbahar zemini (doku-sonbahar), turuncu/kırmızı/sarı ağaçlar, kızıl çalı,
   yaprak yığını, mantar, kabak, sarı ot; uçan yapraklar; sincap (zıplar), kirpi (gidip gelir), ağaçta baykuş.
   Tarlada mısır sapı (misir-filiz/fidan/sap, bulutta bulut-misir). Yelkenlinin yerinde köprü (680x900 tuval,

@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 172;
+const SURUM = 173;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -476,6 +476,7 @@ class AdaSahnesi extends Phaser.Scene {
       }
       if (this.periyeDokunus(p)) return;
       if (this.tirmaniyor) return; // sırıkta tırmanırken dokunuş beklenmez
+      if (this.tanriDamlaTiklamasi(p)) return;
       if (this.menuTiklamasi(p)) return;
       if (this.tesisTiklamasi(p)) return;
       if (this.cikTiklamasi(p)) return;
@@ -1091,6 +1092,40 @@ class AdaSahnesi extends Phaser.Scene {
     this.cantaIcerigi = this.add.container(0, 0);
     pencere.add([g, pencereResmi, baslik, this.cantaIcerigi]);
     this.cantaPenceresi = pencere;
+    this.tanriDamlaKur();
+  }
+
+  // God mode "Damla ver" düğmesi (öğretmenin isteği; yalnızca God mode'da, çantanın altında):
+  // basınca adanın bütün harflerinin şişedeki damlaları dolar (harf başına 3)
+  tanriDamlaKur() {
+    this.tanriDamla = null;
+    if (!this.tanriModu) return;
+    const g = this.add.graphics();
+    g.fillStyle(0xfbf4e2, 1);
+    g.fillCircle(0, 0, 34);
+    g.lineStyle(4, 0x2b2b2b, 1);
+    g.strokeCircle(0, 0, 34);
+    const damla = this.add.image(-4, -2, "damla");
+    damla.setScale(40 / Math.max(damla.width, damla.height));
+    const arti = this.add.text(18, 12, "+", {
+      fontFamily: "Andika", fontSize: "30px", color: "#2e9e3a", stroke: "#ffffff", strokeThickness: 5,
+    }).setOrigin(0.5);
+    this.tanriDamla = this.add.container(1280 - 80, 178, [g, damla, arti]).setScrollFactor(0).setDepth(9000);
+  }
+
+  tanriDamlaTiklamasi(p) {
+    const d = this.tanriDamla;
+    if (!d || this.cantaAcik || this.tesisAcik || this.menuAcik) return false;
+    if (Math.hypot(p.x - d.x, p.y - d.y) > 40) return false;
+    let eklenen = 0;
+    for (const h of this.varilHarfleri) while (Canta.damlaEkle(h)) eklenen++;
+    this.damlaNoktalariniCiz();
+    Sesler.ac();
+    if (eklenen) Sesler.damla();
+    else Sesler.nota(440, 0, 0.08, 0.1);
+    this.tweens.add({ targets: d, scale: 1.2, duration: 110, yoyo: true });
+    this.tweens.add({ targets: this.cantaDugmesi, scale: 1.2, duration: 110, yoyo: true, delay: 150 });
+    return true;
   }
 
   // Dokunuş çantayla ilgiliyse işler ve true döner.
