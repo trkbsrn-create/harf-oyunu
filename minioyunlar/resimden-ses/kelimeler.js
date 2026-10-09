@@ -44,40 +44,6 @@ const KONUMLU_KELIMELER = {
     orta: ["elma", "balık", "kelebek", "bulut", "kulak", "halı", "silgi", "bilezik", "kalem",
       "kale"],
   },
-  // 2. harf grubu (o, k, u, r, ı, m)
-  o: {
-    bas: ["otobüs", "ok", "odun", "oklava", "on"],
-    son: ["piyano", "radyo", "domino", "flamingo", "avokado"],
-    orta: ["kova", "koyun", "top", "nohut", "lokum", "balon", "yorgan", "çorba", "dondurma", "nota"],
-  },
-  k: {
-    bas: ["kedi", "kova", "koyun", "kale", "kalem", "kapı", "kartal", "kaşık", "kazan", "keçi",
-      "kelebek", "kibrit", "kilit", "kiraz", "kirpi", "kitap", "kumbara", "kurbağa", "kuzu", "kuyu"],
-    son: ["balık", "bebek", "çiçek", "erik", "etek", "fındık", "fıstık", "iplik", "yaprak", "bardak",
-      "tavuk", "uçak", "ıspanak"],
-    orta: ["iki", "lokum", "ayakkabı", "şeker", "akvaryum", "makas"],
-  },
-  u: {
-    bas: ["uçak", "un", "uçurtma", "ut", "uzaylı"],
-    son: ["kutu", "kanguru", "boru", "kuyu", "kuzu"],
-    orta: ["bulut", "nohut", "armut", "lokum", "kulak", "tavuk", "kumbara", "kurbağa", "dondurma"],
-  },
-  r: {
-    bas: ["robot", "radyo", "roket", "raket", "rende", "reçel"],
-    son: ["anahtar", "biber", "fener", "nehir", "nar", "şeker"],
-    orta: ["armut", "araba", "kartal", "kurbağa", "kiraz", "kirpi", "terlik", "erik", "kibrit", "tarak",
-      "bardak", "çorba", "fırça", "ördek"],
-  },
-  ı: {
-    bas: ["ıspanak", "ıslık", "ızgara", "ıstakoz"],
-    son: ["kapı", "ayı", "halı", "ayakkabı", "arı"],
-    orta: ["balık", "fındık", "fıstık", "fırça", "kaşık", "altın"],
-  },
-  m: {
-    bas: ["maymun", "masa", "muz", "mum", "mantar", "makas"],
-    son: ["lokum", "kalem", "üzüm", "akvaryum", "çim"],
-    orta: ["limon", "lamba", "kumbara", "timsah", "ekmek", "lahmacun", "dondurma", "kemik", "elma", "lama"],
-  },
 };
 
 // Okumada birbirine karışabilen sesler: yanlış seçeneklerde bunlar da geçmez

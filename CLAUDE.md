@@ -8,8 +8,6 @@ Oyunların ayrıntılı tarifi `OYUNLAR.md`'de: yalnızca üzerinde çalışıla
 tarayıcı oyunu ("Harf Avcısı"). Çocuk adaya düşmüştür: sandıkta harf tohumu bulur, tarlaya eker,
 mini oyunlarla damla kazanıp sular, fasulye sırığından bulutlara çıkar, yelkenli parçasını alır;
 altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik yalnızca 1. ada.
-Mini oyunlar 2. harf grubuyla (o k u r ı m; kelimeleri otobüs, kedi, uçak, robot, ıspanak, maymun) da
-oynanır (deneme menüsü); 2. adanın hikâyesi sonra yapılacak.
 
 ## Dosya rehberi (ayrıntı: OYUNLAR.md)
 - `index.html` ana sayfa (derleme yok; telefon ayarları, yazı tipi yükleme `yaziTipiHazir`, dönünce
@@ -197,9 +195,7 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - iPhone'da efekt sesi düzeltmesinin (`iosSesiniAc`) öğretmenden onayı bekleniyor.
 - Bulut bölgelerinin içeriği; bilmeceler ("Hızlı koşar, yeleleri var." → at; "Türk bayrağında
   beni görürler, kırmızıyla eş derler." → al) nerede kullanılacak, sonra konuşulacak.
-- 2. harf grubu (öğretmenle konuşulan sıra): kelime listesi (KELIMELER), 3. seviyede dört harfli
-  heceler, bütün oyunların kontrolü, yeni seslerin kaydı; sonra 2. adanın hikâyesi.
-- Kalan harf grupları; yeni gruplarla 4-5 heceli kelimeler (Elektrik Devresi).
+- Kalan harf grupları ve 2. ada; yeni gruplarla 4-5 heceli kelimeler (Elektrik Devresi).
 - Peri rehber (öğretmenin fikri) tamam: tanışma, anlatım, görev düğmesi, omuzdaki peri, mini oyun
   yönergeleri. Perinin adı yok (sorulabilir). Yeni mini oyuna `YONERGELER`'de yönerge yazılır.
 - Bulut Market (taslak proje): karakterin kıyafetini değiştirme, yeni eşyalar alma. Sonra başlanacak.
