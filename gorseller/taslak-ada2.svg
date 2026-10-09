@@ -37,6 +37,11 @@
       <rect width="7" height="7" fill="#d9a46b"/>
       <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#b07a42" stroke-width="3" stroke-linecap="round"/>
     </pattern>
+    <pattern id="yesil" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9eba7"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#8fd16a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <linearGradient id="misirSolma" x1="0" y1="412" x2="0" y2="112" gradientUnits="userSpaceOnUse"><stop offset="0" stop-color="#8fd16a"/><stop offset="1" stop-color="#8fd16a" stop-opacity="0"/></linearGradient>
   </defs>
   <rect width="1280" height="720" fill="url(#su)"/>
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
@@ -50,6 +55,16 @@
     <path d="M585 386 h40 v48 h-40z" fill="#9a6c43" stroke-width="2.5"/>
     <path d="M635 386 h40 v48 h-40z" fill="#9a6c43" stroke-width="2.5"/>
     <path d="M372 372 h316 M372 448 h316 M372 372 v76 M688 372 v76" fill="none" stroke="#c98f4f" stroke-width="5"/>
+    <path d="M405 412 v-300" fill="none" stroke="url(#misirSolma)" stroke-width="9"/>
+    <path d="M405 380 q26 -6 34 -30 q-20 8 -34 18z" fill="url(#yesil)" opacity="1.00" stroke-width="2.5"/>
+    <path d="M405 340 q-26 -6 -34 -30 q20 8 34 18z" fill="url(#yesil)" opacity="0.82" stroke-width="2.5"/>
+    <path d="M405 300 q26 -6 34 -30 q-20 8 -34 18z" fill="url(#yesil)" opacity="0.64" stroke-width="2.5"/>
+    <path d="M405 255 q-26 -6 -34 -30 q20 8 34 18z" fill="url(#yesil)" opacity="0.46" stroke-width="2.5"/>
+    <path d="M405 210 q26 -6 34 -30 q-20 8 -34 18z" fill="url(#yesil)" opacity="0.28" stroke-width="2.5"/>
+    <path d="M408 330 q14 -6 14 -30 q-2 -12 -10 -6 q-6 14 -4 36z" fill="url(#sari)" stroke-width="2.5"/>
+    <path d="M455 412 v-70" fill="none" stroke="#8fd16a" stroke-width="7"/>
+    <path d="M455 392 q18 -4 24 -22 q-14 4 -24 12z M455 370 q-18 -4 -22 -22 q12 4 22 12z" fill="url(#yesil)" stroke-width="2.5"/>
+    <path d="M505 412 v-20 M505 400 q10 -2 12 -12 M505 404 q-10 -2 -12 -12" fill="none" stroke="#5f9e3c" stroke-width="4"/>
     <g transform="translate(180 260) scale(0.9)">
     <path d="M-8 60 l3 -50 h10 l3 50z" fill="url(#kahve)"/>
     <path d="M-40 10 q-18 -4 -10 -24 q-8 -22 16 -26 q6 -22 32 -14 q20 -14 36 6 q22 2 16 24 q14 20 -8 30 q-6 18 -30 12 q-18 14 -36 2 q-14 6 -16 -10z" fill="url(#turuncu)"/>
@@ -196,22 +211,18 @@
     <path d="M646 64 q6 -6 12 0 q6 -6 12 0" fill="none" stroke-width="2.5"/>
     <path d="M672 78 q6 -6 12 0 q6 -6 12 0" fill="none" stroke-width="2.5"/>
     <path d="M1180 210 q40 -60 100 -50 v130 q-60 10 -100 -80z" fill="#eeeeee" stroke="#8a8a8a" stroke-dasharray="12 8"/>
-    <path d="M1050 300 q70 -40 140 -60" fill="none" stroke="#b07a42" stroke-width="5" stroke-dasharray="10 8"/>
-    <path d="M1050 340 q70 -40 140 -60" fill="none" stroke="#b07a42" stroke-width="5" stroke-dasharray="10 8"/>
-    <path d="M1050 298 l20 -7 v40 l-20 7z" fill="#f2d7b0" fill-opacity="0.45" stroke="#8a8a8a" stroke-dasharray="5 4" stroke-width="2.5"/>
-    <path d="M1074 285 l20 -7 v40 l-20 7z" fill="#f2d7b0" fill-opacity="0.45" stroke="#8a8a8a" stroke-dasharray="5 4" stroke-width="2.5"/>
-    <path d="M1098 272 l20 -7 v40 l-20 7z" fill="#f2d7b0" fill-opacity="0.45" stroke="#8a8a8a" stroke-dasharray="5 4" stroke-width="2.5"/>
-    <path d="M1122 259 l20 -7 v40 l-20 7z" fill="#f2d7b0" fill-opacity="0.45" stroke="#8a8a8a" stroke-dasharray="5 4" stroke-width="2.5"/>
-    <path d="M1146 246 l20 -7 v40 l-20 7z" fill="#f2d7b0" fill-opacity="0.45" stroke="#8a8a8a" stroke-dasharray="5 4" stroke-width="2.5"/>
-    <path d="M1170 233 l20 -7 v40 l-20 7z" fill="#f2d7b0" fill-opacity="0.45" stroke="#8a8a8a" stroke-dasharray="5 4" stroke-width="2.5"/>
-    <text x="1060" y="320" text-anchor="middle" font-family="Andika, sans-serif" font-size="18" fill="#6b6b6b" stroke="none">o</text>
-    <text x="1084" y="307" text-anchor="middle" font-family="Andika, sans-serif" font-size="18" fill="#6b6b6b" stroke="none">k</text>
-    <text x="1108" y="294" text-anchor="middle" font-family="Andika, sans-serif" font-size="18" fill="#6b6b6b" stroke="none">u</text>
-    <text x="1132" y="281" text-anchor="middle" font-family="Andika, sans-serif" font-size="18" fill="#6b6b6b" stroke="none">r</text>
-    <text x="1156" y="268" text-anchor="middle" font-family="Andika, sans-serif" font-size="18" fill="#6b6b6b" stroke="none">ı</text>
-    <text x="1180" y="255" text-anchor="middle" font-family="Andika, sans-serif" font-size="18" fill="#6b6b6b" stroke="none">m</text>
-    <path d="M1060 345 v40" fill="none" stroke="#9b6a38" stroke-width="8"/>
-    <path d="M1180 285 v40" fill="none" stroke="#9b6a38" stroke-width="8"/>
+    <path d="M1071 304 h14 v58 h-14z" fill="#f2d7b0" fill-opacity="0.4" stroke="#8a8a8a" stroke-dasharray="6 5" stroke-width="2.5"/>
+    <path d="M1143 266 h14 v58 h-14z" fill="#f2d7b0" fill-opacity="0.4" stroke="#8a8a8a" stroke-dasharray="6 5" stroke-width="2.5"/>
+    <path d="M1062 308 l15 -8 v20 l-15 8z" fill="#f2d7b0" fill-opacity="0.4" stroke="#8a8a8a" stroke-dasharray="6 5" stroke-width="2.5"/>
+    <path d="M1079 299 l15 -8 v20 l-15 8z" fill="#f2d7b0" fill-opacity="0.4" stroke="#8a8a8a" stroke-dasharray="6 5" stroke-width="2.5"/>
+    <path d="M1096 290 l15 -8 v20 l-15 8z" fill="#f2d7b0" fill-opacity="0.4" stroke="#8a8a8a" stroke-dasharray="6 5" stroke-width="2.5"/>
+    <path d="M1113 281 l15 -8 v20 l-15 8z" fill="#f2d7b0" fill-opacity="0.4" stroke="#8a8a8a" stroke-dasharray="6 5" stroke-width="2.5"/>
+    <path d="M1130 272 l15 -8 v20 l-15 8z" fill="#f2d7b0" fill-opacity="0.4" stroke="#8a8a8a" stroke-dasharray="6 5" stroke-width="2.5"/>
+    <path d="M1147 263 l15 -8 v20 l-15 8z" fill="#f2d7b0" fill-opacity="0.4" stroke="#8a8a8a" stroke-dasharray="6 5" stroke-width="2.5"/>
+    <path d="M1164 254 l15 -8 v20 l-15 8z" fill="#f2d7b0" fill-opacity="0.4" stroke="#8a8a8a" stroke-dasharray="6 5" stroke-width="2.5"/>
+    <path d="M1181 245 l15 -8 v20 l-15 8z" fill="#f2d7b0" fill-opacity="0.4" stroke="#8a8a8a" stroke-dasharray="6 5" stroke-width="2.5"/>
+    <path d="M1062 270 q60 -10 136 -72" fill="none" stroke="#8a8a8a" stroke-width="3" stroke-dasharray="8 6"/>
+    <path d="M1062 296 q60 -10 136 -72" fill="none" stroke="#8a8a8a" stroke-width="3" stroke-dasharray="8 6"/>
     <path d="M600 640 v70 h24 v-70" fill="url(#tahta)" stroke-width="3"/>
     <path d="M300 560 l4 9 l10 1 l-8 6 l3 10 l-9 -6 l-9 6 l3 -10 l-8 -6 l10 -1z" fill="#ffe680" stroke-width="2"/>
   </g>

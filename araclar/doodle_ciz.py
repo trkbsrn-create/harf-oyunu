@@ -2219,7 +2219,8 @@ doku("doku-cimen.svg", 64, "#c9eba7", capraz(64, 16, "#b4e190", 4, -1), "Çimen 
 print("tamam")
 
 # ---- TASLAK (öğretmen onayı bekliyor): 2. ada, sonbahar. Kuşbakışı tek resim; oyuna eklenmedi.
-# Sağda 3. adaya giden yarım köprü: 6 parça (o k u r ı m), başta silik.
+# Tarlada mısır sapı (fasulye sırığının yerine). Sağda 3. adaya giden yarım köprü: 6 parça
+# (2 ayak, 2 halat, 2 tahta öbeği; parçalarda harf yok), başta silik.
 def _sonbahar_agac(x, y, renk, olcek=1.0):
     return (f'    <g transform="translate({x} {y}) scale({olcek})">\n'
             '    <path d="M-8 60 l3 -50 h10 l3 50z" fill="url(#kahve)"/>\n'
@@ -2276,6 +2277,16 @@ def _taslak_ada2():
     for i in range(6):
         p.append(f'    <path d="M{385+i*50} 386 h40 v48 h-40z" fill="#9a6c43" stroke-width="2.5"/>\n')
     p.append('    <path d="M372 372 h316 M372 448 h316 M372 372 v76 M688 372 v76" fill="none" stroke="#c98f4f" stroke-width="5"/>\n')
+    # mısır sapları (öğretmenin seçimi): 1. karede bulutlara uzanan sap (yukarı doğru solar),
+    # 2. karede genç sap, 3. karede filiz
+    p.append('    <path d="M405 412 v-300" fill="none" stroke="url(#misirSolma)" stroke-width="9"/>\n')
+    for k, (y, yon) in enumerate([(380, 1), (340, -1), (300, 1), (255, -1), (210, 1)]):
+        op = 1 - k * 0.18
+        p.append(f'    <path d="M405 {y} q{yon*26} -6 {yon*34} -30 q{-yon*20} 8 {-yon*34} 18z" fill="url(#yesil)" opacity="{op:.2f}" stroke-width="2.5"/>\n')
+    p.append('    <path d="M408 330 q14 -6 14 -30 q-2 -12 -10 -6 q-6 14 -4 36z" fill="url(#sari)" stroke-width="2.5"/>\n')
+    p.append('    <path d="M455 412 v-70" fill="none" stroke="#8fd16a" stroke-width="7"/>\n')
+    p.append('    <path d="M455 392 q18 -4 24 -22 q-14 4 -24 12z M455 370 q-18 -4 -22 -22 q12 4 22 12z" fill="url(#yesil)" stroke-width="2.5"/>\n')
+    p.append('    <path d="M505 412 v-20 M505 400 q10 -2 12 -12 M505 404 q-10 -2 -12 -12" fill="none" stroke="#5f9e3c" stroke-width="4"/>\n')
     # ağaçlar (turuncu, kırmızı, sarı)
     renkler = ["turuncu", "kirmizi", "sari", "turuncu", "kirmizi", "sari", "turuncu", "sari", "kirmizi", "turuncu"]
     yerler = [(180, 260), (260, 190), (380, 160), (520, 140), (660, 150), (800, 170), (930, 230), (150, 420), (850, 330), (980, 400)]
@@ -2311,18 +2322,17 @@ def _taslak_ada2():
         p.append(f'    <path d="M{620+dx} {50+dy} q6 -6 12 0 q6 -6 12 0" fill="none" stroke-width="2.5"/>\n')
     # 3. ada (uzakta, silik)
     p.append('    <path d="M1180 210 q40 -60 100 -50 v130 q-60 10 -100 -80z" fill="#eeeeee" stroke="#8a8a8a" stroke-dasharray="12 8"/>\n')
-    # yarım köprü: kıyıdan 3. adaya; 6 parça (o k u r ı m), başta silik
-    p.append('    <path d="M1050 300 q70 -40 140 -60" fill="none" stroke="#b07a42" stroke-width="5" stroke-dasharray="10 8"/>\n')
-    p.append('    <path d="M1050 340 q70 -40 140 -60" fill="none" stroke="#b07a42" stroke-width="5" stroke-dasharray="10 8"/>\n')
-    for i, h in enumerate("okurım"):
-        x = 1050 + i * 24; y = 318 - i * 13
-        p.append(f'    <path d="M{x} {y-20} l20 -7 v40 l-20 7z" fill="#f2d7b0" fill-opacity="0.45" stroke="#8a8a8a" stroke-dasharray="5 4" stroke-width="2.5"/>\n')
-    for i, h in enumerate("okurım"):
-        x = 1060 + i * 24; y = 314 - i * 13
-        p.append(f'    <text x="{x}" y="{y+6}" text-anchor="middle" font-family="Andika, sans-serif" font-size="18" fill="#6b6b6b" stroke="none">{h}</text>\n')
-    # köprü ayakları
-    for x, y in [(1060, 345), (1180, 285)]:
-        p.append(f'    <path d="M{x} {y} v40" fill="none" stroke="#9b6a38" stroke-width="8"/>\n')
+    # yarım köprü: kıyıdan 3. adaya. 6 parça (2 ayak, 2 halat, 2 tahta öbeği; harf yazılmaz),
+    # başta hepsi silik (kesik çizgili)
+    silik = 'fill="#f2d7b0" fill-opacity="0.4" stroke="#8a8a8a" stroke-dasharray="6 5" stroke-width="2.5"'
+    for x, y in [(1078, 318), (1150, 280)]:  # ayaklar
+        p.append(f'    <path d="M{x-7} {y-14} h14 v58 h-14z" {silik}/>\n')
+    for k in range(2):  # tahta öbekleri (her biri 4 tahta)
+        for t in range(4):
+            x = 1062 + (k * 4 + t) * 17; y = 322 - (k * 4 + t) * 9
+            p.append(f'    <path d="M{x} {y-14} l15 -8 v20 l-15 8z" {silik}/>\n')
+    for dy in (-30, -4):  # halatlar (alt kenar ve üst korkuluk)
+        p.append(f'    <path d="M1062 {300+dy} q60 -10 136 -72" fill="none" stroke="#8a8a8a" stroke-width="3" stroke-dasharray="8 6"/>\n')
     # su tesisi yerine iskele (aynı yerde)
     p.append('    <path d="M600 640 v70 h24 v-70" fill="url(#tahta)" stroke-width="3"/>\n')
     # karakter başlangıç noktası (küçük yıldız)
@@ -2330,5 +2340,7 @@ def _taslak_ada2():
     return "".join(p)
 
 yaz("taslak-ada2.svg", 1280, 720, "TASLAK: 2. ada (sonbahar), kuşbakışı; yarım köprü 3. adaya",
-    SU + tarama("sonbaharCimen", "#f2d29a", "#e0b66b", 35, 8, 3) + TOPRAK + TAHTA + TURUNCU + KIRMIZI + SARI2 + KAHVE,
+    SU + tarama("sonbaharCimen", "#f2d29a", "#e0b66b", 35, 8, 3) + TOPRAK + TAHTA + TURUNCU + KIRMIZI + SARI2 + KAHVE
+    + YESIL2 + '    <linearGradient id="misirSolma" x1="0" y1="412" x2="0" y2="112" gradientUnits="userSpaceOnUse">'
+    '<stop offset="0" stop-color="#8fd16a"/><stop offset="1" stop-color="#8fd16a" stop-opacity="0"/></linearGradient>\n',
     '  <rect width="1280" height="720" fill="url(#su)"/>\n' + kalem(_taslak_ada2(), 3.5), 300)
