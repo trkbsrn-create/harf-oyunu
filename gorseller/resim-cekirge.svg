@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Çekirge (yandan, yeşil) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="430" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="yesil" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9eba7"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#8fd16a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="112" rx="50" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M76 70 l26 -30 l18 60" fill="none" stroke-width="5"/>
+    <path d="M40 80 l-8 24 M54 82 l2 24" fill="none" stroke-width="4"/>
+    <path d="M18 70 q4 -22 40 -24 q40 -2 62 18 q-10 16 -50 18 q-40 2 -52 -12z" fill="url(#yesil)"/>
+    <circle cx="26" cy="62" r="12" fill="url(#yesil)"/>
+    <circle cx="22" cy="58" r="3" fill="#2b2b2b"/>
+    <path d="M24 50 q-6 -24 8 -40 M30 52 q4 -22 22 -34" fill="none" stroke-width="2.5"/>
+    <path d="M60 56 q20 -6 40 4" fill="none" stroke-width="2.5"/>
+  </g>
+</svg>

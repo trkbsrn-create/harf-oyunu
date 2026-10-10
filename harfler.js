@@ -44,11 +44,11 @@ const HARFLER = [
   { kucuk: "z", buyuk: "Z", unlu: false, grup: 3, kelime: "zürafa",   harfKelimeBasinda: true, resim: "resim-zurafa", hece: "az", tekBasinaDenenir: true, okunus: "zzz" },
 
   // Grup 4
-  { kucuk: "ç", buyuk: "Ç", unlu: false, grup: 4, kelime: "çekirge",  harfKelimeBasinda: true },
-  { kucuk: "b", buyuk: "B", unlu: false, grup: 4, kelime: "balık",    harfKelimeBasinda: true },
-  { kucuk: "g", buyuk: "G", unlu: false, grup: 4, kelime: "güvercin", harfKelimeBasinda: true },
-  { kucuk: "c", buyuk: "C", unlu: false, grup: 4, kelime: "civciv",   harfKelimeBasinda: true },
-  { kucuk: "ş", buyuk: "Ş", unlu: false, grup: 4, kelime: "şahin",    harfKelimeBasinda: true },
+  { kucuk: "ç", buyuk: "Ç", unlu: false, grup: 4, kelime: "çekirge",  harfKelimeBasinda: true, resim: "resim-cekirge", hece: "aç", tekBasinaDenenir: true, kisaSes: true, okunus: "ç" },
+  { kucuk: "b", buyuk: "B", unlu: false, grup: 4, kelime: "balık",    harfKelimeBasinda: true, resim: "resim-balik", hece: "ab", tekBasinaDenenir: true, kisaSes: true, okunus: "b" },
+  { kucuk: "g", buyuk: "G", unlu: false, grup: 4, kelime: "güvercin", harfKelimeBasinda: true, resim: "resim-guvercin", hece: "ag", tekBasinaDenenir: true, kisaSes: true, okunus: "g" },
+  { kucuk: "c", buyuk: "C", unlu: false, grup: 4, kelime: "civciv",   harfKelimeBasinda: true, resim: "resim-civciv", hece: "ac", tekBasinaDenenir: true, kisaSes: true, okunus: "c" },
+  { kucuk: "ş", buyuk: "Ş", unlu: false, grup: 4, kelime: "şahin",    harfKelimeBasinda: true, resim: "resim-sahin", hece: "aş", tekBasinaDenenir: true, okunus: "şşş" },
 
   // Grup 5
   { kucuk: "p", buyuk: "P", unlu: false, grup: 5, kelime: "penguen",  harfKelimeBasinda: true },

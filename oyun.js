@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 178;
+const SURUM = 179;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -2319,7 +2319,7 @@ class AdaSahnesi extends Phaser.Scene {
 
   // ---- 3. ada: kar kıyafeti sınavı (öğretmenin fikri) ----
   // Peri gelir, kar kıyafeti verebileceğini söyler; önce önceki iki adanın zor oyunlarından (hece ve
-  // kelime oyunları, 3. seviye, 1. ya da 2. grubun rastgele bir harfi) biri oynanır. Geçene kadar
+  // kelime oyunları, 3. seviye, öğretmenin seçimi: m harfi) biri oynanır. Geçene kadar
   // yeni bir sınav gelir; geçince çocuk kar kıyafetini giyer, peri omza konar.
   kisSinaviTanisma() {
     this.peri = this.periYap(1400, 260);
@@ -2334,11 +2334,8 @@ class AdaSahnesi extends Phaser.Scene {
   }
 
   kisSinaviBaslat() {
-    const adaylar = [];
-    for (const o of PLANLANAN_OYUNLAR) {
-      if (!MINI_OYUNLAR[o.ad] || !o.etiketler.includes("hece")) continue;
-      for (const h of HARFLER.filter((x) => x.grup <= 2)) if (miniOyunOlur(o.ad, h.kucuk)) adaylar.push({ ad: o.ad, harf: h.kucuk });
-    }
+    const adaylar = PLANLANAN_OYUNLAR.filter((o) => MINI_OYUNLAR[o.ad] && o.etiketler.includes("hece")
+      && miniOyunOlur(o.ad, KIS_SINAVI_HARFI)).map((o) => ({ ad: o.ad, harf: KIS_SINAVI_HARFI }));
     const secim = Phaser.Utils.Array.GetRandom(adaylar);
     this.input.enabled = false;
     const kamera = this.cameras.main;
@@ -4413,6 +4410,8 @@ const PERI_ANLATIM_2 = [
   "Görev düğmesine basıp görevlerini takip edebilirsin.",
 ];
 
+// Kar kıyafeti sınavının harfi (öğretmenin seçimi: 2. adanın son harfi)
+const KIS_SINAVI_HARFI = "m";
 // 3. adanın başında perinin sözleri (kar kıyafeti sınavı)
 const KIS_SINAVI_SOZLERI = [
   "Brrr! Bu ada çok soğuk!",
