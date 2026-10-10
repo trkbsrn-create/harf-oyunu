@@ -2818,3 +2818,76 @@ resim("sahin", "Şahin (yandan, dalda duran; kıvrık sarı gaga, kahverengi kan
     <circle cx="58" cy="31" r="3" fill="#2b2b2b"/>
     <path d="M50 34 q-12 0 -14 8 q6 -2 10 2 q2 -6 6 -6z" fill="#ffc928" stroke-width="2.5"/>
 """), 432)
+
+# ---- 5. harf grubu (p h v ğ f j) için resimler ----
+resim("penguen", "Penguen (önden)", SARI2,
+    golge(65, 114, 30) + kalem("""    <ellipse cx="65" cy="66" rx="34" ry="46" fill="#2b2b2b"/>
+    <ellipse cx="65" cy="76" rx="22" ry="34" fill="#ffffff" stroke="none"/>
+    <path d="M32 56 q-14 20 -6 40 M98 56 q14 20 6 40" fill="none" stroke-width="7"/>
+    <circle cx="55" cy="38" r="5" fill="#ffffff" stroke="none"/><circle cx="75" cy="38" r="5" fill="#ffffff" stroke="none"/>
+    <circle cx="55" cy="38" r="2.5" fill="#2b2b2b" stroke="none"/><circle cx="75" cy="38" r="2.5" fill="#2b2b2b" stroke="none"/>
+    <path d="M58 48 h14 l-7 10z" fill="url(#sari)" stroke-width="2"/>
+    <path d="M48 110 h14 M68 110 h14" fill="none" stroke="#ffc928" stroke-width="6"/>
+"""), 440)
+resim("horoz", "Horoz (yandan, kırmızı ibikli)", KIRMIZI + TURUNCU + YESIL2,
+    golge(62, 114, 36) + kalem("""    <path d="M56 98 v14 M70 98 v14" fill="none" stroke="#ffc928" stroke-width="5"/>
+    <path d="M90 60 q30 -30 30 10 q-4 20 -20 24 M92 64 q18 -10 16 18" fill="url(#yesil)" stroke-width="3"/>
+    <path d="M30 60 q0 -24 22 -26 l10 22 q30 -4 34 18 q-2 28 -36 26 q-30 0 -30 -40z" fill="url(#turuncu)"/>
+    <circle cx="42" cy="34" r="14" fill="url(#turuncu)"/>
+    <path d="M32 22 q2 -14 8 -4 q4 -12 8 0 q6 -10 8 6z" fill="url(#kirmizi)" stroke-width="2.5"/>
+    <path d="M30 40 q-4 10 4 12 q4 -4 2 -10z" fill="url(#kirmizi)" stroke-width="2"/>
+    <circle cx="44" cy="32" r="2.5" fill="#2b2b2b"/>
+    <path d="M28 32 l-10 4 l10 4z" fill="#ffc928" stroke-width="2"/>
+"""), 441)
+resim("vapur", "Vapur (bacalı, denizde)", MAVI + KIRMIZI,
+    kalem("""    <path d="M4 100 q30 -10 61 0 q31 10 61 0 v16 h-122z" fill="url(#mavi)" stroke-width="3"/>
+    <path d="M14 74 h102 l-14 24 h-74z" fill="#ffffff"/>
+    <path d="M30 52 h70 v22 h-70z" fill="#ffffff"/>
+    <path d="M38 58 h10 v8 h-10z M56 58 h10 v8 h-10z M74 58 h10 v8 h-10z" fill="url(#mavi)" stroke-width="2.5"/>
+    <path d="M58 52 v-24 h16 v24z" fill="url(#kirmizi)"/>
+    <path d="M58 34 h16" fill="none" stroke-width="3"/>
+    <path d="M66 22 q-6 -8 2 -14 q8 -4 4 -10" fill="none" stroke="#a9a59c" stroke-width="4"/>
+"""), 442)
+resim("dag", "Dağ (karlı tepeli iki dağ)", GRI + YESIL2,
+    golge(65, 112, 56) + kalem("""    <path d="M6 108 l40 -64 l40 64z" fill="url(#gri)"/>
+    <path d="M46 108 l38 -92 l42 92z" fill="url(#gri)"/>
+    <path d="M70 48 l14 -32 l14 32 l-8 -6 l-6 8 l-6 -8z" fill="#ffffff" stroke-width="2.5"/>
+    <path d="M36 60 l10 -16 l10 16 l-5 -4 l-5 5 l-5 -5z" fill="#ffffff" stroke-width="2.5"/>
+    <path d="M4 108 h122" fill="none" stroke="#8fd16a" stroke-width="6"/>
+"""), 443)
+resim("vazo", "Vazo (çiçekli)", MAVI + KIRMIZI + YESIL2,
+    golge(65, 114, 30) + kalem("""    <path d="M65 40 v-20 M65 40 l-18 -16 M65 40 l18 -16" fill="none" stroke="#5f9e3c" stroke-width="3"/>
+    <circle cx="65" cy="16" r="9" fill="url(#kirmizi)"/><circle cx="45" cy="22" r="8" fill="url(#kirmizi)"/><circle cx="85" cy="22" r="8" fill="url(#kirmizi)"/>
+    <path d="M50 40 h30 q-4 10 6 24 q12 18 -2 40 q-6 8 -19 8 q-13 0 -19 -8 q-14 -22 -2 -40 q10 -14 6 -24z" fill="url(#mavi)"/>
+    <path d="M44 74 q21 10 42 0" fill="none" stroke="#ffffff" stroke-width="4"/>
+"""), 444)
+resim("telefon", "Telefon (akıllı telefon)", GRI + MAVI,
+    kalem("""    <path d="M40 8 h50 q8 0 8 8 v88 q0 8 -8 8 h-50 q-8 0 -8 -8 v-88 q0 -8 8 -8z" fill="#2b2b2b"/>
+    <path d="M38 22 h54 v72 h-54z" fill="url(#mavi)" stroke-width="2.5"/>
+    <circle cx="65" cy="103" r="4" fill="#ffffff" stroke="none"/>
+    <path d="M58 14 h14" fill="none" stroke="#ffffff" stroke-width="3"/>
+    <path d="M46 34 h12 v12 h-12z M66 34 h12 v12 h-12z M46 54 h12 v12 h-12z M66 54 h12 v12 h-12z" fill="#ffffff" stroke-width="2"/>
+"""), 445)
+resim("jaguar", "Jaguar (benekli büyük kedi, yandan)", SARI2 + KAHVE,
+    golge(62, 112, 50) + kalem("""    <path d="M26 104 v-20 M40 104 v-20 M84 104 v-20 M98 104 v-20" fill="none" stroke-width="7"/>
+    <path d="M26 104 v-20 M40 104 v-20 M84 104 v-20 M98 104 v-20" fill="none" stroke="#ffc928" stroke-width="3"/>
+    <path d="M108 70 q20 -4 16 -30" fill="none" stroke-width="6"/>
+    <path d="M20 66 q0 -22 40 -22 q40 0 48 22 q0 22 -44 22 q-44 0 -44 -22z" fill="url(#sari)"/>
+    <circle cx="20" cy="52" r="16" fill="url(#sari)"/>
+    <path d="M10 40 l2 -8 l6 6 M26 38 l4 -6 l2 8" fill="url(#sari)" stroke-width="2.5"/>
+    <circle cx="14" cy="50" r="2.5" fill="#2b2b2b"/><circle cx="8" cy="58" r="2" fill="#2b2b2b"/>
+    <circle cx="44" cy="58" r="4" fill="none" stroke-width="2.5"/><circle cx="62" cy="54" r="4" fill="none" stroke-width="2.5"/><circle cx="80" cy="60" r="4" fill="none" stroke-width="2.5"/>
+    <circle cx="54" cy="72" r="4" fill="none" stroke-width="2.5"/><circle cx="72" cy="74" r="4" fill="none" stroke-width="2.5"/><circle cx="92" cy="70" r="4" fill="none" stroke-width="2.5"/>
+"""), 446)
+resim("jole", "Jöle (tabakta, titrek, kırmızı)", KIRMIZI,
+    golge(65, 112, 46) + kalem("""    <path d="M14 104 h102 q0 10 -51 10 q-51 0 -51 -10z" fill="#ffffff"/>
+    <path d="M28 104 q-4 -40 6 -66 q30 -14 62 0 q10 26 6 66z" fill="url(#kirmizi)"/>
+    <path d="M34 38 q31 10 62 0" fill="none" stroke-width="3"/>
+    <path d="M42 54 q-4 20 0 36" fill="none" stroke="#ffffff" stroke-width="5"/>
+    <path d="M58 26 q4 -10 10 -2" fill="none" stroke="#5f9e3c" stroke-width="4"/><circle cx="60" cy="28" r="6" fill="#e0533d" stroke-width="2"/>
+"""), 447)
+resim("pijama", "Pijama (yıldızlı üst ve alt)", MOR + SARI2,
+    kalem("""    <path d="M36 10 l14 10 h30 l14 -10 l24 18 l-12 18 l-10 -6 v26 h-62 v-26 l-10 6 l-12 -18z" fill="url(#mor)"/>
+    <path d="M38 70 h54 l4 44 h-22 l-5 -30 l-5 30 h-22z" fill="url(#mor)"/>
+    <path d="M54 34 l2 5 l5 1 l-4 3 l1 5 l-4 -3 l-4 3 l1 -5 l-4 -3 l5 -1z M76 46 l2 5 l5 1 l-4 3 l1 5 l-4 -3 l-4 3 l1 -5 l-4 -3 l5 -1z" fill="url(#sari)" stroke-width="1.5"/>
+"""), 448)

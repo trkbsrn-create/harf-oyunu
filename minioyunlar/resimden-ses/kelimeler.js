@@ -135,6 +135,38 @@ const KONUMLU_KELIMELER = {
     son: ["ateş", "diş", "güneş"],
     orta: ["kaşık", "tavşan", "eşek"],
   },
+  // 5. harf grubu (p, h, v, ğ, f, j). ğ kelime başında gelmez; h, f, j ile biten resimli kelime yok
+  // (bkz. konumSec)
+  p: {
+    bas: ["penguen", "patates", "panda", "pil", "pizza"],
+    son: ["kitap", "top", "ip"],
+    orta: ["kirpi", "iplik", "kapı", "kepçe", "yaprak", "sepet"],
+  },
+  h: {
+    bas: ["horoz", "hindi", "halı", "havuç"],
+    son: [],
+    orta: ["lahana", "lahmacun", "anahtar"],
+  },
+  v: {
+    bas: ["vapur", "vazo"],
+    son: ["ev"],
+    orta: ["havuç", "tavşan", "tavuk", "kova", "deve", "eldiven", "ceviz", "civciv", "güvercin"],
+  },
+  ğ: {
+    bas: [],
+    son: ["dağ"],
+    orta: ["ağaç", "leğen", "iğne", "kurbağa"],
+  },
+  f: {
+    bas: ["fil", "fare", "fener", "fincan", "fındık", "fıstık", "fırça"],
+    son: [],
+    orta: ["zürafa", "telefon"],
+  },
+  j: {
+    bas: ["jaguar", "jöle"],
+    son: [],
+    orta: ["pijama"],
+  },
 };
 
 // Bu harfte bu konumda yeterli resimli kelime yoksa (ö ve d ile biten kelime yok) başka konum
