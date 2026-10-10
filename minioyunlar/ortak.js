@@ -115,6 +115,14 @@ function miniOyunOlur(ad, harf) {
   return oyun.gereken === "hece" ? heceOyunuOlur(harf) : kelimeOyunuOlur(harf);
 }
 
+// Öğretmenin kuralı: Türkçede küfür ya da argo olan heceler ve kelimeler oyunda hiç çıkmaz (ne sorulur,
+// ne seçenek olur, ne birleştirilir). Sonraki harf gruplarının harfleri de baştan yazıldı.
+const UYGUNSUZ_HECELER = ["am", "amı", "amk", "sik", "sok", "mal", "göt", "piç", "bok", "çük", "kıç", "sıç",
+  "oç", "döl", "taşak", "yarak", "kaltak", "pezo", "ibne"];
+function uygunsuzMu(metin) {
+  return UYGUNSUZ_HECELER.includes(metin);
+}
+
 // Hecelerine ayrılmış kelimeler (1., 2. ve 3. harf grubunun harfleriyle yazılabilenler; yeni harf
 // grupları gelince liste büyüyecek). Oyunlar yalnızca bilinen harflerle yazılanları seçer
 // (ogrenilmisKelimeler). Elektrik Devresi, Scrabble gibi oyunlar kullanır.
@@ -150,7 +158,8 @@ const KELIMELER = [
   ["kuzu", "ku", "zu"], ["yazı", "ya", "zı"], ["tuzlu", "tuz", "lu"],
   ["kürek", "kü", "rek"], ["ürün", "ü", "rün"], ["ünlü", "ün", "lü"], ["örnek", "ör", "nek"],
   ["kömür", "kö", "mür"], ["önlük", "ön", "lük"], ["körük", "kö", "rük"],
-].map(([kelime, ...heceler]) => ({ kelime, heceler }));
+].map(([kelime, ...heceler]) => ({ kelime, heceler }))
+  .filter((k) => !uygunsuzMu(k.kelime) && !k.heceler.some(uygunsuzMu));
 
 // Üç heceli anlamlı kelimeler (Elektrik Devresi 3. seviye; öğretmenin isteği: anlamsız üçlü
 // olmasın). Yeni harf gruplarıyla dört ve beş heceli kelimeler de eklenecek.
@@ -167,7 +176,8 @@ const COK_HECELI_KELIMELER = [
   ["domates", "do", "ma", "tes"], ["salata", "sa", "la", "ta"], ["dinozor", "di", "no", "zor"],
   ["yumurta", "yu", "mur", "ta"], ["zeytinli", "zey", "tin", "li"], ["dondurma", "don", "dur", "ma"],
   ["ördekler", "ör", "dek", "ler"], ["yıldızlı", "yıl", "dız", "lı"], ["sütlüler", "süt", "lü", "ler"],
-].map(([kelime, ...heceler]) => ({ kelime, heceler }));
+].map(([kelime, ...heceler]) => ({ kelime, heceler }))
+  .filter((k) => !uygunsuzMu(k.kelime) && !k.heceler.some(uygunsuzMu));
 
 // Bilinen harflerle (bkz. bilinenHarfler) yazılabilen kelimeler; oyunun harfini içerenler önce
 function ogrenilmisKelimeler(harf) {
@@ -212,7 +222,7 @@ function heceHavuzu(harf) {
       for (const s2 of unsuzler) heceler.push({ hece: s + u + s2, u, s, acik: false });
     }
   }
-  return heceler;
+  return heceler.filter((h) => !uygunsuzMu(h.hece));
 }
 
 // Hece sorusu: oyunun harfini içeren, seviyenin uzunluğunda bir hece ve aynı uzunlukta yanlış

@@ -85,6 +85,10 @@ Mini oyunlar 3. harf grubuyla da (ü s ö y d z; üzüm, sincap, ördek, yunus, 
   "ı" de olmasın (`KARISAN_SESLER`). Büyük ünlü uyumu şart değil (öğretmen: "çok önemli değil").
 - Kelime resimden kolay tanınmalı; birbirine benzeyen resimler (kurt/kedi gibi) aynı soruda
   karışmasın.
+- Öğretmenin kuralı: Türkçede küfür ya da argo olan heceler ve kelimeler (am, sik, sok, mal...) oyunda
+  hiç çıkmaz: ne sorulur, ne seçenek olur, ne birleşir, ne ipucu hecesi olur (m'nin hecesi "em").
+  Liste `UYGUNSUZ_HECELER` (ortak.js); hece havuzu, kelime listeleri, Birleştir Büyüt ve Elektrik
+  Devresi yolları buna bakar. Yeni harf grubunda yeni çıkan uygunsuz heceleri listeye ekle.
 
 ## Yazı ve harfler
 - Oyundaki bütün yazılar Türkçe.

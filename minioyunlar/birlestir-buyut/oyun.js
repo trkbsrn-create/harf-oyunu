@@ -126,7 +126,8 @@ class BirlestirBuyutSahnesi extends MiniOyunSahnesi {
   birlesim(ilk, ikinci) {
     if (ilk.length === 1 && ikinci.length === 1) {
       const birUnlu = this.unluler.includes(ilk) !== this.unluler.includes(ikinci);
-      return birUnlu ? { metin: ilk + ikinci, tur: "hece" } : null;
+      // Küfür/argo hece (ör. a + m) birleşmez (öğretmenin kuralı)
+      return birUnlu && !uygunsuzMu(ilk + ikinci) ? { metin: ilk + ikinci, tur: "hece" } : null;
     }
     if (!this.ayar.heceKalir) return null;
     const kelime = KELIMELER.find((k) => k.heceler.length === 2 && k.heceler[0] === ilk && k.heceler[1] === ikinci);
