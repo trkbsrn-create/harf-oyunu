@@ -1,0 +1,58 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="380" viewBox="0 0 240 380">
+  <!-- Buz sarmaşığı: tarlada son aşama, gökyüzüne doğru solar (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="416" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="koyuToprak" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#8e6340"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#6f4a2c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="buzYaprak" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#eef8ff"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#a9dcf5" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <linearGradient id="solma" x1="0" y1="0" x2="0" y2="380" gradientUnits="userSpaceOnUse">
+      <stop offset="0.04" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="1"/>
+    </linearGradient>
+    <mask id="sol"><rect width="240" height="380" fill="url(#solma)"/></mask>
+  </defs>
+  <g mask="url(#sol)">
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M150.5 374 L151.0 368 L151.0 362 L150.4 356 L149.4 350 L147.8 344 L145.9 338 L143.5 332 L140.8 326 L137.8 320 L134.6 314 L131.2 308 L127.6 302 L124.1 296 L120.6 290 L117.1 284 L113.8 278 L110.7 272 L107.8 266" fill="none" stroke="#2b2b2b" stroke-width="19"/>
+    <path d="M150.5 374 L151.0 368 L151.0 362 L150.4 356 L149.4 350 L147.8 344 L145.9 338 L143.5 332 L140.8 326 L137.8 320 L134.6 314 L131.2 308 L127.6 302 L124.1 296 L120.6 290 L117.1 284 L113.8 278 L110.7 272 L107.8 266" fill="none" stroke="#7cc3e6" stroke-width="14"/>
+    <path d="M107.8 266 L105.2 260 L103.0 254 L101.0 248 L99.5 242 L98.4 236 L97.6 230 L97.3 224 L97.4 218 L97.8 212 L98.7 206 L99.8 200 L101.3 194 L103.1 188 L105.1 182 L107.2 176 L109.6 170 L112.0 164 L114.5 158 L117.0 152" fill="none" stroke="#2b2b2b" stroke-width="16"/>
+    <path d="M107.8 266 L105.2 260 L103.0 254 L101.0 248 L99.5 242 L98.4 236 L97.6 230 L97.3 224 L97.4 218 L97.8 212 L98.7 206 L99.8 200 L101.3 194 L103.1 188 L105.1 182 L107.2 176 L109.6 170 L112.0 164 L114.5 158 L117.0 152" fill="none" stroke="#7cc3e6" stroke-width="11"/>
+    <path d="M117.0 152 L119.4 146 L121.8 140 L124.0 134 L126.1 128 L128.0 122 L129.7 116 L131.2 110 L132.4 104 L133.3 98 L133.9 92 L134.3 86 L134.4 80 L134.3 74 L133.9 68 L133.3 62 L132.4 56 L131.4 50 L130.3 44 L129.0 38 L127.6 32 L126.2 26 L124.7 20 L123.2 14" fill="none" stroke="#2b2b2b" stroke-width="13"/>
+    <path d="M117.0 152 L119.4 146 L121.8 140 L124.0 134 L126.1 128 L128.0 122 L129.7 116 L131.2 110 L132.4 104 L133.3 98 L133.9 92 L134.3 86 L134.4 80 L134.3 74 L133.9 68 L133.3 62 L132.4 56 L131.4 50 L130.3 44 L129.0 38 L127.6 32 L126.2 26 L124.7 20 L123.2 14" fill="none" stroke="#7cc3e6" stroke-width="8"/>
+    <path d="M89.5 374 L89.0 368 L89.0 362 L89.6 356 L90.6 350 L92.2 344 L94.1 338 L96.5 332 L99.2 326 L102.2 320 L105.4 314 L108.8 308 L112.4 302 L115.9 296 L119.4 290 L122.9 284 L126.2 278 L129.3 272 L132.2 266" fill="none" stroke="#2b2b2b" stroke-width="19"/>
+    <path d="M89.5 374 L89.0 368 L89.0 362 L89.6 356 L90.6 350 L92.2 344 L94.1 338 L96.5 332 L99.2 326 L102.2 320 L105.4 314 L108.8 308 L112.4 302 L115.9 296 L119.4 290 L122.9 284 L126.2 278 L129.3 272 L132.2 266" fill="none" stroke="#a9dcf5" stroke-width="14"/>
+    <path d="M132.2 266 L134.8 260 L137.0 254 L139.0 248 L140.5 242 L141.6 236 L142.4 230 L142.7 224 L142.6 218 L142.2 212 L141.3 206 L140.2 200 L138.7 194 L136.9 188 L134.9 182 L132.8 176 L130.4 170 L128.0 164 L125.5 158 L123.0 152" fill="none" stroke="#2b2b2b" stroke-width="16"/>
+    <path d="M132.2 266 L134.8 260 L137.0 254 L139.0 248 L140.5 242 L141.6 236 L142.4 230 L142.7 224 L142.6 218 L142.2 212 L141.3 206 L140.2 200 L138.7 194 L136.9 188 L134.9 182 L132.8 176 L130.4 170 L128.0 164 L125.5 158 L123.0 152" fill="none" stroke="#a9dcf5" stroke-width="11"/>
+    <path d="M123.0 152 L120.6 146 L118.2 140 L116.0 134 L113.9 128 L112.0 122 L110.3 116 L108.8 110 L107.6 104 L106.7 98 L106.1 92 L105.7 86 L105.6 80 L105.7 74 L106.1 68 L106.7 62 L107.6 56 L108.6 50 L109.7 44 L111.0 38 L112.4 32 L113.8 26 L115.3 20 L116.8 14" fill="none" stroke="#2b2b2b" stroke-width="13"/>
+    <path d="M123.0 152 L120.6 146 L118.2 140 L116.0 134 L113.9 128 L112.0 122 L110.3 116 L108.8 110 L107.6 104 L106.7 98 L106.1 92 L105.7 86 L105.6 80 L105.7 74 L106.1 68 L106.7 62 L107.6 56 L108.6 50 L109.7 44 L111.0 38 L112.4 32 L113.8 26 L115.3 20 L116.8 14" fill="none" stroke="#a9dcf5" stroke-width="8"/>
+    <path d="M0 0 l40 -16 l-12 22z" fill="url(#buzYaprak)" stroke-width="3" transform="translate(130 330) scale(1.31)"/>
+    <path d="M0 0 l-40 -16 l12 22z" fill="url(#buzYaprak)" stroke-width="3" transform="translate(110 280) scale(1.22)"/>
+    <path d="M150 260 l5 -10 l5 10 l-5 10z" fill="#ffffff" stroke-width="2"/>
+    <path d="M0 0 l40 -16 l-12 22z" fill="url(#buzYaprak)" stroke-width="3" transform="translate(130 230) scale(1.12)"/>
+    <path d="M0 0 l-40 -16 l12 22z" fill="url(#buzYaprak)" stroke-width="3" transform="translate(110 180) scale(1.03)"/>
+    <path d="M150 160 l5 -10 l5 10 l-5 10z" fill="#ffffff" stroke-width="2"/>
+    <path d="M0 0 l40 -16 l-12 22z" fill="url(#buzYaprak)" stroke-width="3" transform="translate(130 130) scale(0.94)"/>
+    <path d="M0 0 l-40 -16 l12 22z" fill="url(#buzYaprak)" stroke-width="3" transform="translate(110 80) scale(0.85)"/>
+    <path d="M150 60 l5 -10 l5 10 l-5 10z" fill="#ffffff" stroke-width="2"/>
+    <path d="M65.0 374 q55.0 -22 110 0z" fill="url(#koyuToprak)" stroke-width="3.5"/>
+  </g>
+  </g>
+  <g opacity="0.55">
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="78" cy="52" r="28" fill="#ffffff" stroke-width="2.5"/>
+    <circle cx="120" cy="34" r="34" fill="#ffffff" stroke-width="2.5"/>
+    <circle cx="162" cy="54" r="28" fill="#ffffff" stroke-width="2.5"/>
+    <circle cx="100" cy="70" r="24" fill="#ffffff" stroke-width="2.5"/>
+    <circle cx="142" cy="72" r="24" fill="#ffffff" stroke-width="2.5"/>
+    <path d="M74 72 q46 14 92 0" fill="none" stroke="#ffffff" stroke-width="14"/>
+  </g>
+  </g>
+</svg>

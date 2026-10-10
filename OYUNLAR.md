@@ -29,7 +29,12 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   yaprak yığını, mantar, kabak, sarı ot; uçan yapraklar; sincap (zıplar), kirpi (gidip gelir), ağaçta baykuş.
   Tarlada mısır sapı (misir-filiz/fidan/sap, bulutta bulut-misir). Yelkenlinin yerinde köprü (680x900 tuval,
   kopru-temel + kopru-<parça>; o, k ayak; u, r halat; ı, m tahta; harf yuvarlağı yok); "Köprüden geç" →
-  `FinalSahnesi` (`kopruFinali`: harita, "3. ada yakında"). 1. adanın finalinde "2. adaya git" düğmesi.
+  `FinalSahnesi` (`kopruFinali`: harita, "3. adaya git"). 1. adanın finalinde "2. adaya git" düğmesi (`sonrakiAdaDugmesi`).
+- 3. ada (karlı, `ADALAR[3]`): kar zemini, karlı çamlar (cam-tepe), karlı çalı ve kaya, kar yığını, karlı ot, buz
+  kristali, seyrek kardan adam; yağan kar; penguen, kutup ayısı (gidip gelir), beyaz tavşan (zıplar), fok (sallanır).
+  Tarlada buz sarmaşığı (buz-filiz/fidan/sarmasik, bulutta bulut-buz). Yelkenlinin yerinde askı ve donmuş göl
+  (dalgic-temel + dalgic-<parça>; ü maske, s şnorkel, ö elbise, y palet, d tüp, z çekiç). "Buzu kır" →
+  `buzFinali` (çekiç buzu kırar, çocuk maskeyle dalar; harita3, "4. ada (su altı) yakında").
   Yazılar da doodle: `doodleYazi` (başlık, düğme, pencere yazıları: boya kalemi taraması,
   kalem çerçevesi, titrek kenar) ve `titret` (öğretilen harfler: biçim aynı, yalnızca
   kenar titrer). Harf biçimi her zaman aynı yazı tipidir (kodda adı hep "Andika"; aşağıya bkz.).

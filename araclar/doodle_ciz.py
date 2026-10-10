@@ -2579,65 +2579,188 @@ resim("buz", "Buz (buz küpleri)", MAVI,
     <path d="M24 72 l6 -2 M72 46 l6 -2" fill="none" stroke="#ffffff" stroke-width="4"/>
 """), 361)
 
-# ---- TASLAK (öğretmen onayı bekliyor): 3. ada, karlı ada. Kuşbakışı tek resim; oyuna eklenmedi.
-# Ortada donmuş göl ve kırılacak buz; yanında dalgıç kıyafeti askısı (silik parçalar) ve çekiç yeri.
-def _taslak_ada3():
-    import random
-    p = []
-    rnd = random.Random(9)
-    # ada (kar) ve kıyı
-    p.append('    <path d="M90 360 q-20 -170 160 -230 q170 -70 380 -40 q200 -40 360 30 q110 60 100 180 q20 140 -110 210 '
-             'q-190 90 -420 70 q-220 20 -360 -60 q-120 -60 -110 -160z" fill="url(#kar)"/>\n')
-    # donmuş göl ve ortasındaki kırılacak buz (çatlaklı, parlak)
-    p.append('    <ellipse cx="790" cy="420" rx="170" ry="80" fill="url(#buzGol)"/>\n')
-    p.append('    <ellipse cx="800" cy="420" rx="46" ry="22" fill="#eef8ff" stroke-width="3"/>\n')
-    p.append('    <path d="M800 420 l-22 -10 M800 420 l18 -14 M800 420 l26 6 M800 420 l-10 16" fill="none" stroke="#7cc3e6" stroke-width="2.5"/>\n')
-    p.append('    <path d="M760 392 l4 -10 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4z" fill="#ffffff" stroke-width="1.5"/>\n')
-    # tarla (6 kare, karlı)
-    p.append('    <path d="M300 380 h300 v60 h-300z" fill="url(#toprak)"/>\n')
-    for i in range(6):
-        p.append(f'    <path d="M{305+i*50} 386 h40 v48 h-40z" fill="#9a6c43" stroke-width="2.5"/>\n')
-        p.append(f'    <path d="M{305+i*50} 390 q20 -8 40 0" fill="none" stroke="#ffffff" stroke-width="4"/>\n')
-    p.append('    <path d="M292 372 h316 M292 448 h316 M292 372 v76 M608 372 v76" fill="none" stroke="#c98f4f" stroke-width="5"/>\n')
-    # karlı çam ağaçları
-    for x, y in [(180, 260), (260, 190), (380, 160), (520, 140), (660, 150), (800, 170), (930, 230), (150, 420), (260, 540), (980, 560)]:
-        p.append(f'    <g transform="translate({x} {y}) scale(0.9)"><path d="M-6 50 h12 v14 h-12z" fill="url(#kahve)"/>'
-                 '<path d="M0 -50 l26 40 h-12 l22 30 h-14 l22 32 h-88 l22 -32 h-14 l22 -30 h-12z" fill="url(#cam)"/>'
-                 '<path d="M0 -50 l12 18 q-12 6 -24 0z M-14 -10 q14 8 28 0 M-24 20 q24 8 48 0" fill="#ffffff" stroke-width="2.5"/></g>\n')
-    # kardan adam
-    p.append('    <g transform="translate(470 300)"><circle cx="0" cy="20" r="22" fill="#ffffff"/><circle cx="0" cy="-12" r="15" fill="#ffffff"/>'
-             '<path d="M0 -12 l12 3 l-12 3z" fill="#f08a3c" stroke-width="1.5"/><circle cx="-5" cy="-16" r="2" fill="#2b2b2b" stroke="none"/><circle cx="5" cy="-16" r="2" fill="#2b2b2b" stroke="none"/>'
-             '<path d="M-12 -26 h24 v-14 h-24z" fill="#2b2b2b"/><path d="M-16 -2 q16 6 32 0" fill="none" stroke="#e0533d" stroke-width="5"/></g>\n')
-    # hayvanlar: penguenler, kutup ayısı, beyaz tavşan, fok (gölün kıyısında)
-    for x, y in [(640, 470), (665, 480)]:
-        p.append(f'    <g transform="translate({x} {y})"><ellipse cx="0" cy="0" rx="10" ry="15" fill="#2b2b2b"/><ellipse cx="0" cy="3" rx="6" ry="10" fill="#ffffff" stroke="none"/>'
-                 '<path d="M-2 -8 l4 0 l-2 4z" fill="#ffc928" stroke-width="1"/><path d="M-5 15 h4 M2 15 h4" fill="none" stroke="#ffc928" stroke-width="3"/></g>\n')
-    p.append('    <g transform="translate(980 300)"><ellipse cx="0" cy="0" rx="34" ry="18" fill="#fffdf6"/><circle cx="30" cy="-10" r="12" fill="#fffdf6"/>'
-             '<circle cx="34" cy="-12" r="2" fill="#2b2b2b" stroke="none"/><circle cx="42" cy="-8" r="2" fill="#2b2b2b" stroke="none"/>'
-             '<path d="M-24 14 v10 M-10 16 v10 M10 16 v10 M24 14 v10" fill="none" stroke-width="5"/></g>\n')
-    p.append('    <g transform="translate(200 330)"><ellipse cx="0" cy="0" rx="12" ry="9" fill="#ffffff"/><circle cx="10" cy="-6" r="6" fill="#ffffff"/>'
-             '<path d="M10 -12 l-2 -12 l4 0z M14 -12 l2 -12 l3 2z" fill="#ffffff" stroke-width="1.5"/></g>\n')
-    p.append('    <g transform="translate(730 510)"><path d="M-26 6 q0 -14 26 -14 q20 0 24 10 q8 0 10 6 q-12 6 -24 2 q-18 6 -36 -4z" fill="url(#gri)" stroke-width="2.5"/>'
-             '<circle cx="18" cy="-4" r="2" fill="#2b2b2b" stroke="none"/></g>\n')
-    # kar taneleri
-    for k in range(60):
-        x = rnd.randint(60, 1220); y = rnd.randint(20, 700)
-        p.append(f'    <circle cx="{x}" cy="{y}" r="{rnd.choice([2, 3, 4])}" fill="#ffffff" stroke="#c9dfee" stroke-width="1"/>\n')
-    # dalgıç kıyafeti askısı (gölün sağında): maske, şnorkel, elbise, paletler, tüp (silik) + çekiç yeri
-    silik = 'fill="#ffffff" fill-opacity="0.45" stroke="#8a8a8a" stroke-dasharray="6 5" stroke-width="2.5"'
-    p.append('    <path d="M1000 330 v150 M1070 330 v150 M990 330 h90" fill="none" stroke="#b07a42" stroke-width="7"/>\n')
-    p.append(f'    <path d="M1018 350 h34 v30 l10 50 h-54 l10 -50z" {silik}/>\n')                 # dalgıç elbisesi
-    p.append(f'    <path d="M1020 336 q15 -10 30 0 v10 h-30z" {silik}/>\n')                        # maske
-    p.append(f'    <path d="M1056 330 v-22 q0 -6 6 -6" fill="none" stroke="#8a8a8a" stroke-dasharray="6 5" stroke-width="3"/>\n')  # şnorkel
-    p.append(f'    <path d="M1010 470 l-14 18 h28z M1062 470 l-14 18 h28z" {silik}/>\n')          # paletler
-    p.append(f'    <path d="M1080 360 h14 v50 h-14z" {silik}/>\n')                                  # oksijen tüpü
-    p.append(f'    <path d="M860 470 h40 v12 h-40z M876 482 h8 v28 h-8z" {silik}/>\n')              # çekiç (göl kıyısında)
-    # su tesisi iskelesi ve başlangıç
-    p.append('    <path d="M600 640 v70 h24 v-70" fill="url(#tahta)" stroke-width="3"/>\n')
-    p.append('    <path d="M300 560 l4 9 l10 1 l-8 6 l3 10 l-9 -6 l-9 6 l3 -10 l-8 -6 l10 -1z" fill="#ffe680" stroke-width="2"/>\n')
-    return "".join(p)
+# ==== 3. ada (karlı ada; öğretmen taslağı onayladı) ====
+# Zemin: kar taraması. Ağaçlar: karlı çam tepesi (agac-tepe.svg ile aynı 160x140 tuval; gövdesi
+# agac-govde.svg). Karlı çalı ve kaya, yerde kar yığını, karlı ot, buz kristali, küçük kardan adam;
+# yağan kar tanesi; hayvanlar: penguen, kutup ayısı, beyaz tavşan, fok.
+doku("doku-kar.svg", 64, "#ffffff", capraz(64, 16, "#e3eef6", 4, -1), "Kar taraması")
+CAM = tarama("cam", "#8fbf8a", "#5f9e5c", 35, 6, 3)
+yaz("cam-tepe.svg", 160, 140, "Karlı çam tepesi; gövdesi agac-govde.svg", CAM,
+    kalem('''    <path d="M80 4 l40 44 h-18 l34 38 h-20 l38 40 h-148 l38 -40 h-20 l34 -38 h-18z" fill="url(#cam)"/>
+    <path d="M80 4 l17 19 q-17 8 -34 0z M58 48 q22 10 44 0 M42 86 q38 12 76 0 M30 126 q50 10 100 0" fill="#ffffff" stroke-width="2.5"/>
+'''), 401)
+yaz("cali-karli.svg", 140, 90, "Karlı çalı", KOYU_YESIL,
+    golge(70, 84, 56, 5) + kalem('''    <path d="M22 80 q-18 -2 -12 -22 q-8 -22 16 -26 q4 -22 30 -18 q14 -18 36 -4 q24 -6 28 18 q20 6 14 26 q4 26 -20 26z" fill="url(#koyuYesil)"/>
+    <path d="M14 40 q10 -14 26 -12 q8 -16 30 -16 q16 -10 34 2 q16 0 22 14 q-20 -4 -30 4 q-14 -8 -30 0 q-16 -6 -30 4 q-12 -4 -22 4z" fill="#ffffff" stroke-width="2.5"/>
+'''), 402)
+yaz("kaya-karli.svg", 110, 80, "Karlı kaya", tarama("gri", "#d6d3cc", "#a9a59c", 25),
+    golge(55, 74, 44, 5) + kalem('''    <path d="M12 72 q-6 -28 16 -44 q16 -18 38 -12 q30 8 34 34 q4 14 -4 22 z" fill="url(#gri)"/>
+    <path d="M18 40 q10 -20 30 -22 q20 -6 38 6 q10 6 12 16 q-14 -6 -26 0 q-14 -8 -28 0 q-14 -4 -26 0z" fill="#ffffff" stroke-width="2.5"/>
+'''), 403)
+yaz("kar-yigini.svg", 70, 30, "Yerde kar yığını", "",
+    kalem('''    <path d="M4 28 q8 -22 31 -24 q23 2 31 24z" fill="#ffffff" stroke-width="3"/>
+    <path d="M20 16 q6 -4 12 -2" fill="none" stroke="#c9dfee" stroke-width="3"/>
+''', 3), 404, 2.5)
+yaz("ot-karli.svg", 44, 34, "Karlı ot öbeği", "",
+    kalem('''    <path d="M8 32 q-4 -14 -6 -24 M16 32 q0 -16 4 -28 M24 32 q4 -14 12 -24 M32 32 q4 -8 9 -12" fill="none" stroke="#7a9e78"/>
+    <path d="M2 30 q20 -8 40 0z" fill="#ffffff" stroke-width="2"/>
+''', 3), 405, 2.5)
+yaz("buz-kristali.svg", 40, 40, "Buz kristali (parlak)", "",
+    kalem('''    <path d="M20 4 l6 10 l-6 22 l-6 -22z" fill="#d7efff" stroke-width="2.5"/>
+    <path d="M8 16 l8 4 l-4 14 l-8 -8z M32 16 l-8 4 l4 14 l8 -8z" fill="#eef8ff" stroke-width="2"/>
+''', 2.5), 406, 2)
+yaz("kardan-adam.svg", 60, 90, "Küçük kardan adam", "",
+    golge(30, 86, 22, 3) + kalem('''    <circle cx="30" cy="64" r="22" fill="#ffffff"/>
+    <circle cx="30" cy="32" r="15" fill="#ffffff"/>
+    <path d="M18 20 h24 v-14 h-24z M14 20 h32" fill="#2b2b2b" stroke-width="3"/>
+    <path d="M30 32 l12 3 l-12 3z" fill="#f08a3c" stroke-width="1.5"/>
+    <circle cx="25" cy="28" r="2" fill="#2b2b2b" stroke="none"/><circle cx="35" cy="28" r="2" fill="#2b2b2b" stroke="none"/>
+    <path d="M16 46 q14 6 28 0" fill="none" stroke="#e0533d" stroke-width="5"/>
+    <circle cx="30" cy="60" r="2" fill="#2b2b2b" stroke="none"/><circle cx="30" cy="70" r="2" fill="#2b2b2b" stroke="none"/>
+''', 3), 407)
+yaz("kar-tanesi.svg", 26, 26, "Yağan kar tanesi (oyunda hafifçe renklenir)", "",
+    kalem('''    <path d="M13 2 v22 M3 7 l20 12 M3 19 l20 -12" fill="none" stroke="#ffffff" stroke-width="3.5"/>
+    <path d="M13 2 v22 M3 7 l20 12 M3 19 l20 -12" fill="none" stroke="#a9cbe0" stroke-width="1.2"/>
+''', 1.5), 408, 1.5)
+yaz("penguen.svg", 50, 70, "Penguen (önden)", "",
+    golge(25, 67, 16, 3) + kalem('''    <ellipse cx="25" cy="38" rx="18" ry="26" fill="#2b2b2b"/>
+    <ellipse cx="25" cy="44" rx="11" ry="18" fill="#ffffff" stroke="none"/>
+    <circle cx="19" cy="22" r="3" fill="#ffffff" stroke="none"/><circle cx="31" cy="22" r="3" fill="#ffffff" stroke="none"/>
+    <circle cx="19" cy="22" r="1.5" fill="#2b2b2b" stroke="none"/><circle cx="31" cy="22" r="1.5" fill="#2b2b2b" stroke="none"/>
+    <path d="M21 28 h8 l-4 6z" fill="#ffc928" stroke-width="1.5"/>
+    <path d="M16 64 h8 M27 64 h8" fill="none" stroke="#ffc928" stroke-width="4"/>
+''', 2.5), 409)
+yaz("kutup-ayisi.svg", 110, 70, "Kutup ayısı (yandan, yürüyen)", "",
+    golge(54, 66, 44, 4) + kalem('''    <path d="M22 62 v-12 M36 64 v-12 M70 64 v-12 M84 62 v-12" fill="none" stroke-width="9"/>
+    <path d="M22 62 v-12 M36 64 v-12 M70 64 v-12 M84 62 v-12" fill="none" stroke="#fffdf6" stroke-width="5"/>
+    <ellipse cx="52" cy="38" rx="40" ry="20" fill="#fffdf6"/>
+    <path d="M84 30 q4 -14 16 -12 q10 2 8 12 q-2 8 -12 8 q-10 0 -12 -8z" fill="#fffdf6"/>
+    <circle cx="90" cy="18" r="4" fill="#fffdf6"/><circle cx="102" cy="24" r="2" fill="#2b2b2b" stroke="none"/>
+    <circle cx="108" cy="30" r="2.5" fill="#2b2b2b" stroke="none"/>
+''', 3), 410)
+yaz("tavsan-beyaz.svg", 60, 56, "Beyaz kar tavşanı (oturan)", "",
+    golge(30, 52, 22, 3) + kalem('''    <ellipse cx="28" cy="38" rx="20" ry="14" fill="#ffffff"/>
+    <circle cx="44" cy="26" r="10" fill="#ffffff"/>
+    <path d="M40 18 q-4 -16 2 -16 q4 2 2 16 M48 18 q2 -16 8 -14 q2 4 -4 16" fill="#ffffff" stroke-width="2.5"/>
+    <circle cx="48" cy="25" r="1.8" fill="#2b2b2b" stroke="none"/><circle cx="54" cy="28" r="1.5" fill="#ff9c8a" stroke="none"/>
+    <circle cx="8" cy="36" r="5" fill="#ffffff" stroke-width="2"/>
+''', 2.5), 411)
+yaz("fok.svg", 90, 50, "Fok (buzda yatan)", GRI,
+    golge(44, 46, 36, 4) + kalem('''    <path d="M6 40 q-2 -10 10 -14 q20 -14 46 -14 q20 0 24 14 q2 12 -12 16 q-30 6 -68 -2z" fill="url(#gri)"/>
+    <path d="M6 40 l-4 -12 l10 6 M34 42 l8 6 l4 -8" fill="url(#gri)" stroke-width="2.5"/>
+    <circle cx="74" cy="20" r="2.5" fill="#2b2b2b" stroke="none"/><circle cx="84" cy="25" r="2" fill="#2b2b2b" stroke="none"/>
+    <path d="M80 30 l8 -2 M80 31 l8 2" fill="none" stroke-width="1.5"/>
+''', 3), 412)
 
-yaz("taslak-ada3.svg", 1280, 720, "TASLAK: 3. ada (karlı), kuşbakışı; donmuş göl, buz, dalgıç kıyafeti ve çekiç",
-    SU + tarama("kar", "#ffffff", "#e3eef6", 35, 9, 2.5) + tarama("buzGol", "#d7efff", "#a9dcf5", -35, 7, 3)
-    + tarama("cam", "#8fbf8a", "#5f9e5c", 35, 6, 3) + TOPRAK + TAHTA + KAHVE + GRI,
-    '  <rect width="1280" height="720" fill="url(#su)"/>\n' + kalem(_taslak_ada3(), 3.5), 400)
+# ---- 3. ada: buz sarmaşığı (mısır sapı ve fasulye sırığının yerine; aynı boylar ve tabanlar) ----
+BUZ = tarama("buzYaprak", "#eef8ff", "#a9dcf5", 35, 6, 3)
+yaz("buz-filiz.svg", 100, 110, "Buz sarmaşığı filizi: tohum bir kez sulanınca", KOYU_TOPRAK + BUZ,
+    kalem('''    <path d="M50 100 q-6 -30 4 -60" fill="none" stroke="#7cc3e6" stroke-width="6"/>
+    <path d="M50 100 q-6 -30 4 -60" fill="none" stroke-width="2"/>
+    <path d="M50 70 l-28 -12 l10 -10z M52 56 l28 -14 l-6 14z M54 40 l-6 -26 l12 10z" fill="url(#buzYaprak)" stroke-width="3"/>
+''' + tumsek(50, 106, 70)), 413)
+yaz("buz-fidan.svg", 130, 150, "Genç buz sarmaşığı: tohum iki kez sulanınca", KOYU_TOPRAK + BUZ,
+    kalem('''    <path d="M65 140 q-20 -30 0 -60 q20 -30 0 -60" fill="none" stroke="#7cc3e6" stroke-width="8"/>
+    <path d="M65 140 q-20 -30 0 -60 q20 -30 0 -60" fill="none" stroke-width="2"/>
+    <path d="M56 116 l-34 -14 l12 -14z M68 92 l36 -16 l-8 18z M60 64 l-32 -18 l14 -10z M70 40 l28 -18 l-4 16z" fill="url(#buzYaprak)" stroke-width="3"/>
+    <path d="M40 98 l4 -8 l4 8 l-4 8z M92 72 l4 -8 l4 8 l-4 8z" fill="#ffffff" stroke-width="2"/>
+''' + tumsek(65, 146, 80)), 414)
+
+
+def buz_sarmasigi(boy, y_ust, aralik):
+    # Kıvrılarak yukarı çıkan buz mavisi sarmaşık; iki yanda buz yaprakları ve parlak kristaller
+    c = ""
+    for faz, renk in ((0, "#7cc3e6"), (math.pi, "#a9dcf5")):
+        for y1, y2, k in [(boy - 6, boy * 0.7, 14), (boy * 0.7, boy * 0.4, 11), (boy * 0.4, y_ust, 8)]:
+            c += f'    <path d="{sap(faz, int(y1), int(y2), boy)}" fill="none" stroke="{KALEM}" stroke-width="{k + 5}"/>\n'
+            c += f'    <path d="{sap(faz, int(y1), int(y2), boy)}" fill="none" stroke="{renk}" stroke-width="{k}"/>\n'
+    for i, y in enumerate(range(int(boy - 50), int(y_ust + 30), -aralik)):
+        yon = 1 if i % 2 == 0 else -1
+        olcek = 0.7 + 0.7 * (y / boy)
+        c += (f'    <path d="M0 0 l{yon*40} -16 l{-yon*12} 22z" fill="url(#buzYaprak)" stroke-width="3" '
+              f'transform="translate({120 + yon*10} {y}) scale({olcek:.2f})"/>\n')
+        if i % 2 == 1:
+            c += f'    <path d="M{120 - yon*30} {y - 20} l5 -10 l5 10 l-5 10z" fill="#ffffff" stroke-width="2"/>\n'
+    return c
+
+
+yaz("bulut-buz.svg", SIRIK_EN, SIRIK_BOY, "Buz sarmaşığı: bulutların üstünde, tepesi bulutta", KOYU_TOPRAK + BUZ,
+    kalem(buz_sarmasigi(SIRIK_BOY, 90, 64) + bulut +
+          '    <path d="M64 104 q56 14 112 0" fill="none" stroke="#ffffff" stroke-width="16"/>\n'
+          + tumsek(120, 774, 110), 3.5)
+    + '''  <path d="M40 20 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4z M206 30 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3z" fill="#ffe680" stroke="#2b2b2b" stroke-width="2"/>
+''', 415)
+yaz("buz-sarmasik.svg", SIRIK_EN, KISA_BOY, "Buz sarmaşığı: tarlada son aşama, gökyüzüne doğru solar",
+    KOYU_TOPRAK + BUZ + SOLMA,
+    '  <g mask="url(#sol)">\n' + kalem(buz_sarmasigi(KISA_BOY, 10, 50) + tumsek(120, 374, 110), 3.5) + '  </g>\n'
+    + '  <g opacity="0.55">\n' + kalem("".join(
+        f'    <circle cx="{x}" cy="{y}" r="{r}" fill="#ffffff" stroke-width="2.5"/>\n'
+        for x, y, r in [(78, 52, 28), (120, 34, 34), (162, 54, 28), (100, 70, 24), (142, 72, 24)])
+        + '    <path d="M74 72 q46 14 92 0" fill="none" stroke="#ffffff" stroke-width="14"/>\n', 2.5) + '  </g>\n', 416)
+
+# ---- 3. ada: dalgıç kıyafeti ve çekiç (4. adaya, su altına inmek için) ----
+# Bütün resimler aynı 680x440 tuvalde, oyunda sol üst köşeleri (YELKENLI_X, YELKENLI_Y).
+# Solda kıyafet askısı, sağda donmuş göl ve ortasında kırılacak buz (dalgic-temel.svg).
+# Parçalar (öğretmenin kararı; harf yazmaz): ü maske, s şnorkel, ö elbise, y paletler, d tüp, z çekiç.
+DALGIC_DESEN = (tarama("elbise", "#5d8fb3", "#3f6f94", 35, 6, 3) + tarama("maske", "#ffe680", "#ffc928", -35, 6, 2.5)
+                + tarama("tup", "#ff9c8a", "#e0533d", 80, 6, 2.5) + tarama("palet", "#9be3dc", "#4fc3b8", 35, 6, 2.5)
+                + TAHTA + GRI)
+DALGIC_PARCALARI = [
+    ("maske", "M150 82 q0 -12 14 -12 h52 q14 0 14 12 v22 q0 12 -14 12 h-14 l-6 -8 h-12 l-6 8 h-14 q-14 0 -14 -12z", "maske"),
+    ("snorkel", "M238 120 v-70 q0 -12 12 -12 h6 v10 h-6 q-2 0 -2 2 v70 q0 10 -8 10 h-10 v-10z", "tup"),
+    ("elbise", "M150 130 h80 l20 50 l-14 6 l-10 -24 v150 h-24 l-6 -80 l-6 80 h-24 v-150 l-10 24 l-14 -6z", "elbise"),
+    ("palet", "M96 352 h30 l14 46 h-58z M232 352 h30 l14 46 h-58z", "palet"),
+    ("tup", "M282 168 q0 -14 18 -14 q18 0 18 14 v130 q0 10 -18 10 q-18 0 -18 -10z M292 146 h16 v10 h-16z", "tup"),
+    ("cekic", "M520 286 h70 v30 h-70z M548 316 h14 l-30 70 h-14z", "tahta"),
+]
+DALGIC_KUTU = {"maske": (150, 70, 80, 48), "snorkel": (226, 38, 32, 102), "elbise": (126, 130, 124, 200),
+               "palet": (82, 352, 194, 46), "tup": (282, 146, 36, 162), "cekic": (504, 286, 86, 100)}
+for ad, yol, desen in DALGIC_PARCALARI:
+    yaz(f"dalgic-{ad}.svg", 680, 440, f"Dalgıç parçası: {ad}", DALGIC_DESEN,
+        kalem(f'    <path d="{yol}" fill="url(#{desen})"/>\n'), 420)
+    yaz(f"dalgic-{ad}-silik.svg", 680, 440, f"Dalgıç parçasının silik yeri: {ad}", "",
+        f'  <path d="{yol}" fill="#ffffff" fill-opacity="0.3" stroke="#8a8a8a" stroke-width="3.5" '
+        'stroke-dasharray="10 8" stroke-linecap="round" stroke-linejoin="round"/>\n', 420)
+    x, y, en, boy = DALGIC_KUTU[ad]
+    olcek = 96 / max(en, boy)
+    tx = 60 - (x + en / 2) * olcek
+    ty = 60 - (y + boy / 2) * olcek
+    yaz(f"dalgic-{ad}-simge.svg", 120, 120, f"Dalgıç parçasının çanta simgesi: {ad}", DALGIC_DESEN,
+        kalem(f'    <path d="{yol}" fill="url(#{desen})" transform="translate({tx:.1f} {ty:.1f}) scale({olcek:.3f})" '
+              'vector-effect="non-scaling-stroke"/>\n', 3.5), 421, 2.5)
+yaz("dalgic-temel.svg", 680, 440, "Dalgıç askısı ve donmuş göl (ortada kırılacak buz)",
+    TAHTA + tarama("buzGol", "#d7efff", "#a9dcf5", -35, 7, 3),
+    golge(200, 408, 150, 8) + kalem('''    <ellipse cx="520" cy="250" rx="150" ry="90" fill="url(#buzGol)"/>
+    <ellipse cx="520" cy="240" rx="56" ry="28" fill="#eef8ff" stroke-width="3"/>
+    <path d="M520 240 l-26 -12 M520 240 l22 -16 M520 240 l30 8 M520 240 l-12 20" fill="none" stroke="#7cc3e6" stroke-width="3"/>
+    <path d="M70 404 v-350 M330 404 v-350 M56 54 h288" fill="none" stroke="#9b6a38" stroke-width="10"/>
+    <path d="M70 404 v-350 M330 404 v-350 M56 54 h288" fill="none" stroke-width="2"/>
+    <path d="M190 54 v14 q0 6 -6 6" fill="none" stroke-width="3"/>
+    <path d="M40 404 h60 M300 404 h60" fill="none" stroke="#9b6a38" stroke-width="10"/>
+'''), 422)
+# 3. adanın sonu: buz kırılır (sahne arka planı) ve 4 adalı harita
+yaz("hikaye-buz.svg", 1280, 720, "Final 3: karlı kıyı, donmuş göl ve ortasındaki buz",
+    tarama("kar", "#ffffff", "#e3eef6", 35, 9, 2.5) + tarama("gok", "#d7efff", "#bfe3f5", 30, 8, 2.5)
+    + tarama("buzGol", "#d7efff", "#a9dcf5", -35, 7, 3) + CAM,
+    '  <rect width="1280" height="720" fill="url(#gok)"/>\n'
+    + kalem('''    <path d="M0 300 q320 -40 640 -10 q320 30 640 -10 v440 h-1280z" fill="url(#kar)"/>
+    <ellipse cx="640" cy="520" rx="420" ry="150" fill="url(#buzGol)"/>
+    <ellipse cx="640" cy="520" rx="130" ry="60" fill="#eef8ff" stroke-width="4"/>
+    <path d="M140 300 l40 -80 l40 80z M1060 290 l46 -92 l46 92z M260 296 l30 -60 l30 60z" fill="url(#cam)"/>
+''', 4), 423)
+yaz("hikaye-harita3.svg", 1280, 720, "Final 3: adalar haritası (1 yeşil, 2 sonbahar, 3 karlı, 4 su altı kesik çizgili)",
+    tarama("kagit", "#fbf4e2", "#f1e6c8", 30, 8, 3) + tarama("cimen", "#d8f0c0", "#bfe39f", 35, 8, 3)
+    + tarama("sonbahar", "#f2d29a", "#e0b66b", 35, 8, 3) + tarama("kar", "#ffffff", "#e3eef6", 35, 8, 3) + SU,
+    '  <rect width="1280" height="720" fill="url(#kagit)"/>\n'
+    '  <rect x="60" y="60" width="1160" height="600" rx="30" fill="url(#su)" opacity="0.6"/>\n'
+    + kalem('    <path d="M100 460 q70 -90 180 -12 q-70 72 -180 12z" fill="url(#cimen)"/>\n'
+            '    <path d="M360 340 q80 -100 200 -10 q-80 76 -200 10z" fill="url(#sonbahar)"/>\n'
+            '    <path d="M640 430 q90 -110 220 -10 q-90 80 -220 10z" fill="url(#kar)"/>\n'
+            '    <circle cx="1040" cy="300" r="90" fill="#bfe3f5" stroke="#8a8a8a" stroke-dasharray="14 10"/>\n'
+            '    <path d="M1000 300 q10 -12 20 0 q10 12 20 0 M1030 330 q10 -12 20 0 q10 12 20 0" fill="none" stroke="#7cc3e6" stroke-width="3"/>\n'
+            '    <path d="M860 420 q90 -10 110 -80" fill="none" stroke="#e0533d" stroke-dasharray="16 12"/>\n', 4), 424)
+# 3. ada (karlı) için mini harita kartı: çimen yerine kar
+with open(os.path.join(KLASOR, "harita-karti.svg"), encoding="utf-8") as f:
+    _kart = f.read()
+with open(os.path.join(KLASOR, "harita-karti3.svg"), "w", encoding="utf-8") as f:
+    f.write(_kart.replace("#c9eba7", "#ffffff").replace("#a3d97c", "#dce9f2").replace("Mini harita kartı", "Mini harita kartı (3. ada)"))
