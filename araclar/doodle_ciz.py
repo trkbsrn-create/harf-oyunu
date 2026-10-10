@@ -3358,3 +3358,235 @@ resim("sag", "Sağ (sağı gösteren yön tabelası)", YESIL2 + KAHVE,
     golge(65, 116, 30) + kalem("""    <path d="M60 116 v-66 h10 v66z" fill="url(#kahve)"/>
     <path d="M12 30 h76 v-16 l34 30 l-34 30 v-16 h-76z" fill="url(#yesil)"/>
 """), 519)
+
+# ==== 4. ada (su altı; öğretmenin kararları) ====
+# Zemin: deniz tabanı kumu (mavimsi). Ağaç yerine uzun deniz yosunu, çalı yerine deniz şakayığı,
+# yosunlu kaya; yerde deniz kabuğu, deniz yıldızı, küçük mercan, deniz çayırı. Uçan: yükselen
+# kabarcık. Canlılar: renkli balık, denizatı, ahtapot, yengeç, denizanası. Tohum yerine mercan
+# tanesi; damla yerine hava kabarcığı. Bulutlar yerine su yüzeyi. Görev: dev kaplumbağa (eyer,
+# dizgin, fener, harita, anahtar) gizli mağaradaki roket üssüne götürür.
+doku("doku-deniz-tabani.svg", 64, "#d3e9df", capraz(64, 16, "#bcdccd", 4, 1) + capraz(64, 32, "#e6e3c0", 3, -1),
+     "Deniz tabanı kumu taraması")
+doku("doku-derin-su.svg", 64, "#7fbfdc", capraz(64, 16, "#6aaed0", 5, -1) + capraz(64, 16, "#8fcbe4", 2, 1), "Derin su taraması")
+YOSUN = tarama("yosun", "#9fd6a0", "#5fae6a", 35, 6, 3)
+yaz("su-yosun.svg", 160, 240, "Uzun deniz yosunu (ağaç yerine; alt ortası tabanı, oyunda sallanır)", YOSUN,
+    golge(80, 234, 40) + kalem('''    <path d="M80 236 q-24 -60 -4 -120 q16 -50 -6 -110" fill="none" stroke="#5fae6a" stroke-width="10"/>
+    <path d="M80 236 q-24 -60 -4 -120 q16 -50 -6 -110" fill="none" stroke-width="2"/>
+    <path d="M74 200 q-40 -10 -50 -46 q34 4 50 46z M70 150 q36 -16 54 -50 q-34 0 -54 50z M74 104 q-36 -10 -46 -44 q30 2 46 44z M76 60 q30 -14 40 -44 q-28 0 -40 44z" fill="url(#yosun)" stroke-width="3"/>
+    <path d="M96 236 q16 -40 2 -84 q-8 -26 6 -52" fill="none" stroke="#8fcf8a" stroke-width="7"/>
+    <path d="M98 170 q26 -6 34 -30 q-24 2 -34 30z M100 120 q-20 -8 -24 -28 q18 2 24 28z" fill="url(#yosun)" stroke-width="2.5"/>
+'''), 601)
+yaz("su-anemon.svg", 140, 90, "Deniz şakayığı (çalı yerine; oyunda sallanır)", tarama("anemon", "#ffb3c7", "#f07aa0", 35, 6, 3),
+    golge(70, 84, 50, 5) + kalem('''    <path d="M36 84 q-4 -26 34 -28 q38 2 34 28z" fill="#f2a65a"/>
+    <path d="M40 58 q-20 -20 -12 -42 M52 56 q-6 -28 4 -46 M64 56 q2 -30 12 -46 M78 56 q10 -26 26 -40 M90 60 q20 -18 34 -22 M34 62 q-20 -8 -28 -26" fill="none" stroke="#f07aa0" stroke-width="9"/>
+    <path d="M28 16 a4 4 0 1 0 0.1 0 M56 10 a4 4 0 1 0 0.1 0 M76 10 a4 4 0 1 0 0.1 0 M104 16 a4 4 0 1 0 0.1 0 M124 38 a4 4 0 1 0 0.1 0 M6 36 a4 4 0 1 0 0.1 0" fill="#ffb3c7" stroke-width="2.5"/>
+'''), 602)
+yaz("su-kaya.svg", 110, 80, "Yosunlu kaya", tarama("gri", "#c3cfcc", "#94a3a0", 25),
+    golge(55, 74, 44, 5) + kalem('''    <path d="M12 72 q-6 -28 16 -44 q16 -18 38 -12 q30 8 34 34 q4 14 -4 22 z" fill="url(#gri)"/>
+    <path d="M20 34 q8 -6 16 -2 q6 -10 16 -6 M70 30 q10 -4 18 4" fill="none" stroke="#5fae6a" stroke-width="6"/>
+'''), 603)
+yaz("deniz-kabugu.svg", 44, 34, "Deniz kabuğu (yelpaze)", "",
+    kalem('''    <path d="M22 30 l-18 -14 q4 -14 18 -14 q14 0 18 14z" fill="#ffd2c8"/>
+    <path d="M22 30 l-10 -24 M22 30 v-26 M22 30 l10 -24" fill="none" stroke-width="2"/>
+''', 3), 604, 2.5)
+yaz("deniz-yildizi.svg", 44, 44, "Deniz yıldızı", "",
+    kalem('''    <path d="M22 3 l5 13 l14 1 l-11 9 l4 14 l-12 -8 l-12 8 l4 -14 l-11 -9 l14 -1z" fill="#ff9c5a"/>
+    <circle cx="22" cy="18" r="1.5" fill="#2b2b2b" stroke="none"/><circle cx="16" cy="24" r="1.5" fill="#2b2b2b" stroke="none"/><circle cx="28" cy="24" r="1.5" fill="#2b2b2b" stroke="none"/>
+''', 3), 605, 2.5)
+yaz("mercan-kucuk.svg", 60, 56, "Küçük mercan (yer süsü)", "",
+    kalem('''    <path d="M30 54 v-20 l-12 -14 v-12 M30 34 l12 -12 v-14 M30 42 l-18 -6 v-8 M30 40 l20 -4" fill="none" stroke="#2b2b2b" stroke-width="9"/>
+    <path d="M30 54 v-20 l-12 -14 v-12 M30 34 l12 -12 v-14 M30 42 l-18 -6 v-8 M30 40 l20 -4" fill="none" stroke="#ff7f6a" stroke-width="5"/>
+''', 3), 606, 2.5)
+yaz("deniz-cayiri.svg", 44, 40, "Deniz çayırı öbeği", "",
+    kalem('''    <path d="M8 38 q-6 -16 0 -32 M16 38 q-2 -18 6 -34 M24 38 q4 -16 12 -28 M32 38 q6 -10 10 -16" fill="none" stroke="#5fae6a" stroke-width="3"/>
+''', 3), 607, 2.5)
+yaz("kabarcik-ucan.svg", 26, 26, "Yükselen kabarcık (uçan süs yerine)", "",
+    '  <circle cx="13" cy="13" r="10" fill="#ffffff" fill-opacity="0.35" stroke="#ffffff" stroke-width="2.5"/>\n'
+    '  <path d="M8 10 q2 -4 6 -4" fill="none" stroke="#ffffff" stroke-width="2.5" stroke-linecap="round"/>\n', 608)
+# Hava kabarcığı (damla yerine): 40x52, damla.svg ile aynı tuval
+yaz("kabarcik.svg", 40, 52, "Hava kabarcığı (4. adada damla yerine)", tarama("kabarcikDesen", "#e8f8ff", "#bfe8f8", 35, 6, 2.5),
+    kalem('''    <circle cx="20" cy="30" r="17" fill="url(#kabarcikDesen)" stroke-width="3.5"/>
+    <path d="M10 26 q2 -8 10 -10" fill="none" stroke="#ffffff" stroke-width="4"/>
+    <circle cx="28" cy="38" r="2.5" fill="#ffffff" stroke="none"/>
+'''), 609, 2.5)
+yaz("kabarcik-bos.svg", 40, 52, "Boş kabarcık yeri", "",
+    '  <circle cx="20" cy="30" r="17" fill="#ffffff" fill-opacity="0.5" stroke="#9fb6c4" stroke-width="3" stroke-dasharray="5 4"/>\n', 610)
+
+# ---- 4. ada: canlılar ----
+yaz("su-balik.svg", 60, 40, "Küçük renkli balık (oyunda renklenir; sağa yüzer)", "",
+    kalem('''    <path d="M6 20 l-4 -12 l14 8z M6 20 l-4 12 l14 -8z" fill="#ffffff"/>
+    <path d="M14 20 q14 -18 34 -10 q10 4 10 10 q0 6 -10 10 q-20 8 -34 -10z" fill="#ffffff"/>
+    <path d="M28 10 q4 10 0 20" fill="none" stroke-width="2"/>
+    <circle cx="48" cy="17" r="2.5" fill="#2b2b2b" stroke="none"/>
+''', 3), 611, 2)
+yaz("denizati.svg", 50, 80, "Denizatı (sarı)", tarama("denizati", "#ffe680", "#ffc928", -40, 6, 3),
+    kalem('''    <path d="M26 20 q14 0 14 14 q0 16 -12 24 q-8 6 -4 14 q6 4 2 8 q-12 0 -12 -10 q0 -10 10 -18 q8 -8 0 -14 q-10 -2 -10 -10 q0 -8 12 -8z" fill="url(#denizati)"/>
+    <path d="M24 20 q-6 -6 -2 -14 q6 0 8 8 M18 26 l-14 -2 l12 6z" fill="url(#denizati)" stroke-width="2.5"/>
+    <path d="M38 40 q8 2 8 10 q-6 0 -10 -4" fill="#ffc928" stroke-width="2"/>
+    <circle cx="24" cy="24" r="2" fill="#2b2b2b" stroke="none"/>
+''', 3), 612, 2)
+yaz("ahtapot.svg", 90, 80, "Ahtapot (mor, gülen)", MOR,
+    golge(45, 76, 34, 4) + kalem('''    <path d="M22 50 q-14 10 -16 24 M32 54 q-6 14 -4 22 M44 56 v20 M56 54 q6 14 4 22 M66 50 q14 10 18 24" fill="none" stroke="#2b2b2b" stroke-width="11"/>
+    <path d="M22 50 q-14 10 -16 24 M32 54 q-6 14 -4 22 M44 56 v20 M56 54 q6 14 4 22 M66 50 q14 10 18 24" fill="none" stroke="#c4a3ec" stroke-width="6"/>
+    <path d="M14 46 q-4 -42 30 -42 q34 0 30 42 q-30 14 -60 0z" fill="url(#mor)"/>
+    <circle cx="34" cy="32" r="3.5" fill="#2b2b2b" stroke="none"/><circle cx="54" cy="32" r="3.5" fill="#2b2b2b" stroke="none"/>
+    <path d="M38 42 q6 5 12 0" fill="none" stroke-width="2.5"/>
+'''), 613, 2.5)
+yaz("su-yengec.svg", 80, 56, "Yengeç (kırmızı, yandan yürür)", KIRMIZI,
+    golge(40, 52, 30, 4) + kalem('''    <path d="M22 38 l-14 10 M28 42 l-8 12 M52 42 l8 12 M58 38 l14 10" fill="none" stroke-width="4"/>
+    <path d="M18 26 q-6 -14 -14 -12 q-4 8 6 12 l-6 4 q8 6 14 2z M62 26 q6 -14 14 -12 q4 8 -6 12 l6 4 q-8 6 -14 2z" fill="url(#kirmizi)" stroke-width="2.5"/>
+    <ellipse cx="40" cy="34" rx="24" ry="14" fill="url(#kirmizi)"/>
+    <path d="M34 22 v-10 M46 22 v-10" fill="none" stroke-width="3"/>
+    <circle cx="34" cy="10" r="3.5" fill="#ffffff"/><circle cx="46" cy="10" r="3.5" fill="#ffffff"/>
+    <circle cx="34" cy="10" r="1.5" fill="#2b2b2b" stroke="none"/><circle cx="46" cy="10" r="1.5" fill="#2b2b2b" stroke="none"/>
+'''), 614, 2.5)
+yaz("denizanasi.svg", 60, 80, "Denizanası (pembe, yarı saydam; yukarı aşağı süzülür)", "",
+    kalem('''    <path d="M14 34 q2 18 -6 34 M24 36 q6 20 0 40 M36 36 q-6 20 0 40 M46 34 q-2 18 6 34" fill="none" stroke="#f07aa0" stroke-width="3"/>
+    <path d="M6 34 q0 -30 24 -30 q24 0 24 30 q-6 -4 -12 0 q-6 -4 -12 0 q-6 -4 -12 0 q-6 -4 -12 0z" fill="#ffc2d6" fill-opacity="0.85"/>
+    <circle cx="23" cy="20" r="2" fill="#2b2b2b" stroke="none"/><circle cx="37" cy="20" r="2" fill="#2b2b2b" stroke="none"/>
+    <path d="M14 14 q4 -6 10 -6" fill="none" stroke="#ffffff" stroke-width="3"/>
+''', 3), 615, 2)
+
+# ---- 4. ada: mercan (fasulye sırığının yerine; aynı boylar ve tabanlar). Tohum: mercan tanesi ----
+MERCAN = tarama("mercan", "#ffb08a", "#f0705a", 35, 6, 3)
+KUM_TUMSEK = '    <path d="M{x1} {y} q{yarim} -22 {tam} 0z" fill="#e9dca8" stroke-width="3.5"/>\n'
+
+
+def kum_tumsek(orta, taban, en):
+    return KUM_TUMSEK.format(x1=orta - en / 2, y=taban, yarim=en / 2, tam=en)
+
+
+def mercan_dal(x, y, uzunluk, aci, kalinlik, derin, tohum):
+    # Dallanan mercan: her dal iki dala ayrılır (önce koyu kenar, sonra renk; mercan_ciz birleştirir)
+    import random
+    r = random.Random(tohum)
+    kenar, ic = "", ""
+
+    def dal(x, y, uzunluk, aci, kalinlik, d):
+        nonlocal kenar, ic
+        x2 = x + uzunluk * math.sin(math.radians(aci))
+        y2 = y - uzunluk * math.cos(math.radians(aci))
+        yol = f"M{x:.1f} {y:.1f} L{x2:.1f} {y2:.1f}"
+        kenar += f'    <path d="{yol}" fill="none" stroke="{KALEM}" stroke-width="{kalinlik + 5:.1f}"/>\n'
+        ic += f'    <path d="{yol}" fill="none" stroke="#ff8a6a" stroke-width="{kalinlik:.1f}"/>\n'
+        if d > 0:
+            for yon in (-1, 1):
+                dal(x2, y2, uzunluk * r.uniform(0.62, 0.78), aci + yon * r.uniform(18, 34), kalinlik * 0.72, d - 1)
+        else:
+            ic += f'    <circle cx="{x2:.1f}" cy="{y2:.1f}" r="{kalinlik * 0.6 + 2:.1f}" fill="#ffd2c0" stroke-width="2"/>\n'
+    dal(x, y, uzunluk, aci, kalinlik, derin)
+    return kenar + ic
+
+
+yaz("mercan-filiz.svg", 100, 110, "Mercan filizi: tohum bir kabarcık alınca", "",
+    kalem(mercan_dal(50, 100, 30, 0, 8, 2, 1) + kum_tumsek(50, 106, 70)), 616)
+yaz("mercan-fidan.svg", 130, 150, "Genç mercan: tohum iki kabarcık alınca", "",
+    kalem(mercan_dal(65, 140, 40, 0, 11, 3, 2) + kum_tumsek(65, 146, 80)), 617)
+# Mercan kulesi: dallar birbirinin üstüne yükselir; tarlada solarak su yüzeyine doğru kaybolur
+def mercan_kulesi(boy, taban):
+    c = ""
+    for i, y in enumerate(range(taban - 6, 60, -110)):
+        olcek = 1 - 0.35 * (taban - y) / boy
+        c += mercan_dal(120, y, 70 * olcek, (-8 if i % 2 else 8), 18 * olcek, 2, 10 + i)
+    return c
+
+
+YUZEY = '''    <path d="M0 40 q20 -10 40 0 q20 10 40 0 q20 -10 40 0 q20 10 40 0 q20 -10 40 0 q20 10 40 0 v-40 h-240z" fill="#cfeefc" stroke-width="3"/>
+'''
+yaz("mercan-kule.svg", SIRIK_EN, KISA_BOY, "Mercan kulesi: tarlada son aşama, su yüzeyine doğru solar", SOLMA,
+    '  <g mask="url(#sol)">\n' + kalem(mercan_kulesi(KISA_BOY, 374) + kum_tumsek(120, 374, 110), 3.5) + '  </g>\n'
+    + '  <g opacity="0.55">\n' + kalem(YUZEY, 2.5) + '  </g>\n', 618)
+yaz("yuzey-mercan.svg", SIRIK_EN, SIRIK_BOY, "Mercan kulesi: su yüzeyinin altından yükselir, tepesi yüzeyde", "",
+    kalem(mercan_kulesi(SIRIK_BOY, 774) + kum_tumsek(120, 774, 110), 3.5), 619)
+
+# ---- 4. ada: dev kaplumbağa ve parçaları (680x440 tuval; oyunda sol üst köşe YELKENLI_X, YELKENLI_Y) ----
+# Parçalar (öğretmenin kararı; harf yazmaz): ç eyer, b dizgin, g fener, c harita, ş anahtar.
+KAPLUMBAGA_DESEN = (tarama("kabuk", "#9fd6a0", "#5fae6a", 35, 8, 3.5) + tarama("deri", "#c9e6b0", "#9fcf86", -35, 7, 3)
+                    + tarama("eyer", "#ff9c8a", "#e0533d", -35, 7, 3) + tarama("ip", "#e3b77e", "#c98f4f", 80, 5, 2.5)
+                    + tarama("fener", "#ffe680", "#ffc928", -40, 6, 3) + tarama("harita", "#fbf0d0", "#e8d39a", 30, 6, 2.5)
+                    + tarama("anahtar", "#ffd76a", "#e0a82e", 35, 5, 2.5))
+yaz("kaplumbaga.svg", 680, 440, "Dev kaplumbağa (yandan, sağa bakar; deniz tabanında)", KAPLUMBAGA_DESEN,
+    golge(340, 400, 250, 14) + kalem('''    <path d="M180 330 q-40 40 -96 52 q-6 -24 40 -60z M470 330 q40 40 96 52 q6 -24 -40 -60z" fill="url(#deri)"/>
+    <path d="M530 262 q46 -40 92 -32 q46 10 44 42 q-6 28 -46 26 q-30 -2 -90 10z" fill="url(#deri)"/>
+    <circle cx="630" cy="252" r="7" fill="#2b2b2b"/><circle cx="632" cy="249" r="2" fill="#ffffff" stroke="none"/>
+    <path d="M636 282 q14 4 22 -4" fill="none" stroke-width="3"/>
+    <path d="M110 320 q0 -200 230 -210 q230 10 230 210 q-230 30 -460 0z" fill="url(#kabuk)"/>
+    <path d="M110 320 q230 40 460 0 l-10 22 q-220 34 -440 0z" fill="url(#deri)" stroke-width="3.5"/>
+    <path d="M250 140 l-30 70 l40 60 h160 l40 -60 l-30 -70 M220 210 h-90 M460 210 h90 M260 270 l-30 50 M420 270 l30 50 M300 118 l-4 22 M380 118 l4 22" fill="none" stroke-width="4"/>
+    <path d="M90 300 q-30 4 -50 22 q30 6 54 -6z" fill="url(#deri)" stroke-width="3"/>
+'''), 620)
+KAPLUMBAGA_PARCALARI = [
+    ("eyer", "M282 112 q58 -26 116 0 l8 40 q-66 22 -132 0z M300 150 v40 h14 v-40 M366 150 v40 h14 v-40", "eyer"),
+    ("dizgin", "M650 282 q-120 -190 -268 -156 l-2 -12 q156 -36 280 160z M644 270 a8 8 0 1 0 0.1 0", "ip"),
+    ("fener", "M400 140 l66 -50 l6 6 l-66 50z M470 70 h36 v14 h-36z M466 84 h44 v50 q0 10 -10 10 h-24 q-10 0 -10 -10z M478 70 q10 -20 20 0", "fener"),
+    ("harita", "M150 170 h80 v50 h-80z M142 166 h12 v58 h-12z M226 166 h12 v58 h-12z", "harita"),
+    ("anahtar", "M420 170 a16 16 0 1 0 0.1 0 M420 202 v52 h16 v-8 h-8 v-10 h8 v-8 h-8 v-26z", "anahtar"),
+]
+KAPLUMBAGA_KUTU = {"eyer": (274, 102, 132, 88), "dizgin": (380, 112, 280, 178), "fener": (400, 56, 110, 100),
+                   "harita": (142, 166, 96, 58), "anahtar": (404, 170, 32, 84)}
+for ad, yol, desen in KAPLUMBAGA_PARCALARI:
+    ekler = ""
+    if ad == "fener":  # fenerin ışığı
+        ekler = '    <circle cx="488" cy="112" r="10" fill="#fffbe0" stroke-width="2"/>\n'
+    if ad == "harita":  # haritada yol ve çarpı
+        ekler = '    <path d="M160 206 q20 -26 40 -10 q10 8 18 -10" fill="none" stroke="#e0533d" stroke-width="3" stroke-dasharray="6 5"/>\n    <path d="M210 180 l10 10 M220 180 l-10 10" fill="none" stroke="#e0533d" stroke-width="3"/>\n'
+    yaz(f"kaplumbaga-{ad}.svg", 680, 440, f"Kaplumbağa parçası: {ad}", KAPLUMBAGA_DESEN,
+        kalem(f'    <path d="{yol}" fill="url(#{desen})"/>\n' + ekler, 4), 621)
+    yaz(f"kaplumbaga-{ad}-silik.svg", 680, 440, f"Kaplumbağa parçasının silik yeri: {ad}", "",
+        f'  <path d="{yol}" fill="#ffffff" fill-opacity="0.3" stroke="#8a8a8a" stroke-width="3.5" '
+        'stroke-dasharray="10 8" stroke-linecap="round" stroke-linejoin="round"/>\n', 621)
+    x, y, en, boy = KAPLUMBAGA_KUTU[ad]
+    olcek = 96 / max(en, boy)
+    tx = 60 - (x + en / 2) * olcek
+    ty = 60 - (y + boy / 2) * olcek
+    yaz(f"kaplumbaga-{ad}-simge.svg", 120, 120, f"Kaplumbağa parçasının çanta simgesi: {ad}", KAPLUMBAGA_DESEN,
+        kalem(f'    <g transform="translate({tx:.1f} {ty:.1f}) scale({olcek:.3f})"><path d="{yol}" fill="url(#{desen})" '
+              f'vector-effect="non-scaling-stroke"/>\n{ekler}    </g>\n', 3.5), 622, 2.5)
+
+# ---- 4. ada: çocuğun dalgıç hâli (cocuk*-dalgic.svg; elle çizilmiş cocuk*.svg'lerden üretilir):
+# tişört ve şort mavi dalgıç elbisesi, kollar ve bacaklar elbise renginde, ayakkabı sarı palet,
+# sırt çantası kırmızı oksijen tüpü, gözlerde sarı maske, yanda şnorkel.
+_MASKE = ('    <path d="M27 31 q0 -6 7 -6 h22 q7 0 7 6 v8 q0 6 -7 6 h-6 l-5 -4 l-5 4 h-6 q-7 0 -7 -6z" fill="#cfeefc"/>\n'
+          '    <path d="M23 33 h4 M63 33 h4" fill="none" stroke="#ffc928" stroke-width="5"/>\n'
+          '    <path d="M66 46 v-26 q0 -6 6 -6 h3" fill="none" stroke-width="8"/>\n'
+          '    <path d="M66 46 v-26 q0 -6 6 -6 h3" fill="none" stroke="#e0533d" stroke-width="4"/>\n')
+for _ad in ["cocuk", "cocuk-adim1", "cocuk-adim2", "cocuk-tirman"]:
+    with open(os.path.join(KLASOR, f"{_ad}.svg"), encoding="utf-8") as f:
+        _s = f.read()
+    _s = _s.replace("#ffe680", "#5d8fb3").replace("#ffc928", "#3f6f94")       # tişört → dalgıç elbisesi
+    _s = _s.replace("#a9c8f0", "#3f6f94").replace("#6b9be0", "#2f5677")       # şort → koyu elbise
+    _s = _s.replace("#9be3dc", "#ff9c8a").replace("#4fc3b8", "#e0533d")       # çanta → oksijen tüpü
+    _s = _s.replace('stroke="#2c7c76"', 'stroke="#2b2b2b"')                    # askılar
+    def _kalin(m, renk):
+        return (f'{m.group(1)}<path d="{m.group(2)}" fill="none" stroke-width="12"/>'
+                f'<path d="{m.group(2)}" fill="none" stroke="{renk}" stroke-width="7"/>')
+    _s = _re.sub(r'(<!-- bacaklar[^\n]*\n\s*)<path d="([^"]+)" fill="none"/>', lambda m: _kalin(m, "#3f6f94"), _s)
+    _s = _re.sub(r'(<!-- kollar[^\n]*\n\s*)<path d="([^"]+)" fill="none"/>', lambda m: _kalin(m, "#5d8fb3"), _s)
+    _s = _s.replace('stroke="#e0533d" stroke-width="6"', 'stroke="#ffc928" stroke-width="9"')  # palet
+    _ek = ('  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">\n'
+           + _MASKE + "  </g>\n")
+    if "<!-- yüz -->" in _s:  # maske yüzün üstünde (gözler camın içinde görünür)
+        _s = _s.replace("</svg>", _ek.replace('fill="#cfeefc"', 'fill="#cfeefc" fill-opacity="0.55"') + "</svg>")
+    else:
+        _s = _s.replace("</svg>", _ek + "</svg>")
+    _s = _s.replace("<!-- Ana karakter", "<!-- Dalgıç (4. ada, doodle_ciz.py üretir). Ana karakter", 1)
+    with open(os.path.join(KLASOR, f"{_ad}-dalgic.svg"), "w", encoding="utf-8") as f:
+        f.write(_s)
+# Yüzen çocuk (yatay, sağa yüzer; 130x90): sola dönerken oyunda aynalanır
+yaz("cocuk-yuz.svg", 130, 90, "Dalgıç çocuk yüzerken (yatay, sağa)",
+    tarama("elbise", "#5d8fb3", "#3f6f94", 35, 6, 3) + tarama("tup", "#ff9c8a", "#e0533d", 80, 6, 2.5),
+    kalem('''    <path d="M30 50 l-18 -8 M30 56 l-18 8" fill="none" stroke-width="11"/>
+    <path d="M30 50 l-18 -8 M30 56 l-18 8" fill="none" stroke="#3f6f94" stroke-width="6"/>
+    <path d="M14 42 l-14 -12 l2 18z M14 64 l-14 12 l2 -18z" fill="#ffc928" stroke-width="2.5"/>
+    <path d="M44 30 h40 q8 0 8 6 v2 q0 6 -8 6 h-40 q-8 0 -8 -6 v-2 q0 -6 8 -6z" fill="url(#tup)" stroke-width="3"/>
+    <path d="M28 46 q0 -10 14 -10 h46 q12 0 12 12 q0 12 -12 12 h-46 q-14 0 -14 -14z" fill="url(#elbise)"/>
+    <path d="M86 56 l26 6 M78 58 l20 12" fill="none" stroke-width="10"/>
+    <path d="M86 56 l26 6 M78 58 l20 12" fill="none" stroke="#5d8fb3" stroke-width="5"/>
+    <circle cx="112" cy="40" r="17" fill="#ffe7cf"/>
+    <path d="M96 34 q4 -18 22 -16 q8 2 10 8 q-10 -2 -16 4 q-8 -4 -16 4z" fill="#8a5a33"/>
+    <path d="M106 34 h18 q4 0 4 4 v6 q0 4 -4 4 h-18 q-4 0 -4 -4 v-6 q0 -4 4 -4z" fill="#cfeefc" stroke-width="2.5"/>
+    <path d="M102 38 h-4" fill="none" stroke="#ffc928" stroke-width="5"/>
+    <circle cx="118" cy="41" r="2" fill="#2b2b2b" stroke="none"/>
+    <path d="M100 26 v-14 h6" fill="none" stroke-width="7"/>
+    <path d="M100 26 v-14 h6" fill="none" stroke="#e0533d" stroke-width="3"/>
+'''), 623)

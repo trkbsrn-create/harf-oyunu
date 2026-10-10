@@ -1,0 +1,30 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="110" viewBox="0 0 100 110">
+  <!-- Mercan filizi: tohum bir kabarcık alınca (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="616" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50.0 100.0 L50.0 70.0" fill="none" stroke="#2b2b2b" stroke-width="13.0"/>
+    <path d="M50.0 70.0 L39.9 53.6" fill="none" stroke="#2b2b2b" stroke-width="10.8"/>
+    <path d="M39.9 53.6 L28.4 45.1" fill="none" stroke="#2b2b2b" stroke-width="9.1"/>
+    <path d="M39.9 53.6 L38.4 40.2" fill="none" stroke="#2b2b2b" stroke-width="9.1"/>
+    <path d="M50.0 70.0 L61.1 51.3" fill="none" stroke="#2b2b2b" stroke-width="10.8"/>
+    <path d="M61.1 51.3 L64.0 37.8" fill="none" stroke="#2b2b2b" stroke-width="9.1"/>
+    <path d="M61.1 51.3 L74.6 42.0" fill="none" stroke="#2b2b2b" stroke-width="9.1"/>
+    <path d="M50.0 100.0 L50.0 70.0" fill="none" stroke="#ff8a6a" stroke-width="8.0"/>
+    <path d="M50.0 70.0 L39.9 53.6" fill="none" stroke="#ff8a6a" stroke-width="5.8"/>
+    <path d="M39.9 53.6 L28.4 45.1" fill="none" stroke="#ff8a6a" stroke-width="4.1"/>
+    <circle cx="28.4" cy="45.1" r="4.5" fill="#ffd2c0" stroke-width="2"/>
+    <path d="M39.9 53.6 L38.4 40.2" fill="none" stroke="#ff8a6a" stroke-width="4.1"/>
+    <circle cx="38.4" cy="40.2" r="4.5" fill="#ffd2c0" stroke-width="2"/>
+    <path d="M50.0 70.0 L61.1 51.3" fill="none" stroke="#ff8a6a" stroke-width="5.8"/>
+    <path d="M61.1 51.3 L64.0 37.8" fill="none" stroke="#ff8a6a" stroke-width="4.1"/>
+    <circle cx="64.0" cy="37.8" r="4.5" fill="#ffd2c0" stroke-width="2"/>
+    <path d="M61.1 51.3 L74.6 42.0" fill="none" stroke="#ff8a6a" stroke-width="4.1"/>
+    <circle cx="74.6" cy="42.0" r="4.5" fill="#ffd2c0" stroke-width="2"/>
+    <path d="M15.0 106 q35.0 -22 70 0z" fill="#e9dca8" stroke-width="3.5"/>
+  </g>
+</svg>
