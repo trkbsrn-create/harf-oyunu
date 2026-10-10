@@ -17,7 +17,7 @@ yok); köprü bitince "3. adaya git". 3. ada karlı adadır (ü s ö y d z): buz
 çocuk kışlık giyer (cocuk*-kis.svg, `cocukDokusu`, kayıtta `kisKiyafeti`). Adalar `AdaSahnesi`nde `ADALAR` ayarıyla (`veri.ada`, kayıtta `ada`; sözler `sozler`).
 Mini oyunlar 3., 4. ve 5. harf grubuyla da (ü s ö y d z; üzüm, sincap, ördek, yunus, deve, zürafa / ç b g c ş;
 çekirge, balık, güvercin, civciv, şeker / p h v ğ f j; penguen, horoz, vapur, dağ, fil, jelibon) oynanır (deneme
-menüsü). O konumda resimli kelime yoksa (ö, d, b, g, c, h, f, j ile biten; ğ ile başlayan) başka konum sorulur
+menüsü). O konumda resimli kelime yoksa (ö, d, b, g, c, h, f ile biten; ğ ile başlayan) başka konum sorulur
 (`konumSec`). ğ kelime ve hece başında gelmez (hece havuzunda "ğa" gibi hece yok), tek başına söylenemez
 (`tekBasinaDenenir` yok, ipucu hecesi "ağ").
 

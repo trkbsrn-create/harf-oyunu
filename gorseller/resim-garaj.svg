@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Garaj (kepenkli, içinde araba) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="503" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="gri" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#d6d3cc"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#a9a59c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="kiremit" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="6" height="6" fill="#ffb3a8"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#e0533d" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="kirmizi" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#ff9c8a"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#e0533d" stroke-width="3.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="116" rx="56" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M12 114 v-64 l53 -38 l53 38 v64z" fill="url(#gri)"/>
+    <path d="M6 54 l59 -46 l59 46" fill="none" stroke="#e0533d" stroke-width="7"/>
+    <path d="M26 114 v-50 h78 v50z" fill="#fbf7ec"/>
+    <path d="M26 64 h78 v22 h-78z" fill="#d6d3cc" stroke-width="3"/>
+    <path d="M26 72 h78 M26 80 h78" fill="none" stroke-width="2"/>
+    <path d="M32 108 v-14 q4 -8 14 -8 h38 q10 0 14 8 v14z" fill="url(#kirmizi)" stroke-width="3"/>
+    <circle cx="44" cy="110" r="5" fill="#2b2b2b"/><circle cx="86" cy="110" r="5" fill="#2b2b2b"/>
+  </g>
+</svg>

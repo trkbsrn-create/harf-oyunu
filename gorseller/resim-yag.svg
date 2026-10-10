@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Yağ (sarı yağ şişesi ve damla) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="507" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="sari" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+      <rect width="6" height="6" fill="#ffe680"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffc928" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="60" cy="116" rx="32" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50 6 h20 v12 h-20z" fill="url(#kirmizi)" stroke-width="3"/>
+    <path d="M52 18 h16 v12 q20 8 20 30 v46 q0 8 -8 8 h-40 q-8 0 -8 -8 v-46 q0 -22 20 -30z" fill="url(#sari)"/>
+    <path d="M42 62 h36 v28 h-36z" fill="#ffffff" stroke-width="2.5"/>
+    <path d="M52 76 q8 -14 16 0 q0 8 -8 8 q-8 0 -8 -8z" fill="url(#sari)" stroke-width="2"/>
+    <path d="M108 70 q10 14 0 22 q-10 -8 0 -22z" fill="url(#sari)" stroke-width="3"/>
+  </g>
+</svg>
