@@ -6,5 +6,5 @@
       <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
     </filter>
   </defs>
-  <path d="M238 120 v-70 q0 -12 12 -12 h6 v10 h-6 q-2 0 -2 2 v70 q0 10 -8 10 h-10 v-10z" fill="#ffffff" fill-opacity="0.3" stroke="#8a8a8a" stroke-width="3.5" stroke-dasharray="10 8" stroke-linecap="round" stroke-linejoin="round"/>
+  <path d="M238 120 v-70 q0 -12 12 -12 h6 v10 h-6 q-2 0 -2 2 v70 q0 10 -8 10 h-10 v-10z" transform="translate(20 180) scale(0.55)" fill="#ffffff" fill-opacity="0.3" stroke="#8a8a8a" stroke-width="4.5" stroke-dasharray="10 8" stroke-linecap="round" stroke-linejoin="round"/>
 </svg>

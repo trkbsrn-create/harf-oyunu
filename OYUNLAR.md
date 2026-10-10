@@ -33,7 +33,7 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
 - 3. ada (karlı, `ADALAR[3]`): kar zemini, karlı çamlar (cam-tepe), karlı çalı ve kaya, kar yığını, karlı ot, buz
   kristali, seyrek kardan adam; yağan kar; penguen, kutup ayısı (gidip gelir), beyaz tavşan (zıplar), fok (sallanır).
   Tarlada buz sarmaşığı (buz-filiz/fidan/sarmasik, bulutta bulut-buz). Yelkenlinin yerinde askı ve donmuş göl
-  (dalgic-temel + dalgic-<parça>; ü maske, s şnorkel, ö elbise, y palet, d tüp, z çekiç). "Buzu kır" →
+  (dalgic-gol yere yatık, karakterin altında; küçük dalgic-aski + dalgic-<parça>; ü maske, s şnorkel, ö elbise, y palet, d tüp, z çekiç). "Buzu kır" →
   `buzFinali` (çekiç buzu kırar, çocuk maskeyle dalar; harita3, "4. ada (su altı) yakında").
   Yazılar da doodle: `doodleYazi` (başlık, düğme, pencere yazıları: boya kalemi taraması,
   kalem çerçevesi, titrek kenar) ve `titret` (öğretilen harfler: biçim aynı, yalnızca

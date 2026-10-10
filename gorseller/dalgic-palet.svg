@@ -30,7 +30,7 @@
       <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#a9a59c" stroke-width="3" stroke-linecap="round"/>
     </pattern>
   </defs>
-  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M96 352 h30 l14 46 h-58z M232 352 h30 l14 46 h-58z" fill="url(#palet)"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M96 352 h30 l14 46 h-58z M232 352 h30 l14 46 h-58z" fill="url(#palet)" transform="translate(20 180) scale(0.55)"/>
   </g>
 </svg>

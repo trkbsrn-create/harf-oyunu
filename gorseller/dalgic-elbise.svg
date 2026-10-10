@@ -30,7 +30,7 @@
       <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#a9a59c" stroke-width="3" stroke-linecap="round"/>
     </pattern>
   </defs>
-  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M150 130 h80 l20 50 l-14 6 l-10 -24 v150 h-24 l-6 -80 l-6 80 h-24 v-150 l-10 24 l-14 -6z" fill="url(#elbise)"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="6" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M150 130 h80 l20 50 l-14 6 l-10 -24 v150 h-24 l-6 -80 l-6 80 h-24 v-150 l-10 24 l-14 -6z" fill="url(#elbise)" transform="translate(20 180) scale(0.55)"/>
   </g>
 </svg>
