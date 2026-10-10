@@ -93,8 +93,9 @@ menüsü). O konumda resimli kelime yoksa (ö, d, b, g, c, h, f, j ile biten; ğ
 - Kelime resimden kolay tanınmalı; birbirine benzeyen resimler (kurt/kedi gibi) aynı soruda
   karışmasın.
 - Kelime listesinin büyük kısmı öğretmenin verdiği Mehmet Öğretmen kelime tablolarından seçildi
-  (çocuğa uygun, somut sözcükler; ad, yer adı ve fiil çekimleri alınmadı). ilkokuldokumanlari.com
-  ağ izninde "www" ile açılmadığı için henüz kullanılamadı.
+  (çocuğa uygun, somut sözcükler; ad, yer adı ve fiil çekimleri alınmadı). ilkokuldokumanlari.com hece
+  tablolarındaki resmi çizilebilen kelimeler de resimleriyle konum listelerine eklendi (benzer resmi olanlar,
+  ör. kuş/güvercin, keman/gitar, alınmadı).
 - Öğretmenin kuralı: Türkçede küfür ya da argo olan heceler ve kelimeler (am, sik, sok, mal...) oyunda
   hiç çıkmaz: ne sorulur, ne seçenek olur, ne birleşir, ne ipucu hecesi olur (m'nin hecesi "em").
   Liste `UYGUNSUZ_HECELER` (ortak.js); hece havuzu, kelime listeleri, Birleştir Büyüt ve Elektrik
