@@ -48,7 +48,7 @@ const HARFLER = [
   { kucuk: "b", buyuk: "B", unlu: false, grup: 4, kelime: "balık",    harfKelimeBasinda: true, resim: "resim-balik", hece: "ab", tekBasinaDenenir: true, kisaSes: true, okunus: "b" },
   { kucuk: "g", buyuk: "G", unlu: false, grup: 4, kelime: "güvercin", harfKelimeBasinda: true, resim: "resim-guvercin", hece: "ag", tekBasinaDenenir: true, kisaSes: true, okunus: "g" },
   { kucuk: "c", buyuk: "C", unlu: false, grup: 4, kelime: "civciv",   harfKelimeBasinda: true, resim: "resim-civciv", hece: "ac", tekBasinaDenenir: true, kisaSes: true, okunus: "c" },
-  { kucuk: "ş", buyuk: "Ş", unlu: false, grup: 4, kelime: "şahin",    harfKelimeBasinda: true, resim: "resim-sahin", hece: "aş", tekBasinaDenenir: true, okunus: "şşş" },
+  { kucuk: "ş", buyuk: "Ş", unlu: false, grup: 4, kelime: "şeker",    harfKelimeBasinda: true, resim: "resim-seker", hece: "aş", tekBasinaDenenir: true, okunus: "şşş" },
 
   // Grup 5
   { kucuk: "p", buyuk: "P", unlu: false, grup: 5, kelime: "penguen",  harfKelimeBasinda: true },

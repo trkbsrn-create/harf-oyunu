@@ -16,7 +16,7 @@ yok); köprü bitince "3. adaya git". 3. ada karlı adadır (ü s ö y d z): buz
 `KIS_SINAVI_HARFI`) rastgele bir hece/kelime oyunu, 3. seviye (`kisSinaviBaslat`, mini oyunda `veri.sinav`); geçene kadar yeni sınav; geçince
 çocuk kışlık giyer (cocuk*-kis.svg, `cocukDokusu`, kayıtta `kisKiyafeti`). Adalar `AdaSahnesi`nde `ADALAR` ayarıyla (`veri.ada`, kayıtta `ada`; sözler `sozler`).
 Mini oyunlar 3. ve 4. harf grubuyla da (ü s ö y d z; üzüm, sincap, ördek, yunus, deve, zürafa / ç b g c ş;
-çekirge, balık, güvercin, civciv, şahin) oynanır (deneme menüsü). ö, d, b, g, c ile biten resimli kelime yok:
+çekirge, balık, güvercin, civciv, şeker) oynanır (deneme menüsü). ö, d, b, g, c ile biten resimli kelime yok:
 o seviyede başka konum sorulur (`konumSec`).
 
 ## Dosya rehberi (ayrıntı: OYUNLAR.md)

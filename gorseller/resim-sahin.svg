@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
-  <!-- Şahin (kanatları açık, uçan) (doodle tarzı, kendi çizimimiz) -->
+  <!-- Şahin (yandan, dalda duran; kıvrık sarı gaga, kahverengi kanat) (doodle tarzı, kendi çizimimiz) -->
   <defs>
     <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
       <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="432" result="g"/>
@@ -15,12 +15,16 @@
     </pattern>
   </defs>
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M65 54 q-30 -30 -60 -20 q20 10 24 30 q20 -2 36 -2z M65 54 q30 -30 60 -20 q-20 10 -24 30 q-20 -2 -36 -2z" fill="url(#kahve)"/>
-    <path d="M14 38 l8 6 M24 34 l6 8 M116 38 l-8 6 M106 34 l-6 8" fill="none" stroke-width="2.5"/>
-    <ellipse cx="65" cy="66" rx="14" ry="26" fill="url(#sahinAcik)"/>
-    <path d="M56 90 l9 20 l9 -20z" fill="url(#kahve)"/>
-    <circle cx="65" cy="40" r="11" fill="url(#sahinAcik)"/>
-    <circle cx="61" cy="38" r="2.5" fill="#2b2b2b"/><circle cx="69" cy="38" r="2.5" fill="#2b2b2b"/>
-    <path d="M62 44 l3 8 l3 -8z" fill="#ffc928" stroke-width="2"/>
+    <path d="M8 104 h114" fill="none" stroke="#8e6340" stroke-width="8"/>
+    <path d="M8 104 h114" fill="none" stroke-width="2"/>
+    <path d="M58 100 l-4 8 M58 100 l2 8 M70 100 l-2 8 M70 100 l4 8" fill="none" stroke="#ffc928" stroke-width="4"/>
+    <path d="M44 56 q2 -22 24 -24 q22 2 24 26 q2 30 -12 42 h-26 q-12 -14 -10 -44z" fill="url(#sahinAcik)"/>
+    <path d="M54 66 l4 4 M66 70 l4 4 M56 80 l4 4 M70 84 l4 4" fill="none" stroke="#b07a42" stroke-width="2.5"/>
+    <path d="M88 44 q22 10 22 40 l-6 34 l-16 -20 q-10 -26 0 -54z" fill="url(#kahve)"/>
+    <path d="M96 60 q6 14 4 30 M104 70 q2 10 0 22" fill="none" stroke-width="2"/>
+    <circle cx="66" cy="32" r="18" fill="url(#kahve)"/>
+    <path d="M52 30 q8 -4 16 4 q-8 6 -16 -4z" fill="#ffffff" stroke-width="2"/>
+    <circle cx="58" cy="31" r="3" fill="#2b2b2b"/>
+    <path d="M50 34 q-12 0 -14 8 q6 -2 10 2 q2 -6 6 -6z" fill="#ffc928" stroke-width="2.5"/>
   </g>
 </svg>
