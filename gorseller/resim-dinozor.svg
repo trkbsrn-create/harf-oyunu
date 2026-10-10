@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Dinozor (uzun boyunlu, yeşil) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="357" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="yesil" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9eba7"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#8fd16a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="60" cy="114" rx="46" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 112 v-20 M46 112 v-18 M70 112 v-18 M84 112 v-20" fill="none" stroke-width="7"/>
+    <path d="M20 96 q-14 -2 -16 -12 q10 4 18 0 q4 -26 40 -28 q26 0 32 16 l10 -50 q2 -12 14 -12 q12 0 12 10 q0 8 -10 8 l-8 54 q-4 24 -40 24 q-30 0 -52 -10z" fill="url(#yesil)"/>
+    <circle cx="114" cy="16" r="2.5" fill="#2b2b2b"/>
+    <path d="M44 62 l4 -8 l4 8 M60 58 l4 -8 l4 8" fill="none" stroke-width="2.5"/>
+  </g>
+</svg>

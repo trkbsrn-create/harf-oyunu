@@ -78,7 +78,46 @@ const KONUMLU_KELIMELER = {
     son: ["lokum", "kalem", "üzüm", "akvaryum", "çim"],
     orta: ["limon", "lamba", "kumbara", "timsah", "ekmek", "lahmacun", "dondurma", "kemik", "elma", "lama"],
   },
+  // 3. harf grubu (ü, s, ö, y, d, z). ö ve d ile biten resimli kelime yok (bkz. konumSec)
+  ü: {
+    bas: ["üzüm", "ütü", "üç", "üçgen"],
+    son: ["köprü", "örgü"],
+    orta: ["gül", "süt", "küpe", "otobüs", "güneş", "gözlük"],
+  },
+  s: {
+    bas: ["sincap", "süt", "sepet", "silgi", "saat", "sandalye", "simit"],
+    son: ["otobüs", "patates", "nergis", "makas", "kaktüs", "ananas"],
+    orta: ["aslan", "masa", "elbise", "timsah", "fıstık", "ıspanak"],
+  },
+  ö: {
+    bas: ["ördek", "örümcek", "ödül", "örgü", "önlük"],
+    son: [],
+    orta: ["göz", "köpek", "dört", "böcek", "gözlük", "köprü"],
+  },
+  y: {
+    bas: ["yunus", "yaprak", "yatak", "yengeç", "yorgan", "yumurta"],
+    son: ["ay", "çay", "saray"],
+    orta: ["ayak", "ayı", "ayna", "ayakkabı", "koyun", "bilye", "şemsiye", "maymun"],
+  },
+  d: {
+    bas: ["deve", "dondurma", "diş", "davul", "domates", "dinozor"],
+    son: [],
+    orta: ["bardak", "fındık", "kedi", "ördek", "yıldız"],
+  },
+  z: {
+    bas: ["zürafa", "zeytin", "zil", "zar"],
+    son: ["kiraz", "ceviz", "muz", "buz", "yıldız"],
+    orta: ["üzüm", "bilezik", "ızgara", "uzaylı", "kuzu", "kazan"],
+  },
 };
+
+// Bu harfte bu konumda yeterli resimli kelime yoksa (ö ve d ile biten kelime yok) başka konum
+// sorulur: önce orta, sonra baş
+function konumSec(harf, konum) {
+  const k = KONUMLU_KELIMELER[harf] || KONUMLU_KELIMELER.a;
+  if (k[konum] && k[konum].length >= 2) return konum;
+  return ["orta", "bas", "son"].find((x) => k[x] && k[x].length >= 2);
+}
 
 // Okumada birbirine karışabilen sesler: yanlış seçeneklerde bunlar da geçmez
 const KARISAN_SESLER = { i: ["ı"], ı: ["i"], o: ["ö"], ö: ["o"], u: ["ü"], ü: ["u"] };

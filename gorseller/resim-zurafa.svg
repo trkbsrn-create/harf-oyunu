@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Zürafa (uzun boyunlu, benekli) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="331" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="sari" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+      <rect width="6" height="6" fill="#ffe680"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffc928" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="kahve" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#d9a46b"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#b07a42" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="60" cy="116" rx="30" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 112 v-30 M52 112 v-30 M70 112 v-30 M82 112 v-30" fill="none" stroke-width="5"/>
+    <path d="M32 84 q0 -20 28 -20 h20 q12 0 12 20z" fill="url(#sari)"/>
+    <path d="M72 66 l12 -46 h12 l-6 46z" fill="url(#sari)"/>
+    <path d="M80 26 q2 -16 18 -14 q14 2 12 14 q-4 8 -16 8 q-10 0 -14 -8z" fill="url(#sari)"/>
+    <path d="M88 12 v-8 M98 12 v-8" fill="none" stroke-width="3"/><circle cx="88" cy="4" r="3" fill="#b07a42"/><circle cx="98" cy="4" r="3" fill="#b07a42"/>
+    <circle cx="100" cy="20" r="2.5" fill="#2b2b2b"/>
+    <circle cx="44" cy="74" r="5" fill="#b07a42" stroke-width="2"/><circle cx="62" cy="72" r="4" fill="#b07a42" stroke-width="2"/><circle cx="78" cy="48" r="4" fill="#b07a42" stroke-width="2"/><circle cx="84" cy="34" r="3" fill="#b07a42" stroke-width="2"/>
+    <path d="M32 74 q-10 4 -12 16" fill="none" stroke-width="3"/>
+  </g>
+</svg>

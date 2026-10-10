@@ -2390,3 +2390,191 @@ yaz("hikaye-harita2.svg", 1280, 720, "Final 2: adalar haritası (1. yeşil, 2. s
             '    <path d="M900 420 q130 -150 290 -10 q-140 106 -290 10z" fill="#eeeeee" stroke="#8a8a8a" stroke-dasharray="14 10"/>\n'
             '    <path d="M330 420 q80 -80 150 -90" fill="none" stroke="#9a8f7a" stroke-dasharray="10 10"/>\n'
             '    <path d="M770 330 q90 -10 140 70" fill="none" stroke="#e0533d" stroke-dasharray="16 12"/>\n', 4), 323)
+
+# ---- 3. harf grubu (ü s ö y d z) için "Resimden Sesi Bul" resimleri ----
+resim("yunus", "Yunus (sudan zıplayan)", MAVI + tarama("yunusGri", "#bcd7e6", "#8fb5cc", 30, 7, 3),
+    kalem("""    <path d="M8 100 q30 -12 60 0 q30 12 56 0" fill="none" stroke="#7cc3e6" stroke-width="5"/>
+    <path d="M18 92 q10 -60 66 -66 q20 -2 30 6 q-8 4 -10 10 q-6 30 -34 44 l6 14 l-18 -10 q-20 4 -40 2z" fill="url(#yunusGri)"/>
+    <path d="M60 30 l-8 -16 l18 10" fill="url(#yunusGri)" stroke-width="3"/>
+    <path d="M18 92 l-12 -4 l4 14z" fill="url(#yunusGri)" stroke-width="3"/>
+    <circle cx="92" cy="36" r="3" fill="#2b2b2b"/><path d="M98 46 q6 2 12 -2" fill="none" stroke-width="2.5"/>
+"""), 330)
+resim("zurafa", "Zürafa (uzun boyunlu, benekli)", SARI2 + KAHVE,
+    golge(60, 116, 30) + kalem("""    <path d="M40 112 v-30 M52 112 v-30 M70 112 v-30 M82 112 v-30" fill="none" stroke-width="5"/>
+    <path d="M32 84 q0 -20 28 -20 h20 q12 0 12 20z" fill="url(#sari)"/>
+    <path d="M72 66 l12 -46 h12 l-6 46z" fill="url(#sari)"/>
+    <path d="M80 26 q2 -16 18 -14 q14 2 12 14 q-4 8 -16 8 q-10 0 -14 -8z" fill="url(#sari)"/>
+    <path d="M88 12 v-8 M98 12 v-8" fill="none" stroke-width="3"/><circle cx="88" cy="4" r="3" fill="#b07a42"/><circle cx="98" cy="4" r="3" fill="#b07a42"/>
+    <circle cx="100" cy="20" r="2.5" fill="#2b2b2b"/>
+    <circle cx="44" cy="74" r="5" fill="#b07a42" stroke-width="2"/><circle cx="62" cy="72" r="4" fill="#b07a42" stroke-width="2"/><circle cx="78" cy="48" r="4" fill="#b07a42" stroke-width="2"/><circle cx="84" cy="34" r="3" fill="#b07a42" stroke-width="2"/>
+    <path d="M32 74 q-10 4 -12 16" fill="none" stroke-width="3"/>
+"""), 331)
+resim("utu", "Ütü", MAVI + GRI,
+    golge(65, 108, 50) + kalem("""    <path d="M14 100 q4 -40 50 -46 h56 v46z" fill="url(#mavi)"/>
+    <path d="M14 100 h106 v8 h-106z" fill="url(#gri)" stroke-width="3"/>
+    <path d="M56 54 q0 -24 26 -24 h22 q10 0 10 14 v10" fill="none" stroke-width="6"/>
+    <circle cx="96" cy="78" r="6" fill="#ff9c8a" stroke-width="2.5"/>
+"""), 332)
+resim("uc", "Üç (3 rakamı ve üç yıldız)", SARI2 + KIRMIZI,
+    kalem("""    <path d="M20 20 h50 l-22 26 q30 0 30 28 q0 30 -34 30 q-20 0 -28 -14 l12 -8 q6 8 16 8 q18 0 18 -16 q0 -16 -20 -16 h-8 v-12 l18 -20 h-32z" fill="url(#sari)"/>
+    <circle cx="102" cy="34" r="11" fill="url(#kirmizi)"/><circle cx="102" cy="64" r="11" fill="url(#kirmizi)"/><circle cx="102" cy="94" r="11" fill="url(#kirmizi)"/>
+"""), 333)
+resim("ucgen", "Üçgen", TURUNCU,
+    kalem("""    <path d="M65 12 l54 96 h-108z" fill="url(#turuncu)" stroke-width="5"/>
+"""), 334)
+resim("kopru", "Köprü (dere üstünde taş kemerli)", GRI + MAVI,
+    kalem("""    <path d="M4 100 q61 10 122 0 v14 h-122z" fill="url(#mavi)" stroke-width="3"/>
+    <path d="M4 60 h122 v16 h-122z" fill="url(#gri)"/>
+    <path d="M14 76 v28 h18 q4 -22 33 -24 q29 2 33 24 h18 v-28z" fill="url(#gri)"/>
+    <path d="M4 60 v-20 M126 60 v-20 M4 44 h122 M34 60 v-16 M64 60 v-16 M94 60 v-16" fill="none" stroke="#b07a42" stroke-width="5"/>
+"""), 335)
+resim("orgu", "Örgü (şişlere geçmiş örgü ve yumak)", PEMBE + KAHVE,
+    golge(65, 112, 50) + kalem("""    <circle cx="94" cy="84" r="24" fill="url(#pembe)"/>
+    <path d="M76 72 q18 10 36 0 M72 86 q22 10 44 0 M78 98 q16 8 32 0" fill="none" stroke-width="2.5"/>
+    <path d="M14 44 h56 v40 h-56z" fill="url(#pembe)"/>
+    <path d="M20 54 l6 6 l6 -6 l6 6 l6 -6 l6 6 l6 -6 l6 6 M20 70 l6 6 l6 -6 l6 6 l6 -6 l6 6 l6 -6 l6 6" fill="none" stroke-width="2.5"/>
+    <path d="M8 30 l80 26 M14 22 l78 30" fill="none" stroke="#b07a42" stroke-width="5"/>
+    <path d="M70 84 q6 10 6 -2" fill="none" stroke-width="2.5"/>
+"""), 336)
+resim("gunes", "Güneş (gülen)", SARI2 + TURUNCU,
+    kalem("""    <path d="M65 6 v14 M65 100 v14 M6 60 h14 M110 60 h14 M22 18 l10 10 M98 92 l10 10 M108 18 l-10 10 M32 92 l-10 10" fill="none" stroke="#f08a3c" stroke-width="6"/>
+    <circle cx="65" cy="60" r="34" fill="url(#sari)"/>
+    <circle cx="54" cy="54" r="3.5" fill="#2b2b2b"/><circle cx="76" cy="54" r="3.5" fill="#2b2b2b"/>
+    <path d="M52 68 q13 12 26 0" fill="none" stroke-width="3.5"/>
+"""), 337)
+resim("saat", "Saat (çalar saat)", KIRMIZI,
+    golge(65, 114, 40) + kalem("""    <path d="M30 108 l10 -14 M100 108 l-10 -14" fill="none" stroke-width="5"/>
+    <circle cx="34" cy="22" r="13" fill="url(#kirmizi)"/><circle cx="96" cy="22" r="13" fill="url(#kirmizi)"/>
+    <circle cx="65" cy="64" r="42" fill="url(#kirmizi)"/>
+    <circle cx="65" cy="64" r="33" fill="#ffffff" stroke-width="3"/>
+    <path d="M65 64 v-22 M65 64 l14 8" fill="none" stroke-width="4"/>
+    <path d="M65 35 v4 M65 89 v4 M36 64 h4 M90 64 h4" fill="none" stroke-width="3"/>
+"""), 339)
+resim("sandalye", "Sandalye", KAHVE,
+    golge(65, 116, 40) + kalem("""    <path d="M38 12 h54 v52 h-54z" fill="url(#kahve)"/>
+    <path d="M48 24 v32 M65 24 v32 M82 24 v32" fill="none" stroke-width="3"/>
+    <path d="M30 64 h70 v12 h-70z" fill="url(#kahve)"/>
+    <path d="M36 76 v38 M94 76 v38 M46 76 v28 M84 76 v28" fill="none" stroke-width="6"/>
+"""), 340)
+resim("simit", "Simit (susamlı)", tarama("simit", "#e3a86b", "#c27c3a", 35, 6, 3),
+    golge(65, 108, 46) + kalem("""    <ellipse cx="65" cy="62" rx="50" ry="40" fill="url(#simit)"/>
+    <ellipse cx="65" cy="62" rx="20" ry="14" fill="#fbf7ec"/>
+    <path d="M30 40 l4 2 M50 30 l4 2 M84 32 l4 -2 M100 48 l4 2 M96 82 l4 -2 M72 92 l4 2 M40 86 l4 -2 M24 64 l4 2" fill="none" stroke="#fff6e0" stroke-width="3"/>
+"""), 341)
+resim("kaktus", "Kaktüs (saksıda)", YESIL2 + KIRMIZI,
+    golge(65, 116, 34) + kalem("""    <path d="M56 84 v-60 q0 -14 9 -14 q9 0 9 14 v60z" fill="url(#yesil)"/>
+    <path d="M56 60 h-14 q-8 0 -8 -8 v-18 q0 -6 5 -6 q5 0 5 6 v14 h12 M74 52 h12 v-10 q0 -6 5 -6 q5 0 5 6 v14 q0 8 -8 8 h-14" fill="url(#yesil)" stroke-width="3.5"/>
+    <path d="M62 30 l-4 -2 M70 44 l4 -2 M62 60 l-4 -2 M70 72 l4 -2" fill="none" stroke-width="2"/>
+    <path d="M40 84 h50 l-6 30 h-38z" fill="url(#kirmizi)"/>
+"""), 342)
+resim("ananas", "Ananas", SARI2 + YESIL2,
+    golge(65, 116, 32) + kalem("""    <path d="M65 40 l-16 -30 l14 14 l2 -20 l6 20 l14 -14 l-14 30z" fill="url(#yesil)"/>
+    <ellipse cx="65" cy="78" rx="32" ry="38" fill="url(#sari)"/>
+    <path d="M40 60 l50 40 M36 80 l40 32 M50 46 l42 34 M90 60 l-50 40 M94 80 l-40 32 M80 46 l-42 34" fill="none" stroke-width="2"/>
+"""), 343)
+resim("orumcek", "Örümcek (ağında)", MOR,
+    kalem("""    <path d="M65 4 v40" fill="none" stroke-width="2"/>
+    <path d="M44 56 l-24 -14 l-10 10 M44 64 l-28 2 l-8 12 M48 72 l-20 18 l0 14 M86 56 l24 -14 l10 10 M86 64 l28 2 l8 12 M82 72 l20 18 l0 14" fill="none" stroke-width="4"/>
+    <ellipse cx="65" cy="66" rx="24" ry="20" fill="url(#mor)"/>
+    <circle cx="65" cy="44" r="12" fill="url(#mor)"/>
+    <circle cx="60" cy="42" r="3" fill="#ffffff" stroke-width="1.5"/><circle cx="70" cy="42" r="3" fill="#ffffff" stroke-width="1.5"/>
+"""), 344)
+resim("odul", "Ödül (kupa)", SARI2,
+    golge(65, 116, 34) + kalem("""    <path d="M36 14 h58 v20 q0 30 -29 34 q-29 -4 -29 -34z" fill="url(#sari)"/>
+    <path d="M36 22 q-20 0 -18 16 q2 14 22 16 M94 22 q20 0 18 16 q-2 14 -22 16" fill="none" stroke-width="5"/>
+    <path d="M58 68 h14 v20 h-14z" fill="url(#sari)" stroke-width="3"/>
+    <path d="M40 88 h50 v16 h-50z" fill="#b07a42"/>
+    <path d="M65 26 l4 8 l8 1 l-6 5 l2 8 l-8 -4 l-8 4 l2 -8 l-6 -5 l8 -1z" fill="#ffffff" stroke-width="2"/>
+"""), 345)
+resim("onluk", "Önlük (mutfak önlüğü)", KIRMIZI,
+    kalem("""    <path d="M50 10 q15 -8 30 0 M44 40 q-24 -4 -36 -10 M86 40 q24 -4 36 -10" fill="none" stroke-width="3"/>
+    <path d="M48 12 h34 v28 q14 0 20 6 l-6 66 h-62 l-6 -66 q6 -6 20 -6z" fill="url(#kirmizi)"/>
+    <path d="M46 72 h38 v22 h-38z" fill="#ffffff" stroke-width="3"/>
+"""), 346)
+resim("goz", "Göz (açık, kirpikli)", MAVI,
+    kalem("""    <path d="M8 60 q57 -60 114 0 q-57 60 -114 0z" fill="#ffffff"/>
+    <circle cx="65" cy="60" r="22" fill="url(#mavi)"/>
+    <circle cx="65" cy="60" r="10" fill="#2b2b2b"/><circle cx="60" cy="54" r="4" fill="#ffffff" stroke="none"/>
+    <path d="M30 34 l-6 -12 M50 24 l-2 -12 M80 24 l2 -12 M100 34 l6 -12" fill="none" stroke-width="3.5"/>
+"""), 347)
+resim("kopek", "Köpek (oturan, sarkık kulaklı)", KAHVE + tarama("kopekAcik", "#f2d7b0", "#d9b07a", -30, 6, 2.5),
+    golge(65, 114, 40) + kalem("""    <path d="M40 112 q-10 -40 25 -44 q35 4 25 44z" fill="url(#kopekAcik)"/>
+    <ellipse cx="65" cy="46" rx="30" ry="28" fill="url(#kopekAcik)"/>
+    <path d="M38 30 q-18 6 -14 34 q10 0 16 -16z M92 30 q18 6 14 34 q-10 0 -16 -16z" fill="url(#kahve)"/>
+    <circle cx="55" cy="42" r="3.5" fill="#2b2b2b"/><circle cx="75" cy="42" r="3.5" fill="#2b2b2b"/>
+    <ellipse cx="65" cy="56" rx="7" ry="5" fill="#2b2b2b"/>
+    <path d="M58 64 q7 6 14 0" fill="none" stroke-width="3"/><path d="M64 66 q2 8 6 6" fill="#ff9c8a" stroke-width="2"/>
+"""), 348)
+resim("dort", "Dört (4 rakamı ve dört elma)", MAVI + KIRMIZI,
+    kalem("""    <path d="M44 10 h16 v58 h10 v14 h-10 v26 h-16 v-26 h-38 v-12z M44 34 l-22 34 h22z" fill="url(#mavi)"/>
+    <circle cx="94" cy="30" r="11" fill="url(#kirmizi)"/>
+    <circle cx="94" cy="56" r="11" fill="url(#kirmizi)"/><circle cx="94" cy="82" r="11" fill="url(#kirmizi)"/><circle cx="94" cy="108" r="11" fill="url(#kirmizi)"/>
+"""), 349)
+resim("bocek", "Böcek (uğur böceği)", KIRMIZI,
+    golge(65, 112, 40) + kalem("""    <path d="M40 40 l-14 -16 M90 40 l14 -16 M30 64 h-16 M100 64 h16 M34 86 l-14 12 M96 86 l14 12" fill="none" stroke-width="3.5"/>
+    <ellipse cx="65" cy="68" rx="38" ry="40" fill="url(#kirmizi)"/>
+    <path d="M65 30 v78" fill="none" stroke-width="3"/>
+    <path d="M40 34 q25 -26 50 0 q-25 10 -50 0z" fill="#2b2b2b"/>
+    <circle cx="48" cy="58" r="7" fill="#2b2b2b"/><circle cx="82" cy="58" r="7" fill="#2b2b2b"/><circle cx="50" cy="86" r="6" fill="#2b2b2b"/><circle cx="80" cy="86" r="6" fill="#2b2b2b"/>
+"""), 350)
+resim("gozluk", "Gözlük", MAVI,
+    kalem("""    <circle cx="36" cy="60" r="24" fill="url(#mavi)" stroke-width="5"/>
+    <circle cx="94" cy="60" r="24" fill="url(#mavi)" stroke-width="5"/>
+    <path d="M60 58 q5 -8 10 0 M12 56 l-8 -16 M118 56 l8 -16" fill="none" stroke-width="5"/>
+    <path d="M26 50 q6 -6 12 -4 M84 50 q6 -6 12 -4" fill="none" stroke="#ffffff" stroke-width="4"/>
+"""), 351)
+resim("yumurta", "Yumurta (kırık kabuklu, sarısı görünen)", SARI2,
+    golge(65, 112, 40) + kalem("""    <path d="M30 70 q0 -56 35 -56 q35 0 35 56 q0 40 -35 40 q-35 0 -35 -40z" fill="#fff6e0"/>
+    <path d="M44 34 q6 -6 10 2" fill="none" stroke="#ffffff" stroke-width="4"/>
+"""), 352)
+resim("cay", "Çay (ince belli bardakta, tabaklı)", KIRMIZI,
+    golge(65, 114, 40) + kalem("""    <path d="M26 104 h78 q0 10 -39 10 q-39 0 -39 -10z" fill="#ffffff"/>
+    <path d="M42 20 h46 q-14 26 -4 46 q10 20 -6 38 h-26 q-16 -18 -6 -38 q10 -20 -4 -46z" fill="#eef8ff"/>
+    <path d="M46 36 h38 q-8 14 0 30 q10 20 -6 38 h-26 q-16 -18 -6 -38 q8 -16 0 -30z" fill="url(#kirmizi)" stroke-width="3"/>
+    <path d="M62 14 q-6 -8 2 -12 M72 14 q-6 -8 2 -12" fill="none" stroke="#a9a59c" stroke-width="3"/>
+"""), 353)
+resim("saray", "Saray (kubbeli, kuleli)", PEMBE + MAVI,
+    golge(65, 114, 56) + kalem("""    <path d="M18 112 v-58 h94 v58z" fill="url(#pembe)"/>
+    <path d="M40 54 q0 -34 25 -40 q25 6 25 40z" fill="url(#mavi)"/>
+    <path d="M65 14 v-10" fill="none" stroke-width="3"/><circle cx="65" cy="4" r="3" fill="#ffc928"/>
+    <path d="M10 112 v-74 h14 v74 M106 112 v-74 h14 v74" fill="url(#pembe)" stroke-width="3.5"/>
+    <path d="M8 38 l9 -18 l9 18 M104 38 l9 -18 l9 18" fill="url(#mavi)" stroke-width="3"/>
+    <path d="M54 112 v-22 q11 -14 22 0 v22" fill="#b07a42" stroke-width="3"/>
+    <path d="M30 70 v12 M100 70 v12" fill="none" stroke-width="4"/>
+"""), 354)
+resim("davul", "Davul (tokmaklı)", KIRMIZI + SARI2,
+    golge(65, 116, 46) + kalem("""    <path d="M20 44 v50 q45 22 90 0 v-50" fill="url(#kirmizi)"/>
+    <ellipse cx="65" cy="44" rx="45" ry="16" fill="#fff6e0"/>
+    <path d="M20 54 l18 30 l18 -26 l18 28 l18 -28 l18 26" fill="none" stroke="#ffc928" stroke-width="4"/>
+    <path d="M34 6 l28 32 M100 8 l-26 30" fill="none" stroke="#b07a42" stroke-width="5"/>
+    <circle cx="34" cy="6" r="6" fill="#ffffff" stroke-width="2.5"/><circle cx="100" cy="8" r="6" fill="#ffffff" stroke-width="2.5"/>
+"""), 355)
+resim("domates", "Domates", KIRMIZI + YESIL2,
+    golge(65, 112, 46) + kalem("""    <path d="M65 26 q-50 0 -50 44 q0 40 50 40 q50 0 50 -40 q0 -44 -50 -44z" fill="url(#kirmizi)"/>
+    <path d="M65 30 l-18 -8 l14 -2 l-4 -12 l8 10 l8 -10 l-4 12 l14 2z" fill="url(#yesil)" stroke-width="3"/>
+    <path d="M36 54 q6 -10 16 -12" fill="none" stroke="#ffffff" stroke-width="5"/>
+"""), 356)
+resim("dinozor", "Dinozor (uzun boyunlu, yeşil)", YESIL2,
+    golge(60, 114, 46) + kalem("""    <path d="M30 112 v-20 M46 112 v-18 M70 112 v-18 M84 112 v-20" fill="none" stroke-width="7"/>
+    <path d="M20 96 q-14 -2 -16 -12 q10 4 18 0 q4 -26 40 -28 q26 0 32 16 l10 -50 q2 -12 14 -12 q12 0 12 10 q0 8 -10 8 l-8 54 q-4 24 -40 24 q-30 0 -52 -10z" fill="url(#yesil)"/>
+    <circle cx="114" cy="16" r="2.5" fill="#2b2b2b"/>
+    <path d="M44 62 l4 -8 l4 8 M60 58 l4 -8 l4 8" fill="none" stroke-width="2.5"/>
+"""), 357)
+resim("yildiz", "Yıldız (sarı, gülen)", SARI2,
+    kalem("""    <path d="M65 6 l16 34 l38 4 l-28 26 l8 38 l-34 -20 l-34 20 l8 -38 l-28 -26 l38 -4z" fill="url(#sari)"/>
+    <circle cx="56" cy="56" r="3" fill="#2b2b2b"/><circle cx="74" cy="56" r="3" fill="#2b2b2b"/>
+    <path d="M56 68 q9 8 18 0" fill="none" stroke-width="3"/>
+"""), 358)
+resim("zar", "Zar (iki zar)", KIRMIZI,
+    kalem("""    <g transform="rotate(-10 40 60)"><path d="M12 32 h56 v56 h-56z" fill="#ffffff" stroke-width="4"/>
+    <circle cx="26" cy="46" r="5" fill="#2b2b2b"/><circle cx="40" cy="60" r="5" fill="#2b2b2b"/><circle cx="54" cy="74" r="5" fill="#2b2b2b"/></g>
+    <g transform="rotate(12 92 70)"><path d="M66 44 h52 v52 h-52z" fill="url(#kirmizi)" stroke-width="4"/>
+    <circle cx="80" cy="58" r="5" fill="#ffffff"/><circle cx="104" cy="58" r="5" fill="#ffffff"/><circle cx="80" cy="82" r="5" fill="#ffffff"/><circle cx="104" cy="82" r="5" fill="#ffffff"/></g>
+"""), 360)
+resim("buz", "Buz (buz küpleri)", MAVI,
+    golge(65, 112, 50) + kalem("""    <path d="M14 66 l30 -12 l28 12 v36 l-28 12 l-30 -12z" fill="#eef8ff"/>
+    <path d="M14 66 l30 12 l28 -12 M44 78 v36" fill="none" stroke-width="3"/>
+    <path d="M62 40 l28 -12 l28 12 v34 l-28 12 l-28 -12z" fill="url(#mavi)"/>
+    <path d="M62 40 l28 12 l28 -12 M90 52 v34" fill="none" stroke-width="3"/>
+    <path d="M24 72 l6 -2 M72 46 l6 -2" fill="none" stroke="#ffffff" stroke-width="4"/>
+"""), 361)

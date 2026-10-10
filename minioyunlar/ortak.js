@@ -77,6 +77,7 @@ const BENZER_HARFLER = {
   a: ["e", "o"], e: ["a", "o"], i: ["l", "ı", "t"], l: ["i", "t", "ı"], t: ["l", "i"],
   n: ["m", "u", "r"], o: ["a", "e", "ö"], k: ["t", "l"], u: ["n", "ü"], r: ["n"],
   ı: ["l", "t"], m: ["n", "u"], // ı ile i okumada karışır: birbirine seçenek olmaz
+  ü: ["u", "ö"], s: ["z"], ö: ["o", "ü"], y: ["u", "k"], d: ["a", "l"], z: ["s"],
 };
 
 // Bu harfin grubuna kadar öğrenilmiş harfler (o harfin kendisi dahil). Okumada bu harfle
@@ -114,7 +115,7 @@ function miniOyunOlur(ad, harf) {
   return oyun.gereken === "hece" ? heceOyunuOlur(harf) : kelimeOyunuOlur(harf);
 }
 
-// Hecelerine ayrılmış kelimeler (1. ve 2. harf grubunun harfleriyle yazılabilenler; yeni harf
+// Hecelerine ayrılmış kelimeler (1., 2. ve 3. harf grubunun harfleriyle yazılabilenler; yeni harf
 // grupları gelince liste büyüyecek). Oyunlar yalnızca bilinen harflerle yazılanları seçer
 // (ogrenilmisKelimeler). Elektrik Devresi, Scrabble gibi oyunlar kullanır.
 const KELIMELER = [
@@ -135,6 +136,20 @@ const KELIMELER = [
   ["rakam", "ra", "kam"], ["elma", "el", "ma"], ["mama", "ma", "ma"], ["ırmak", "ır", "mak"],
   ["ılık", "ı", "lık"], ["kırık", "kı", "rık"], ["kına", "kı", "na"], ["kalın", "ka", "lın"],
   ["tırnak", "tır", "nak"], ["tırtıl", "tır", "tıl"], ["atkı", "at", "kı"],
+  // 3. grup (ü s ö y d z)
+  ["üzüm", "ü", "züm"], ["ütü", "ü", "tü"], ["sütlü", "süt", "lü"], ["kümes", "kü", "mes"],
+  ["yüzük", "yü", "zük"], ["yünlü", "yün", "lü"], ["türkü", "tür", "kü"], ["örtü", "ör", "tü"],
+  ["ördek", "ör", "dek"], ["sözlük", "söz", "lük"], ["masa", "ma", "sa"], ["simit", "si", "mit"],
+  ["susam", "su", "sam"], ["kase", "ka", "se"], ["sarı", "sa", "rı"], ["masal", "ma", "sal"],
+  ["musluk", "mus", "luk"], ["yastık", "yas", "tık"], ["sakız", "sa", "kız"], ["dede", "de", "de"],
+  ["dere", "de", "re"], ["kedi", "ke", "di"], ["kadın", "ka", "dın"], ["deniz", "de", "niz"],
+  ["yıldız", "yıl", "dız"], ["dolu", "do", "lu"], ["duman", "du", "man"], ["minder", "min", "der"],
+  ["yaka", "ya", "ka"], ["yatak", "ya", "tak"], ["yemek", "ye", "mek"], ["kayık", "ka", "yık"],
+  ["oyun", "o", "yun"], ["koyun", "ko", "yun"], ["ayna", "ay", "na"], ["ayı", "a", "yı"],
+  ["kuyu", "ku", "yu"], ["uyku", "uy", "ku"], ["zeytin", "zey", "tin"], ["kiraz", "ki", "raz"],
+  ["kuzu", "ku", "zu"], ["yazı", "ya", "zı"], ["tuzlu", "tuz", "lu"],
+  ["kürek", "kü", "rek"], ["ürün", "ü", "rün"], ["ünlü", "ün", "lü"], ["örnek", "ör", "nek"],
+  ["kömür", "kö", "mür"], ["önlük", "ön", "lük"], ["körük", "kö", "rük"],
 ].map(([kelime, ...heceler]) => ({ kelime, heceler }));
 
 // Üç heceli anlamlı kelimeler (Elektrik Devresi 3. seviye; öğretmenin isteği: anlamsız üçlü
@@ -148,6 +163,10 @@ const COK_HECELI_KELIMELER = [
   ["tekerlek", "te", "ker", "lek"], ["kamera", "ka", "me", "ra"], ["kalemlik", "ka", "lem", "lik"],
   ["limonlu", "li", "mon", "lu"], ["elmalı", "el", "ma", "lı"], ["motorlu", "mo", "tor", "lu"],
   ["kulaklık", "ku", "lak", "lık"], ["armutlu", "ar", "mut", "lu"], ["kartallar", "kar", "tal", "lar"],
+  // 3. grup (ü s ö y d z)
+  ["domates", "do", "ma", "tes"], ["salata", "sa", "la", "ta"], ["dinozor", "di", "no", "zor"],
+  ["yumurta", "yu", "mur", "ta"], ["zeytinli", "zey", "tin", "li"], ["dondurma", "don", "dur", "ma"],
+  ["ördekler", "ör", "dek", "ler"], ["yıldızlı", "yıl", "dız", "lı"], ["sütlüler", "süt", "lü", "ler"],
 ].map(([kelime, ...heceler]) => ({ kelime, heceler }));
 
 // Bilinen harflerle (bkz. bilinenHarfler) yazılabilen kelimeler; oyunun harfini içerenler önce

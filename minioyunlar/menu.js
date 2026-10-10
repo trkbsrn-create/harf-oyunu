@@ -7,7 +7,7 @@
 
 const MENU_SAYFA_KART = 8;
 // Mini oyunlarda hazır olan son harf grubu (sonrakiler menüde silik, "Yakında")
-const MENU_HAZIR_GRUP = 2;
+const MENU_HAZIR_GRUP = 3;
 // Etiket rozetlerinin renkleri (harf: kırmızımsı, hece: sarı; Birleştir Büyüt taşlarıyla aynı)
 const ETIKET_RENKLERI = { harf: 0xff9c8a, hece: 0xffe680 };
 

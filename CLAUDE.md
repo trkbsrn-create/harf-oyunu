@@ -11,6 +11,8 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
 2. ada sonbahar adasıdır (o k u r ı m; kelimeleri otobüs, kedi, uçak, robot, ıspanak, maymun): aynı akış,
 fasulye sırığı yerine mısır sapı, yelkenli yerine köprü (o, k ayak; u, r halat; ı, m tahta; parçalarda harf
 yok); köprü bitince "3. ada yakında". Adalar `AdaSahnesi`nde `ADALAR` ayarıyla (`veri.ada`, kayıtta `ada`).
+Mini oyunlar 3. harf grubuyla da (ü s ö y d z; üzüm, sincap, ördek, yunus, deve, zürafa) oynanır (deneme menüsü).
+ö ve d ile biten resimli kelime yok: o seviyede başka konum sorulur (`konumSec`).
 
 ## Dosya rehberi (ayrıntı: OYUNLAR.md)
 - `index.html` ana sayfa (derleme yok; telefon ayarları, yazı tipi yükleme `yaziTipiHazir`, dönünce
