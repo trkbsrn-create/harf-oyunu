@@ -10,7 +10,9 @@ mini oyunlarla damla kazanıp sular, fasulye sırığından bulutlara çıkar, y
 altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik yalnızca 1. ada.
 2. ada sonbahar adasıdır (o k u r ı m; kelimeleri otobüs, kedi, uçak, robot, ıspanak, maymun): aynı akış,
 fasulye sırığı yerine mısır sapı, yelkenli yerine köprü (o, k ayak; u, r halat; ı, m tahta; parçalarda harf
-yok); köprü bitince "3. ada yakında". Adalar `AdaSahnesi`nde `ADALAR` ayarıyla (`veri.ada`, kayıtta `ada`).
+yok); köprü bitince "3. adaya git". 3. ada karlı adadır (ü s ö y d z): buz sarmaşığı; dalgıç kıyafeti ve çekiç
+(ü maske, s şnorkel, ö elbise, y paletler, d tüp, z çekiç; harf yok); "Buzu kır" → çocuk deliğe dalar, "4. ada
+(su altı) yakında". Adalar `AdaSahnesi`nde `ADALAR` ayarıyla (`veri.ada`, kayıtta `ada`; sözler `sozler`).
 Mini oyunlar 3. harf grubuyla da (ü s ö y d z; üzüm, sincap, ördek, yunus, deve, zürafa) oynanır (deneme menüsü).
 ö ve d ile biten resimli kelime yok: o seviyede başka konum sorulur (`konumSec`).
 
@@ -18,7 +20,7 @@ Mini oyunlar 3. harf grubuyla da (ü s ö y d z; üzüm, sincap, ördek, yunus, 
 - `index.html` ana sayfa (derleme yok; telefon ayarları, yazı tipi yükleme `yaziTipiHazir`, dönünce
   yeniden yerleştirme). Uygulama olarak ekleme: `manifest.webmanifest`, `sw.js` (önbellek yok), `simge/`.
 - `oyun.js` ana oyun sahneleri (karşılama, hikâye, ada, bulut, final), `SURUM`. God mode (şifreli) bir
-  seçim paneli açar: hikâye, Mini Games ya da 1./2. adanın bir aşaması (`tanriSecenekleri`, `tanriAsamasi`).
+  seçim paneli açar: hikâye, Mini Games ya da 1./2./3. adanın bir aşaması (`tanriSecenekleri`, `tanriAsamasi`).
 - `minioyunlar/<ad>/oyun.js` her mini oyun; `ortak.js` ortak sınıf `MiniOyunSahnesi`, `PLANLANAN_OYUNLAR`,
   hece/kelime yardımcıları; `menu.js` deneme menüsü; `lambalar.js` Oyun Lambaları (çarkın yerine).
 - `profil.js` profil (hayvan resmi + takma ad; ilk ekranda "Profil oluştur" → `ProfilPaneli`), istatistik, karne (`KarneSahnesi`).
@@ -209,7 +211,7 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Bulut bölgelerinin içeriği; bilmeceler ("Hızlı koşar, yeleleri var." → at; "Türk bayrağında
   beni görürler, kırmızıyla eş derler." → al) nerede kullanılacak, sonra konuşulacak.
 - 2. harf grubu: 3. seviyede dört harfli heceler, yeni seslerin kaydı (kayit.html "2. ada"); bulut bölgeleri.
-- 3. ada (köprünün karşısı) henüz yok.
+- 4. ada (su altı) henüz yok.
 - Kalan harf grupları; yeni gruplarla 4-5 heceli kelimeler (Elektrik Devresi).
 - Peri rehber (öğretmenin fikri) tamam: tanışma, anlatım, görev düğmesi, omuzdaki peri, mini oyun
   yönergeleri. Perinin adı yok (sorulabilir). Yeni mini oyuna `YONERGELER`'de yönerge yazılır.

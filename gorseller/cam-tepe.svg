@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="140" viewBox="0 0 160 140">
+  <!-- Karlı çam tepesi; gövdesi agac-govde.svg (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="401" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="cam" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#8fbf8a"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#5f9e5c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M80 4 l40 44 h-18 l34 38 h-20 l38 40 h-148 l38 -40 h-20 l34 -38 h-18z" fill="url(#cam)"/>
+    <path d="M80 4 l17 19 q-17 8 -34 0z M58 48 q22 10 44 0 M42 86 q38 12 76 0 M30 126 q50 10 100 0" fill="#ffffff" stroke-width="2.5"/>
+  </g>
+</svg>
