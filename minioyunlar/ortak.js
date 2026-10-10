@@ -395,6 +395,8 @@ class MiniOyunSahnesi extends Phaser.Scene {
     // Zincir: tesisteki varilden damla almak için oyun 1, 2, 3. düzeyde art arda oynanır;
     // 3. düzey bitince ana oyuna dönülür ve damla kazanılır (veri.zincir).
     this.zincir = !!veri.zincir;
+    // Sınav (3. adada kar kıyafeti için): tek oyun; kazanınca ana oyuna dönülür (veri.sinav)
+    this.sinav = !!veri.sinav;
     this.bitti = false;
   }
 
@@ -423,6 +425,8 @@ class MiniOyunSahnesi extends Phaser.Scene {
     geri.on("pointerdown", () => this.geriDon());
     if (this.zincir) {
       doodleYazi(this, 1176, 112, `Düzey ${this.seviye} / 3`, 24).setOrigin(0.5).setDepth(900);
+    } else if (this.sinav) {
+      doodleYazi(this, 1176, 112, "Sınav", 26).setOrigin(0.5).setDepth(900);
     }
     // Uçan yıldız ve parıltı için küçük parçacık
     if (!this.textures.exists("parilti")) {
@@ -645,8 +649,8 @@ class MiniOyunSahnesi extends Phaser.Scene {
     const kart = this.add.image(370, 200, "onay-pencere").setOrigin(0);
     // Zincirde kazanınca: "Devam" sıradaki düzeyi açar; 3. düzeyden sonra damla kazanılır
     const zincirDevam = this.zincir && basarili && this.seviye < 3;
-    const zincirSon = this.zincir && basarili && this.seviye >= 3;
-    const baslikYazi = zincirSon ? "Damla kazandın!" : basarili ? "Aferin!" : "Bir daha dene";
+    const zincirSon = (this.zincir && basarili && this.seviye >= 3) || (this.sinav && basarili);
+    const baslikYazi = this.sinav && basarili ? "Sınavı geçtin!" : zincirSon ? "Damla kazandın!" : basarili ? "Aferin!" : "Bir daha dene";
     const baslik = doodleYazi(this, 640, 300, baslikYazi, zincirSon ? 46 : 52,
       basarili ? "mavi" : "beyaz").setOrigin(0.5);
     const solYazi = zincirDevam ? "Devam" : zincirSon ? "Tamam" : "Tekrar";
@@ -864,8 +868,8 @@ class MiniOyunSahnesi extends Phaser.Scene {
   // Zincirde ana oyun uyutulmuştur: o uyandırılır, sonuç (damla kazanıldı mı) ona iletilir
   geriDon(kazandi = false) {
     Sesler.sustur();
-    if (this.zincir) {
-      this.scene.wake(this.donus, { miniOyun: true, harf: this.harf, kazandi });
+    if (this.zincir || this.sinav) {
+      this.scene.wake(this.donus, { miniOyun: true, sinav: this.sinav, harf: this.harf, kazandi });
       this.scene.stop();
       return;
     }

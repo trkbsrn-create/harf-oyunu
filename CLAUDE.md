@@ -12,7 +12,9 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
 fasulye sırığı yerine mısır sapı, yelkenli yerine köprü (o, k ayak; u, r halat; ı, m tahta; parçalarda harf
 yok); köprü bitince "3. adaya git". 3. ada karlı adadır (ü s ö y d z): buz sarmaşığı; dalgıç kıyafeti ve çekiç
 (ü maske, s şnorkel, ö elbise, y paletler, d tüp, z çekiç; harf yok); "Buzu kır" → çocuk deliğe dalar, "4. ada
-(su altı) yakında". Adalar `AdaSahnesi`nde `ADALAR` ayarıyla (`veri.ada`, kayıtta `ada`; sözler `sozler`).
+(su altı) yakında". 3. adanın başında peri kar kıyafeti için sınav yapar: 1-2. grubun rastgele bir harfiyle
+hece/kelime oyunu, 3. seviye (`kisSinaviBaslat`, mini oyunda `veri.sinav`); geçene kadar yeni sınav; geçince
+çocuk kışlık giyer (cocuk*-kis.svg, `cocukDokusu`, kayıtta `kisKiyafeti`). Adalar `AdaSahnesi`nde `ADALAR` ayarıyla (`veri.ada`, kayıtta `ada`; sözler `sozler`).
 Mini oyunlar 3. harf grubuyla da (ü s ö y d z; üzüm, sincap, ördek, yunus, deve, zürafa) oynanır (deneme menüsü).
 ö ve d ile biten resimli kelime yok: o seviyede başka konum sorulur (`konumSec`).
 

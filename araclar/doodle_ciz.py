@@ -2750,33 +2750,38 @@ yaz("dalgic-aski.svg", 680, 440, "Dalgıç kıyafeti askısı (küçük, solda)"
     <path d="M40 404 h60 M300 404 h60" fill="none" stroke="#9b6a38" stroke-width="14"/>
     </g>
 '''), 425)
-for ad, k in DALGIC_KUTU.items():
-    if ad != "cekic":
-        x, y, en, boy = k
-        print("KUTU", ad, [round(ASKI_X + x * ASKI_OLCEK), round(ASKI_Y + y * ASKI_OLCEK), round(en * ASKI_OLCEK), round(boy * ASKI_OLCEK)])
-# 3. adanın sonu: buz kırılır (sahne arka planı) ve 4 adalı harita
-yaz("hikaye-buz.svg", 1280, 720, "Final 3: karlı kıyı, donmuş göl ve ortasındaki buz",
-    tarama("kar", "#ffffff", "#e3eef6", 35, 9, 2.5) + tarama("gok", "#d7efff", "#bfe3f5", 30, 8, 2.5)
-    + tarama("buzGol", "#d7efff", "#a9dcf5", -35, 7, 3) + CAM,
-    '  <rect width="1280" height="720" fill="url(#gok)"/>\n'
-    + kalem('''    <path d="M0 300 q320 -40 640 -10 q320 30 640 -10 v440 h-1280z" fill="url(#kar)"/>
-    <ellipse cx="640" cy="520" rx="420" ry="150" fill="url(#buzGol)"/>
-    <ellipse cx="640" cy="520" rx="130" ry="60" fill="#eef8ff" stroke-width="4"/>
-    <path d="M140 300 l40 -80 l40 80z M1060 290 l46 -92 l46 92z M260 296 l30 -60 l30 60z" fill="url(#cam)"/>
-''', 4), 423)
-yaz("hikaye-harita3.svg", 1280, 720, "Final 3: adalar haritası (1 yeşil, 2 sonbahar, 3 karlı, 4 su altı kesik çizgili)",
-    tarama("kagit", "#fbf4e2", "#f1e6c8", 30, 8, 3) + tarama("cimen", "#d8f0c0", "#bfe39f", 35, 8, 3)
-    + tarama("sonbahar", "#f2d29a", "#e0b66b", 35, 8, 3) + tarama("kar", "#ffffff", "#e3eef6", 35, 8, 3) + SU,
-    '  <rect width="1280" height="720" fill="url(#kagit)"/>\n'
-    '  <rect x="60" y="60" width="1160" height="600" rx="30" fill="url(#su)" opacity="0.6"/>\n'
-    + kalem('    <path d="M100 460 q70 -90 180 -12 q-70 72 -180 12z" fill="url(#cimen)"/>\n'
-            '    <path d="M360 340 q80 -100 200 -10 q-80 76 -200 10z" fill="url(#sonbahar)"/>\n'
-            '    <path d="M640 430 q90 -110 220 -10 q-90 80 -220 10z" fill="url(#kar)"/>\n'
-            '    <circle cx="1040" cy="300" r="90" fill="#bfe3f5" stroke="#8a8a8a" stroke-dasharray="14 10"/>\n'
-            '    <path d="M1000 300 q10 -12 20 0 q10 12 20 0 M1030 330 q10 -12 20 0 q10 12 20 0" fill="none" stroke="#7cc3e6" stroke-width="3"/>\n'
-            '    <path d="M860 420 q90 -10 110 -80" fill="none" stroke="#e0533d" stroke-dasharray="16 12"/>\n', 4), 424)
-# 3. ada (karlı) için mini harita kartı: çimen yerine kar
-with open(os.path.join(KLASOR, "harita-karti.svg"), encoding="utf-8") as f:
-    _kart = f.read()
-with open(os.path.join(KLASOR, "harita-karti3.svg"), "w", encoding="utf-8") as f:
-    f.write(_kart.replace("#c9eba7", "#ffffff").replace("#a3d97c", "#dce9f2").replace("Mini harita kartı", "Mini harita kartı (3. ada)"))
+# (Askıdaki parçaların oyundaki kutuları: ASKI_X + x * ASKI_OLCEK, ASKI_Y + y * ASKI_OLCEK)
+
+# ---- 3. ada: çocuğun kışlık hâli (cocuk*-kis.svg). Elle çizilmiş cocuk*.svg'lerden üretilir:
+# tişört kırmızı mont olur (uzar), şort mavi pantolon, bacaklar ve kollar kalınlaşır (pantolon,
+# kollu mont), ayakkabı kahverengi bot, başa ponponlu bere, boyna sarı atkı, ellere eldiven.
+import re as _re
+_BERE = ('    <path d="M21 31 q0 -27 24 -27 q24 0 24 27z" fill="url(#bere)"/>\n'
+         '    <path d="M19 31 h52" fill="none" stroke-width="9"/><path d="M19 31 h52" fill="none" stroke="#ff9c8a" stroke-width="5"/>\n'
+         '    <circle cx="45" cy="4" r="6" fill="#ffffff"/>\n'
+         '    <path d="M27 59 q18 9 36 0 l1 7 q-19 9 -38 0z" fill="#ffe680"/>\n'
+         '    <path d="M54 64 l3 16 h7 l-4 -17z" fill="#ffe680"/>\n')
+_BERE_DESEN = ('    <pattern id="bere" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">\n'
+               '      <rect width="7" height="7" fill="#9be3dc"/>\n'
+               '      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#4fc3b8" stroke-width="3" stroke-linecap="round"/>\n'
+               '    </pattern>\n')
+for _ad in ["cocuk", "cocuk-adim1", "cocuk-adim2", "cocuk-tirman"]:
+    with open(os.path.join(KLASOR, f"{_ad}.svg"), encoding="utf-8") as f:
+        _s = f.read()
+    _s = _s.replace("#ffe680", "#ff9c8a").replace("#ffc928", "#e0533d")       # tişört → kırmızı mont
+    _s = _s.replace("#a9c8f0", "#5d8fb3").replace("#6b9be0", "#3f6f94")       # şort → mavi pantolon
+    _s = _s.replace('l2 26 h-42 z" fill="url(#tisort)"', 'l3 32 h-44 z" fill="url(#tisort)"')  # mont uzun
+    # Bacaklar ve kollar: kalın kalem kenarı üstüne pantolon/mont rengi
+    def _kalin(m, renk):
+        return (f'{m.group(1)}<path d="{m.group(2)}" fill="none" stroke-width="12"/>'
+                f'<path d="{m.group(2)}" fill="none" stroke="{renk}" stroke-width="7"/>')
+    _s = _re.sub(r'(<!-- bacaklar[^\n]*\n\s*)<path d="([^"]+)" fill="none"/>', lambda m: _kalin(m, "#5d8fb3"), _s)
+    _s = _re.sub(r'(<!-- kollar[^\n]*\n\s*)<path d="([^"]+)" fill="none"/>', lambda m: _kalin(m, "#ff9c8a"), _s)
+    _s = _s.replace('stroke="#e0533d" stroke-width="6"', 'stroke="#6b4a2b" stroke-width="8"')   # bot
+    _s = _s.replace('r="5" fill="#ffe7cf"', 'r="6" fill="#ff9c8a"')                              # eldiven
+    _s = _s.replace("  </defs>", _BERE_DESEN + "  </defs>", 1)
+    _ek = '  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">\n' + _BERE + "  </g>\n"
+    _s = _s.replace("  <!-- yüz -->", _ek + "  <!-- yüz -->", 1) if "<!-- yüz -->" in _s else _s.replace("</svg>", _ek + "</svg>")
+    _s = _s.replace("<!-- Ana karakter", "<!-- Kışlık (3. ada, doodle_ciz.py üretir). Ana karakter", 1)
+    with open(os.path.join(KLASOR, f"{_ad}-kis.svg"), "w", encoding="utf-8") as f:
+        f.write(_s)
