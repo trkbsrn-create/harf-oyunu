@@ -2578,3 +2578,66 @@ resim("buz", "Buz (buz küpleri)", MAVI,
     <path d="M62 40 l28 12 l28 -12 M90 52 v34" fill="none" stroke-width="3"/>
     <path d="M24 72 l6 -2 M72 46 l6 -2" fill="none" stroke="#ffffff" stroke-width="4"/>
 """), 361)
+
+# ---- TASLAK (öğretmen onayı bekliyor): 3. ada, karlı ada. Kuşbakışı tek resim; oyuna eklenmedi.
+# Ortada donmuş göl ve kırılacak buz; yanında dalgıç kıyafeti askısı (silik parçalar) ve çekiç yeri.
+def _taslak_ada3():
+    import random
+    p = []
+    rnd = random.Random(9)
+    # ada (kar) ve kıyı
+    p.append('    <path d="M90 360 q-20 -170 160 -230 q170 -70 380 -40 q200 -40 360 30 q110 60 100 180 q20 140 -110 210 '
+             'q-190 90 -420 70 q-220 20 -360 -60 q-120 -60 -110 -160z" fill="url(#kar)"/>\n')
+    # donmuş göl ve ortasındaki kırılacak buz (çatlaklı, parlak)
+    p.append('    <ellipse cx="790" cy="420" rx="170" ry="80" fill="url(#buzGol)"/>\n')
+    p.append('    <ellipse cx="800" cy="420" rx="46" ry="22" fill="#eef8ff" stroke-width="3"/>\n')
+    p.append('    <path d="M800 420 l-22 -10 M800 420 l18 -14 M800 420 l26 6 M800 420 l-10 16" fill="none" stroke="#7cc3e6" stroke-width="2.5"/>\n')
+    p.append('    <path d="M760 392 l4 -10 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4z" fill="#ffffff" stroke-width="1.5"/>\n')
+    # tarla (6 kare, karlı)
+    p.append('    <path d="M300 380 h300 v60 h-300z" fill="url(#toprak)"/>\n')
+    for i in range(6):
+        p.append(f'    <path d="M{305+i*50} 386 h40 v48 h-40z" fill="#9a6c43" stroke-width="2.5"/>\n')
+        p.append(f'    <path d="M{305+i*50} 390 q20 -8 40 0" fill="none" stroke="#ffffff" stroke-width="4"/>\n')
+    p.append('    <path d="M292 372 h316 M292 448 h316 M292 372 v76 M608 372 v76" fill="none" stroke="#c98f4f" stroke-width="5"/>\n')
+    # karlı çam ağaçları
+    for x, y in [(180, 260), (260, 190), (380, 160), (520, 140), (660, 150), (800, 170), (930, 230), (150, 420), (260, 540), (980, 560)]:
+        p.append(f'    <g transform="translate({x} {y}) scale(0.9)"><path d="M-6 50 h12 v14 h-12z" fill="url(#kahve)"/>'
+                 '<path d="M0 -50 l26 40 h-12 l22 30 h-14 l22 32 h-88 l22 -32 h-14 l22 -30 h-12z" fill="url(#cam)"/>'
+                 '<path d="M0 -50 l12 18 q-12 6 -24 0z M-14 -10 q14 8 28 0 M-24 20 q24 8 48 0" fill="#ffffff" stroke-width="2.5"/></g>\n')
+    # kardan adam
+    p.append('    <g transform="translate(470 300)"><circle cx="0" cy="20" r="22" fill="#ffffff"/><circle cx="0" cy="-12" r="15" fill="#ffffff"/>'
+             '<path d="M0 -12 l12 3 l-12 3z" fill="#f08a3c" stroke-width="1.5"/><circle cx="-5" cy="-16" r="2" fill="#2b2b2b" stroke="none"/><circle cx="5" cy="-16" r="2" fill="#2b2b2b" stroke="none"/>'
+             '<path d="M-12 -26 h24 v-14 h-24z" fill="#2b2b2b"/><path d="M-16 -2 q16 6 32 0" fill="none" stroke="#e0533d" stroke-width="5"/></g>\n')
+    # hayvanlar: penguenler, kutup ayısı, beyaz tavşan, fok (gölün kıyısında)
+    for x, y in [(640, 470), (665, 480)]:
+        p.append(f'    <g transform="translate({x} {y})"><ellipse cx="0" cy="0" rx="10" ry="15" fill="#2b2b2b"/><ellipse cx="0" cy="3" rx="6" ry="10" fill="#ffffff" stroke="none"/>'
+                 '<path d="M-2 -8 l4 0 l-2 4z" fill="#ffc928" stroke-width="1"/><path d="M-5 15 h4 M2 15 h4" fill="none" stroke="#ffc928" stroke-width="3"/></g>\n')
+    p.append('    <g transform="translate(980 300)"><ellipse cx="0" cy="0" rx="34" ry="18" fill="#fffdf6"/><circle cx="30" cy="-10" r="12" fill="#fffdf6"/>'
+             '<circle cx="34" cy="-12" r="2" fill="#2b2b2b" stroke="none"/><circle cx="42" cy="-8" r="2" fill="#2b2b2b" stroke="none"/>'
+             '<path d="M-24 14 v10 M-10 16 v10 M10 16 v10 M24 14 v10" fill="none" stroke-width="5"/></g>\n')
+    p.append('    <g transform="translate(200 330)"><ellipse cx="0" cy="0" rx="12" ry="9" fill="#ffffff"/><circle cx="10" cy="-6" r="6" fill="#ffffff"/>'
+             '<path d="M10 -12 l-2 -12 l4 0z M14 -12 l2 -12 l3 2z" fill="#ffffff" stroke-width="1.5"/></g>\n')
+    p.append('    <g transform="translate(730 510)"><path d="M-26 6 q0 -14 26 -14 q20 0 24 10 q8 0 10 6 q-12 6 -24 2 q-18 6 -36 -4z" fill="url(#gri)" stroke-width="2.5"/>'
+             '<circle cx="18" cy="-4" r="2" fill="#2b2b2b" stroke="none"/></g>\n')
+    # kar taneleri
+    for k in range(60):
+        x = rnd.randint(60, 1220); y = rnd.randint(20, 700)
+        p.append(f'    <circle cx="{x}" cy="{y}" r="{rnd.choice([2, 3, 4])}" fill="#ffffff" stroke="#c9dfee" stroke-width="1"/>\n')
+    # dalgıç kıyafeti askısı (gölün sağında): maske, şnorkel, elbise, paletler, tüp (silik) + çekiç yeri
+    silik = 'fill="#ffffff" fill-opacity="0.45" stroke="#8a8a8a" stroke-dasharray="6 5" stroke-width="2.5"'
+    p.append('    <path d="M1000 330 v150 M1070 330 v150 M990 330 h90" fill="none" stroke="#b07a42" stroke-width="7"/>\n')
+    p.append(f'    <path d="M1018 350 h34 v30 l10 50 h-54 l10 -50z" {silik}/>\n')                 # dalgıç elbisesi
+    p.append(f'    <path d="M1020 336 q15 -10 30 0 v10 h-30z" {silik}/>\n')                        # maske
+    p.append(f'    <path d="M1056 330 v-22 q0 -6 6 -6" fill="none" stroke="#8a8a8a" stroke-dasharray="6 5" stroke-width="3"/>\n')  # şnorkel
+    p.append(f'    <path d="M1010 470 l-14 18 h28z M1062 470 l-14 18 h28z" {silik}/>\n')          # paletler
+    p.append(f'    <path d="M1080 360 h14 v50 h-14z" {silik}/>\n')                                  # oksijen tüpü
+    p.append(f'    <path d="M860 470 h40 v12 h-40z M876 482 h8 v28 h-8z" {silik}/>\n')              # çekiç (göl kıyısında)
+    # su tesisi iskelesi ve başlangıç
+    p.append('    <path d="M600 640 v70 h24 v-70" fill="url(#tahta)" stroke-width="3"/>\n')
+    p.append('    <path d="M300 560 l4 9 l10 1 l-8 6 l3 10 l-9 -6 l-9 6 l3 -10 l-8 -6 l10 -1z" fill="#ffe680" stroke-width="2"/>\n')
+    return "".join(p)
+
+yaz("taslak-ada3.svg", 1280, 720, "TASLAK: 3. ada (karlı), kuşbakışı; donmuş göl, buz, dalgıç kıyafeti ve çekiç",
+    SU + tarama("kar", "#ffffff", "#e3eef6", 35, 9, 2.5) + tarama("buzGol", "#d7efff", "#a9dcf5", -35, 7, 3)
+    + tarama("cam", "#8fbf8a", "#5f9e5c", 35, 6, 3) + TOPRAK + TAHTA + KAHVE + GRI,
+    '  <rect width="1280" height="720" fill="url(#su)"/>\n' + kalem(_taslak_ada3(), 3.5), 400)
