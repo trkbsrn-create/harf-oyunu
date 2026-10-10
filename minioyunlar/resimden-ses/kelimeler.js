@@ -163,7 +163,7 @@ const KONUMLU_KELIMELER = {
     orta: ["zürafa", "telefon", "kafes"],
   },
   j: {
-    bas: ["jaguar", "jöle"],
+    bas: ["jelibon", "jaguar", "jöle"],
     son: [],
     orta: ["pijama"],
   },

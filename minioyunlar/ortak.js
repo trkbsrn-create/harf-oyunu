@@ -266,7 +266,7 @@ const COK_HECELI_KELIMELER = [
   // 5. grup
   ["patates", "pa", "ta", "tes"], ["papatya", "pa", "pat", "ya"], ["telefon", "te", "le", "fon"],
   ["hediye", "he", "di", "ye"], ["fotoğraf", "fo", "toğ", "raf"], ["havuçlu", "ha", "vuç", "lu"],
-  ["penguen", "pen", "gu", "en"], ["pijama", "pi", "ja", "ma"],
+  ["penguen", "pen", "gu", "en"], ["pijama", "pi", "ja", "ma"], ["jelibon", "je", "li", "bon"],
   // Mehmet Öğretmen kelime tablolarından
   ["acele", "a", "ce", "le"], ["aile", "a", "i", "le"], ["akraba", "ak", "ra", "ba"],
   ["araba", "a", "ra", "ba"], ["arkadaş", "ar", "ka", "daş"], ["bilmece", "bil", "me", "ce"],
