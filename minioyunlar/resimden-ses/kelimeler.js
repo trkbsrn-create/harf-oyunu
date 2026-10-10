@@ -7,123 +7,123 @@
 const KONUMLU_KELIMELER = {
   a: {
     bas: ["arı", "ayı", "at", "armut", "ay", "ağaç", "ayak", "ayakkabı", "araba", "altın", "ayna",
-      "aslan", "ateş"],
+      "aslan", "ateş", "ağ", "ağız"],
     son: ["elma", "kova", "fırça", "çorba", "masa", "çanta", "kumbara", "kurbağa", "pizza",
-      "panda", "nota", "bina", "yonca", "para", "kupa", "vida", "yuva"],
+      "panda", "nota", "bina", "yonca", "para", "kupa", "vida", "yuva", "jandarma", "tuğla", "boğa"],
     orta: ["kapı", "balık", "tavuk", "kaşık", "havuç", "yaprak", "bardak", "kalem", "lale", "fare",
-      "kale", "kitap", "kiraz", "sincap", "timsah", "kanguru", "patates", "ocak"],
+      "kale", "kitap", "kiraz", "sincap", "timsah", "kanguru", "patates", "ocak", "japon balığı", "garaj", "bagaj", "plaj", "yağ", "bağ", "soğan", "yağmur", "sağ"],
   },
   n: {
     bas: ["nar", "nal", "nohut", "nane", "nine", "nergis", "nehir", "nota"],
-    son: ["aslan", "koyun", "yorgan", "kazan", "fincan", "zeytin", "balon", "tren"],
+    son: ["aslan", "koyun", "yorgan", "kazan", "fincan", "zeytin", "balon", "tren", "soğan", "düğün", "öğretmen"],
     orta: ["çanta", "dondurma", "tencere", "anahtar", "yengeç", "fındık", "fener", "sincap",
-      "kanguru", "panda", "bina", "yonca"],
+      "kanguru", "panda", "bina", "yonca", "jandarma", "japon balığı"],
   },
   e: {
     bas: ["eşek", "elma", "ev", "el", "erik", "ekmek", "etek", "eldiven", "elbise"],
     son: ["deve", "küpe", "tencere", "kepçe", "iğne", "bilye", "şemsiye", "lale", "fare", "kale", "bere", "pide", "düğme", "oje"],
     orta: ["kedi", "gemi", "ördek", "sepet", "ceviz", "bebek", "çiçek", "kemik", "kalem", "ateş",
-      "tren", "patates", "ceket", "kek", "börek"],
+      "tren", "patates", "ceket", "kek", "börek", "jet", "çiğdem", "öğretmen"],
   },
   t: {
     bas: ["tilki", "top", "tavşan", "tabak", "tavuk", "tarak", "tencere", "terlik", "testere",
-      "timsah", "tren", "tost"],
-    son: ["at", "süt", "bulut", "armut", "sepet", "kilit", "kibrit", "ceket", "şort", "flüt"],
+      "timsah", "tren", "tost", "tuğla"],
+    son: ["at", "süt", "bulut", "armut", "sepet", "kilit", "kibrit", "ceket", "şort", "flüt", "jet", "yoğurt"],
     orta: ["çatal", "kutu", "etek", "fıstık", "yatak", "kartal", "kitap", "ateş", "nota", "otobüs",
-      "patates", "motor"],
+      "patates", "motor", "öğretmen"],
   },
   i: {
     bas: ["inek", "ip", "iğne", "incir", "inci", "iplik", "iki", "iguana"],
     son: ["kedi", "gemi", "kirpi", "keçi", "tilki", "hindi", "kivi"],
     orta: ["fil", "diş", "zil", "biber", "civciv", "çiçek", "pil", "kilit", "kibrit", "kitap",
-      "kiraz", "sincap", "timsah", "pizza", "bina", "pide", "polis", "vida"],
+      "kiraz", "sincap", "timsah", "pizza", "bina", "pide", "polis", "vida", "jip", "çiğdem"],
   },
   l: {
     bas: ["leylek", "lamba", "lahana", "lokum", "leğen", "lama", "limon", "lahmacun", "lale"],
     son: ["fil", "bal", "gül", "kartal", "çatal", "zil", "nal"],
     orta: ["elma", "balık", "kelebek", "bulut", "kulak", "halı", "silgi", "bilezik", "kalem",
-      "kale", "polis", "flüt"],
+      "kale", "polis", "flüt", "japon balığı", "plaj", "tuğla"],
   },
   // 2. harf grubu (o, k, u, r, ı, m)
   o: {
     bas: ["otobüs", "ok", "odun", "oklava", "on", "ocak", "oje"],
-    son: ["piyano", "radyo", "domino", "flamingo", "avokado"],
-    orta: ["kova", "koyun", "top", "nohut", "lokum", "balon", "yorgan", "çorba", "dondurma", "nota", "motor", "tost", "yonca", "şort", "polis", "fok"],
+    son: ["piyano", "radyo", "domino", "flamingo", "avokado", "judo"],
+    orta: ["kova", "koyun", "top", "nohut", "lokum", "balon", "yorgan", "çorba", "dondurma", "nota", "motor", "tost", "yonca", "şort", "polis", "fok", "japon balığı", "soğan", "yoğurt", "boğa"],
   },
   k: {
     bas: ["kedi", "kova", "koyun", "kale", "kalem", "kapı", "kartal", "kaşık", "kazan", "keçi",
-      "kelebek", "kibrit", "kilit", "kiraz", "kirpi", "kitap", "kumbara", "kurbağa", "kuzu", "kuyu", "kaykay", "kafes", "kek", "kız", "kupa", "kivi"],
+      "kelebek", "kibrit", "kilit", "kiraz", "kirpi", "kitap", "kumbara", "kurbağa", "kuzu", "kuyu", "kaykay", "kafes", "kek", "kız", "kupa", "kivi", "kuğu"],
     son: ["balık", "bebek", "çiçek", "erik", "etek", "fındık", "fıstık", "iplik", "yaprak", "bardak",
       "tavuk", "uçak", "ıspanak", "börek", "ocak", "sucuk", "fok"],
     orta: ["iki", "lokum", "ayakkabı", "şeker", "akvaryum", "makas"],
   },
   u: {
     bas: ["uçak", "un", "uçurtma", "ut", "uzaylı"],
-    son: ["kutu", "kanguru", "boru", "kuyu", "kuzu"],
-    orta: ["bulut", "nohut", "armut", "lokum", "kulak", "tavuk", "kumbara", "kurbağa", "dondurma", "sucuk", "kupa", "yuva", "ruj"],
+    son: ["kutu", "kanguru", "boru", "kuyu", "kuzu", "kuğu"],
+    orta: ["bulut", "nohut", "armut", "lokum", "kulak", "tavuk", "kumbara", "kurbağa", "dondurma", "sucuk", "kupa", "yuva", "ruj", "judo", "yoğurt", "yağmur", "tuğla"],
   },
   r: {
     bas: ["robot", "radyo", "roket", "raket", "rende", "reçel", "ruj"],
-    son: ["anahtar", "biber", "fener", "nehir", "nar", "şeker", "motor"],
+    son: ["anahtar", "biber", "fener", "nehir", "nar", "şeker", "motor", "yağmur"],
     orta: ["armut", "araba", "kartal", "kurbağa", "kiraz", "kirpi", "terlik", "erik", "kibrit", "tarak",
-      "bardak", "çorba", "fırça", "ördek", "bere", "börek", "şort", "para"],
+      "bardak", "çorba", "fırça", "ördek", "bere", "börek", "şort", "para", "jandarma", "garaj", "yoğurt", "öğretmen"],
   },
   ı: {
     bas: ["ıspanak", "ıslık", "ızgara", "ıstakoz"],
-    son: ["kapı", "ayı", "halı", "ayakkabı", "arı", "fıçı"],
-    orta: ["balık", "fındık", "fıstık", "fırça", "kaşık", "altın", "kız"],
+    son: ["kapı", "ayı", "halı", "ayakkabı", "arı", "fıçı", "japon balığı"],
+    orta: ["balık", "fındık", "fıstık", "fırça", "kaşık", "altın", "kız", "ağız"],
   },
   m: {
     bas: ["maymun", "masa", "muz", "mum", "mantar", "makas", "motor"],
-    son: ["lokum", "kalem", "üzüm", "akvaryum", "çim"],
-    orta: ["limon", "lamba", "kumbara", "timsah", "ekmek", "lahmacun", "dondurma", "kemik", "elma", "lama", "düğme"],
+    son: ["lokum", "kalem", "üzüm", "akvaryum", "çim", "çiğdem"],
+    orta: ["limon", "lamba", "kumbara", "timsah", "ekmek", "lahmacun", "dondurma", "kemik", "elma", "lama", "düğme", "jandarma", "yağmur", "öğretmen"],
   },
   // 3. harf grubu (ü, s, ö, y, d, z). ö ve d ile biten resimli kelime yok (bkz. konumSec)
   ü: {
     bas: ["üzüm", "ütü", "üç", "üçgen"],
     son: ["köprü", "örgü"],
-    orta: ["gül", "süt", "küpe", "otobüs", "güneş", "gözlük", "dürbün", "düğme", "flüt"],
+    orta: ["gül", "süt", "küpe", "otobüs", "güneş", "gözlük", "dürbün", "düğme", "flüt", "düğün"],
   },
   s: {
-    bas: ["sincap", "süt", "sepet", "silgi", "saat", "sandalye", "simit", "sabun", "sinek", "salıncak", "sucuk"],
+    bas: ["sincap", "süt", "sepet", "silgi", "saat", "sandalye", "simit", "sabun", "sinek", "salıncak", "sucuk", "soğan", "sağ"],
     son: ["otobüs", "patates", "nergis", "makas", "kaktüs", "ananas", "polis"],
     orta: ["aslan", "masa", "elbise", "timsah", "fıstık", "ıspanak", "tost"],
   },
   ö: {
-    bas: ["ördek", "örümcek", "ödül", "örgü", "önlük"],
+    bas: ["ördek", "örümcek", "ödül", "örgü", "önlük", "öğretmen"],
     son: [],
     orta: ["göz", "köpek", "dört", "böcek", "gözlük", "köprü", "börek", "çöp"],
   },
   y: {
-    bas: ["yunus", "yaprak", "yatak", "yengeç", "yorgan", "yumurta", "yonca", "yuva"],
+    bas: ["yunus", "yaprak", "yatak", "yengeç", "yorgan", "yumurta", "yonca", "yuva", "yağ", "yoğurt", "yağmur"],
     son: ["ay", "çay", "saray", "kaykay"],
     orta: ["ayak", "ayı", "ayna", "ayakkabı", "koyun", "bilye", "şemsiye", "maymun"],
   },
   d: {
-    bas: ["deve", "dondurma", "diş", "davul", "domates", "dinozor", "dürbün", "düğme"],
+    bas: ["deve", "dondurma", "diş", "davul", "domates", "dinozor", "dürbün", "düğme", "düğün"],
     son: [],
-    orta: ["bardak", "fındık", "kedi", "ördek", "yıldız", "pide", "vida"],
+    orta: ["bardak", "fındık", "kedi", "ördek", "yıldız", "pide", "vida", "jandarma", "judo", "çiğdem"],
   },
   z: {
     bas: ["zürafa", "zeytin", "zil", "zar"],
-    son: ["kiraz", "ceviz", "muz", "buz", "yıldız", "kız"],
+    son: ["kiraz", "ceviz", "muz", "buz", "yıldız", "kız", "ağız"],
     orta: ["üzüm", "bilezik", "ızgara", "uzaylı", "kuzu", "kazan"],
   },
   // 4. harf grubu (ç, b, g, c, ş). b, g ve c ile biten resimli kelime yok (bkz. konumSec)
   ç: {
-    bas: ["çekirge", "çanta", "çatal", "çiçek", "çorba", "çay", "çim", "çeşme", "çöp"],
+    bas: ["çekirge", "çanta", "çatal", "çiçek", "çorba", "çay", "çim", "çeşme", "çöp", "çiğdem"],
     son: ["ağaç", "havuç", "yengeç", "üç"],
     orta: ["kepçe", "fırça", "keçi", "uçak", "uçurtma", "fıçı"],
   },
   b: {
-    bas: ["balık", "balon", "bal", "bardak", "bebek", "biber", "bilye", "bulut", "buz", "böcek", "bere", "bina", "börek"],
+    bas: ["balık", "balon", "bal", "bardak", "bebek", "biber", "bilye", "bulut", "buz", "böcek", "bere", "bina", "börek", "bagaj", "bağ", "boğa"],
     son: [],
-    orta: ["ayakkabı", "kumbara", "kibrit", "otobüs", "robot", "çorba", "elbise"],
+    orta: ["ayakkabı", "kumbara", "kibrit", "otobüs", "robot", "çorba", "elbise", "japon balığı"],
   },
   g: {
-    bas: ["güvercin", "gemi", "gül", "güneş", "gözlük", "göz", "gitar", "geyik", "gömlek"],
+    bas: ["güvercin", "gemi", "gül", "güneş", "gözlük", "göz", "gitar", "geyik", "gömlek", "garaj"],
     son: [],
-    orta: ["silgi", "nergis", "iguana", "yorgan", "kanguru"],
+    orta: ["silgi", "nergis", "iguana", "yorgan", "kanguru", "bagaj"],
   },
   c: {
     bas: ["ceviz", "civciv", "ceket", "cüzdan", "ciklet"],
@@ -135,12 +135,12 @@ const KONUMLU_KELIMELER = {
     son: ["ateş", "diş", "güneş"],
     orta: ["kaşık", "tavşan", "eşek", "çeşme"],
   },
-  // 5. harf grubu (p, h, v, ğ, f, j). ğ kelime başında gelmez; h, f, j ile biten resimli kelime yok
+  // 5. harf grubu (p, h, v, ğ, f, j). ğ kelime başında gelmez; h ve f ile biten resimli kelime yok
   // (bkz. konumSec)
   p: {
-    bas: ["penguen", "patates", "panda", "pil", "pizza", "para", "pide", "polis"],
-    son: ["kitap", "top", "ip", "çöp"],
-    orta: ["kirpi", "iplik", "kapı", "kepçe", "yaprak", "sepet", "kupa"],
+    bas: ["penguen", "patates", "panda", "pil", "pizza", "para", "pide", "polis", "plaj"],
+    son: ["kitap", "top", "ip", "çöp", "jip"],
+    orta: ["kirpi", "iplik", "kapı", "kepçe", "yaprak", "sepet", "kupa", "japon balığı"],
   },
   h: {
     bas: ["horoz", "hindi", "halı", "havuç"],
@@ -154,8 +154,8 @@ const KONUMLU_KELIMELER = {
   },
   ğ: {
     bas: [],
-    son: ["dağ"],
-    orta: ["ağaç", "leğen", "iğne", "kurbağa", "düğme"],
+    son: ["dağ", "ağ", "yağ", "bağ", "sağ"],
+    orta: ["ağaç", "leğen", "iğne", "kurbağa", "düğme", "japon balığı", "soğan", "yoğurt", "yağmur", "ağız", "tuğla", "çiğdem", "boğa", "kuğu", "düğün", "öğretmen"],
   },
   f: {
     bas: ["fil", "fare", "fener", "fincan", "fındık", "fıstık", "fırça", "fok", "fıçı", "flüt"],
@@ -163,8 +163,8 @@ const KONUMLU_KELIMELER = {
     orta: ["zürafa", "telefon", "kafes"],
   },
   j: {
-    bas: ["jelibon", "jaguar", "jöle"],
-    son: ["ruj"],
+    bas: ["jelibon", "jaguar", "jöle", "jet", "jandarma", "japon balığı", "jip", "judo"],
+    son: ["ruj", "garaj", "bagaj", "plaj"],
     orta: ["pijama", "oje"],
   },
 };
@@ -187,7 +187,7 @@ function kelimeResmi(kelime) {
   const harf = HARFLER.find((h) => h.kelime === kelime && h.resim);
   if (harf) return harf.resim;
   const TR = { ç: "c", ğ: "g", ı: "i", ö: "o", ş: "s", ü: "u" };
-  return "resim-" + kelime.replace(/[çğıöşü]/g, (h) => TR[h]);
+  return "resim-" + kelime.replace(/[çğıöşü]/g, (h) => TR[h]).replace(/ /g, "-");
 }
 
 // Bütün resimli kelimeler (yanlış seçenekler buradan, harfi hiç içermeyenlerden seçilir)

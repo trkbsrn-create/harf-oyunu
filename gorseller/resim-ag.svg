@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Ağ (balık ağı, içinde balıklar) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="506" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="mavi" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#bfe3f5"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#7cc3e6" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="turuncu" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#ffc58f"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#f08a3c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 12 q51 -10 102 0 q0 60 -51 102 q-51 -42 -51 -102z" fill="#fbf7ec"/>
+    <path d="M24 12 q14 50 41 102 M46 8 q8 56 19 106 M84 8 q-8 56 -19 106 M106 12 q-14 50 -41 102 M16 34 q49 10 98 0 M22 58 q43 10 86 0 M36 82 q29 8 58 0" fill="none" stroke-width="2"/>
+    <path d="M44 50 q12 -12 26 0 q-14 12 -26 0z M70 50 l8 -6 v12z" fill="url(#turuncu)" stroke-width="2.5"/>
+    <path d="M56 76 q10 -10 22 0 q-12 10 -22 0z M78 76 l7 -5 v10z" fill="url(#mavi)" stroke-width="2.5"/>
+    <path d="M14 12 q51 -10 102 0" fill="none" stroke="#8e6340" stroke-width="6"/>
+  </g>
+</svg>

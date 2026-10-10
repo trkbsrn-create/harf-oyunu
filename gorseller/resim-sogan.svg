@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Soğan (kuru soğan) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="509" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="sogan" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="6" height="6" fill="#f4cfa0"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#d99a5a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="116" rx="40" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M65 26 q46 22 40 58 q-6 30 -40 30 q-34 0 -40 -30 q-6 -36 40 -58z" fill="url(#sogan)"/>
+    <path d="M65 26 q-4 -12 -2 -22 M65 26 q6 -12 12 -18" fill="none" stroke="#6fbf4a" stroke-width="4"/>
+    <path d="M65 30 q-24 30 -10 82 M65 30 q24 30 10 82" fill="none" stroke-width="2.5"/>
+    <path d="M56 114 l-4 6 M65 114 v6 M74 114 l4 6" fill="none" stroke-width="2"/>
+  </g>
+</svg>
