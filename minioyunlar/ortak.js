@@ -79,6 +79,7 @@ const BENZER_HARFLER = {
   ı: ["l", "t"], m: ["n", "u"], // ı ile i okumada karışır: birbirine seçenek olmaz
   ü: ["u", "ö"], s: ["z"], ö: ["o", "ü"], y: ["u", "k"], d: ["a", "l"], z: ["s"],
   ç: ["c", "ş"], b: ["d"], g: ["y", "k"], c: ["ç", "e"], ş: ["s", "ç"],
+  p: ["b", "d"], h: ["n"], v: ["y", "u"], ğ: ["g"], f: ["t"], j: ["i"],
 };
 
 // Bu harfin grubuna kadar öğrenilmiş harfler (o harfin kendisi dahil). Okumada bu harfle
@@ -119,12 +120,13 @@ function miniOyunOlur(ad, harf) {
 // Öğretmenin kuralı: Türkçede küfür ya da argo olan heceler ve kelimeler oyunda hiç çıkmaz (ne sorulur,
 // ne seçenek olur, ne birleştirilir). Sonraki harf gruplarının harfleri de baştan yazıldı.
 const UYGUNSUZ_HECELER = ["am", "amı", "amk", "sik", "sok", "mal", "göt", "piç", "bok", "çük", "kıç", "sıç",
-  "oç", "döl", "taşak", "yarak", "kaltak", "pezo", "ibne", "gay", "çiş", "bok", "boka"];
+  "oç", "döl", "taşak", "yarak", "kaltak", "pezo", "ibne", "gay", "çiş", "bok", "boka", "pipi",
+  "popo", "piç", "osur", "zıbar"];
 function uygunsuzMu(metin) {
   return UYGUNSUZ_HECELER.includes(metin);
 }
 
-// Hecelerine ayrılmış kelimeler (1.-4. harf grubunun harfleriyle yazılabilenler; yeni harf
+// Hecelerine ayrılmış kelimeler (bütün harf gruplarının harfleriyle yazılabilenler; yeni harf
 // grupları gelince liste büyüyecek). Oyunlar yalnızca bilinen harflerle yazılanları seçer
 // (ogrenilmisKelimeler). Elektrik Devresi, Scrabble gibi oyunlar kullanır.
 const KELIMELER = [
@@ -169,6 +171,17 @@ const KELIMELER = [
   ["incir", "in", "cir"], ["camcı", "cam", "cı"], ["şeker", "şe", "ker"], ["şarkı", "şar", "kı"],
   ["şişe", "şi", "şe"], ["güneş", "gü", "neş"], ["beşik", "be", "şik"], ["kuşlar", "kuş", "lar"],
   ["kaşık", "ka", "şık"], ["başak", "ba", "şak"], ["kibar", "ki", "bar"], ["cüce", "cü", "ce"],
+  // 5. grup (p h v ğ f j)
+  ["hamak", "ha", "mak"], ["hasta", "has", "ta"], ["hesap", "he", "sap"],
+  ["pasta", "pas", "ta"], ["kitap", "ki", "tap"], ["sepet", "se", "pet"], ["kapı", "ka", "pı"],
+  ["pilav", "pi", "lav"], ["pamuk", "pa", "muk"], ["tepsi", "tep", "si"], ["hava", "ha", "va"],
+  ["horoz", "ho", "roz"], ["halı", "ha", "lı"], ["kahve", "kah", "ve"], ["havuç", "ha", "vuç"],
+  ["havlu", "hav", "lu"], ["vapur", "va", "pur"], ["vazo", "va", "zo"], ["ceviz", "ce", "viz"],
+  ["tavuk", "ta", "vuk"], ["kova", "ko", "va"], ["deve", "de", "ve"], ["ağaç", "a", "ğaç"],
+  ["yağmur", "yağ", "mur"], ["doğa", "do", "ğa"], ["soğan", "so", "ğan"], ["ağız", "a", "ğız"],
+  ["yoğurt", "yo", "ğurt"], ["fare", "fa", "re"], ["fener", "fe", "ner"], ["fincan", "fin", "can"],
+  ["kafes", "ka", "fes"], ["sofra", "sof", "ra"], ["fındık", "fın", "dık"], ["jöle", "jö", "le"],
+  ["jeton", "je", "ton"], ["garaj", "ga", "raj"], ["bagaj", "ba", "gaj"],
 ].map(([kelime, ...heceler]) => ({ kelime, heceler }))
   .filter((k) => !uygunsuzMu(k.kelime) && !k.heceler.some(uygunsuzMu));
 
@@ -191,6 +204,10 @@ const COK_HECELI_KELIMELER = [
   ["kelebek", "ke", "le", "bek"], ["çekirge", "çe", "kir", "ge"], ["şemsiye", "şem", "si", "ye"],
   ["çocuklar", "ço", "cuk", "lar"], ["çiçekçi", "çi", "çek", "çi"], ["bebekler", "be", "bek", "ler"],
   ["balıkçı", "ba", "lık", "çı"], ["bulutlu", "bu", "lut", "lu"],
+  // 5. grup
+  ["patates", "pa", "ta", "tes"], ["papatya", "pa", "pat", "ya"], ["telefon", "te", "le", "fon"],
+  ["hediye", "he", "di", "ye"], ["fotoğraf", "fo", "toğ", "raf"], ["havuçlu", "ha", "vuç", "lu"],
+  ["penguen", "pen", "gu", "en"], ["pijama", "pi", "ja", "ma"],
 ].map(([kelime, ...heceler]) => ({ kelime, heceler }))
   .filter((k) => !uygunsuzMu(k.kelime) && !k.heceler.some(uygunsuzMu));
 
@@ -229,12 +246,13 @@ function heceHavuzu(harf) {
   for (const u of unluler) {
     for (const s of unsuzler) {
       heceler.push({ hece: u + s, u, s, acik: false });
-      heceler.push({ hece: s + u, u, s, acik: true });
+      // ğ hece başında gelmez (Türkçede "ğa" gibi hece yok)
+      if (s !== "ğ") heceler.push({ hece: s + u, u, s, acik: true });
     }
   }
   for (const u of unluler) {
     for (const s of unsuzler) {
-      for (const s2 of unsuzler) heceler.push({ hece: s + u + s2, u, s, acik: false });
+      if (s !== "ğ") for (const s2 of unsuzler) heceler.push({ hece: s + u + s2, u, s, acik: false });
     }
   }
   return heceler.filter((h) => !uygunsuzMu(h.hece));

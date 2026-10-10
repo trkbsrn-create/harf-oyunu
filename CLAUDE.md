@@ -15,9 +15,11 @@ yok); köprü bitince "3. adaya git". 3. ada karlı adadır (ü s ö y d z): buz
 (su altı) yakında". 3. adanın başında peri kar kıyafeti için sınav yapar: m harfiyle (öğretmenin seçimi,
 `KIS_SINAVI_HARFI`) rastgele bir hece/kelime oyunu, 3. seviye (`kisSinaviBaslat`, mini oyunda `veri.sinav`); geçene kadar yeni sınav; geçince
 çocuk kışlık giyer (cocuk*-kis.svg, `cocukDokusu`, kayıtta `kisKiyafeti`). Adalar `AdaSahnesi`nde `ADALAR` ayarıyla (`veri.ada`, kayıtta `ada`; sözler `sozler`).
-Mini oyunlar 3. ve 4. harf grubuyla da (ü s ö y d z; üzüm, sincap, ördek, yunus, deve, zürafa / ç b g c ş;
-çekirge, balık, güvercin, civciv, şeker) oynanır (deneme menüsü). ö, d, b, g, c ile biten resimli kelime yok:
-o seviyede başka konum sorulur (`konumSec`).
+Mini oyunlar 3., 4. ve 5. harf grubuyla da (ü s ö y d z; üzüm, sincap, ördek, yunus, deve, zürafa / ç b g c ş;
+çekirge, balık, güvercin, civciv, şeker / p h v ğ f j; penguen, horoz, vapur, dağ, fil, jaguar) oynanır (deneme
+menüsü). O konumda resimli kelime yoksa (ö, d, b, g, c, h, f, j ile biten; ğ ile başlayan) başka konum sorulur
+(`konumSec`). ğ kelime ve hece başında gelmez (hece havuzunda "ğa" gibi hece yok), tek başına söylenemez
+(`tekBasinaDenenir` yok, ipucu hecesi "ağ").
 
 ## Dosya rehberi (ayrıntı: OYUNLAR.md)
 - `index.html` ana sayfa (derleme yok; telefon ayarları, yazı tipi yükleme `yaziTipiHazir`, dönünce
