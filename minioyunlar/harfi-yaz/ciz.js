@@ -60,6 +60,13 @@ const HARF_YOLLARI = {
     cizgiNoktalari(695, 415, 695, 330)), birlestir(cizgiNoktalari(695, 330, 695, 520), yayNoktalari(655, 520, 40, 40, 0, 150))],
   d: [yayNoktalari(640, 400, 68, 70, -40, -340), cizgiNoktalari(708, 250, 708, 470)],
   z: [birlestir(cizgiNoktalari(585, 330, 695, 330), cizgiNoktalari(695, 330, 585, 470), cizgiNoktalari(585, 470, 695, 470))],
+  // 4. grup: c sağ üstten saat yönünün tersine açık yay; ç c ve çengel; b dikey, sonra göbek;
+  // g a gibi, sağ çizgi aşağı iner ve sola kıvrılır; ş s ve çengel
+  c: [yayNoktalari(645, 400, 62, 70, -40, -320)],
+  ç: [yayNoktalari(645, 400, 62, 70, -40, -320), cizgiNoktalari(642, 474, 632, 500)],
+  b: [cizgiNoktalari(590, 250, 590, 470), yayNoktalari(645, 400, 55, 70, 160, -160)],
+  g: [yayNoktalari(640, 400, 68, 70, -40, -340), birlestir(cizgiNoktalari(708, 330, 708, 520), yayNoktalari(668, 520, 40, 40, 0, 150))],
+  ş: [birlestir(yayNoktalari(640, 365, 50, 35, -20, -270), yayNoktalari(640, 435, 50, 35, -90, 160)), cizgiNoktalari(640, 474, 632, 500)],
 };
 
 // Büyük harfler (öğretmenin isteği; dik temel harf yazılış sırası, öğretmen kontrol edecek):
@@ -95,6 +102,14 @@ const BUYUK_HARF_YOLLARI = {
   d: [cizgiNoktalari(590, 250, 590, 470),
     birlestir(cizgiNoktalari(590, 250, 630, 250), yayNoktalari(630, 360, 80, 110, -90, 90), cizgiNoktalari(630, 470, 590, 470))],
   z: [birlestir(cizgiNoktalari(575, 250, 705, 250), cizgiNoktalari(705, 250, 575, 470), cizgiNoktalari(575, 470, 705, 470))],
+  // C açık yay; Ç C ve çengel; B dikey, üst ve alt göbek; G yay ve içe çizgi; Ş S ve çengel
+  c: [yayNoktalari(650, 360, 85, 110, -40, -320)],
+  ç: [yayNoktalari(650, 360, 85, 110, -40, -320), cizgiNoktalari(648, 474, 638, 500)],
+  b: [cizgiNoktalari(590, 250, 590, 470),
+    birlestir(cizgiNoktalari(590, 250, 640, 250), yayNoktalari(640, 302, 48, 52, -90, 90), cizgiNoktalari(640, 354, 590, 354)),
+    birlestir(cizgiNoktalari(590, 354, 645, 354), yayNoktalari(645, 412, 55, 58, -90, 90), cizgiNoktalari(645, 470, 590, 470))],
+  g: [birlestir(yayNoktalari(650, 360, 85, 110, -40, -340), cizgiNoktalari(730, 398, 730, 360), cizgiNoktalari(730, 360, 672, 360))],
+  ş: [birlestir(yayNoktalari(640, 305, 60, 55, -20, -270), yayNoktalari(640, 415, 60, 55, -90, 160)), cizgiNoktalari(640, 474, 632, 500)],
 };
 
 // Her turda küçük mü büyük mü yazılacak: 2. tur büyük harf (küçük, BÜYÜK, küçük)

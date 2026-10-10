@@ -78,6 +78,7 @@ const BENZER_HARFLER = {
   n: ["m", "u", "r"], o: ["a", "e", "ö"], k: ["t", "l"], u: ["n", "ü"], r: ["n"],
   ı: ["l", "t"], m: ["n", "u"], // ı ile i okumada karışır: birbirine seçenek olmaz
   ü: ["u", "ö"], s: ["z"], ö: ["o", "ü"], y: ["u", "k"], d: ["a", "l"], z: ["s"],
+  ç: ["c", "ş"], b: ["d"], g: ["y", "k"], c: ["ç", "e"], ş: ["s", "ç"],
 };
 
 // Bu harfin grubuna kadar öğrenilmiş harfler (o harfin kendisi dahil). Okumada bu harfle
@@ -118,12 +119,12 @@ function miniOyunOlur(ad, harf) {
 // Öğretmenin kuralı: Türkçede küfür ya da argo olan heceler ve kelimeler oyunda hiç çıkmaz (ne sorulur,
 // ne seçenek olur, ne birleştirilir). Sonraki harf gruplarının harfleri de baştan yazıldı.
 const UYGUNSUZ_HECELER = ["am", "amı", "amk", "sik", "sok", "mal", "göt", "piç", "bok", "çük", "kıç", "sıç",
-  "oç", "döl", "taşak", "yarak", "kaltak", "pezo", "ibne"];
+  "oç", "döl", "taşak", "yarak", "kaltak", "pezo", "ibne", "gay", "çiş", "bok", "boka"];
 function uygunsuzMu(metin) {
   return UYGUNSUZ_HECELER.includes(metin);
 }
 
-// Hecelerine ayrılmış kelimeler (1., 2. ve 3. harf grubunun harfleriyle yazılabilenler; yeni harf
+// Hecelerine ayrılmış kelimeler (1.-4. harf grubunun harfleriyle yazılabilenler; yeni harf
 // grupları gelince liste büyüyecek). Oyunlar yalnızca bilinen harflerle yazılanları seçer
 // (ogrenilmisKelimeler). Elektrik Devresi, Scrabble gibi oyunlar kullanır.
 const KELIMELER = [
@@ -158,6 +159,16 @@ const KELIMELER = [
   ["kuzu", "ku", "zu"], ["yazı", "ya", "zı"], ["tuzlu", "tuz", "lu"],
   ["kürek", "kü", "rek"], ["ürün", "ü", "rün"], ["ünlü", "ün", "lü"], ["örnek", "ör", "nek"],
   ["kömür", "kö", "mür"], ["önlük", "ön", "lük"], ["körük", "kö", "rük"],
+  // 4. grup (ç b g c ş)
+  ["çanta", "çan", "ta"], ["çocuk", "ço", "cuk"], ["çiçek", "çi", "çek"], ["çorba", "çor", "ba"],
+  ["keçi", "ke", "çi"], ["bıçak", "bı", "çak"], ["çakıl", "ça", "kıl"], ["aşçı", "aş", "çı"],
+  ["baba", "ba", "ba"], ["balık", "ba", "lık"], ["bebek", "be", "bek"], ["bulut", "bu", "lut"],
+  ["kabak", "ka", "bak"], ["bilet", "bi", "let"], ["tabak", "ta", "bak"], ["sabun", "sa", "bun"],
+  ["gemi", "ge", "mi"], ["güzel", "gü", "zel"], ["gece", "ge", "ce"], ["silgi", "sil", "gi"],
+  ["gözlük", "göz", "lük"], ["boncuk", "bon", "cuk"], ["cami", "ca", "mi"], ["ceket", "ce", "ket"],
+  ["incir", "in", "cir"], ["camcı", "cam", "cı"], ["şeker", "şe", "ker"], ["şarkı", "şar", "kı"],
+  ["şişe", "şi", "şe"], ["güneş", "gü", "neş"], ["beşik", "be", "şik"], ["kuşlar", "kuş", "lar"],
+  ["kaşık", "ka", "şık"], ["başak", "ba", "şak"], ["kibar", "ki", "bar"], ["cüce", "cü", "ce"],
 ].map(([kelime, ...heceler]) => ({ kelime, heceler }))
   .filter((k) => !uygunsuzMu(k.kelime) && !k.heceler.some(uygunsuzMu));
 
@@ -176,6 +187,10 @@ const COK_HECELI_KELIMELER = [
   ["domates", "do", "ma", "tes"], ["salata", "sa", "la", "ta"], ["dinozor", "di", "no", "zor"],
   ["yumurta", "yu", "mur", "ta"], ["zeytinli", "zey", "tin", "li"], ["dondurma", "don", "dur", "ma"],
   ["ördekler", "ör", "dek", "ler"], ["yıldızlı", "yıl", "dız", "lı"], ["sütlüler", "süt", "lü", "ler"],
+  // 4. grup
+  ["kelebek", "ke", "le", "bek"], ["çekirge", "çe", "kir", "ge"], ["şemsiye", "şem", "si", "ye"],
+  ["çocuklar", "ço", "cuk", "lar"], ["çiçekçi", "çi", "çek", "çi"], ["bebekler", "be", "bek", "ler"],
+  ["balıkçı", "ba", "lık", "çı"], ["bulutlu", "bu", "lut", "lu"],
 ].map(([kelime, ...heceler]) => ({ kelime, heceler }))
   .filter((k) => !uygunsuzMu(k.kelime) && !k.heceler.some(uygunsuzMu));
 

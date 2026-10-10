@@ -2785,3 +2785,32 @@ for _ad in ["cocuk", "cocuk-adim1", "cocuk-adim2", "cocuk-tirman"]:
     _s = _s.replace("<!-- Ana karakter", "<!-- Kışlık (3. ada, doodle_ciz.py üretir). Ana karakter", 1)
     with open(os.path.join(KLASOR, f"{_ad}-kis.svg"), "w", encoding="utf-8") as f:
         f.write(_s)
+
+# ---- 4. harf grubu (ç b g c ş) için harf resimleri ----
+resim("cekirge", "Çekirge (yandan, yeşil)", YESIL2,
+    golge(65, 112, 50) + kalem("""    <path d="M76 70 l26 -30 l18 60" fill="none" stroke-width="5"/>
+    <path d="M40 80 l-8 24 M54 82 l2 24" fill="none" stroke-width="4"/>
+    <path d="M18 70 q4 -22 40 -24 q40 -2 62 18 q-10 16 -50 18 q-40 2 -52 -12z" fill="url(#yesil)"/>
+    <circle cx="26" cy="62" r="12" fill="url(#yesil)"/>
+    <circle cx="22" cy="58" r="3" fill="#2b2b2b"/>
+    <path d="M24 50 q-6 -24 8 -40 M30 52 q4 -22 22 -34" fill="none" stroke-width="2.5"/>
+    <path d="M60 56 q20 -6 40 4" fill="none" stroke-width="2.5"/>
+"""), 430)
+resim("guvercin", "Güvercin (yandan, gri)", GRI + MOR,
+    golge(62, 112, 40) + kalem("""    <path d="M56 98 v12 M70 98 v12" fill="none" stroke="#e0533d" stroke-width="4"/>
+    <path d="M30 70 q0 -30 30 -32 q30 0 46 22 l16 2 l-14 10 q-10 26 -46 26 q-32 0 -32 -28z" fill="url(#gri)"/>
+    <path d="M100 62 q-14 8 -40 6" fill="none" stroke-width="2.5"/>
+    <circle cx="38" cy="40" r="14" fill="url(#gri)"/>
+    <path d="M30 50 q10 8 22 2" fill="url(#mor)" stroke-width="2.5"/>
+    <circle cx="34" cy="36" r="3" fill="#2b2b2b"/>
+    <path d="M24 40 l-10 4 l10 3z" fill="#ffc928" stroke-width="2"/>
+"""), 431)
+resim("sahin", "Şahin (kanatları açık, uçan)", KAHVE + tarama("sahinAcik", "#f2d7b0", "#d9b07a", -30, 6, 2.5),
+    kalem("""    <path d="M65 54 q-30 -30 -60 -20 q20 10 24 30 q20 -2 36 -2z M65 54 q30 -30 60 -20 q-20 10 -24 30 q-20 -2 -36 -2z" fill="url(#kahve)"/>
+    <path d="M14 38 l8 6 M24 34 l6 8 M116 38 l-8 6 M106 34 l-6 8" fill="none" stroke-width="2.5"/>
+    <ellipse cx="65" cy="66" rx="14" ry="26" fill="url(#sahinAcik)"/>
+    <path d="M56 90 l9 20 l9 -20z" fill="url(#kahve)"/>
+    <circle cx="65" cy="40" r="11" fill="url(#sahinAcik)"/>
+    <circle cx="61" cy="38" r="2.5" fill="#2b2b2b"/><circle cx="69" cy="38" r="2.5" fill="#2b2b2b"/>
+    <path d="M62 44 l3 8 l3 -8z" fill="#ffc928" stroke-width="2"/>
+"""), 432)

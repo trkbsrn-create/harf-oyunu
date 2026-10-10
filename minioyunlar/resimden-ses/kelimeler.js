@@ -109,6 +109,32 @@ const KONUMLU_KELIMELER = {
     son: ["kiraz", "ceviz", "muz", "buz", "yıldız"],
     orta: ["üzüm", "bilezik", "ızgara", "uzaylı", "kuzu", "kazan"],
   },
+  // 4. harf grubu (ç, b, g, c, ş). b, g ve c ile biten resimli kelime yok (bkz. konumSec)
+  ç: {
+    bas: ["çekirge", "çanta", "çatal", "çiçek", "çorba", "çay", "çim"],
+    son: ["ağaç", "havuç", "yengeç", "üç"],
+    orta: ["kepçe", "fırça", "keçi", "uçak", "uçurtma"],
+  },
+  b: {
+    bas: ["balık", "balon", "bal", "bardak", "bebek", "biber", "bilye", "bulut", "buz", "böcek"],
+    son: [],
+    orta: ["ayakkabı", "kumbara", "kibrit", "otobüs", "robot", "çorba", "elbise"],
+  },
+  g: {
+    bas: ["güvercin", "gemi", "gül", "güneş", "gözlük", "göz"],
+    son: [],
+    orta: ["silgi", "nergis", "iguana", "yorgan", "kanguru"],
+  },
+  c: {
+    bas: ["ceviz", "civciv", "ceket"],
+    son: [],
+    orta: ["fincan", "lahmacun", "incir", "inci", "sincap", "örümcek"],
+  },
+  ş: {
+    bas: ["şemsiye", "şeker", "şahin"],
+    son: ["ateş", "diş", "güneş"],
+    orta: ["kaşık", "tavşan", "eşek"],
+  },
 };
 
 // Bu harfte bu konumda yeterli resimli kelime yoksa (ö ve d ile biten kelime yok) başka konum

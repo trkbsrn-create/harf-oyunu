@@ -36,7 +36,7 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   (dalgic-gol yere yatık, karakterin altında; küçük dalgic-aski + dalgic-<parça>; ü maske, s şnorkel, ö elbise, y palet, d tüp, z çekiç). "Buzu kır" →
   `buzFinali` (çekiç buzu kırar, çocuk maskeyle dalar; harita3, "4. ada (su altı) yakında").
   Başta kar kıyafeti sınavı (öğretmenin fikri): peri gelir (`KIS_SINAVI_SOZLERI`), "hece" etiketli bir oyun
-  1-2. grubun rastgele harfiyle 3. seviyede tek oyun olarak açılır (sağ üstte "Sınav"; kazanınca "Sınavı
+  m harfiyle (`KIS_SINAVI_HARFI`) 3. seviyede tek oyun olarak açılır (sağ üstte "Sınav"; kazanınca "Sınavı
   geçtin!" → Tamam). Kaybedince peri "Üzülme, bir daha deneyelim!" der, yeni sınav gelir. Geçince çocuk
   kışlık olur (kırmızı mont, mavi pantolon, bot, bere, atkı, eldiven; bulutta ve finalde de).
   Yazılar da doodle: `doodleYazi` (başlık, düğme, pencere yazıları: boya kalemi taraması,
