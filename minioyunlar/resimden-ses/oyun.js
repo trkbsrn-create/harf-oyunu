@@ -37,14 +37,15 @@ class ResimdenSesSahnesi extends MiniOyunSahnesi {
     this.kartlar = [];
     this.kalpleriKur(3);
     this.ilerlemeKur(this.ayar.tur);
-    const liste = (KONUMLU_KELIMELER[this.harf] || KONUMLU_KELIMELER.a)[this.ayar.konum];
+    this.konum = konumSec(this.harf, this.ayar.konum);
+    const liste = (KONUMLU_KELIMELER[this.harf] || KONUMLU_KELIMELER.a)[this.konum];
     this.dogrular = Phaser.Utils.Array.Shuffle(liste.slice());
     this.dogruSira = 0;
     // Yanlış resimlerde harf (ve onunla karışabilen ses, ör. i için ı) hiç geçmez
     const yasak = [this.harf, ...(KARISAN_SESLER[this.harf] || [])];
     this.yanlislar = RESIMLI_KELIMELER.filter((k) => !yasak.some((h) => k.includes(h)));
     const bilgi = HARFLER.find((h) => h.kucuk === this.harf);
-    this.yonerge = `${KONUM_ADLARI[this.ayar.konum]} ${bilgi && bilgi.unlu ? this.harf : "bu harf"} olan resimleri bul!`;
+    this.yonerge = `${KONUM_ADLARI[this.konum]} ${bilgi && bilgi.unlu ? this.harf : "bu harf"} olan resimleri bul!`;
 
     this.input.on("gameobjectdown", (p, nesne) => {
       if (nesne.hoparlor) Sesler.soyle(nesne.hoparlor);
@@ -61,7 +62,7 @@ class ResimdenSesSahnesi extends MiniOyunSahnesi {
     const aralik = en + boy * 0.18;
     for (let i = 0; i < 3; i++) {
       const x = (i - 1) * aralik;
-      const dolu = i === KONUM_KUTUSU[this.ayar.konum];
+      const dolu = i === KONUM_KUTUSU[this.konum];
       const g = this.add.graphics();
       g.fillStyle(dolu ? 0xffe680 : 0xfffdf6, 1);
       g.fillRoundedRect(x - en / 2, -boy / 2, en, boy, boy * 0.18);

@@ -26,6 +26,7 @@ const SEKER_UST = 236;
 const SEKER_RENKLERI = {
   a: 0xff9c8a, n: 0x9be3dc, e: 0xc8a2ff, t: 0xffe680, i: 0xa9c8f0, l: 0xb5e48c,
   o: 0xffc58f, k: 0xff9cc4, u: 0x8fd16a, r: 0xffd96b, ı: 0x7cc3e6, m: 0xd9a46b,
+  ü: 0xd8c2f3, s: 0x9be3dc, ö: 0xffb08a, y: 0xffe680, d: 0xc9eba7, z: 0xff9c8a,
 };
 
 class SekerPatlatmaSahnesi extends MiniOyunSahnesi {

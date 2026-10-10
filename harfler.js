@@ -36,12 +36,12 @@ const HARFLER = [
   { kucuk: "m", buyuk: "M", unlu: false, grup: 2, kelime: "maymun",   harfKelimeBasinda: true, resim: "resim-maymun", hece: "am", tekBasinaDenenir: true, okunus: "mmm" },
 
   // Grup 3
-  { kucuk: "ü", buyuk: "Ü", unlu: true,  grup: 3, kelime: "üzüm",     harfKelimeBasinda: true },
-  { kucuk: "s", buyuk: "S", unlu: false, grup: 3, kelime: "sincap",   harfKelimeBasinda: true },
-  { kucuk: "ö", buyuk: "Ö", unlu: true,  grup: 3, kelime: "ördek",    harfKelimeBasinda: true },
-  { kucuk: "y", buyuk: "Y", unlu: false, grup: 3, kelime: "yunus",    harfKelimeBasinda: true },
-  { kucuk: "d", buyuk: "D", unlu: false, grup: 3, kelime: "deve",     harfKelimeBasinda: true },
-  { kucuk: "z", buyuk: "Z", unlu: false, grup: 3, kelime: "zürafa",   harfKelimeBasinda: true },
+  { kucuk: "ü", buyuk: "Ü", unlu: true,  grup: 3, kelime: "üzüm",     harfKelimeBasinda: true, resim: "resim-uzum" },
+  { kucuk: "s", buyuk: "S", unlu: false, grup: 3, kelime: "sincap",   harfKelimeBasinda: true, resim: "resim-sincap", hece: "as", tekBasinaDenenir: true, okunus: "sss" },
+  { kucuk: "ö", buyuk: "Ö", unlu: true,  grup: 3, kelime: "ördek",    harfKelimeBasinda: true, resim: "resim-ordek" },
+  { kucuk: "y", buyuk: "Y", unlu: false, grup: 3, kelime: "yunus",    harfKelimeBasinda: true, resim: "resim-yunus", hece: "ay", tekBasinaDenenir: true, okunus: "yyy" },
+  { kucuk: "d", buyuk: "D", unlu: false, grup: 3, kelime: "deve",     harfKelimeBasinda: true, resim: "resim-deve", hece: "ad", tekBasinaDenenir: true, kisaSes: true, okunus: "d" },
+  { kucuk: "z", buyuk: "Z", unlu: false, grup: 3, kelime: "zürafa",   harfKelimeBasinda: true, resim: "resim-zurafa", hece: "az", tekBasinaDenenir: true, okunus: "zzz" },
 
   // Grup 4
   { kucuk: "ç", buyuk: "Ç", unlu: false, grup: 4, kelime: "çekirge",  harfKelimeBasinda: true },
