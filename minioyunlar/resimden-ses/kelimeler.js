@@ -52,7 +52,7 @@ const KONUMLU_KELIMELER = {
   },
   k: {
     bas: ["kedi", "kova", "koyun", "kale", "kalem", "kapı", "kartal", "kaşık", "kazan", "keçi",
-      "kelebek", "kibrit", "kilit", "kiraz", "kirpi", "kitap", "kumbara", "kurbağa", "kuzu", "kuyu"],
+      "kelebek", "kibrit", "kilit", "kiraz", "kirpi", "kitap", "kumbara", "kurbağa", "kuzu", "kuyu", "kaykay", "kafes"],
     son: ["balık", "bebek", "çiçek", "erik", "etek", "fındık", "fıstık", "iplik", "yaprak", "bardak",
       "tavuk", "uçak", "ıspanak"],
     orta: ["iki", "lokum", "ayakkabı", "şeker", "akvaryum", "makas"],
@@ -82,10 +82,10 @@ const KONUMLU_KELIMELER = {
   ü: {
     bas: ["üzüm", "ütü", "üç", "üçgen"],
     son: ["köprü", "örgü"],
-    orta: ["gül", "süt", "küpe", "otobüs", "güneş", "gözlük"],
+    orta: ["gül", "süt", "küpe", "otobüs", "güneş", "gözlük", "dürbün"],
   },
   s: {
-    bas: ["sincap", "süt", "sepet", "silgi", "saat", "sandalye", "simit"],
+    bas: ["sincap", "süt", "sepet", "silgi", "saat", "sandalye", "simit", "sabun", "sinek", "salıncak"],
     son: ["otobüs", "patates", "nergis", "makas", "kaktüs", "ananas"],
     orta: ["aslan", "masa", "elbise", "timsah", "fıstık", "ıspanak"],
   },
@@ -96,11 +96,11 @@ const KONUMLU_KELIMELER = {
   },
   y: {
     bas: ["yunus", "yaprak", "yatak", "yengeç", "yorgan", "yumurta"],
-    son: ["ay", "çay", "saray"],
+    son: ["ay", "çay", "saray", "kaykay"],
     orta: ["ayak", "ayı", "ayna", "ayakkabı", "koyun", "bilye", "şemsiye", "maymun"],
   },
   d: {
-    bas: ["deve", "dondurma", "diş", "davul", "domates", "dinozor"],
+    bas: ["deve", "dondurma", "diş", "davul", "domates", "dinozor", "dürbün"],
     son: [],
     orta: ["bardak", "fındık", "kedi", "ördek", "yıldız"],
   },
@@ -111,7 +111,7 @@ const KONUMLU_KELIMELER = {
   },
   // 4. harf grubu (ç, b, g, c, ş). b, g ve c ile biten resimli kelime yok (bkz. konumSec)
   ç: {
-    bas: ["çekirge", "çanta", "çatal", "çiçek", "çorba", "çay", "çim"],
+    bas: ["çekirge", "çanta", "çatal", "çiçek", "çorba", "çay", "çim", "çeşme"],
     son: ["ağaç", "havuç", "yengeç", "üç"],
     orta: ["kepçe", "fırça", "keçi", "uçak", "uçurtma"],
   },
@@ -121,19 +121,19 @@ const KONUMLU_KELIMELER = {
     orta: ["ayakkabı", "kumbara", "kibrit", "otobüs", "robot", "çorba", "elbise"],
   },
   g: {
-    bas: ["güvercin", "gemi", "gül", "güneş", "gözlük", "göz"],
+    bas: ["güvercin", "gemi", "gül", "güneş", "gözlük", "göz", "gitar", "geyik", "gömlek"],
     son: [],
     orta: ["silgi", "nergis", "iguana", "yorgan", "kanguru"],
   },
   c: {
-    bas: ["ceviz", "civciv", "ceket"],
+    bas: ["ceviz", "civciv", "ceket", "cüzdan", "ciklet"],
     son: [],
     orta: ["fincan", "lahmacun", "incir", "inci", "sincap", "örümcek"],
   },
   ş: {
-    bas: ["şemsiye", "şeker", "şahin"],
+    bas: ["şemsiye", "şeker", "şahin", "şişe", "şato", "şimşek"],
     son: ["ateş", "diş", "güneş"],
-    orta: ["kaşık", "tavşan", "eşek"],
+    orta: ["kaşık", "tavşan", "eşek", "çeşme"],
   },
   // 5. harf grubu (p, h, v, ğ, f, j). ğ kelime başında gelmez; h, f, j ile biten resimli kelime yok
   // (bkz. konumSec)
@@ -148,7 +148,7 @@ const KONUMLU_KELIMELER = {
     orta: ["lahana", "lahmacun", "anahtar"],
   },
   v: {
-    bas: ["vapur", "vazo"],
+    bas: ["vapur", "vazo", "valiz"],
     son: ["ev"],
     orta: ["havuç", "tavşan", "tavuk", "kova", "deve", "eldiven", "ceviz", "civciv", "güvercin"],
   },
@@ -160,7 +160,7 @@ const KONUMLU_KELIMELER = {
   f: {
     bas: ["fil", "fare", "fener", "fincan", "fındık", "fıstık", "fırça"],
     son: [],
-    orta: ["zürafa", "telefon"],
+    orta: ["zürafa", "telefon", "kafes"],
   },
   j: {
     bas: ["jaguar", "jöle"],
