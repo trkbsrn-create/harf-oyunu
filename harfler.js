@@ -56,5 +56,5 @@ const HARFLER = [
   { kucuk: "v", buyuk: "V", unlu: false, grup: 5, kelime: "vapur",    harfKelimeBasinda: true, resim: "resim-vapur", hece: "av", tekBasinaDenenir: true, okunus: "vvv" },
   { kucuk: "ğ", buyuk: "Ğ", unlu: false, grup: 5, kelime: "dağ",      harfKelimeBasinda: false, resim: "resim-dag", hece: "ağ", okunus: "yumuşak ge" },
   { kucuk: "f", buyuk: "F", unlu: false, grup: 5, kelime: "fil",      harfKelimeBasinda: true, resim: "resim-fil", hece: "af", tekBasinaDenenir: true, okunus: "fff" },
-  { kucuk: "j", buyuk: "J", unlu: false, grup: 5, kelime: "jaguar",   harfKelimeBasinda: true, resim: "resim-jaguar", hece: "aj", tekBasinaDenenir: true, okunus: "jjj" },
+  { kucuk: "j", buyuk: "J", unlu: false, grup: 5, kelime: "jelibon",  harfKelimeBasinda: true, resim: "resim-jelibon", hece: "aj", tekBasinaDenenir: true, okunus: "jjj" },
 ];

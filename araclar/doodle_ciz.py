@@ -3001,3 +3001,14 @@ resim("valiz", "Valiz (tekerlekli, saplı)", KIRMIZI,
     <path d="M46 34 v72 M84 34 v72" fill="none" stroke-width="3"/>
     <circle cx="40" cy="114" r="5" fill="#2b2b2b"/><circle cx="90" cy="114" r="5" fill="#2b2b2b"/>
 """), 467)
+resim("jelibon", "Jelibon (renkli ayıcık şekerler)", KIRMIZI + SARI2 + YESIL2,
+    golge(65, 112, 50) + kalem("""    <g transform="translate(34 58)"><circle cx="-8" cy="-26" r="6" fill="url(#kirmizi)"/><circle cx="8" cy="-26" r="6" fill="url(#kirmizi)"/>
+    <circle cx="0" cy="-16" r="12" fill="url(#kirmizi)"/><ellipse cx="0" cy="8" rx="16" ry="18" fill="url(#kirmizi)"/>
+    <circle cx="-4" cy="-18" r="1.8" fill="#2b2b2b" stroke="none"/><circle cx="4" cy="-18" r="1.8" fill="#2b2b2b" stroke="none"/></g>
+    <g transform="translate(96 58)"><circle cx="-8" cy="-26" r="6" fill="url(#yesil)"/><circle cx="8" cy="-26" r="6" fill="url(#yesil)"/>
+    <circle cx="0" cy="-16" r="12" fill="url(#yesil)"/><ellipse cx="0" cy="8" rx="16" ry="18" fill="url(#yesil)"/>
+    <circle cx="-4" cy="-18" r="1.8" fill="#2b2b2b" stroke="none"/><circle cx="4" cy="-18" r="1.8" fill="#2b2b2b" stroke="none"/></g>
+    <g transform="translate(65 84)"><circle cx="-8" cy="-26" r="6" fill="url(#sari)"/><circle cx="8" cy="-26" r="6" fill="url(#sari)"/>
+    <circle cx="0" cy="-16" r="12" fill="url(#sari)"/><ellipse cx="0" cy="8" rx="16" ry="18" fill="url(#sari)"/>
+    <circle cx="-4" cy="-18" r="1.8" fill="#2b2b2b" stroke="none"/><circle cx="4" cy="-18" r="1.8" fill="#2b2b2b" stroke="none"/></g>
+"""), 470)

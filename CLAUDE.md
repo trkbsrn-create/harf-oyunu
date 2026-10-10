@@ -16,7 +16,7 @@ yok); köprü bitince "3. adaya git". 3. ada karlı adadır (ü s ö y d z): buz
 `KIS_SINAVI_HARFI`) rastgele bir hece/kelime oyunu, 3. seviye (`kisSinaviBaslat`, mini oyunda `veri.sinav`); geçene kadar yeni sınav; geçince
 çocuk kışlık giyer (cocuk*-kis.svg, `cocukDokusu`, kayıtta `kisKiyafeti`). Adalar `AdaSahnesi`nde `ADALAR` ayarıyla (`veri.ada`, kayıtta `ada`; sözler `sozler`).
 Mini oyunlar 3., 4. ve 5. harf grubuyla da (ü s ö y d z; üzüm, sincap, ördek, yunus, deve, zürafa / ç b g c ş;
-çekirge, balık, güvercin, civciv, şeker / p h v ğ f j; penguen, horoz, vapur, dağ, fil, jaguar) oynanır (deneme
+çekirge, balık, güvercin, civciv, şeker / p h v ğ f j; penguen, horoz, vapur, dağ, fil, jelibon) oynanır (deneme
 menüsü). O konumda resimli kelime yoksa (ö, d, b, g, c, h, f, j ile biten; ğ ile başlayan) başka konum sorulur
 (`konumSec`). ğ kelime ve hece başında gelmez (hece havuzunda "ğa" gibi hece yok), tek başına söylenemez
 (`tekBasinaDenenir` yok, ipucu hecesi "ağ").
@@ -32,7 +32,7 @@ menüsü). O konumda resimli kelime yoksa (ö, d, b, g, c, h, f, j ile biten; ğ
 - `harfler.js` harf verisi; `canta.js` çanta; `sesler.js` efekt ve sesli okuma; `dinleyici.js` mikrofon.
 - `gorseller/` kendi SVG'lerimiz, `araclar/doodle_ciz.py` ile üretilir (görsel değişikliği betikte yapılır).
 - `araclar/dene.js` mini oyun deneme aracı (aşağıda "Test").
-- Öğretmen sayfaları: `mikrofon.html`, `kayit.html`, `dinle.html`.
+- Öğretmen sayfaları: `mikrofon.html`, `kayit.html`, `dinle.html`, `resimler.html` (bütün kelime resimleri, kontrol için).
 - Phaser 3.90.0 jsDelivr'den (sürüm değiştirilmez). Yayın: Cloudflare Workers (harfavcisi.net; `main`e eklenince
   kendiliğinden yüklenir, ayar `wrangler.jsonc` + `.assetsignore`). Deneme sitesi: GitHub Pages
   (trkbsrn-create.github.io/harf-oyunu, `gelistirme` dalından).

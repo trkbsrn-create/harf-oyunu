@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Jelibon (renkli ayıcık şekerler) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="470" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kirmizi" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#ff9c8a"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#e0533d" stroke-width="3.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="sari" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+      <rect width="6" height="6" fill="#ffe680"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffc928" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="yesil" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9eba7"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#8fd16a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="112" rx="50" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="translate(34 58)"><circle cx="-8" cy="-26" r="6" fill="url(#kirmizi)"/><circle cx="8" cy="-26" r="6" fill="url(#kirmizi)"/>
+    <circle cx="0" cy="-16" r="12" fill="url(#kirmizi)"/><ellipse cx="0" cy="8" rx="16" ry="18" fill="url(#kirmizi)"/>
+    <circle cx="-4" cy="-18" r="1.8" fill="#2b2b2b" stroke="none"/><circle cx="4" cy="-18" r="1.8" fill="#2b2b2b" stroke="none"/></g>
+    <g transform="translate(96 58)"><circle cx="-8" cy="-26" r="6" fill="url(#yesil)"/><circle cx="8" cy="-26" r="6" fill="url(#yesil)"/>
+    <circle cx="0" cy="-16" r="12" fill="url(#yesil)"/><ellipse cx="0" cy="8" rx="16" ry="18" fill="url(#yesil)"/>
+    <circle cx="-4" cy="-18" r="1.8" fill="#2b2b2b" stroke="none"/><circle cx="4" cy="-18" r="1.8" fill="#2b2b2b" stroke="none"/></g>
+    <g transform="translate(65 84)"><circle cx="-8" cy="-26" r="6" fill="url(#sari)"/><circle cx="8" cy="-26" r="6" fill="url(#sari)"/>
+    <circle cx="0" cy="-16" r="12" fill="url(#sari)"/><ellipse cx="0" cy="8" rx="16" ry="18" fill="url(#sari)"/>
+    <circle cx="-4" cy="-18" r="1.8" fill="#2b2b2b" stroke="none"/><circle cx="4" cy="-18" r="1.8" fill="#2b2b2b" stroke="none"/></g>
+  </g>
+</svg>
