@@ -33,7 +33,7 @@ const HARFLER = [
   { kucuk: "u", buyuk: "U", unlu: true,  grup: 2, kelime: "uçak",     harfKelimeBasinda: true, resim: "resim-ucak" },
   { kucuk: "r", buyuk: "R", unlu: false, grup: 2, kelime: "robot",    harfKelimeBasinda: true, resim: "resim-robot", hece: "ar", tekBasinaDenenir: true, okunus: "rrr" },
   { kucuk: "ı", buyuk: "I", unlu: true,  grup: 2, kelime: "ıspanak",  harfKelimeBasinda: true, resim: "resim-ispanak" },
-  { kucuk: "m", buyuk: "M", unlu: false, grup: 2, kelime: "maymun",   harfKelimeBasinda: true, resim: "resim-maymun", hece: "am", tekBasinaDenenir: true, okunus: "mmm" },
+  { kucuk: "m", buyuk: "M", unlu: false, grup: 2, kelime: "maymun",   harfKelimeBasinda: true, resim: "resim-maymun", hece: "em", tekBasinaDenenir: true, okunus: "mmm" },
 
   // Grup 3
   { kucuk: "ü", buyuk: "Ü", unlu: true,  grup: 3, kelime: "üzüm",     harfKelimeBasinda: true, resim: "resim-uzum" },
