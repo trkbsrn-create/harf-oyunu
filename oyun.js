@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 176;
+const SURUM = 177;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -90,15 +90,16 @@ const KOPRU_PARCALARI = [
   { harf: "m", ad: "tahta2", kutu: [262, 552, 116, 310] },
 ].map((p) => ({ ...p, resim: `kopru-${p.ad}` }));
 // 3. ada: dalgıç kıyafeti ve çekiç (su altındaki 4. adaya, buzu kırıp inmek için). Yelkenliyle aynı yerde,
-// 680x440 tuvalde: solda askı, sağda donmuş göl ve kırılacak buz (dalgic-temel.svg). Öğretmenin kararı:
-// ü maske, s şnorkel, ö elbise, y paletler, d oksijen tüpü, z çekiç (harf yazmaz). kutu: doodle_ciz.py DALGIC_KUTU
+// 680x440 tuvalde: solda küçük askı (dalgic-aski.svg), sağda büyük donmuş göl ve kırılacak buz (dalgic-gol.svg;
+// yere yatık, karakter üstünde yürür). Öğretmenin kararı: ü maske, s şnorkel, ö elbise, y paletler, d oksijen
+// tüpü, z çekiç (harf yazmaz). kutu: doodle_ciz.py çıktısı (askıdakiler küçültülmüş). yerde: göl gibi yatık çizilir
 const DALGIC_PARCALARI = [
-  { harf: "ü", ad: "maske", kutu: [150, 70, 80, 48] },
-  { harf: "s", ad: "snorkel", kutu: [226, 38, 32, 102] },
-  { harf: "ö", ad: "elbise", kutu: [126, 130, 124, 200] },
-  { harf: "y", ad: "palet", kutu: [82, 352, 194, 46] },
-  { harf: "d", ad: "tup", kutu: [282, 146, 36, 162] },
-  { harf: "z", ad: "cekic", kutu: [504, 286, 86, 100] },
+  { harf: "ü", ad: "maske", kutu: [102, 218, 44, 26] },
+  { harf: "s", ad: "snorkel", kutu: [144, 201, 18, 56] },
+  { harf: "ö", ad: "elbise", kutu: [89, 252, 68, 110] },
+  { harf: "y", ad: "palet", kutu: [65, 374, 107, 25] },
+  { harf: "d", ad: "tup", kutu: [175, 260, 20, 89] },
+  { harf: "z", ad: "cekic", kutu: [504, 286, 86, 100], yerde: true },
 ].map((p) => ({ ...p, resim: `dalgic-${p.ad}` }));
 // Bir harfin parçası (hangi adada olursa olsun)
 function parcaBul(harf) {
@@ -149,8 +150,8 @@ const ADALAR = {
     ucan: "kar-tanesi", ucanRenkleri: [0xffffff, 0xeef8ff, 0xd7efff], hayvanlar: ["penguen", "kutup-ayisi", "tavsan-beyaz", "fok"],
     bitkiler: [null, "buz-filiz", "buz-fidan", "buz-sarmasik"], bulutSirik: "bulut-buz",
     bitkiAdi: "buz sarmaşığı", sirikAdi: "Buz sarmaşığına", hedefAdi: "dalgıç kıyafeti", hedefYonelme: "askıya",
-    temel: "dalgic-temel", tuvalBoy: 440, derinlik: 380, parcalar: DALGIC_PARCALARI, harfYuvarlagi: false,
-    dugme: "Buzu kır", dugmeYeri: { x: 520, y: 400 }, hazirSozu: "Dalgıç kıyafetin ve çekicin hazır! Aferin!",
+    temel: "dalgic-aski", zeminResmi: "dalgic-gol", tuvalBoy: 440, derinlik: 404, parcalar: DALGIC_PARCALARI,
+    harfYuvarlagi: false, dugme: "Buzu kır", dugmeYeri: { x: 450, y: 412 }, hazirSozu: "Dalgıç kıyafetin ve çekicin hazır! Aferin!",
     hedefYeri: "Askı kıyıda, su tesisinin yanında.", hazirYazi: "Kıyafet hazır!", harita: "harita-karti3",
     temelSimgede: true, ucanDoner: true, ziplayanlar: ["tavsan-beyaz"], duranlar: ["fok"],
     sozler: {
@@ -409,7 +410,7 @@ class AdaSahnesi extends Phaser.Scene {
       // 3. ada (karlı)
       "doku-kar", "cam-tepe", "cali-karli", "kaya-karli", "kar-yigini", "ot-karli", "buz-kristali", "kardan-adam",
       "kar-tanesi", "penguen", "kutup-ayisi", "tavsan-beyaz", "fok", "buz-filiz", "buz-fidan", "buz-sarmasik",
-      "dalgic-temel", "harita-karti3"]) {
+      "dalgic-aski", "dalgic-gol", "harita-karti3"]) {
       this.load.svg(ad, `gorseller/${ad}.svg`);
     }
     for (const p of [...KOPRU_PARCALARI, ...DALGIC_PARCALARI]) {
@@ -999,6 +1000,7 @@ class AdaSahnesi extends Phaser.Scene {
       const o = 242 / this.ayar.tuvalBoy; // yelkenli 0.55, köprü daha küçük (uzun tuval)
       const X = 640 - 680 * o / 2;
       const Y = 250 - this.ayar.tuvalBoy * o / 2;
+      if (this.ayar.zeminResmi) sayfa.add(this.add.image(X, Y, this.ayar.zeminResmi).setOrigin(0).setScale(o));
       sayfa.add(this.add.image(X, Y, this.ayar.temel).setOrigin(0).setScale(o));
       this.ayar.parcalar.forEach((p, k) => {
         sayfa.add(this.add.image(X, Y, `${p.resim}-silik`).setOrigin(0).setScale(o));
@@ -1714,9 +1716,12 @@ class AdaSahnesi extends Phaser.Scene {
     // Kızağın alt kenarı: önünden geçen karakter önde görünür (2. adada köprü, aynı yerde)
     const derinlik = YELKENLI_Y + this.ayar.derinlik;
     this.add.image(YELKENLI_X, YELKENLI_Y, this.ayar.temel).setOrigin(0).setDepth(derinlik - 1);
+    // Yere yatık kısım (3. adada donmuş göl): her zaman karakterin altında, tarla gibi
+    if (this.ayar.zeminResmi) this.add.image(YELKENLI_X, YELKENLI_Y, this.ayar.zeminResmi).setOrigin(0).setDepth(-0.85);
     this.yelkenliParcalari = this.ayar.parcalar.map((p) => {
-      const silik = this.add.image(YELKENLI_X, YELKENLI_Y, `${p.resim}-silik`).setOrigin(0).setDepth(derinlik);
-      const dolu = this.add.image(YELKENLI_X, YELKENLI_Y, p.resim).setOrigin(0).setDepth(derinlik)
+      const d = p.yerde ? -0.84 : derinlik;
+      const silik = this.add.image(YELKENLI_X, YELKENLI_Y, `${p.resim}-silik`).setOrigin(0).setDepth(d);
+      const dolu = this.add.image(YELKENLI_X, YELKENLI_Y, p.resim).setOrigin(0).setDepth(d)
         .setVisible(false);
       const [kx, ky, ken, kboy] = p.kutu;
       // Parça bu alana bırakılınca takılır (yerinin çevresi, parmak için geniş)
@@ -1934,6 +1939,7 @@ class AdaSahnesi extends Phaser.Scene {
       if (d.yelkenli) {
         // Küçük, tam yelkenli ya da köprü (tuval yuvarlağa sığacak kadar küçültülür)
         const olcek = 48 / Math.max(680, this.ayar.tuvalBoy);
+        if (this.ayar.zeminResmi) this.gorevListesi.add(this.add.image(38, y - 2, this.ayar.zeminResmi).setScale(olcek));
         if (this.ayar.temelSimgede) this.gorevListesi.add(this.add.image(38, y - 2, this.ayar.temel).setScale(olcek));
         for (const p of this.ayar.parcalar) {
           this.gorevListesi.add(this.add.image(38, y - 2, p.resim).setScale(olcek));

@@ -2700,11 +2700,15 @@ yaz("buz-sarmasik.svg", SIRIK_EN, KISA_BOY, "Buz sarmaşığı: tarlada son aşa
 
 # ---- 3. ada: dalgıç kıyafeti ve çekiç (4. adaya, su altına inmek için) ----
 # Bütün resimler aynı 680x440 tuvalde, oyunda sol üst köşeleri (YELKENLI_X, YELKENLI_Y).
-# Solda kıyafet askısı, sağda donmuş göl ve ortasında kırılacak buz (dalgic-temel.svg).
-# Parçalar (öğretmenin kararı; harf yazmaz): ü maske, s şnorkel, ö elbise, y paletler, d tüp, z çekiç.
+# Donmuş göl yere yatık ayrı resimdir (dalgic-gol.svg; oyunda karakterin altında çizilir, üstünde
+# yürünür); ortasında kırılacak buz. Askı küçük, solda (dalgic-aski.svg; ASKI_OLCEK ile küçültülür).
+# Parçalar (öğretmenin kararı; harf yazmaz): ü maske, s şnorkel, ö elbise, y paletler, d tüp (askıda),
+# z çekiç (gölün üstünde, buzun yanında).
 DALGIC_DESEN = (tarama("elbise", "#5d8fb3", "#3f6f94", 35, 6, 3) + tarama("maske", "#ffe680", "#ffc928", -35, 6, 2.5)
                 + tarama("tup", "#ff9c8a", "#e0533d", 80, 6, 2.5) + tarama("palet", "#9be3dc", "#4fc3b8", 35, 6, 2.5)
                 + TAHTA + GRI)
+ASKI_OLCEK, ASKI_X, ASKI_Y = 0.55, 20, 180
+ASKI = f"translate({ASKI_X} {ASKI_Y}) scale({ASKI_OLCEK})"
 DALGIC_PARCALARI = [
     ("maske", "M150 82 q0 -12 14 -12 h52 q14 0 14 12 v22 q0 12 -14 12 h-14 l-6 -8 h-12 l-6 8 h-14 q-14 0 -14 -12z", "maske"),
     ("snorkel", "M238 120 v-70 q0 -12 12 -12 h6 v10 h-6 q-2 0 -2 2 v70 q0 10 -8 10 h-10 v-10z", "tup"),
@@ -2713,13 +2717,16 @@ DALGIC_PARCALARI = [
     ("tup", "M282 168 q0 -14 18 -14 q18 0 18 14 v130 q0 10 -18 10 q-18 0 -18 -10z M292 146 h16 v10 h-16z", "tup"),
     ("cekic", "M520 286 h70 v30 h-70z M548 316 h14 l-30 70 h-14z", "tahta"),
 ]
+# Kutular küçültülmeden önceki çizim ölçüsünde (çanta simgesi için); oyundaki kutu (oyun.js
+# DALGIC_PARCALARI) askıdakiler için ASKI ile küçültülmüş hâlidir, çekiçte aynıdır
 DALGIC_KUTU = {"maske": (150, 70, 80, 48), "snorkel": (226, 38, 32, 102), "elbise": (126, 130, 124, 200),
                "palet": (82, 352, 194, 46), "tup": (282, 146, 36, 162), "cekic": (504, 286, 86, 100)}
 for ad, yol, desen in DALGIC_PARCALARI:
+    donus = "" if ad == "cekic" else f' transform="{ASKI}"'
     yaz(f"dalgic-{ad}.svg", 680, 440, f"Dalgıç parçası: {ad}", DALGIC_DESEN,
-        kalem(f'    <path d="{yol}" fill="url(#{desen})"/>\n'), 420)
+        kalem(f'    <path d="{yol}" fill="url(#{desen})"{donus}/>\n', 6 if donus else 4), 420)
     yaz(f"dalgic-{ad}-silik.svg", 680, 440, f"Dalgıç parçasının silik yeri: {ad}", "",
-        f'  <path d="{yol}" fill="#ffffff" fill-opacity="0.3" stroke="#8a8a8a" stroke-width="3.5" '
+        f'  <path d="{yol}"{donus} fill="#ffffff" fill-opacity="0.3" stroke="#8a8a8a" stroke-width="{4.5 if donus else 3.5}" '
         'stroke-dasharray="10 8" stroke-linecap="round" stroke-linejoin="round"/>\n', 420)
     x, y, en, boy = DALGIC_KUTU[ad]
     olcek = 96 / max(en, boy)
@@ -2728,16 +2735,25 @@ for ad, yol, desen in DALGIC_PARCALARI:
     yaz(f"dalgic-{ad}-simge.svg", 120, 120, f"Dalgıç parçasının çanta simgesi: {ad}", DALGIC_DESEN,
         kalem(f'    <path d="{yol}" fill="url(#{desen})" transform="translate({tx:.1f} {ty:.1f}) scale({olcek:.3f})" '
               'vector-effect="non-scaling-stroke"/>\n', 3.5), 421, 2.5)
-yaz("dalgic-temel.svg", 680, 440, "Dalgıç askısı ve donmuş göl (ortada kırılacak buz)",
-    TAHTA + tarama("buzGol", "#d7efff", "#a9dcf5", -35, 7, 3),
-    golge(200, 408, 150, 8) + kalem('''    <ellipse cx="520" cy="250" rx="150" ry="90" fill="url(#buzGol)"/>
-    <ellipse cx="520" cy="240" rx="56" ry="28" fill="#eef8ff" stroke-width="3"/>
-    <path d="M520 240 l-26 -12 M520 240 l22 -16 M520 240 l30 8 M520 240 l-12 20" fill="none" stroke="#7cc3e6" stroke-width="3"/>
-    <path d="M70 404 v-350 M330 404 v-350 M56 54 h288" fill="none" stroke="#9b6a38" stroke-width="10"/>
-    <path d="M70 404 v-350 M330 404 v-350 M56 54 h288" fill="none" stroke-width="2"/>
-    <path d="M190 54 v14 q0 6 -6 6" fill="none" stroke-width="3"/>
-    <path d="M40 404 h60 M300 404 h60" fill="none" stroke="#9b6a38" stroke-width="10"/>
+yaz("dalgic-gol.svg", 680, 440, "Donmuş göl (yere yatık; ortada kırılacak buz)",
+    tarama("buzGol", "#d7efff", "#a9dcf5", -35, 7, 3),
+    kalem('''    <ellipse cx="450" cy="250" rx="225" ry="135" fill="url(#buzGol)"/>
+    <ellipse cx="450" cy="240" rx="70" ry="34" fill="#eef8ff" stroke-width="3"/>
+    <path d="M450 240 l-32 -14 M450 240 l28 -20 M450 240 l38 10 M450 240 l-14 24" fill="none" stroke="#7cc3e6" stroke-width="3"/>
+    <path d="M320 180 q20 -10 40 -6 M560 320 q20 -6 34 2" fill="none" stroke="#ffffff" stroke-width="5"/>
 '''), 422)
+yaz("dalgic-aski.svg", 680, 440, "Dalgıç kıyafeti askısı (küçük, solda)", TAHTA,
+    golge(ASKI_X + 200 * ASKI_OLCEK, ASKI_Y + 408 * ASKI_OLCEK, 150 * ASKI_OLCEK, 5) + kalem(f'''    <g transform="{ASKI}">
+    <path d="M70 404 v-350 M330 404 v-350 M56 54 h288" fill="none" stroke="#9b6a38" stroke-width="14"/>
+    <path d="M70 404 v-350 M330 404 v-350 M56 54 h288" fill="none" stroke-width="3"/>
+    <path d="M190 54 v14 q0 6 -6 6" fill="none" stroke-width="4"/>
+    <path d="M40 404 h60 M300 404 h60" fill="none" stroke="#9b6a38" stroke-width="14"/>
+    </g>
+'''), 425)
+for ad, k in DALGIC_KUTU.items():
+    if ad != "cekic":
+        x, y, en, boy = k
+        print("KUTU", ad, [round(ASKI_X + x * ASKI_OLCEK), round(ASKI_Y + y * ASKI_OLCEK), round(en * ASKI_OLCEK), round(boy * ASKI_OLCEK)])
 # 3. adanın sonu: buz kırılır (sahne arka planı) ve 4 adalı harita
 yaz("hikaye-buz.svg", 1280, 720, "Final 3: karlı kıyı, donmuş göl ve ortasındaki buz",
     tarama("kar", "#ffffff", "#e3eef6", 35, 9, 2.5) + tarama("gok", "#d7efff", "#bfe3f5", 30, 8, 2.5)
