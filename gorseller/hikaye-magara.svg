@@ -1,0 +1,33 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <!-- Final 4: su altında parlayan gizli mağara (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="625" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="mSu" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="9" height="9" fill="#7fbfdc"/>
+      <line x1="0" y1="4.5" x2="9" y2="4.5" stroke="#6aaed0" stroke-width="4" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="mKaya" width="9" height="9" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)">
+      <rect width="9" height="9" fill="#7d8b98"/>
+      <line x1="0" y1="4.5" x2="9" y2="4.5" stroke="#66737f" stroke-width="4" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="mKum" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="8" height="8" fill="#d3e9df"/>
+      <line x1="0" y1="4.0" x2="8" y2="4.0" stroke="#bcdccd" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <radialGradient id="mIsik" cx="0.5" cy="0.6" r="0.6">
+      <stop offset="0" stop-color="#fff6c4"/><stop offset="0.6" stop-color="#ffe27a"/><stop offset="1" stop-color="#f0b84a"/>
+    </radialGradient>
+  </defs>
+  <rect width="1280" height="720" fill="url(#mSu)"/>
+  <path d="M200 0 l-80 720 M420 0 l-40 720 M700 0 l20 720" stroke="#ffffff" stroke-opacity="0.18" stroke-width="60"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M560 640 q-20 -320 140 -470 q120 -110 300 -90 q200 30 280 120 v540z" fill="url(#mKaya)"/>
+    <path d="M700 640 q-10 -240 110 -350 q90 -70 190 -40 q110 40 130 160 q14 120 4 230z" fill="url(#mIsik)"/>
+    <path d="M0 720 v-90 q200 -40 400 -10 q240 30 480 -6 q220 -20 400 10 v96z" fill="url(#mKum)"/>
+    <path d="M120 640 q-10 -60 6 -110 M140 640 q16 -50 6 -100 M1200 640 q-10 -50 4 -90" fill="none" stroke="#5fae6a" stroke-width="7"/>
+    <path d="M300 660 l14 -24 l14 24 M280 650 l8 -16" fill="none" stroke="#ff7f6a" stroke-width="7"/>
+  </g>
+</svg>
