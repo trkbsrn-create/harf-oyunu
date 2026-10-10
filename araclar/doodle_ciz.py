@@ -3590,3 +3590,62 @@ yaz("cocuk-yuz.svg", 130, 90, "Dalgıç çocuk yüzerken (yatay, sağa)",
     <path d="M100 26 v-14 h6" fill="none" stroke-width="7"/>
     <path d="M100 26 v-14 h6" fill="none" stroke="#e0533d" stroke-width="3"/>
 '''), 623)
+
+# ---- 4. ada: su yüzeyi (bulutların üstü yerine), haritalar, final (mağara ve roket) ----
+# Su yüzeyi zemini (bulut-zemin.svg ile aynı 1430x300): arkada deniz, önde yüzeye çıkan kum adacığı;
+# çocuk adacıkta yürür, tabela adacıkta durur
+yaz("yuzey-zemin.svg", 1280 + 150, 300, "Su yüzeyi: deniz ve yüzeye çıkan kum adacığı",
+    tarama("yDeniz", "#bfe3f5", "#7cc3e6", 30, 8, 3) + tarama("yKum", "#fbe8b0", "#f3cf6a", -35, 8, 3),
+    kalem('''    <path d="M-20 340 V40 q60 -16 120 0 q60 16 120 0 q60 -16 120 0 q60 16 120 0 q60 -16 120 0 q60 16 120 0 q60 -16 120 0 q60 16 120 0 q60 -16 120 0 q60 16 120 0 q60 -16 120 0 q60 16 120 0 q60 -16 120 0 V340z" fill="url(#yDeniz)" stroke-width="4"/>
+    <path d="M-20 340 V96 q140 -40 300 -26 q200 -20 420 -6 q220 -22 440 0 q160 -14 310 10 V340z" fill="url(#yKum)" stroke-width="4"/>
+    <path d="M60 70 q14 -6 28 0 M400 60 q14 -6 28 0 M900 56 q14 -6 28 0 M1240 64 q14 -6 28 0" fill="none" stroke="#ffffff" stroke-width="4"/>
+    <path d="M180 200 l14 -8 l-4 14z M1100 240 l12 -10 l-2 14z" fill="#ffd2c8" stroke-width="2.5"/>
+''', 4), 624)
+# Mini harita kartı (4. ada): deniz tabanı renkleri
+with open(os.path.join(KLASOR, "harita-karti.svg"), encoding="utf-8") as f:
+    _kart = f.read()
+with open(os.path.join(KLASOR, "harita-karti4.svg"), "w", encoding="utf-8") as f:
+    f.write(_kart.replace("#d7efff", "#7fbfdc").replace("#a9dcf5", "#6aaed0").replace("#c9eba7", "#d3e9df")
+            .replace("#a3d97c", "#bcdccd").replace("Mini harita kartı", "Mini harita kartı (4. ada)"))
+# Final 4 haritası: 3. adanın haritası, 4. ada su altı rengiyle dolu, 5. ada (uzay) kesik çizgili
+with open(os.path.join(KLASOR, "hikaye-harita3.svg"), encoding="utf-8") as f:
+    _h = f.read()
+_h = _h.replace('<circle cx="1040" cy="300" r="90" fill="#bfe3f5" stroke="#8a8a8a" stroke-dasharray="14 10"/>',
+                '<circle cx="1000" cy="420" r="90" fill="#7fbfdc"/>')
+_h = _h.replace('<path d="M1000 300 q10 -12 20 0 q10 12 20 0 M1030 330 q10 -12 20 0 q10 12 20 0" fill="none" stroke="#7cc3e6" stroke-width="3"/>',
+                '<path d="M960 400 q10 -12 20 0 q10 12 20 0 M990 450 q10 -12 20 0 q10 12 20 0" fill="none" stroke="#ffffff" stroke-width="3"/>'
+                '\n    <path d="M1010 470 l-10 -20 l-10 20 M1000 450 v24" fill="none" stroke="#ff7f6a" stroke-width="5"/>'
+                '\n    <circle cx="1110" cy="170" r="70" fill="#2f3a66" stroke="#8a8a8a" stroke-dasharray="14 10"/>'
+                '\n    <ellipse cx="1110" cy="170" rx="104" ry="22" fill="none" stroke="#c4a3ec" stroke-width="5"/>'
+                '\n    <path d="M1080 150 l4 8 l8 2 l-8 2 l-4 8 l-4 -8 l-8 -2 l8 -2z M1140 190 l3 6 l6 2 l-6 2 l-3 6 l-3 -6 l-6 -2 l6 -2z" fill="#ffe680" stroke-width="2"/>')
+_h = _h.replace('<path d="M860 420 q90 -10 110 -80" fill="none" stroke="#e0533d" stroke-dasharray="16 12"/>',
+                '<path d="M860 420 q40 0 50 0" fill="none" stroke="#e0533d" stroke-dasharray="16 12"/>'
+                '\n    <path d="M1040 340 q30 -60 50 -110" fill="none" stroke="#e0533d" stroke-dasharray="16 12"/>')
+_h = _h.replace("Final 3: adalar haritası (1 yeşil, 2 sonbahar, 3 karlı, 4 su altı kesik çizgili)",
+                "Final 4: adalar haritası (1 yeşil, 2 sonbahar, 3 karlı, 4 su altı, 5 uzay kesik çizgili)")
+with open(os.path.join(KLASOR, "hikaye-harita4.svg"), "w", encoding="utf-8") as f:
+    f.write(_h)
+# Final: su altında parlayan mağara (roket üssü)
+yaz("hikaye-magara.svg", 1280, 720, "Final 4: su altında parlayan gizli mağara",
+    tarama("mSu", "#7fbfdc", "#6aaed0", 30, 9, 4) + tarama("mKaya", "#7d8b98", "#66737f", -30, 9, 4)
+    + tarama("mKum", "#d3e9df", "#bcdccd", 30, 8, 3)
+    + '''    <radialGradient id="mIsik" cx="0.5" cy="0.6" r="0.6">
+      <stop offset="0" stop-color="#fff6c4"/><stop offset="0.6" stop-color="#ffe27a"/><stop offset="1" stop-color="#f0b84a"/>
+    </radialGradient>
+''',
+    '  <rect width="1280" height="720" fill="url(#mSu)"/>\n'
+    '  <path d="M200 0 l-80 720 M420 0 l-40 720 M700 0 l20 720" stroke="#ffffff" stroke-opacity="0.18" stroke-width="60"/>\n'
+    + kalem('''    <path d="M560 640 q-20 -320 140 -470 q120 -110 300 -90 q200 30 280 120 v540z" fill="url(#mKaya)"/>
+    <path d="M700 640 q-10 -240 110 -350 q90 -70 190 -40 q110 40 130 160 q14 120 4 230z" fill="url(#mIsik)"/>
+    <path d="M0 720 v-90 q200 -40 400 -10 q240 30 480 -6 q220 -20 400 10 v96z" fill="url(#mKum)"/>
+    <path d="M120 640 q-10 -60 6 -110 M140 640 q16 -50 6 -100 M1200 640 q-10 -50 4 -90" fill="none" stroke="#5fae6a" stroke-width="7"/>
+    <path d="M300 660 l14 -24 l14 24 M280 650 l8 -16" fill="none" stroke="#ff7f6a" stroke-width="7"/>
+''', 5), 625)
+yaz("roket.svg", 160, 300, "Roket (beyaz-kırmızı, pencereli)", KIRMIZI + MAVI + GRI,
+    kalem('''    <path d="M80 8 q50 50 50 150 v80 h-100 v-80 q0 -100 50 -150z" fill="#fbf7ec"/>
+    <path d="M80 8 q30 30 42 70 h-84 q12 -40 42 -70z" fill="url(#kirmizi)"/>
+    <circle cx="80" cy="130" r="24" fill="url(#mavi)" stroke-width="4"/>
+    <path d="M30 180 l-26 60 v40 l26 -20z M130 180 l26 60 v40 l-26 -20z" fill="url(#kirmizi)"/>
+    <path d="M44 238 h72 l-8 24 h-56z" fill="url(#gri)"/>
+    <path d="M58 200 v20 M102 200 v20" fill="none" stroke-width="3"/>
+''', 4), 626)
