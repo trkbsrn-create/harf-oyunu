@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Uydu (güneş panelli) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="855" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="gri" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#d6d3cc"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#a9a59c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="mavi" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#bfe3f5"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#7cc3e6" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 40 h40 v36 h-40z M86 40 h40 v36 h-40z" fill="url(#mavi)"/>
+    <path d="M17 40 v36 M31 40 v36 M99 40 v36 M113 40 v36" fill="none" stroke-width="2"/>
+    <path d="M44 58 h42" fill="none" stroke-width="4"/>
+    <path d="M50 40 h30 v36 h-30z" fill="url(#gri)"/>
+    <path d="M65 40 v-14 M54 22 q11 -14 22 0" fill="none" stroke-width="4"/>
+    <circle cx="65" cy="90" r="2" fill="#ffe680" stroke="none"/><circle cx="20" cy="100" r="2" fill="#ffe680" stroke="none"/><circle cx="110" cy="16" r="2" fill="#ffe680" stroke="none"/>
+  </g>
+</svg>
