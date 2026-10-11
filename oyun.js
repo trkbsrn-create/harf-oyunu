@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 187;
+const SURUM = 188;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -1356,6 +1356,12 @@ class AdaSahnesi extends Phaser.Scene {
     this.rehberOlay(this.cantaAcik ? "cantaAcildi" : "cantaKapandi");
   }
 
+  // Öğretmenin isteği: çantadan bir şey konunca (tohum ekilince, sulanınca, parça takılınca) çanta kapanır,
+  // ekrandaki yazıları örtmesin
+  cantayiKapat() {
+    if (this.cantaAcik) this.cantayiAcKapat();
+  }
+
   cantaIceriginiCiz() {
     this.cantaIcerigi.removeAll(true);
     this.kutucukNesneleri = [];
@@ -1504,7 +1510,7 @@ class AdaSahnesi extends Phaser.Scene {
     const t = this.siseTasinan;
     this.siseTasinan = null;
     this.kareIsigi.clear();
-    const geriDon = () => {
+    const geriDon = (sulandi = false) => {
       this.tweens.add({
         targets: t.kap, x: t.geriX, y: t.geriY, scale: 1, angle: 0, duration: 280, ease: "Cubic.Out",
         onComplete: () => {
@@ -1512,6 +1518,7 @@ class AdaSahnesi extends Phaser.Scene {
           this.sulaniyor = false;
           this.cantaIceriginiCiz();
           this.tweens.add({ targets: this.cantaPenceresi, alpha: 1, duration: 250 });
+          if (sulandi) this.cantayiKapat();
         },
       });
     };
@@ -1551,7 +1558,7 @@ class AdaSahnesi extends Phaser.Scene {
         this.time.delayedCall(800, () => {
           Canta.damlaKullan(kare.ekili.harf);
           this.bitkiyiBuyut(kare);
-          this.tweens.add({ targets: t.kap, angle: 0, duration: 200, onComplete: geriDon });
+          this.tweens.add({ targets: t.kap, angle: 0, duration: 200, onComplete: () => geriDon(true) });
         });
       },
     });
@@ -1805,7 +1812,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.tweens.add({
       targets: t.kap, x: kare.alan.centerX - kamera.scrollX, y: kare.alan.centerY - kamera.scrollY,
       scale: 0.7, duration: 200, ease: "Cubic.In",
-      onComplete: () => { t.kap.destroy(); this.tohumuEk(kare); },
+      onComplete: () => { t.kap.destroy(); this.tohumuEk(kare); this.cantayiKapat(); },
     });
   }
 
@@ -2215,7 +2222,7 @@ class AdaSahnesi extends Phaser.Scene {
     this.tweens.add({
       targets: t.kap, x: YELKENLI_X + kx + ken / 2 - kamera.scrollX, y: YELKENLI_Y + ky + kboy / 2 - kamera.scrollY,
       scale: 0.6, alpha: 0.3, duration: 220, ease: "Cubic.In",
-      onComplete: () => { t.kap.destroy(); this.parcayiTak(t.parca); },
+      onComplete: () => { t.kap.destroy(); this.parcayiTak(t.parca); this.cantayiKapat(); },
     });
   }
 
@@ -4593,9 +4600,10 @@ class FinalSahnesi extends Phaser.Scene {
     });
     const siseX = MX + IKSIR_SISE.x * O;
     const siseY = MY + IKSIR_SISE.y * O;
-    const isik = this.add.circle(siseX, siseY + 20, 70, 0xffffff, 0).setBlendMode(Phaser.BlendModes.ADD);
-    const peri = AdaSahnesi.prototype.periYap.call(this, 150, 300);
-    peri.setScale(1.2);
+    const isik = this.add.circle(siseX, siseY + 20, 70, 0xffffff, 0);
+    // Peri sol altta: balonu formül tahtasının altında kalır, parçaları örtmez
+    const peri = AdaSahnesi.prototype.periYap.call(this, 110, 600);
+    peri.setScale(1.1);
     const sozler = [
       "Bu kuyruklu yıldız merak. Sandıkları merakla aradın, onu sen yaptın!",
       "Bu alevli kalp cesaret. Harflerin sesini yüksek sesle söyledin, bulutlara tırmandın!",
