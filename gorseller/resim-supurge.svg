@@ -14,10 +14,12 @@
       <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffc928" stroke-width="3" stroke-linecap="round"/>
     </pattern>
   </defs>
+  <g transform="translate(5.2 4.8) scale(0.92)">
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
     <path d="M30 6 l40 74" fill="none" stroke="#8e6340" stroke-width="8"/>
     <path d="M56 72 l30 -16 l34 52 l-50 12z" fill="url(#sari)"/>
     <path d="M78 66 l20 46 M90 60 l24 44 M66 74 l12 42" fill="none" stroke="#c98f4f" stroke-width="2.5"/>
     <path d="M58 76 l28 -16" fill="none" stroke="#e0533d" stroke-width="6"/>
+  </g>
   </g>
 </svg>

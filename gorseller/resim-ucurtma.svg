@@ -18,6 +18,7 @@
       <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#7cc3e6" stroke-width="3" stroke-linecap="round"/>
     </pattern>
   </defs>
+  <g transform="translate(3.9 3.6) scale(0.94)">
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
     <path d="M70 6 l34 34 l-34 50 l-34 -50z" fill="url(#mavi)"/>
     <path d="M70 6 l34 34 h-68z" fill="url(#kirmizi)" stroke-width="3"/>
@@ -25,5 +26,6 @@
     <path d="M70 90 q-10 10 0 16 q10 6 -2 14" fill="none" stroke-width="3"/>
     <path d="M62 98 l-8 -4 l2 8z M72 108 l8 -4 l-2 8z" fill="url(#sari)" stroke-width="2.5"/>
     <path d="M36 40 q-20 20 -26 74" fill="none" stroke-width="2" stroke-dasharray="4 4"/>
+  </g>
   </g>
 </svg>

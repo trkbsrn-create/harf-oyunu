@@ -18,6 +18,7 @@
       <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ff9c8a" stroke-width="2.5" stroke-linecap="round"/>
     </pattern>
   </defs>
+  <g transform="translate(3.9 3.6) scale(0.94)">
   <ellipse cx="65" cy="116" rx="40" ry="5" fill="#000" fill-opacity="0.13"/>
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
     <path d="M26 116 q0 -40 39 -42 q39 2 39 42z" fill="url(#mor)"/>
@@ -29,5 +30,6 @@
     <path d="M62 48 h6" fill="none" stroke-width="3"/>
     <circle cx="54" cy="48" r="2.5" fill="#2b2b2b"/><circle cx="76" cy="48" r="2.5" fill="#2b2b2b"/>
     <path d="M56 62 q9 7 18 0" fill="none" stroke-width="3"/>
+  </g>
   </g>
 </svg>
