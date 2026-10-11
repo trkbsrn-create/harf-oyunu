@@ -14,7 +14,7 @@ yok); köprü bitince "3. adaya git". 3. ada karlı adadır (ü s ö y d z): buz
 (ü maske, s şnorkel, ö elbise, y paletler, d tüp, z çekiç; harf yok); "Buzu kır" → çocuk deliğe dalar, "4. adaya git".
 4. ada su altıdır (ç b g c ş): çocuk dalgıç kıyafetiyle her yere yüzer (`yuzme`, cocuk-yuz.svg, cocuk*-dalgic.svg);
 ağaç yerine deniz yosunu, tohum mercan olur, damla yerine hava kabarcığı (`kabarcik`, `dk()`, sözler `suAltiSozu`),
-su tesisi "Kabarcık İstasyonu", bulutlar yerine su yüzeyi; görev dev kaplumbağa (ç eyer, b dizgin, g fener, c harita,
+su tesisi "Kabarcık İstasyonu" (tesis, panel ve variller adanın resmiyle: `dk()`, su-tesisi-kabarcik.svg), bulutlar yerine su yüzeyi; görev dev kaplumbağa (ç eyer, b dizgin, g fener, c harita,
 ş anahtar; 5 parça); "Haydi, bin!" → kaplumbağa gizli mağaradaki rokete götürür, "5. adaya git".
 5. ada uzaydır ve final adasıdır (p h v ğ f j): çocuk astronot, ay gibi zıplayarak yürür (`zipla`, cocuk*-astronot.svg);
 kristal ağaç, yıldız sarmaşığı, damla yerine yıldız tozu, bulutlar yerine gezegen halkası; görev uzaylı iksirinin

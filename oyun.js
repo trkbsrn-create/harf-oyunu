@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 195;
+const SURUM = 196;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -520,11 +520,11 @@ class AdaSahnesi extends Phaser.Scene {
       "dalgic-aski", "dalgic-gol", "harita-karti3",
       // 4. ada (su altı)
       "doku-deniz-tabani", "doku-derin-su", "su-yosun", "su-anemon", "su-kaya", "deniz-kabugu", "deniz-yildizi",
-      "mercan-kucuk", "deniz-cayiri", "kabarcik-ucan", "kabarcik", "kabarcik-bos", "su-balik", "denizati", "ahtapot",
+      "mercan-kucuk", "deniz-cayiri", "kabarcik-ucan", "kabarcik", "kabarcik-bos", "su-tesisi-kabarcik", "tesis-pencere-kabarcik", "varil-kabarcik", "su-balik", "denizati", "ahtapot",
       "su-yengec", "denizanasi", "mercan-filiz", "mercan-fidan", "mercan-kule", "kaplumbaga", "cocuk-yuz", "harita-karti4",
       // 5. ada (uzay)
       "doku-gezegen", "doku-uzay", "kristal-agac", "isik-mantar", "meteor-kaya", "krater", "kristal-kucuk", "uzay-cicegi",
-      "yildiz-tozu-ucan", "yildiz-tozu", "yildiz-tozu-bos", "uzayli", "robot-kucuk", "uzay-balinasi", "ufo",
+      "yildiz-tozu-ucan", "yildiz-tozu", "yildiz-tozu-bos", "su-tesisi-yildiz-tozu", "tesis-pencere-yildiz-tozu", "varil-yildiz-tozu", "uzayli", "robot-kucuk", "uzay-balinasi", "ufo",
       "yildiz-filiz", "yildiz-fidan", "yildiz-sarmasik", "iksir-masa", "harita-karti5"]) {
       this.load.svg(ad, `gorseller/${ad}.svg`);
     }
@@ -843,10 +843,12 @@ class AdaSahnesi extends Phaser.Scene {
     return "Görev düğmesine dokun, görevlerine bak.";
   }
 
-  // Damla resimleri: 4. adada hava kabarcığı, 5. adada yıldız tozu
+  // Damla resimleri: 4. adada hava kabarcığı, 5. adada yıldız tozu; tesis, panel ve variller de o adanın
+  // (su-tesisi-kabarcik.svg gibi; biçimleri aynı)
   dk(ad) {
     const r = this.ayar && this.ayar.damlaResmi;
     if (!r) return ad;
+    if (ad === "su-tesisi" || ad === "tesis-pencere" || ad === "varil") return `${ad}-${r}`;
     return { damla: r, "damla-bos": `${r}-bos` }[ad] || ad;
   }
 
@@ -1270,10 +1272,10 @@ class AdaSahnesi extends Phaser.Scene {
       this.tweens.add({ targets: [tohum, el], x: "+=250", duration: 1200, delay: 400, hold: 500,
         repeat: -1, repeatDelay: 300, ease: "Sine.InOut" });
     } else if (i === 4) {
-      // Su tesisi: varil, oradan damla
-      belir(resim(470, 260, "su-tesisi", 230), 0);
+      // Su tesisi: varil, oradan damla (o adanın tesisi)
+      belir(resim(470, 260, this.dk("su-tesisi"), 230), 0);
       ok(640, 270);
-      belir(resim(730, 270, "varil", 110), 500);
+      belir(resim(730, 270, this.dk("varil"), 110), 500);
       ok(810, 270);
       const damla = resim(880, 270, this.dk("damla"), 80);
       belir(damla, 1000);
@@ -2347,7 +2349,7 @@ class AdaSahnesi extends Phaser.Scene {
 
   tesisKur() {
     // Karakter iskelede yürürken tesisin önünde görünsün
-    this.tesis = this.add.image(TESIS_X, TESIS_Y, "su-tesisi").setOrigin(0.5, 0).setDepth(TESIS_Y - 40);
+    this.tesis = this.add.image(TESIS_X, TESIS_Y, this.dk("su-tesisi")).setOrigin(0.5, 0).setDepth(TESIS_Y - 40);
     // 4. ada kabarcık, 5. ada yıldız tozu istasyonu (tesisin deposundan durmadan yükselir)
     if (this.ayar.tesisParcacik) {
       this.add.particles(TESIS_X + 40, TESIS_Y + ISKELE_EK + 200, this.ayar.tesisParcacik, {
@@ -2385,7 +2387,7 @@ class AdaSahnesi extends Phaser.Scene {
     if (i < 0 || this.guverteVarilleri[harf]) return;
     const yer = VARIL_YERI(i);
     const kap = this.add.container(yer.x, yer.y).setDepth(TESIS_Y - 39);
-    const resim = this.add.image(0, 0, "varil").setOrigin(VARIL_ORTA.x, VARIL_ORTA.y).setScale(0.3);
+    const resim = this.add.image(0, 0, this.dk("varil")).setOrigin(VARIL_ORTA.x, VARIL_ORTA.y).setScale(0.3);
     const yazi = boyaliOrtala(titret(this.add.text(0, 19, harf, {
       fontFamily: "Andika", fontSize: "17px", color: "#ffffff",
       stroke: "#3b2a1a", strokeThickness: 4, padding: { x: 2, y: 2 },
@@ -2417,14 +2419,14 @@ class AdaSahnesi extends Phaser.Scene {
     karartma.fillStyle(0x000000, 0.35);
     karartma.fillRect(0, 0, 1280, 720);
     // Çizimdeki düğmeler ve çarpı aşağıdaki konumlarla aynı yerdedir (tesis-pencere.svg)
-    const resim = this.add.image(290, 120, "tesis-pencere").setOrigin(0);
+    const resim = this.add.image(290, 120, this.dk("tesis-pencere")).setOrigin(0);
     const baslik = doodleYazi(this, 630, 190, this.ayar.tesisAdi || "Su Arıtma Tesisi", 44, "mavi").setOrigin(0.5);
     pencere.add([karartma, resim, baslik]);
     // Borunun altındaki varil yerleri: varil yalnızca o harfin tohumu ekilince görünür
     this.tesisDugmeleri = this.varilHarfleri.map((h, i) => {
       const { x, y } = PANEL_VARIL_YERI(i);
       const kap = this.add.container(x, y).setVisible(false);
-      const resim = this.add.image(0, 0, "varil").setOrigin(VARIL_ORTA.x, VARIL_ORTA.y).setScale(PANEL_VARIL_OLCEK);
+      const resim = this.add.image(0, 0, this.dk("varil")).setOrigin(VARIL_ORTA.x, VARIL_ORTA.y).setScale(PANEL_VARIL_OLCEK);
       const yazi = boyaliOrtala(titret(this.add.text(0, 52, h, {
         fontFamily: "Andika", fontSize: "44px", color: "#ffffff",
         stroke: "#3b2a1a", strokeThickness: 8, padding: { x: 4, y: 4 },

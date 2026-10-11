@@ -1,0 +1,48 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="150" viewBox="0 0 120 150">
+  <!-- Harf varili (Yıldız Tozu İstasyonu) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="69" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="tahta" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(80)">
+      <rect width="7" height="7" fill="#d9dde8"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#b7bdd0" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="duvar" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)">
+      <rect width="7" height="7" fill="#f1ecff"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#dcd2fb" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="kiremit" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="6" height="6" fill="#c9b4ff"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#8a6be0" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="depo" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#5a4aa8"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#45388a" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="bant" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="7" height="7" fill="#d8ccff"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#a58cf0" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="varilGovde" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(80)">
+      <rect width="6" height="6" fill="#b9a6f2"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#8f78dc" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="54" cy="142" rx="46" ry="6" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 14 q-14 63 0 126 h76 q14 -63 0 -126z" fill="url(#varilGovde)"/>
+    <path d="M30 14 q-8 63 0 126 M74 14 q8 63 0 126" fill="none" stroke="#2b2b2b" stroke-opacity="0.25" stroke-width="2.5"/>
+    <path d="M8 38 q44 9 88 0 M8 116 q44 9 88 0" fill="none" stroke="#9aa0b8" stroke-width="8"/>
+    <path d="M8 38 q44 9 88 0 M8 116 q44 9 88 0" fill="none" stroke-width="2"/>
+    <ellipse cx="52" cy="14" rx="38" ry="10" fill="#7a68c8"/>
+    <ellipse cx="52" cy="15" rx="28" ry="6" fill="url(#depo)" stroke="none"/>
+    <rect x="25" y="50" width="54" height="56" rx="8" fill="#fbf4e2" stroke-width="3"/>
+    <path d="M92 96 h16 v10" fill="none" stroke="#9aa0b8" stroke-width="9"/>
+    <path d="M92 96 h16 v10" fill="none" stroke-width="2"/>
+    <path d="M100 86 h16" fill="none" stroke="#ff8a7a" stroke-width="7"/>
+    <path d="M40 6 l1.8 4.2 l4.2 1.8 l-4.2 1.8 l-1.8 4.2 l-1.8 -4.2 l-4.2 -1.8 l4.2 -1.8z" fill="#ffe680" stroke="#2b2b2b" stroke-width="2"/>
+    <path d="M62 3 l1.5 3.5 l3.5 1.5 l-3.5 1.5 l-1.5 3.5 l-1.5 -3.5 l-3.5 -1.5 l3.5 -1.5z" fill="#ffe680" stroke="#2b2b2b" stroke-width="2"/>
+  </g>
+</svg>
