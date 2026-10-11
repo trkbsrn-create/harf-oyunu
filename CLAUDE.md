@@ -225,6 +225,9 @@ Her hatadan sonra buraya yeni bir kural ekle.
 
 - Sürüm 192'de 2.-5. adalar ve God mode donuyordu: menüdeki peri (`periyiKondur`) peri yokken boş nesneyi
   taşımaya çalıştı. Yeni akışı her giriş yolundan dene (yeni oyun, sonraki ada, Devam et, God mode).
+- Düğmeye (görev, menü, harita) basıp parmak/fare biraz kayınca karakter oraya yürüyordu; God mode'dan basılı
+  gelen fareyle de kendiliğinden yürüyordu. Kaydırarak yürüme yalnızca boş yerde başlayan dokunuşta olur
+  (`yuruyusDokunusu`). Yeni düğme eklerken dokunup kaydırmayı da dene.
 
 ## Bekleyen işler
 - TTKB Dik Temel Abece yazı tipi: yazardan izin bekleniyor; izin gelirse dosya depoya eklenir.
