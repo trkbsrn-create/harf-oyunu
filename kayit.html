@@ -111,11 +111,9 @@
       ...[1, 2, 3, 4, 5].flatMap((a) => {
         const d = ADA_SOZ[a];
         return [`${d.hazir} "${d.dugme}" düğmesine bas!`, `Parçan çantanda! ${d.hedef} Çantanı aç, parçayı ${d.yon} sürükle.`,
-          ...GRUPLAR[a - 1].flatMap((h) => [
-            `${h.kucuk} tohumu ${d.bitki} oldu! Dibine git, Çık düğmesine bas, parçanı al.`,
-            `Şişende ${h.kucuk} için ${d.damla} var. Tarlaya git, çantanı aç, şişeyi ${h.kucuk} tohumuna sürükle.`,
-            `${h.kucuk} tohumu ${d.damla} istiyor. Kıyıdaki ${d.tesis} git, ${h.kucuk} variline dokun, oyun oyna.`,
-          ])];
+          `Tohumun ${d.bitki} oldu! Dibine git, Çık düğmesine bas, parçanı al.`,
+          `Şişende ${d.damla} var. Tarlaya git, çantanı aç, şişeyi tohuma sürükle.`,
+          `Tohum ${d.damla} istiyor. Kıyıdaki ${d.tesis} git, harfinin variline dokun, oyun oyna.`];
       }),
     ];
     // Her harf grubu: harfler, iki harfli heceler, kelimeler (o grupla okunabilen); üç harfli heceler açılır bölümde
