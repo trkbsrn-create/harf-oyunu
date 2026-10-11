@@ -76,32 +76,68 @@
       .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
 
     const grup1 = HARFLER.filter((h) => h.grup === 1);
-    // Bütün heceler için grubun son harfi verilir (heceHavuzu yalnızca o harfe kadar öğrenilenleri alır)
-    const sonHarf = grup1[grup1.length - 1].kucuk;
-    // Resimli kelimeler (Resimden Sesi Bul, Kazı Kazan, Kırık Cam okur) ve yönergeler
-    const konumlu = grup1.map((h) => KONUMLU_KELIMELER[h.kucuk]).filter(Boolean);
-    const resimAdlari = [...new Set(konumlu.flatMap((k) => [...k.bas, ...k.son, ...k.orta]))]
-      .sort((a, b) => a.localeCompare(b, "tr"));
-    const yonergeler = [...new Set(grup1.flatMap((h) => ["bas", "son", "orta"].map((yer) =>
+    // Hece ve harf dosya adlarında Türkçe harfler ayrı yazılır ("kır" ile "kir", "ğ" ile "g" karışmasın)
+    const AYRI = { ç: "cx", ğ: "gx", ı: "ix", ö: "ox", ş: "sx", ü: "ux" };
+    const kisaltAyri = (m) => m.toLocaleLowerCase("tr-TR").replace(/[çğıöşü]/g, (h) => AYRI[h])
+      .replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+    const GRUPLAR = [1, 2, 3, 4, 5].map((g) => HARFLER.filter((h) => h.grup === g));
+    const harfGrubu = (h) => (HARFLER.find((x) => x.kucuk === h) || { grup: 1 }).grup;
+    // Kelimenin grubu: içindeki en son öğrenilen harfin grubu (o gruptan sonra okunabilir)
+    const kelimeGrubu = (k) => Math.max(...[...k.replace(/ /g, "")].map(harfGrubu));
+    const TUM_KELIMELER = [...new Set([...HARFLER.map((h) => h.kelime), ...KELIMELER.map((k) => k.kelime),
+      ...COK_HECELI_KELIMELER.map((k) => k.kelime),
+      ...Object.values(KONUMLU_KELIMELER).flatMap((k) => [...k.bas, ...k.son, ...k.orta])])];
+    // Resimden Sesi Bul yönergeleri (bütün harfler için)
+    const yonergeler = [...new Set(HARFLER.flatMap((h) => ["bas", "son", "orta"].map((yer) =>
       `${KONUM_ADLARI[yer]} ${h.unlu ? h.kucuk : "bu harf"} olan resimleri bul!`)))];
+    const harfNotu = (h) => h.unlu ? `Ünlü: uzatmadan, net (“${h.kucuk}”)`
+      : !h.tekBasinaDenenir ? `Tek başına söylenmez: “${h.okunus}” diye okuyun`
+      : h.kisaSes ? `Ünsüz: yalnızca sesi, kısa ve net (“${h.kucuk}” – “${h.kucuk}e” değil)`
+      : `Ünsüz: yalnızca sesi, biraz uzatarak (“${h.kucuk}${h.kucuk}${h.kucuk}” – “${h.kucuk}e” değil)`;
+    const heceOgesi = (h) => ({ anahtar: `hece-${kisaltAyri(h.hece)}`, metin: h.hece,
+      not: h.hece.length === 3 ? "Üç harfli hece" : h.acik ? "Açık hece" : "Kapalı hece" });
+    // Menüdeki perinin sözleri (oyun.js simdikiGorev ile aynı kalıplar; ada ayarları ADALAR'dakiyle aynı)
+    const ADA_SOZ = {
+      1: { bitki: "fasulye sırığı", damla: "damla", tesis: "su tesisine", hedef: "Yelkenli kıyıda, su tesisinin yanında.", yon: "yelkenliye", hazir: "Yelkenli hazır!", dugme: "Yola çık" },
+      2: { bitki: "mısır sapı", damla: "damla", tesis: "su tesisine", hedef: "Köprü kıyıda, su tesisinin yanında.", yon: "köprüye", hazir: "Köprü hazır!", dugme: "Köprüden geç" },
+      3: { bitki: "buz sarmaşığı", damla: "damla", tesis: "su tesisine", hedef: "Askı kıyıda, su tesisinin yanında.", yon: "askıya", hazir: "Kıyafet hazır!", dugme: "Buzu kır" },
+      4: { bitki: "mercan", damla: "kabarcık", tesis: "kabarcık istasyonuna", hedef: "Kaplumbağa kıyıda, kabarcık istasyonunun yanında.", yon: "kaplumbağaya", hazir: "Kaplumbağa hazır!", dugme: "Haydi, bin!" },
+      5: { bitki: "yıldız sarmaşığı", damla: "yıldız tozu", tesis: "yıldız tozu istasyonuna", hedef: "Formül tahtası kıyıda, yıldız tozu istasyonunun yanında.", yon: "formüle", hazir: "İksir hazır!", dugme: "İksiri iç!" },
+    };
+    const yardimSozleri = [
+      "Işığa doğru yürü, sıradaki sandığı bul!", "Işığa doğru yüz, sıradaki sandığı bul!",
+      "Çantanda tohum var. Tarlaya git, çantanı aç, tohumu boş kareye sürükle.",
+      "Görev düğmesine dokun, görevlerine bak.",
+      ...[1, 2, 3, 4, 5].flatMap((a) => {
+        const d = ADA_SOZ[a];
+        return [`${d.hazir} "${d.dugme}" düğmesine bas!`, `Parçan çantanda! ${d.hedef} Çantanı aç, parçayı ${d.yon} sürükle.`,
+          ...GRUPLAR[a - 1].flatMap((h) => [
+            `${h.kucuk} tohumu ${d.bitki} oldu! Dibine git, Çık düğmesine bas, parçanı al.`,
+            `Şişende ${h.kucuk} için ${d.damla} var. Tarlaya git, çantanı aç, şişeyi ${h.kucuk} tohumuna sürükle.`,
+            `${h.kucuk} tohumu ${d.damla} istiyor. Kıyıdaki ${d.tesis} git, ${h.kucuk} variline dokun, oyun oyna.`,
+          ])];
+      }),
+    ];
+    // Her harf grubu: harfler, iki harfli heceler, kelimeler (o grupla okunabilen); üç harfli heceler açılır bölümde
+    const GRUP_BOLUMLERI = GRUPLAR.flatMap((harfler, i) => {
+      const ad = `${i + 1}. grup (${harfler.map((h) => h.kucuk).join(" ")})`;
+      const sonHarf = harfler[harfler.length - 1].kucuk;
+      const onceki = i ? new Set(heceHavuzu(GRUPLAR[i - 1][GRUPLAR[i - 1].length - 1].kucuk).map((h) => h.hece)) : new Set();
+      const heceler = heceHavuzu(sonHarf).filter((h) => !onceki.has(h.hece));
+      return [
+        { baslik: `${ad}: harf sesleri`, oge: harfler.map((h) => ({ anahtar: `harf-${kisaltAyri(h.kucuk)}`, metin: h.kucuk, not: harfNotu(h) })) },
+        { baslik: `${ad}: iki harfli heceler`, oge: heceler.filter((h) => h.hece.length === 2).map(heceOgesi) },
+        { baslik: `${ad}: kelimeler`, oge: TUM_KELIMELER.filter((k) => kelimeGrubu(k) === i + 1)
+          .sort((a, b) => a.localeCompare(b, "tr")).map((k) => ({ anahtar: `kelime-${kisalt(k)}`, metin: k, not: "" })) },
+        { baslik: `${ad}: üç harfli heceler (çok sayıda; açmak için dokunun)`, kapali: true,
+          oge: heceler.filter((h) => h.hece.length === 3).map(heceOgesi) },
+      ];
+    });
     const BOLUMLER = [
-      { baslik: "Harf sesleri", oge: grup1.map((h) => ({
-        anahtar: `harf-${kisalt(h.kucuk)}`, metin: h.kucuk,
-        not: h.unlu ? `Ünlü: uzatmadan, net (“${h.kucuk}”)`
-          : h.kisaSes ? `Ünsüz: yalnızca sesi, kısa ve net (“${h.kucuk}” – “te” değil)`
-          : `Ünsüz: yalnızca sesi, biraz uzatarak (“${h.kucuk}${h.kucuk}${h.kucuk}” – “${h.kucuk}e” değil)`,
-      })) },
-      { baslik: "Heceler", oge: [
-        ...heceHavuzu(sonHarf).map((h) => ({ hece: h.hece,
-          not: h.hece.length === 3 ? "Üç harfli hece" : h.acik ? "Açık hece" : "Kapalı hece" })),
-      ].map((h) => ({ anahtar: `hece-${kisalt(h.hece)}`, metin: h.hece, not: h.not })) },
-      { baslik: "Kelimeler", oge: [...new Set([...grup1.map((h) => h.kelime), ...KELIMELER.map((k) => k.kelime),
-        ...COK_HECELI_KELIMELER.map((k) => k.kelime)])]
-        .map((k) => ({ anahtar: `kelime-${kisalt(k)}`, metin: k, not: "" })) },
-      { baslik: "Resim adları (Resimden Sesi Bul, Kazı Kazan, Kırık Cam)", oge: resimAdlari
-        .filter((k) => !grup1.some((h) => h.kelime === k) && ![...KELIMELER, ...COK_HECELI_KELIMELER].some((x) => x.kelime === k))
-        .map((k) => ({ anahtar: `kelime-${kisalt(k)}`, metin: k, not: "" })) },
+      ...GRUP_BOLUMLERI,
       { baslik: "Yönergeler (Resimden Sesi Bul)", oge: yonergeler
+        .map((m) => ({ anahtar: `soz-${kisalt(m)}`, metin: m, not: "" })) },
+      { baslik: "Menüdeki perinin yardım sözleri", oge: [...new Set(yardimSozleri)]
         .map((m) => ({ anahtar: `soz-${kisalt(m)}`, metin: m, not: "" })) },
       { baslik: "Oyun sözleri", oge: [
         "Büyük bir fırtına çıktı!", "Salın kırıldı...", "Bir adaya düştün.", "Yelkenliyi tamamla, adadan kurtul!",
@@ -218,7 +254,9 @@
       { baslik: "Mini oyun adları (Oyun Lambaları okur)", oge: PLANLANAN_OYUNLAR
         .map((o) => ({ anahtar: `oyun-${o.ad}`, metin: o.baslik, not: "" })) },
     ];
-    const HEPSI = BOLUMLER.flatMap((b) => b.oge);
+    // Aynı söz iki bölümde varsa bir kez sayılır
+    const HEPSI = [...new Map(BOLUMLER.flatMap((b) => b.oge).map((o) => [o.anahtar, o])).values()];
+    const ZORUNLU = new Set(BOLUMLER.filter((b) => !b.kapali).flatMap((b) => b.oge.map((o) => o.anahtar)));
 
     // Seçilen sesler (yalnızca bunlar indirilir); bu tarayıcıda hatırlanır
     const SECIM_ANAHTARI = "harf-oyunu-kayit-secimi";
@@ -335,11 +373,8 @@
     const satirlar = {};
     const liste = document.getElementById("liste");
     const basliklar = [];
-    for (const b of BOLUMLER) {
-      const h = document.createElement("h2");
-      h.textContent = b.baslik;
-      basliklar.push([h, b]);
-      liste.append(h);
+    // Satırlar bölüm bölüm çizilir; çok satırlı bölümler (üç harfli heceler) başlığa dokununca açılır
+    function bolumuCiz(b, kap) {
       for (const oge of b.oge) {
         const satir = document.createElement("div");
         satir.className = "satir";
@@ -364,8 +399,27 @@
           if (confirm(`"${oge.metin}" kaydı silinsin mi?`)) { await kaydiSil(oge.anahtar); guncelle(); }
         };
         satirlar[oge.anahtar] = satir;
-        liste.append(satir);
+        kap.append(satir);
       }
+    }
+    for (const b of BOLUMLER) {
+      if (!b.oge.length) continue;
+      const h = document.createElement("h2");
+      h.textContent = `${b.baslik} – ${b.oge.length}`;
+      basliklar.push([h, b]);
+      liste.append(h);
+      const kap = document.createElement("div");
+      liste.append(kap);
+      if (!b.kapali) { bolumuCiz(b, kap); continue; }
+      h.style.cursor = "pointer";
+      h.textContent = `▸ ${h.textContent}`;
+      let acik = false;
+      h.onclick = () => {
+        acik = !acik;
+        h.textContent = `${acik ? "▾" : "▸"} ${b.baslik} – ${b.oge.length}`;
+        if (acik && !kap.childElementCount) { bolumuCiz(b, kap); guncelle(); }
+        kap.style.display = acik ? "" : "none";
+      };
     }
 
     async function guncelle() {
@@ -378,9 +432,9 @@
         satir.querySelector(".sil").disabled = !kayitli;
       }
       for (const [k, satir] of Object.entries(satirlar)) satir.querySelector(".sec").checked = secilenler.has(k);
-      const sayi = HEPSI.filter((o) => var_.has(o.anahtar)).length;
+      const sayi = HEPSI.filter((o) => var_.has(o.anahtar) && ZORUNLU.has(o.anahtar)).length;
       const secili = HEPSI.filter((o) => secilenler.has(o.anahtar) && var_.has(o.anahtar)).length;
-      document.getElementById("sayac").textContent = `${sayi} / ${HEPSI.length} kaydedildi`;
+      document.getElementById("sayac").textContent = `${sayi} / ${ZORUNLU.size} kaydedildi`;
       document.getElementById("indir").textContent = `Seçilenleri indir (${secili})`;
     }
 

@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 192;
+const SURUM = 193;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -4755,11 +4755,11 @@ class FinalSahnesi extends Phaser.Scene {
       "Bu takımyıldızı öğrenme. Bütün harfleri öğrendin!",
       "Bu taçlı yıldız başarı. Oyunları oynadın, yıldızlar kazandın!",
     ];
-    await this.bekle(1200);
+    await this.bekle(600);
     if (!this.surer(no)) return;
     await this.periKonus(peri, "Formülün sırrını sana söyleyeyim mi? Bu parçaların hepsini sen yaptın!");
     for (let i = 0; i < IKSIR_PARCALARI.length; i++) {
-      await this.bekle(900);
+      await this.bekle(200);
       if (!this.surer(no)) return;
       const p = IKSIR_PARCALARI[i];
       const [kx, ky, ken, kboy] = p.kutu;
@@ -4776,7 +4776,7 @@ class FinalSahnesi extends Phaser.Scene {
       this.tweens.killTweensOf(simge);
       this.tweens.add({ targets: ad, alpha: 0, duration: 400 });
       await new Promise((bitir) => this.tweens.add({ targets: simge, x: siseX, y: siseY, scale: 0.3, angle: 360,
-        duration: 1000, ease: "Cubic.InOut", onComplete: bitir }));
+        duration: 650, ease: "Cubic.InOut", onComplete: bitir }));
       if (!this.surer(no)) return;
       simge.destroy();
       Sesler.nota(660 + i * 110, 0, 0.35, 0.08, "sine");
@@ -4789,7 +4789,7 @@ class FinalSahnesi extends Phaser.Scene {
       }).explode(20);
     }
     // İksir hazır: "İksiri iç" düğmesi
-    await this.bekle(900);
+    await this.bekle(400);
     if (!this.surer(no)) return;
     this.tweens.add({ targets: isik, scale: 1.3, alpha: 0.6, duration: 700, yoyo: true, repeat: -1 });
     Sesler.dogru();
@@ -5137,8 +5137,8 @@ function periBalonu(sahne, peri, soz, bitince) {
   const kapat = () => {
     if (kapandi) return;
     kapandi = true;
+    if (bitince) sahne.time.delayedCall(250, bitince); // finalde sıradaki parça hemen gelsin
     sahne.time.delayedCall(1200, () => {
-      if (bitince) bitince();
       if (!balon.active) return;
       sahne.tweens.add({ targets: balon, scale: 0, duration: 150, onComplete: () => balon.destroy() });
     });
