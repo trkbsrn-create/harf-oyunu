@@ -3649,3 +3649,241 @@ yaz("roket.svg", 160, 300, "Roket (beyaz-kırmızı, pencereli)", KIRMIZI + MAVI
     <path d="M44 238 h72 l-8 24 h-56z" fill="url(#gri)"/>
     <path d="M58 200 v20 M102 200 v20" fill="none" stroke-width="3"/>
 ''', 4), 626)
+
+# ==== 5. ada (uzay; final adası; öğretmenin isteği, tasarım taslağı) ====
+# Zemin: mor, kraterli gezegen yüzeyi; dışı yıldızlı uzay. Ağaç yerine kristal ağaç, çalı yerine parlayan
+# mantar, kaya yerine meteor taşı; yerde küçük krater, kristal, uzay çiçeği. Uçan: yıldız tozu. Canlılar:
+# zıplayan yeşil uzaylı, yürüyen küçük robot, süzülen uzay balinası; geçen UFO'lar (sürü). Tohum yıldız
+# sarmaşığı olur, damla yerine yıldız tozu. Görev: uzaylı iksirinin formülü (6 parça).
+doku("doku-gezegen.svg", 64, "#d9c8f0", capraz(64, 16, "#c6b0e6", 4, 1) + capraz(64, 32, "#e8dcf8", 3, -1),
+     "Gezegen yüzeyi taraması")
+doku("doku-uzay.svg", 64, "#2f3a66",
+     capraz(64, 16, "#29335c", 5, -1) + '  <circle cx="12" cy="20" r="1.6" fill="#ffffff"/>\n'
+     '  <circle cx="44" cy="50" r="1.2" fill="#ffe680"/>\n  <circle cx="52" cy="10" r="1" fill="#ffffff"/>\n', "Yıldızlı uzay")
+KRISTAL = tarama("kristal", "#c9f1ff", "#7fd6f0", 35, 6, 3) + tarama("kristalMor", "#e6d4ff", "#b58cf0", -35, 6, 3)
+yaz("kristal-agac.svg", 150, 230, "Kristal ağaç (ağaç yerine; alt ortası tabanı)", KRISTAL,
+    golge(75, 224, 44) + kalem('''    <path d="M66 226 l4 -90 h10 l4 90z" fill="#8e7bb8"/>
+    <path d="M75 10 l26 50 l-26 80 l-26 -80z" fill="url(#kristal)"/>
+    <path d="M40 60 l18 30 l-14 52 l-24 -40z M110 60 l-18 30 l14 52 l24 -40z" fill="url(#kristalMor)"/>
+    <path d="M75 10 v130 M58 60 h34" fill="none" stroke="#ffffff" stroke-width="3"/>
+    <path d="M24 30 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3z M126 100 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2z" fill="#ffe680" stroke-width="1.5"/>
+'''), 701)
+yaz("isik-mantar.svg", 130, 90, "Parlayan uzay mantarları (çalı yerine; oyunda sallanır)", tarama("mantar", "#9ff0c8", "#4fd09a", 35, 6, 3),
+    golge(65, 84, 50, 5) + kalem('''    <path d="M36 84 v-24 M66 84 v-40 M96 84 v-22" fill="none" stroke="#e8dcf8" stroke-width="9"/>
+    <path d="M36 84 v-24 M66 84 v-40 M96 84 v-22" fill="none" stroke-width="2"/>
+    <path d="M16 62 q20 -30 40 0z M38 46 q28 -44 56 0z M78 64 q18 -26 36 0z" fill="url(#mantar)"/>
+    <circle cx="56" cy="34" r="3" fill="#ffffff" stroke="none"/><circle cx="74" cy="38" r="2.5" fill="#ffffff" stroke="none"/><circle cx="30" cy="54" r="2" fill="#ffffff" stroke="none"/>
+'''), 702)
+yaz("meteor-kaya.svg", 110, 80, "Meteor taşı (kraterli)", tarama("gri", "#9a8fb0", "#7c7096", 25),
+    golge(55, 74, 44, 5) + kalem('''    <path d="M12 72 q-6 -28 16 -44 q16 -18 38 -12 q30 8 34 34 q4 14 -4 22 z" fill="url(#gri)"/>
+    <circle cx="40" cy="44" r="8" fill="#7c7096" stroke-width="2.5"/><circle cx="70" cy="56" r="5" fill="#7c7096" stroke-width="2.5"/>
+'''), 703)
+yaz("krater.svg", 70, 30, "Küçük krater", "",
+    kalem('''    <ellipse cx="35" cy="17" rx="30" ry="11" fill="#c6b0e6" stroke-width="3"/>
+    <ellipse cx="35" cy="19" rx="20" ry="6" fill="#b098d8" stroke="none"/>
+''', 3), 704, 2.5)
+yaz("kristal-kucuk.svg", 40, 40, "Yerde küçük kristal", "",
+    kalem('''    <path d="M20 4 l7 12 l-7 20 l-7 -20z" fill="#c9f1ff" stroke-width="2.5"/>
+    <path d="M8 18 l7 6 l-3 12 l-8 -8z M32 18 l-7 6 l3 12 l8 -8z" fill="#e6d4ff" stroke-width="2"/>
+''', 2.5), 705, 2)
+yaz("uzay-cicegi.svg", 44, 44, "Uzay çiçeği (yıldız biçimli, oyunda sallanır)", "",
+    kalem('''    <path d="M22 42 v-16" fill="none" stroke="#4fd09a" stroke-width="3"/>
+    <path d="M22 4 l4 9 l10 1 l-7 7 l2 10 l-9 -5 l-9 5 l2 -10 l-7 -7 l10 -1z" fill="#ffb3e0" stroke-width="2.5"/>
+    <circle cx="22" cy="18" r="3" fill="#ffe680" stroke="none"/>
+''', 3), 706, 2)
+yaz("yildiz-tozu-ucan.svg", 26, 26, "Uçuşan yıldız tozu (uçan süs yerine)", "",
+    '  <path d="M13 2 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3z" fill="#fff6c4" stroke="#ffe680" stroke-width="1.5"/>\n', 707)
+# Yıldız tozu (damla yerine): 40x52, damla.svg ile aynı tuval
+yaz("yildiz-tozu.svg", 40, 52, "Yıldız tozu (5. adada damla yerine)", tarama("tozDesen", "#fff6c4", "#ffe680", 35, 6, 2.5),
+    kalem('''    <path d="M20 10 l6 13 l14 2 l-10 10 l3 14 l-13 -7 l-13 7 l3 -14 l-10 -10 l14 -2z" fill="url(#tozDesen)" stroke-width="3"/>
+    <circle cx="20" cy="30" r="3" fill="#ffffff" stroke="none"/>
+'''), 708, 2.5)
+yaz("yildiz-tozu-bos.svg", 40, 52, "Boş yıldız tozu yeri", "",
+    '  <path d="M20 10 l6 13 l14 2 l-10 10 l3 14 l-13 -7 l-13 7 l3 -14 l-10 -10 l14 -2z" fill="#ffffff" fill-opacity="0.5" '
+    'stroke="#9fb6c4" stroke-width="3" stroke-dasharray="5 4"/>\n', 709)
+
+# ---- 5. ada: canlılar ----
+yaz("uzayli.svg", 60, 70, "Yeşil uzaylı (tek gözlü, antenli; zıplar)", tarama("uzayli", "#b5f0a0", "#7fd66a", 35, 6, 3),
+    golge(30, 67, 18, 3) + kalem('''    <path d="M22 18 l-6 -14 M38 18 l6 -14" fill="none" stroke-width="2.5"/>
+    <circle cx="16" cy="4" r="3.5" fill="#ffe680" stroke-width="2"/><circle cx="44" cy="4" r="3.5" fill="#ffe680" stroke-width="2"/>
+    <path d="M18 64 v-8 M42 64 v-8" fill="none" stroke-width="4"/>
+    <path d="M10 46 q-2 -32 20 -32 q22 0 20 32 q0 14 -20 14 q-20 0 -20 -14z" fill="url(#uzayli)"/>
+    <circle cx="30" cy="32" r="9" fill="#ffffff" stroke-width="2.5"/><circle cx="31" cy="33" r="4" fill="#2b2b2b" stroke="none"/>
+    <path d="M24 48 q6 5 12 0" fill="none" stroke-width="2.5"/>
+''', 3), 710, 2)
+yaz("robot-kucuk.svg", 60, 70, "Küçük robot (tekerlekli, yürür)", tarama("robot", "#e3e1ea", "#b9b5c6", 30, 6, 3),
+    golge(30, 67, 20, 3) + kalem('''    <path d="M30 14 v-8" fill="none" stroke-width="2.5"/><circle cx="30" cy="5" r="3.5" fill="#ff7f6a" stroke-width="2"/>
+    <rect x="14" y="14" width="32" height="22" rx="6" fill="url(#robot)"/>
+    <circle cx="23" cy="25" r="3.5" fill="#7fd6f0" stroke-width="2"/><circle cx="37" cy="25" r="3.5" fill="#7fd6f0" stroke-width="2"/>
+    <rect x="10" y="38" width="40" height="20" rx="5" fill="url(#robot)"/>
+    <path d="M24 46 h12" fill="none" stroke="#ff7f6a" stroke-width="3"/>
+    <circle cx="20" cy="62" r="5" fill="#6b6b80" stroke-width="2.5"/><circle cx="40" cy="62" r="5" fill="#6b6b80" stroke-width="2.5"/>
+''', 3), 711, 2)
+yaz("uzay-balinasi.svg", 120, 70, "Uzay balinası (mor, yıldız benekli; süzülür)", tarama("balina", "#c6b0f0", "#9a7fe0", 35, 7, 3),
+    kalem('''    <path d="M16 36 l-14 -14 q0 14 6 18 q-6 4 -6 18z" fill="url(#balina)" stroke-width="3"/>
+    <path d="M14 38 q10 -30 56 -30 q44 0 46 30 q0 24 -50 24 q-44 0 -52 -24z" fill="url(#balina)"/>
+    <path d="M30 46 q40 12 80 -4" fill="none" stroke-width="2"/>
+    <circle cx="98" cy="30" r="3" fill="#2b2b2b" stroke="none"/>
+    <path d="M50 22 l2 4 l4 1 l-4 1 l-2 4 l-2 -4 l-4 -1 l4 -1z M72 16 l1.5 3 l3 1 l-3 1 l-1.5 3 l-1.5 -3 l-3 -1 l3 -1z" fill="#ffe680" stroke-width="1.2"/>
+'''), 712, 2)
+yaz("ufo.svg", 80, 50, "Uçan daire (UFO; geçip gider)", tarama("ufo", "#e3e1ea", "#b9b5c6", 30, 6, 3),
+    kalem('''    <path d="M26 22 q0 -18 14 -18 q14 0 14 18z" fill="#c9f1ff" stroke-width="3"/>
+    <ellipse cx="40" cy="28" rx="36" ry="11" fill="url(#ufo)"/>
+    <circle cx="20" cy="29" r="3" fill="#ffe680" stroke-width="1.5"/><circle cx="40" cy="32" r="3" fill="#ff7f6a" stroke-width="1.5"/><circle cx="60" cy="29" r="3" fill="#9ff0c8" stroke-width="1.5"/>
+''', 3), 713, 2)
+
+# ---- 5. ada: yıldız sarmaşığı (fasulye sırığının yerine; aynı boylar ve tabanlar) ----
+YILDIZ_YAPRAK = tarama("yildizYaprak", "#fff6c4", "#ffe680", 35, 6, 3)
+GEZEGEN_TUMSEK = '    <path d="M{x1} {y} q{yarim} -22 {tam} 0z" fill="#b098d8" stroke-width="3.5"/>\n'
+
+
+def gezegen_tumsek(orta, taban, en):
+    return GEZEGEN_TUMSEK.format(x1=orta - en / 2, y=taban, yarim=en / 2, tam=en)
+
+
+def yildiz_yol(x, y, r):
+    n = []
+    for i in range(10):
+        a = -math.pi / 2 + i * math.pi / 5
+        rr = r if i % 2 == 0 else r * 0.45
+        n.append(f"{x + rr * math.cos(a):.1f} {y + rr * math.sin(a):.1f}")
+    return "M" + " L".join(n) + "z"
+
+
+def yildiz_sarmasigi(boy, y_ust, aralik):
+    c = ""
+    for faz, renk in ((0, "#b58cf0"), (math.pi, "#7fd6f0")):
+        for y1, y2, k in [(boy - 6, boy * 0.7, 14), (boy * 0.7, boy * 0.4, 11), (boy * 0.4, y_ust, 8)]:
+            c += f'    <path d="{sap(faz, int(y1), int(y2), boy)}" fill="none" stroke="{KALEM}" stroke-width="{k + 5}"/>\n'
+            c += f'    <path d="{sap(faz, int(y1), int(y2), boy)}" fill="none" stroke="{renk}" stroke-width="{k}"/>\n'
+    for i, y in enumerate(range(int(boy - 50), int(y_ust + 30), -aralik)):
+        yon = 1 if i % 2 == 0 else -1
+        r = 10 + 8 * (y / boy)
+        c += f'    <path d="{yildiz_yol(120 + yon * 34, y, r)}" fill="url(#yildizYaprak)" stroke-width="2.5"/>\n'
+    return c
+
+
+yaz("yildiz-filiz.svg", 100, 110, "Yıldız sarmaşığı filizi", YILDIZ_YAPRAK,
+    kalem(f'''    <path d="M50 100 q-6 -30 4 -60" fill="none" stroke="#b58cf0" stroke-width="6"/>
+    <path d="M50 100 q-6 -30 4 -60" fill="none" stroke-width="2"/>
+    <path d="{yildiz_yol(30, 62, 12)}" fill="url(#yildizYaprak)" stroke-width="2.5"/>
+    <path d="{yildiz_yol(72, 50, 12)}" fill="url(#yildizYaprak)" stroke-width="2.5"/>
+    <path d="{yildiz_yol(54, 30, 14)}" fill="url(#yildizYaprak)" stroke-width="2.5"/>
+''' + gezegen_tumsek(50, 106, 70)), 714)
+yaz("yildiz-fidan.svg", 130, 150, "Genç yıldız sarmaşığı", YILDIZ_YAPRAK,
+    kalem(f'''    <path d="M65 140 q-20 -30 0 -60 q20 -30 0 -60" fill="none" stroke="#b58cf0" stroke-width="8"/>
+    <path d="M65 140 q-20 -30 0 -60 q20 -30 0 -60" fill="none" stroke-width="2"/>
+    <path d="{yildiz_yol(36, 112, 14)}" fill="url(#yildizYaprak)" stroke-width="2.5"/>
+    <path d="{yildiz_yol(96, 86, 15)}" fill="url(#yildizYaprak)" stroke-width="2.5"/>
+    <path d="{yildiz_yol(40, 56, 15)}" fill="url(#yildizYaprak)" stroke-width="2.5"/>
+    <path d="{yildiz_yol(70, 20, 17)}" fill="url(#yildizYaprak)" stroke-width="2.5"/>
+''' + gezegen_tumsek(65, 146, 80)), 715)
+yaz("yildiz-sarmasik.svg", SIRIK_EN, KISA_BOY, "Yıldız sarmaşığı: tarlada son aşama, gökyüzüne doğru solar",
+    YILDIZ_YAPRAK + SOLMA,
+    '  <g mask="url(#sol)">\n' + kalem(yildiz_sarmasigi(KISA_BOY, 10, 50) + gezegen_tumsek(120, 374, 110), 3.5) + '  </g>\n', 716)
+yaz("halka-sarmasik.svg", SIRIK_EN, SIRIK_BOY, "Yıldız sarmaşığı: gezegen halkasının altından yükselir", YILDIZ_YAPRAK,
+    kalem(yildiz_sarmasigi(SIRIK_BOY, 90, 64) + gezegen_tumsek(120, 774, 110), 3.5), 717)
+# Gezegen halkası zemini (bulut-zemin.svg ile aynı 1430x300): çocuk halkanın üstünde yürür
+yaz("halka-zemin.svg", 1280 + 150, 300, "Gezegen halkası: renkli taşlardan yürüme yolu",
+    tarama("halka", "#e6d4ff", "#b58cf0", 30, 8, 3) + tarama("halka2", "#c9f1ff", "#7fd6f0", -30, 8, 3),
+    kalem('''    <path d="M-20 340 V70 q735 -60 1470 0 V340z" fill="url(#halka)" stroke-width="4"/>
+    <path d="M-20 340 V140 q735 -50 1470 0 V340z" fill="url(#halka2)" stroke-width="4"/>
+    <path d="M-20 340 V220 q735 -40 1470 0 V340z" fill="url(#halka)" stroke-width="4"/>
+    <circle cx="200" cy="110" r="10" fill="#9a8fb0" stroke-width="3"/><circle cx="700" cy="96" r="14" fill="#9a8fb0" stroke-width="3"/>
+    <circle cx="1100" cy="180" r="9" fill="#9a8fb0" stroke-width="3"/><circle cx="420" cy="240" r="12" fill="#9a8fb0" stroke-width="3"/>
+''', 4), 718)
+
+# ---- 5. ada: uzaylı iksirinin formülü (680x440 tuval; oyunda sol üst köşe YELKENLI_X, YELKENLI_Y) ----
+# Solda formül tahtası (6 çerçeve), sağda büyük iksir şişesi. Parçalar (öğretmenin kararı; anlamsız görünür
+# ama anlamı var; harf yazmaz): p merak (soru işareti kuyruklu yıldız), h cesaret (alevli kalp kristali),
+# v sabır (kum saati gezegen), ğ keşif (pusula yıldız), f öğrenme (harf takımyıldızı), j başarı (taçlı yıldız)
+IKSIR_DESEN = (TAHTA + tarama("cam", "#e8f6ff", "#c9e6f5", 30, 7, 3) + tarama("merak", "#fff6c4", "#ffe680", 35, 6, 3)
+               + tarama("cesaret", "#ffb08a", "#f0705a", -35, 6, 3) + tarama("sabir", "#c6b0f0", "#9a7fe0", 35, 6, 3)
+               + tarama("kesif", "#c9f1ff", "#7fd6f0", -35, 6, 3) + tarama("basari", "#ffe680", "#f0b84a", 35, 6, 3))
+IKSIR_CERCEVE = [(40 + (i % 3) * 130, 70 + (i // 3) * 160) for i in range(6)]
+yaz("iksir-masa.svg", 680, 440, "Uzaylı iksirinin formül tahtası ve boş iksir şişesi", IKSIR_DESEN,
+    golge(340, 420, 300, 12) + kalem('''    <path d="M20 40 h400 v350 h-400z" fill="#3f6b4a"/>
+    <path d="M20 40 h400 v350 h-400z" fill="none" stroke="#c98f4f" stroke-width="10"/>
+''' + "".join(f'    <rect x="{x}" y="{y}" width="110" height="110" rx="12" fill="#355c40" stroke="#ffffff" stroke-width="2.5" stroke-dasharray="8 6"/>\n'
+               for x, y in IKSIR_CERCEVE)
+    + '''    <path d="M200 404 v-14 M240 404 v-14" fill="none" stroke-width="6"/>
+    <path d="M520 60 h60 v80 q80 40 80 140 q0 120 -110 120 q-110 0 -110 -120 q0 -100 80 -140z" fill="url(#cam)"/>
+    <path d="M510 50 h80 v14 h-80z" fill="#c98f4f"/>
+    <path d="M470 260 q20 -40 40 -50" fill="none" stroke="#ffffff" stroke-width="8"/>
+    <path d="M460 400 h180 v14 h-180z" fill="url(#tahta)"/>
+'''), 720)
+_P = [  # (ad, desen, çizim; çerçevenin sol üstüne göre 110x110)
+    ("merak", "merak", '<path d="M70 28 a14 14 0 1 1 -0.1 0z" fill="url(#merak)"/>'
+     '<path d="M58 40 q-30 -10 -34 16 q-2 20 18 22 q14 0 12 14 v8" fill="none" stroke="#ffe680" stroke-width="9"/>'
+     '<path d="M58 40 q-30 -10 -34 16 q-2 20 18 22 q14 0 12 14 v8" fill="none" stroke-width="2"/>'
+     '<circle cx="54" cy="104" r="4" fill="#ffe680"/>'),
+    ("cesaret", "cesaret", '<path d="M55 96 l-34 -34 q-14 -18 0 -30 q16 -10 34 8 q18 -18 34 -8 q14 12 0 30z" fill="url(#cesaret)"/>'
+     '<path d="M46 22 q-6 -14 6 -20 q-2 10 8 12 q6 -8 2 -14 q14 8 6 22" fill="#ffe680" stroke-width="2.5"/>'
+     '<path d="M40 50 l10 10" fill="none" stroke="#ffffff" stroke-width="5"/>'),
+    ("sabir", "sabir", '<circle cx="55" cy="32" r="22" fill="url(#sabir)"/><circle cx="55" cy="80" r="22" fill="url(#sabir)"/>'
+     '<path d="M47 52 h16 l-8 8z" fill="#ffe680" stroke-width="2"/>'
+     '<ellipse cx="55" cy="56" rx="48" ry="9" fill="none" stroke="#7fd6f0" stroke-width="4"/>'
+     '<circle cx="50" cy="88" r="2.5" fill="#ffe680" stroke="none"/><circle cx="60" cy="84" r="2.5" fill="#ffe680" stroke="none"/><circle cx="55" cy="94" r="2.5" fill="#ffe680" stroke="none"/>'),
+    ("kesif", "kesif", '<path d="M55 4 l12 40 l40 11 l-40 11 l-12 40 l-12 -40 l-40 -11 l40 -11z" fill="url(#kesif)"/>'
+     '<path d="M55 30 l6 25 l-6 25 l-6 -25z" fill="#ff7f6a" stroke-width="2"/><circle cx="55" cy="55" r="5" fill="#ffffff" stroke-width="2"/>'),
+    ("ogrenme", "merak", '<path d="M20 94 l35 -80 l35 80 M34 64 h42" fill="none" stroke="#ffe680" stroke-width="3" stroke-dasharray="5 6"/>'
+     + "".join(f'<path d="{yildiz_yol(x, y, 9)}" fill="url(#merak)" stroke-width="2"/>'
+               for x, y in [(20, 94), (55, 14), (90, 94), (34, 64), (76, 64)])),
+    ("basari", "basari", f'<path d="{yildiz_yol(55, 62, 42)}" fill="url(#basari)"/>'
+     '<path d="M35 22 l6 -16 l8 10 l6 -14 l6 14 l8 -10 l6 16z" fill="url(#basari)" stroke-width="2.5"/>'
+     '<circle cx="47" cy="60" r="3" fill="#2b2b2b" stroke="none"/><circle cx="63" cy="60" r="3" fill="#2b2b2b" stroke="none"/>'
+     '<path d="M47 72 q8 7 16 0" fill="none" stroke-width="2.5"/>'),
+]
+IKSIR_KUTU = {}
+for (ad, desen, cizim), (x, y) in zip(_P, IKSIR_CERCEVE):
+    IKSIR_KUTU[ad] = (x, y, 110, 110)
+    yaz(f"iksir-{ad}.svg", 680, 440, f"İksir formülü parçası: {ad}", IKSIR_DESEN,
+        kalem(f'    <g transform="translate({x} {y})">{cizim}</g>\n', 3.5), 721)
+    _silik_cizim = _re.sub(r'fill="[^"]*"', "", cizim)
+    yaz(f"iksir-{ad}-silik.svg", 680, 440, f"İksir parçasının silik yeri: {ad}", "",
+        f'  <g transform="translate({x} {y})" fill="none" stroke="#ffffff" stroke-opacity="0.45" stroke-width="3" '
+        f'stroke-dasharray="8 6">{_silik_cizim}</g>\n', 721)
+    yaz(f"iksir-{ad}-simge.svg", 120, 120, f"İksir parçasının çanta simgesi: {ad}", IKSIR_DESEN,
+        kalem(f'    <g transform="translate(5 5)">{cizim}</g>\n', 3), 722, 2.5)
+
+# ---- 5. ada: çocuğun astronot hâli (cocuk*-astronot.svg; elle çizilmiş cocuk*.svg'lerden üretilir):
+# tişört ve şort beyaz uzay giysisi, sırt çantası gri oksijen çantası, başta cam fanus kask
+_KASK = ('    <circle cx="45" cy="36" r="31" fill="#e8f6ff" fill-opacity="0.35" stroke-width="3.5"/>\n'
+         '    <path d="M24 22 q8 -12 22 -14" fill="none" stroke="#ffffff" stroke-width="5"/>\n'
+         '    <path d="M22 60 q23 12 46 0" fill="none" stroke="#9a8fb0" stroke-width="7"/>\n')
+for _ad in ["cocuk", "cocuk-adim1", "cocuk-adim2", "cocuk-tirman"]:
+    with open(os.path.join(KLASOR, f"{_ad}.svg"), encoding="utf-8") as f:
+        _s = f.read()
+    _s = _s.replace("#ffe680", "#f4f2fa").replace("#ffc928", "#d4d0e2")       # tişört → uzay giysisi
+    _s = _s.replace("#a9c8f0", "#f4f2fa").replace("#6b9be0", "#d4d0e2")       # şort → giysi
+    _s = _s.replace("#9be3dc", "#c6c2d6").replace("#4fc3b8", "#9a96ac")       # çanta → oksijen
+    _s = _s.replace('stroke="#2c7c76"', 'stroke="#ff7f6a"')                    # askılar turuncu
+    def _kalin(m, renk):
+        return (f'{m.group(1)}<path d="{m.group(2)}" fill="none" stroke-width="12"/>'
+                f'<path d="{m.group(2)}" fill="none" stroke="{renk}" stroke-width="7"/>')
+    _s = _re.sub(r'(<!-- bacaklar[^\n]*\n\s*)<path d="([^"]+)" fill="none"/>', lambda m: _kalin(m, "#f4f2fa"), _s)
+    _s = _re.sub(r'(<!-- kollar[^\n]*\n\s*)<path d="([^"]+)" fill="none"/>', lambda m: _kalin(m, "#f4f2fa"), _s)
+    _s = _s.replace('stroke="#e0533d" stroke-width="6"', 'stroke="#9a96ac" stroke-width="9"')  # bot
+    _ek = ('  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">\n'
+           + _KASK + "  </g>\n")
+    _s = _s.replace("</svg>", _ek + "</svg>")
+    _s = _s.replace("<!-- Ana karakter", "<!-- Astronot (5. ada, doodle_ciz.py üretir). Ana karakter", 1)
+    with open(os.path.join(KLASOR, f"{_ad}-astronot.svg"), "w", encoding="utf-8") as f:
+        f.write(_s)
+# Mini harita kartı (5. ada): uzay ve gezegen renkleri
+with open(os.path.join(KLASOR, "harita-karti.svg"), encoding="utf-8") as f:
+    _kart = f.read()
+with open(os.path.join(KLASOR, "harita-karti5.svg"), "w", encoding="utf-8") as f:
+    f.write(_kart.replace("#d7efff", "#2f3a66").replace("#a9dcf5", "#29335c").replace("#c9eba7", "#d9c8f0")
+            .replace("#a3d97c", "#c6b0e6").replace("Mini harita kartı", "Mini harita kartı (5. ada)"))
+# Final: uzay (büyük halkalı gezegen, yıldızlar)
+_yildizlar = "".join(f'  <circle cx="{(i * 397) % 1280}" cy="{(i * 211) % 720}" r="{1 + i % 3}" fill="#ffffff" opacity="0.8"/>\n'
+                     for i in range(1, 90))
+yaz("hikaye-uzay.svg", 1280, 720, "Final 5: yıldızlı uzay, halkalı gezegen",
+    tarama("uUzay", "#2f3a66", "#29335c", 30, 9, 4) + tarama("uGezegen", "#c6b0f0", "#9a7fe0", 35, 9, 4),
+    '  <rect width="1280" height="720" fill="url(#uUzay)"/>\n' + _yildizlar
+    + kalem('''    <circle cx="1080" cy="150" r="90" fill="url(#uGezegen)"/>
+    <ellipse cx="1080" cy="150" rx="150" ry="30" fill="none" stroke="#ffe680" stroke-width="8"/>
+    <path d="M0 720 v-120 q320 -60 640 -20 q320 40 640 -10 v150z" fill="#d9c8f0"/>
+    <circle cx="200" cy="120" r="30" fill="#9ff0c8"/>
+''', 4), 723)

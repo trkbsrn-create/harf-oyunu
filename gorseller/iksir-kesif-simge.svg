@@ -1,0 +1,40 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+  <!-- İksir parçasının çanta simgesi: kesif (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="722" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="tahta" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(80)">
+      <rect width="7" height="7" fill="#e3b77e"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#c98f4f" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="cam" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#e8f6ff"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#c9e6f5" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="merak" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#fff6c4"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffe680" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="cesaret" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="6" height="6" fill="#ffb08a"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#f0705a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="sabir" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c6b0f0"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#9a7fe0" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="kesif" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="6" height="6" fill="#c9f1ff"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#7fd6f0" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="basari" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#ffe680"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#f0b84a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="translate(5 5)"><path d="M55 4 l12 40 l40 11 l-40 11 l-12 40 l-12 -40 l-40 -11 l40 -11z" fill="url(#kesif)"/><path d="M55 30 l6 25 l-6 25 l-6 -25z" fill="#ff7f6a" stroke-width="2"/><circle cx="55" cy="55" r="5" fill="#ffffff" stroke-width="2"/></g>
+  </g>
+</svg>
