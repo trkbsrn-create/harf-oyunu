@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 188;
+const SURUM = 189;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -4589,6 +4589,8 @@ class FinalSahnesi extends Phaser.Scene {
   //    ve yazmayı biliyorsun..." Havai fişekler, çocuğun takma adı.
   iksirFinali() {
     this.add.image(0, 0, "hikaye-uzay").setOrigin(0);
+    Sesler.muzikBaslat("anlatim"); // final müziği (sesler.js), sahneden çıkınca susar
+    this.events.once("shutdown", () => Sesler.muzikDurdur());
     const O = 0.85;
     const MX = 640 - 680 * O / 2 + 60;
     const MY = 90;
@@ -4683,6 +4685,7 @@ class FinalSahnesi extends Phaser.Scene {
         tint: IKSIR_PARCALARI.map((p) => p.renk), emitting: false,
       }).explode(120);
       const kamera = this.cameras.main;
+      Sesler.muzikBaslat("anilar");
       this.tweens.add({ targets: kamera, rotation: Math.PI * 4, zoom: 1.6, duration: 1800, ease: "Cubic.In",
         onComplete: () => {
           kamera.setRotation(0).setZoom(1);
@@ -4817,6 +4820,7 @@ class FinalSahnesi extends Phaser.Scene {
       harfler.forEach((h) => this.tweens.add({ targets: h.t, x: 640, y: 300, alpha: 0, scale: 0.2, duration: 700,
         ease: "Cubic.In" }));
       this.cameras.main.flash(600, 255, 255, 255);
+      Sesler.muzikBaslat("zafer");
       this.add.rectangle(640, 330, 1120, 300, 0x1c2346, 0.55).setStrokeStyle(4, 0xffe680, 0.8);
       const s1 = doodleYazi(this, 640, 230, "Artık okumayı ve yazmayı biliyorsun.", 50, "mavi").setOrigin(0.5).setAlpha(0);
       const s2 = doodleYazi(this, 640, 330, "İstediğin dünyayı kendi zihninle", 50).setOrigin(0.5).setAlpha(0);
