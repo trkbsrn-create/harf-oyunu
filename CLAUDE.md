@@ -223,6 +223,9 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Sürüm 168 onaysız canlıya (main) gitti: oturum eski CLAUDE.md ile başlamıştı. Her işten önce
   `origin/gelistirme`'deki CLAUDE.md'yi oku; çekme isteğinin hedefi `gelistirme` mi, kontrol et.
 
+- Sürüm 192'de 2.-5. adalar ve God mode donuyordu: menüdeki peri (`periyiKondur`) peri yokken boş nesneyi
+  taşımaya çalıştı. Yeni akışı her giriş yolundan dene (yeni oyun, sonraki ada, Devam et, God mode).
+
 ## Bekleyen işler
 - TTKB Dik Temel Abece yazı tipi: yazardan izin bekleniyor; izin gelirse dosya depoya eklenir.
 - Ekrandaki 10 uyarı ("Telefonu yan çevir" vb.) henüz kaydedilmedi (kayit.html'de duruyor).

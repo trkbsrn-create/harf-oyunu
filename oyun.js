@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 193;
+const SURUM = 194;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -758,7 +758,7 @@ class AdaSahnesi extends Phaser.Scene {
     const X = 150;
     const Y = 64;
     const kamera = this.cameras.main;
-    if (this.omuzPerisi === peri) { // omuzdan (dünyadan) ekran katmanına geçer
+    if (peri && this.omuzPerisi === peri) { // omuzdan (dünyadan) ekran katmanına geçer
       this.rehberGizle();
       this.omuzPerisi = null;
       peri.setScrollFactor(0, 0, true).setPosition(peri.x - kamera.scrollX, peri.y - kamera.scrollY);
