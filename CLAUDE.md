@@ -15,7 +15,12 @@ yok); köprü bitince "3. adaya git". 3. ada karlı adadır (ü s ö y d z): buz
 4. ada su altıdır (ç b g c ş): çocuk dalgıç kıyafetiyle her yere yüzer (`yuzme`, cocuk-yuz.svg, cocuk*-dalgic.svg);
 ağaç yerine deniz yosunu, tohum mercan olur, damla yerine hava kabarcığı (`kabarcik`, `dk()`, sözler `suAltiSozu`),
 su tesisi "Kabarcık İstasyonu", bulutlar yerine su yüzeyi; görev dev kaplumbağa (ç eyer, b dizgin, g fener, c harita,
-ş anahtar; 5 parça); "Haydi, bin!" → kaplumbağa gizli mağaradaki rokete götürür, "5. ada (uzay) yakında".
+ş anahtar; 5 parça); "Haydi, bin!" → kaplumbağa gizli mağaradaki rokete götürür, "5. adaya git".
+5. ada uzaydır ve final adasıdır (p h v ğ f j): çocuk astronot, ay gibi zıplayarak yürür (`zipla`, cocuk*-astronot.svg);
+kristal ağaç, yıldız sarmaşığı, damla yerine yıldız tozu, bulutlar yerine gezegen halkası; görev uzaylı iksirinin
+formülü (`IKSIR_PARCALARI`: p merak, h cesaret, v sabır, ğ keşif, f öğrenme, j başarı). "İksiri iç!" → büyük final
+(`iksirFinali`): peri her parçanın çocuğun yaptıklarından yapıldığını anlatır, iksir içilir, anılar kartlarla geçer
+(adalar ve profilde en çok oynanan mini oyunlar), harfler kelime olur: "Artık okumayı ve yazmayı biliyorsun..."
 3. adanın başında peri kar kıyafeti için sınav yapar: m harfiyle (öğretmenin seçimi,
 `KIS_SINAVI_HARFI`) rastgele bir hece/kelime oyunu, 3. seviye (`kisSinaviBaslat`, mini oyunda `veri.sinav`); geçene kadar yeni sınav; geçince
 çocuk kışlık giyer (cocuk*-kis.svg, `cocukDokusu`, kayıtta `kisKiyafeti`). Adalar `AdaSahnesi`nde `ADALAR` ayarıyla (`veri.ada`, kayıtta `ada`; sözler `sozler`).
@@ -29,7 +34,7 @@ menüsü). O konumda resimli kelime yoksa (ö, d, b, g, c, h, f ile biten; ğ il
 - `index.html` ana sayfa (derleme yok; telefon ayarları, yazı tipi yükleme `yaziTipiHazir`, dönünce
   yeniden yerleştirme). Uygulama olarak ekleme: `manifest.webmanifest`, `sw.js` (önbellek yok), `simge/`.
 - `oyun.js` ana oyun sahneleri (karşılama, hikâye, ada, bulut, final), `SURUM`. God mode (şifreli) bir
-  seçim paneli açar: hikâye, Mini Games ya da 1.-4. adanın bir aşaması (`tanriSecenekleri`, `tanriAsamasi`).
+  seçim paneli açar: hikâye, Mini Games ya da 1.-5. adanın bir aşaması (`tanriSecenekleri`, `tanriAsamasi`).
 - `minioyunlar/<ad>/oyun.js` her mini oyun; `ortak.js` ortak sınıf `MiniOyunSahnesi`, `PLANLANAN_OYUNLAR`,
   hece/kelime yardımcıları; `menu.js` deneme menüsü; `lambalar.js` Oyun Lambaları (çarkın yerine).
 - `profil.js` profil (hayvan resmi + takma ad; ilk ekranda "Profil oluştur" → `ProfilPaneli`), istatistik, karne (`KarneSahnesi`).
@@ -224,7 +229,7 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Bulut bölgelerinin içeriği; bilmeceler ("Hızlı koşar, yeleleri var." → at; "Türk bayrağında
   beni görürler, kırmızıyla eş derler." → al) nerede kullanılacak, sonra konuşulacak.
 - 2. harf grubu: 3. seviyede dört harfli heceler, yeni seslerin kaydı (kayit.html "2. ada"); bulut bölgeleri.
-- 5. ada (uzay) henüz yok. 4. adanın yeni sözleri kaydedilmedi (kayit.html "4. ada").
+- 4. ve 5. adanın yeni sözleri kaydedilmedi (kayit.html "4. ada", "5. ada").
 - Kalan harf grupları; yeni gruplarla 4-5 heceli kelimeler (Elektrik Devresi).
 - Peri rehber (öğretmenin fikri) tamam: tanışma, anlatım, görev düğmesi, omuzdaki peri, mini oyun
   yönergeleri. Perinin adı yok (sorulabilir). Yeni mini oyuna `YONERGELER`'de yönerge yazılır.

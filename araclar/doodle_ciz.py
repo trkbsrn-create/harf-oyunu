@@ -3870,3 +3870,20 @@ for _ad in ["cocuk", "cocuk-adim1", "cocuk-adim2", "cocuk-tirman"]:
     _s = _s.replace("<!-- Ana karakter", "<!-- Astronot (5. ada, doodle_ciz.py üretir). Ana karakter", 1)
     with open(os.path.join(KLASOR, f"{_ad}-astronot.svg"), "w", encoding="utf-8") as f:
         f.write(_s)
+# Mini harita kartı (5. ada): uzay ve gezegen renkleri
+with open(os.path.join(KLASOR, "harita-karti.svg"), encoding="utf-8") as f:
+    _kart = f.read()
+with open(os.path.join(KLASOR, "harita-karti5.svg"), "w", encoding="utf-8") as f:
+    f.write(_kart.replace("#d7efff", "#2f3a66").replace("#a9dcf5", "#29335c").replace("#c9eba7", "#d9c8f0")
+            .replace("#a3d97c", "#c6b0e6").replace("Mini harita kartı", "Mini harita kartı (5. ada)"))
+# Final: uzay (büyük halkalı gezegen, yıldızlar)
+_yildizlar = "".join(f'  <circle cx="{(i * 397) % 1280}" cy="{(i * 211) % 720}" r="{1 + i % 3}" fill="#ffffff" opacity="0.8"/>\n'
+                     for i in range(1, 90))
+yaz("hikaye-uzay.svg", 1280, 720, "Final 5: yıldızlı uzay, halkalı gezegen",
+    tarama("uUzay", "#2f3a66", "#29335c", 30, 9, 4) + tarama("uGezegen", "#c6b0f0", "#9a7fe0", 35, 9, 4),
+    '  <rect width="1280" height="720" fill="url(#uUzay)"/>\n' + _yildizlar
+    + kalem('''    <circle cx="1080" cy="150" r="90" fill="url(#uGezegen)"/>
+    <ellipse cx="1080" cy="150" rx="150" ry="30" fill="none" stroke="#ffe680" stroke-width="8"/>
+    <path d="M0 720 v-120 q320 -60 640 -20 q320 40 640 -10 v150z" fill="#d9c8f0"/>
+    <circle cx="200" cy="120" r="30" fill="#9ff0c8"/>
+''', 4), 723)
