@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 189;
+const SURUM = 190;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -4372,9 +4372,9 @@ class FinalSahnesi extends Phaser.Scene {
       "hikaye-firtina", "hikaye-sal", "hikaye-uzay"]) {
       if (!this.textures.exists(ad)) this.load.svg(ad, `gorseller/${ad}.svg`);
     }
-    // Final animasyonundaki mini oyun anları için oyunların simgeleri
-    for (const o of PLANLANAN_OYUNLAR) {
-      if (MINI_OYUNLAR[o.ad] && !this.textures.exists(`simge-${o.ad}`)) this.load.svg(`simge-${o.ad}`, `gorseller/simge-${o.ad}.svg`);
+    // Final animasyonundaki mini oyun anları (oynanış görüntüleri)
+    for (const ad of MINI_OYUN_ANLARI) {
+      if (!this.textures.exists(`an-${ad}`)) this.load.image(`an-${ad}`, `gorseller/anlar/${ad}.jpg`);
     }
   }
 
@@ -4587,10 +4587,36 @@ class FinalSahnesi extends Phaser.Scene {
   //    Parça şişeye uçar, iksir renklenir. 2) Çocuk iksiri içer, ekran döner. 3) Yolculuğun anıları
   //    (adalar ve mini oyunlar) kartlarla geçer. 4) Bütün harfler uçuşur, kelimeler olur; "Artık okumayı
   //    ve yazmayı biliyorsun..." Havai fişekler, çocuğun takma adı.
-  iksirFinali() {
+  // Final akışı sırayla ilerler (öğretmenin isteği: sözler karışmasın): her söz bitince kısa bir ara,
+  // sonra sıradaki. Sahne kapanınca ya da yeni bölüm başlayınca eski akış durur (akisNo).
+  bekle(ms) {
+    return new Promise((bitir) => this.time.delayedCall(ms, bitir));
+  }
+
+  // Söz bitince (ya da çok uzarsa) devam eder
+  konus(soz) {
+    return new Promise((bitir) => {
+      let bitti = false;
+      const son = () => { if (!bitti) { bitti = true; bitir(); } };
+      Sesler.soyle(soz, son);
+      this.time.delayedCall(Math.max(4000, soz.length * 150), son);
+    });
+  }
+
+  periKonus(peri, soz) {
+    return new Promise((bitir) => periBalonu(this, peri, soz, bitir));
+  }
+
+  // Akış hâlâ geçerli mi (sahne değişmediyse)
+  surer(no) {
+    return this.akisNo === no && this.sys.isActive();
+  }
+
+  async iksirFinali() {
+    const no = this.akisNo = (this.akisNo || 0) + 1;
     this.add.image(0, 0, "hikaye-uzay").setOrigin(0);
     Sesler.muzikBaslat("anlatim"); // final müziği (sesler.js), sahneden çıkınca susar
-    this.events.once("shutdown", () => Sesler.muzikDurdur());
+    this.events.once("shutdown", () => { this.akisNo++; Sesler.muzikDurdur(); });
     const O = 0.85;
     const MX = 640 - 680 * O / 2 + 60;
     const MY = 90;
@@ -4614,51 +4640,62 @@ class FinalSahnesi extends Phaser.Scene {
       "Bu takımyıldızı öğrenme. Bütün harfleri öğrendin!",
       "Bu taçlı yıldız başarı. Oyunları oynadın, yıldızlar kazandın!",
     ];
-    periBalonu(this, peri, "Formülün sırrını sana söyleyeyim mi? Bu parçaların hepsini sen yaptın!");
-    IKSIR_PARCALARI.forEach((p, i) => {
-      this.time.delayedCall(4500 + i * 6000, () => {
-        const [kx, ky, ken, kboy] = p.kutu;
-        const x = MX + (kx + ken / 2) * O;
-        const y = MY + (ky + kboy / 2) * O;
-        periBalonu(this, peri, sozler[i]);
-        const ad = doodleYazi(this, x, y + 70, p.anlam, 30).setOrigin(0.5).setDepth(20).setScale(0);
-        this.tweens.add({ targets: ad, scale: 1, duration: 400, ease: "Back.Out" });
-        const simge = this.add.image(x, y, `${p.resim}-simge`).setDepth(19).setScale(0.8);
-        parcalar[i].setVisible(false);
-        this.tweens.add({ targets: simge, scale: 1.3, duration: 500, yoyo: true, repeat: 2, ease: "Sine.InOut" });
-        // Parça şişeye uçar, iksir onun renginde parlar
-        this.time.delayedCall(3600, () => {
-          this.tweens.add({ targets: ad, alpha: 0, duration: 300 });
-          this.tweens.add({ targets: simge, x: siseX, y: siseY, scale: 0.3, angle: 360, duration: 800, ease: "Cubic.In",
-            onComplete: () => {
-              simge.destroy();
-              Sesler.nota(660 + i * 110, 0, 0.25, 0.08, "sine");
-              const damla = this.add.circle(siseX + Phaser.Math.Between(-40, 40), siseY + 60 - i * 18, 26, p.renk, 0.8);
-              this.tweens.add({ targets: damla, y: damla.y - 10, duration: 900, yoyo: true, repeat: -1, ease: "Sine.InOut" });
-              isik.setFillStyle(p.renk, 0.1 + i * 0.04);
-              this.add.particles(siseX, siseY, "parilti", {
-                speed: { min: 60, max: 200 }, lifespan: 700, scale: { start: 0.8, end: 0 }, tint: p.renk, emitting: false,
-              }).explode(20);
-            } });
-        });
-      });
-    });
+    await this.bekle(1200);
+    if (!this.surer(no)) return;
+    await this.periKonus(peri, "Formülün sırrını sana söyleyeyim mi? Bu parçaların hepsini sen yaptın!");
+    for (let i = 0; i < IKSIR_PARCALARI.length; i++) {
+      await this.bekle(900);
+      if (!this.surer(no)) return;
+      const p = IKSIR_PARCALARI[i];
+      const [kx, ky, ken, kboy] = p.kutu;
+      const x = MX + (kx + ken / 2) * O;
+      const y = MY + (ky + kboy / 2) * O;
+      const ad = doodleYazi(this, x, y + 70, p.anlam, 30).setOrigin(0.5).setDepth(20).setScale(0);
+      this.tweens.add({ targets: ad, scale: 1, duration: 500, ease: "Back.Out" });
+      const simge = this.add.image(x, y, `${p.resim}-simge`).setDepth(19).setScale(0.8);
+      parcalar[i].setVisible(false);
+      this.tweens.add({ targets: simge, scale: 1.25, duration: 700, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+      await this.periKonus(peri, sozler[i]);
+      if (!this.surer(no)) return;
+      // Parça şişeye uçar, iksir onun renginde parlar
+      this.tweens.killTweensOf(simge);
+      this.tweens.add({ targets: ad, alpha: 0, duration: 400 });
+      await new Promise((bitir) => this.tweens.add({ targets: simge, x: siseX, y: siseY, scale: 0.3, angle: 360,
+        duration: 1000, ease: "Cubic.InOut", onComplete: bitir }));
+      if (!this.surer(no)) return;
+      simge.destroy();
+      Sesler.nota(660 + i * 110, 0, 0.35, 0.08, "sine");
+      const damla = this.add.circle(siseX + [-40, 30, -10, 45, -45, 10][i], siseY + 60 - i * 18, 26, p.renk, 0.8).setScale(0);
+      this.tweens.add({ targets: damla, scale: 1, duration: 500, ease: "Back.Out" });
+      this.tweens.add({ targets: damla, y: damla.y - 10, duration: 900, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+      isik.setFillStyle(p.renk, 0.1 + i * 0.04);
+      this.add.particles(siseX, siseY, "parilti", {
+        speed: { min: 60, max: 200 }, lifespan: 700, scale: { start: 0.8, end: 0 }, tint: p.renk, emitting: false,
+      }).explode(20);
+    }
     // İksir hazır: "İksiri iç" düğmesi
-    this.time.delayedCall(4500 + 6 * 6000 + 500, () => {
-      this.tweens.add({ targets: isik, scale: 1.3, alpha: 0.6, duration: 700, yoyo: true, repeat: -1 });
-      periBalonu(this, peri, "İksir hazır! Haydi, iç bakalım!");
-      Sesler.dogru();
-      const d = this.dugmeYap(640, "İksiri iç", 300, () => this.iksiriIc());
-      this.time.delayedCall(800, () => this.tweens.add({ targets: d, scale: 1.12, duration: 600, yoyo: true, repeat: -1 }));
-    });
+    await this.bekle(900);
+    if (!this.surer(no)) return;
+    this.tweens.add({ targets: isik, scale: 1.3, alpha: 0.6, duration: 700, yoyo: true, repeat: -1 });
+    Sesler.dogru();
+    const d = this.dugmeYap(640, "İksiri iç", 300, () => this.iksiriIc());
+    this.time.delayedCall(800, () => this.tweens.add({ targets: d, scale: 1.12, duration: 600, yoyo: true, repeat: -1 }));
+    periBalonu(this, peri, "İksir hazır! Haydi, iç bakalım!");
+  }
+
+  // Bölüm değişirken: eski akış durur, ekran temizlenir
+  yeniBolum() {
+    this.akisNo = (this.akisNo || 0) + 1;
+    this.time.removeAllEvents();
+    this.tweens.killAll();
+    this.children.removeAll(true);
+    return this.akisNo;
   }
 
   // Çocuk iksiri içer: şişe ağzına gider, renkler parlar, ekran döner
   iksiriIc() {
-    this.time.removeAllEvents(); // önceki bölümün zamanlayıcıları ve hareketleri kalmasın
-    this.tweens.killAll();
-    this.children.removeAll(true);
-    this.cameras.main.fadeIn(400, 251, 247, 236);
+    this.yeniBolum();
+    this.cameras.main.fadeIn(600, 251, 247, 236);
     this.add.image(0, 0, "hikaye-uzay").setOrigin(0);
     const cocuk = this.add.image(640, 650, "cocuk-astronot").setOrigin(0.5, 1).setScale(3.2);
     const sise = this.add.container(860, 420);
@@ -4673,10 +4710,10 @@ class FinalSahnesi extends Phaser.Scene {
     g.fillRect(-14, -78, 28, 36);
     g.strokeRect(-14, -78, 28, 36);
     sise.add(g);
-    Sesler.soyle("Glu glu glu!");
+    this.time.delayedCall(500, () => Sesler.soyle("Glu glu glu!"));
     this.tweens.chain({ targets: sise, tweens: [
-      { x: 700, y: 330, angle: -60, duration: 900, ease: "Sine.InOut" },
-      { angle: -110, duration: 1200, ease: "Sine.InOut" },
+      { x: 700, y: 330, angle: -60, duration: 1200, ease: "Sine.InOut", delay: 400 },
+      { angle: -110, duration: 1600, ease: "Sine.InOut" },
     ], onComplete: () => {
       sise.destroy();
       Sesler.buyume();
@@ -4686,21 +4723,19 @@ class FinalSahnesi extends Phaser.Scene {
       }).explode(120);
       const kamera = this.cameras.main;
       Sesler.muzikBaslat("anilar");
-      this.tweens.add({ targets: kamera, rotation: Math.PI * 4, zoom: 1.6, duration: 1800, ease: "Cubic.In",
+      this.tweens.add({ targets: kamera, rotation: Math.PI * 4, zoom: 1.6, duration: 2200, ease: "Cubic.In",
         onComplete: () => {
           kamera.setRotation(0).setZoom(1);
-          kamera.flash(700, 255, 255, 255);
+          kamera.flash(900, 255, 255, 255);
           this.anilar();
         } });
     } });
-    this.tweens.add({ targets: cocuk, scaleY: 3.3, duration: 300, yoyo: true, repeat: 5, delay: 900 });
+    this.tweens.add({ targets: cocuk, scaleY: 3.3, duration: 350, yoyo: true, repeat: 5, delay: 1500 });
   }
 
-  // Yolculuğun anıları: adalar ve mini oyunlardan kartlar sırayla ekrandan geçer
-  anilar() {
-    this.time.removeAllEvents(); // önceki bölümün zamanlayıcıları ve hareketleri kalmasın
-    this.tweens.killAll();
-    this.children.removeAll(true);
+  // Yolculuğun anıları: adalardan kartlar sırayla, yumuşakça geçer; sonra mini oyunlardan anlar
+  async anilar() {
+    const no = this.yeniBolum();
     this.add.image(0, 0, "hikaye-uzay").setOrigin(0).setAlpha(0.6);
     this.add.particles(0, 0, "parilti", {
       x: { min: 0, max: 1280 }, y: { min: 0, max: 720 }, lifespan: 1200, frequency: 60,
@@ -4728,8 +4763,7 @@ class FinalSahnesi extends Phaser.Scene {
       }],
       ["Yelkenliyle denize açıldın.", (c) => {
         resim(c, "hikaye-gunbatimi", 0, 0, 1, 0, 0);
-        const y = this.yelkenliYap(-350 + 360 * k, -197 + 120 * k, 0.8 * k);
-        c.add(y);
+        c.add(this.yelkenliYap(-350 + 360 * k, -197 + 120 * k, 0.8 * k));
       }],
       ["Köprüyü kurdun.", (c) => {
         arka(c, 0xf2d29a);
@@ -4747,46 +4781,68 @@ class FinalSahnesi extends Phaser.Scene {
         c.add(this.kaplumbagaYap(-350 + 40 * k, -197 + 300 * k, 0.55 * k));
       }],
     ];
-    // Mini oyun anları (öğretmenin isteği): çocuğun en çok oynadığı oyunlar (profilden; yoksa birkaç oyun)
-    const profil = Profil.aktifId && Profil.oku().profiller[Profil.aktifId];
-    const oyunlar = PLANLANAN_OYUNLAR.filter((o) => MINI_OYUNLAR[o.ad] && this.textures.exists(`simge-${o.ad}`));
-    let secilen = profil ? oyunlar.filter((o) => profil.oyunlar[o.ad])
-      .sort((a, b) => profil.oyunlar[b.ad].oynandi - profil.oyunlar[a.ad].oynandi) : [];
-    if (secilen.length < 4) secilen = [...secilen, ...oyunlar.filter((o) => !secilen.includes(o))];
-    const renkler = [0xffe680, 0xc9eba7, 0xbfe3f5, 0xffd2c8];
-    secilen.slice(0, 4).forEach((o, i) => {
-      sahneler.push([`${o.baslik} oyununda yıldızlar topladın!`, (c) => {
-        arka(c, renkler[i]);
-        resim(c, `simge-${o.ad}`, 640, 320, 2.4);
-        [-1, 0, 1].forEach((j) => {
-          c.add(this.add.image(j * 70, 150, "yildiz").setTint(0xffc928).setScale(1.6));
-        });
-      }]);
+    const kartYap = (yazi) => {
+      const kart = this.add.container(640, 340).setAlpha(0).setScale(0.85).setAngle(-3);
+      kart.add(this.add.rectangle(10, 16, 740, 500, 0x000000, 0.25));
+      kart.add(this.add.rectangle(0, 0, 740, 500, 0xfffdf6).setStrokeStyle(5, 0x2b2b2b));
+      kart.yazi = this.add.text(0, 222, yazi, {
+        fontFamily: "Andika", fontSize: "30px", color: "#2b2b2b", align: "center", wordWrap: { width: 700 },
+      }).setOrigin(0.5);
+      return kart;
+    };
+    // Kart yumuşakça belirir (büyüyerek), söz bitince biraz bekler, yana kayıp kaybolur
+    const goster = (kart) => new Promise((bitir) => this.tweens.add({ targets: kart, alpha: 1, scale: 1, angle: 0,
+      duration: 700, ease: "Cubic.Out", onComplete: bitir }));
+    const gizle = (kart) => this.tweens.add({ targets: kart, alpha: 0, x: 300, scale: 0.85, angle: -6, duration: 700,
+      ease: "Cubic.In", onComplete: () => kart.destroy() });
+    for (const [yazi, ciz] of sahneler) {
+      if (!this.surer(no)) return;
+      const kart = kartYap(yazi);
+      ciz(kart);
+      kart.add(kart.yazi);
+      await goster(kart);
+      // Yavaş yakınlaşma: fotoğraf canlı görünsün
+      this.tweens.add({ targets: kart, scale: 1.04, duration: 4000, ease: "Sine.InOut" });
+      await this.konus(yazi);
+      await this.bekle(700);
+      if (!this.surer(no)) return;
+      gizle(kart);
+      await this.bekle(350);
+    }
+    // Mini oyun anları (öğretmenin isteği): tek kart, içinde oyunların oynanış görüntüleri hızlıca geçer
+    if (!this.surer(no)) return;
+    const yazi = "Bir sürü oyun oynadın ve yıldızlar kazandın!";
+    const kart = kartYap(yazi);
+    const anlar = MINI_OYUN_ANLARI.filter((ad) => this.textures.exists(`an-${ad}`));
+    const kare = this.add.image(0, -24, `an-${anlar[0]}`).setDisplaySize(700, 394);
+    kart.add(kare);
+    // Üç yıldız kartın üst kenarında, ezgiyle zıplar
+    [-1, 0, 1].forEach((j) => {
+      const y = this.add.image(j * 56, -238, "yildiz").setTint(0xffc928).setScale(0.55);
+      kart.add(y);
+      this.tweens.add({ targets: y, y: -250, duration: 400, yoyo: true, repeat: -1, delay: (j + 1) * 130 });
     });
-    const SURE = 2900;
-    sahneler.forEach(([yazi, ciz], i) => {
-      this.time.delayedCall(i * SURE, () => {
-        const kart = this.add.container(1600, 330).setAngle(8);
-        kart.add(this.add.rectangle(10, 16, 740, 500, 0x000000, 0.25));
-        kart.add(this.add.rectangle(0, 0, 740, 500, 0xfffdf6).setStrokeStyle(5, 0x2b2b2b));
-        ciz(kart);
-        kart.add(this.add.text(0, 222, yazi, {
-          fontFamily: "Andika", fontSize: "30px", color: "#2b2b2b", align: "center", wordWrap: { width: 700 },
-        }).setOrigin(0.5));
-        Sesler.soyle(yazi);
-        this.tweens.add({ targets: kart, x: 640, angle: -2, duration: 500, ease: "Cubic.Out" });
-        this.tweens.add({ targets: kart, x: -400, angle: -10, duration: 450, delay: SURE - 450, ease: "Cubic.In",
-          onComplete: () => kart.destroy() });
-      });
-    });
-    this.time.delayedCall(sahneler.length * SURE + 300, () => this.okumaFinali());
+    kart.add(kart.yazi);
+    await goster(kart);
+    let i = 0;
+    const akis = this.time.addEvent({ delay: 420, loop: true, callback: () => {
+      i = (i + 1) % anlar.length;
+      kare.setTexture(`an-${anlar[i]}`).setDisplaySize(700, 394);
+      Sesler.nota(880 + (i % 4) * 110, 0, 0.08, 0.03, "sine");
+    } });
+    await this.konus(yazi);
+    await this.bekle(Math.max(1500, anlar.length * 420 - 3000));
+    if (!this.surer(no)) return;
+    akis.remove();
+    gizle(kart);
+    await this.bekle(900);
+    if (this.surer(no)) this.okumaFinali();
   }
 
   // Bütün harfler çocuğun çevresinde döner, kelimeler olur; büyük söz ve havai fişekler
-  okumaFinali() {
-    this.time.removeAllEvents(); // önceki bölümün zamanlayıcıları ve hareketleri kalmasın
-    this.tweens.killAll();
-    this.children.removeAll(true);
+  async okumaFinali() {
+    const no = this.yeniBolum();
+    this.cameras.main.fadeIn(800, 47, 58, 102);
     this.add.image(0, 0, "hikaye-uzay").setOrigin(0);
     const harfler = HARFLER.map((h, i) => {
       const t = this.add.text(640, 360, h.kucuk, {
@@ -4798,56 +4854,63 @@ class FinalSahnesi extends Phaser.Scene {
     const donme = { a: 0, r: 0 };
     this.tweens.add({ targets: donme, a: Math.PI * 4, r: 290, duration: 5000, ease: "Sine.Out" });
     const saat = this.time.addEvent({ delay: 16, loop: true, callback: () => {
+      donme.a += 0.004;
       harfler.forEach((h) => h.t.setPosition(640 + Math.cos(h.aci + donme.a) * donme.r,
         360 + Math.sin(h.aci + donme.a) * donme.r * 0.62));
     } });
-    Sesler.soyle("Bak! Bütün harfler artık senin!");
+    await this.konus("Bak! Bütün harfler artık senin!");
+    await this.bekle(800);
     // Harflerden kelimeler kurulur ve okunur
-    const kelimeler = ["ev", "kitap", "dünya", "hayal"];
-    kelimeler.forEach((kelime, i) => {
-      this.time.delayedCall(5200 + i * 2600, () => {
-        const yazi = doodleYazi(this, 640, 360, kelime, 96).setOrigin(0.5).setScale(0);
-        this.tweens.add({ targets: yazi, scale: 1, duration: 400, ease: "Back.Out" });
-        Sesler.soyle(kelime);
-        Sesler.pling();
-        this.time.delayedCall(2100, () => this.tweens.add({ targets: yazi, alpha: 0, scale: 1.4, duration: 400,
-          onComplete: () => yazi.destroy() }));
-      });
-    });
+    for (const kelime of ["ev", "kitap", "dünya", "hayal"]) {
+      if (!this.surer(no)) return;
+      const yazi = doodleYazi(this, 640, 360, kelime, 96).setOrigin(0.5).setScale(0);
+      await new Promise((bitir) => this.tweens.add({ targets: yazi, scale: 1, duration: 600, ease: "Back.Out", onComplete: bitir }));
+      Sesler.pling();
+      await this.konus(kelime);
+      await this.bekle(900);
+      if (!this.surer(no)) return;
+      await new Promise((bitir) => this.tweens.add({ targets: yazi, alpha: 0, scale: 1.4, duration: 500,
+        onComplete: () => { yazi.destroy(); bitir(); } }));
+      await this.bekle(300);
+    }
     // Büyük söz
-    this.time.delayedCall(5200 + kelimeler.length * 2600 + 300, () => {
-      saat.remove();
-      harfler.forEach((h) => this.tweens.add({ targets: h.t, x: 640, y: 300, alpha: 0, scale: 0.2, duration: 700,
-        ease: "Cubic.In" }));
-      this.cameras.main.flash(600, 255, 255, 255);
-      Sesler.muzikBaslat("zafer");
-      this.add.rectangle(640, 330, 1120, 300, 0x1c2346, 0.55).setStrokeStyle(4, 0xffe680, 0.8);
-      const s1 = doodleYazi(this, 640, 230, "Artık okumayı ve yazmayı biliyorsun.", 50, "mavi").setOrigin(0.5).setAlpha(0);
-      const s2 = doodleYazi(this, 640, 330, "İstediğin dünyayı kendi zihninle", 50).setOrigin(0.5).setAlpha(0);
-      const s3 = doodleYazi(this, 640, 400, "yaratabilirsin!", 60).setOrigin(0.5).setAlpha(0);
-      this.tweens.add({ targets: s1, alpha: 1, duration: 600, delay: 700 });
-      this.tweens.add({ targets: [s2, s3], alpha: 1, duration: 600, delay: 3200 });
-      this.time.delayedCall(700, () => Sesler.soyle("Artık okumayı ve yazmayı biliyorsun.", () =>
-        Sesler.soyle("İstediğin dünyayı kendi zihninle yaratabilirsin!")));
-      const profil = Profil.aktifId && Profil.oku().profiller[Profil.aktifId];
-      if (profil && profil.ad) {
-        const ad = doodleYazi(this, 640, 520, `Aferin, ${profil.ad}!`, 64).setOrigin(0.5).setScale(0);
-        this.tweens.add({ targets: ad, scale: 1, duration: 600, delay: 6500, ease: "Back.Out",
-          onComplete: () => this.tweens.add({ targets: ad, scale: 1.08, duration: 700, yoyo: true, repeat: -1 }) });
-      }
-      // Havai fişekler
-      this.time.addEvent({ delay: 650, loop: true, callback: () => {
-        const x = Phaser.Math.Between(120, 1160);
-        const y = Phaser.Math.Between(80, 300);
-        this.add.particles(x, y, "parilti", {
-          speed: { min: 120, max: 340 }, lifespan: 1300, gravityY: 180, scale: { start: 0.9, end: 0 },
-          tint: Phaser.Utils.Array.GetRandom(IKSIR_PARCALARI).renk, emitting: false,
-        }).explode(40);
-        Sesler.nota(Phaser.Math.Between(500, 1200), 0, 0.15, 0.04, "sine");
-      } });
-      this.time.delayedCall(4000, () => Sesler.dogru());
-      this.dugmeYap(1140, "Adaya dön", 9000, () => this.adayaDon());
-    });
+    if (!this.surer(no)) return;
+    saat.remove();
+    harfler.forEach((h) => this.tweens.add({ targets: h.t, x: 640, y: 300, alpha: 0, scale: 0.2, duration: 900,
+      ease: "Cubic.In" }));
+    this.cameras.main.flash(800, 255, 255, 255);
+    Sesler.muzikBaslat("zafer");
+    const panel = this.add.rectangle(640, 330, 1120, 300, 0x1c2346, 0.55).setStrokeStyle(4, 0xffe680, 0.8).setAlpha(0);
+    this.tweens.add({ targets: panel, alpha: 1, duration: 800 });
+    const s1 = doodleYazi(this, 640, 230, "Artık okumayı ve yazmayı biliyorsun.", 50, "mavi").setOrigin(0.5).setAlpha(0);
+    const s2 = doodleYazi(this, 640, 330, "İstediğin dünyayı kendi zihninle", 50).setOrigin(0.5).setAlpha(0);
+    const s3 = doodleYazi(this, 640, 400, "yaratabilirsin!", 60).setOrigin(0.5).setAlpha(0);
+    // Havai fişekler
+    this.time.addEvent({ delay: 700, loop: true, callback: () => {
+      const x = Phaser.Math.Between(120, 1160);
+      const y = Phaser.Math.Between(80, 300);
+      this.add.particles(x, y, "parilti", {
+        speed: { min: 120, max: 340 }, lifespan: 1300, gravityY: 180, scale: { start: 0.9, end: 0 },
+        tint: Phaser.Utils.Array.GetRandom(IKSIR_PARCALARI).renk, emitting: false,
+      }).explode(40);
+    } });
+    await this.bekle(1000);
+    this.tweens.add({ targets: s1, alpha: 1, duration: 900 });
+    await this.konus("Artık okumayı ve yazmayı biliyorsun.");
+    await this.bekle(700);
+    if (!this.surer(no)) return;
+    this.tweens.add({ targets: [s2, s3], alpha: 1, duration: 900 });
+    await this.konus("İstediğin dünyayı kendi zihninle yaratabilirsin!");
+    await this.bekle(800);
+    if (!this.surer(no)) return;
+    Sesler.dogru();
+    const profil = Profil.aktifId && Profil.oku().profiller[Profil.aktifId];
+    if (profil && profil.ad) {
+      const ad = doodleYazi(this, 640, 540, `Aferin, ${profil.ad}!`, 64).setOrigin(0.5).setScale(0);
+      this.tweens.add({ targets: ad, scale: 1, duration: 700, ease: "Back.Out",
+        onComplete: () => this.tweens.add({ targets: ad, scale: 1.08, duration: 700, yoyo: true, repeat: -1 }) });
+    }
+    this.dugmeYap(1140, "Adaya dön", 2500, () => this.adayaDon());
   }
 
   // Tam kaplumbağa: gövde ve beş parça üst üste (tuval 680x440)
@@ -4934,7 +4997,8 @@ const PERI_OMUZ_OLCEK = 0.38;
 const PERI_DURUMU = { ayrildi: false, bulutta: false };
 
 // Bulutların üstünde perinin balonu (ekran katmanı); söz bitince kaybolur
-function periBalonu(sahne, peri, soz) {
+// bitince: balon kapanınca (söz bitip kısa bir an sonra) çağrılır
+function periBalonu(sahne, peri, soz, bitince) {
   if (sahne.periBalonNesnesi) sahne.periBalonNesnesi.destroy();
   const yazi = sahne.add.text(0, 0, soz, {
     fontFamily: "Andika", fontSize: "26px", color: "#2b2b2b", align: "center",
@@ -4956,12 +5020,13 @@ function periBalonu(sahne, peri, soz) {
     if (kapandi) return;
     kapandi = true;
     sahne.time.delayedCall(1200, () => {
+      if (bitince) bitince();
       if (!balon.active) return;
       sahne.tweens.add({ targets: balon, scale: 0, duration: 150, onComplete: () => balon.destroy() });
     });
   };
   Sesler.soyle(soz, kapat);
-  sahne.time.delayedCall(Math.max(5000, soz.length * 110), kapat);
+  sahne.time.delayedCall(Math.max(5000, soz.length * (bitince ? 150 : 110)), kapat);
 }
 
 // Perinin anlatım penceresindeki sözler (sırayla 8 sayfa; öğretmen onayladı)
@@ -5020,6 +5085,11 @@ const PERI_ANLATIM_4 = [
   "Mercandan su yüzeyine tırman, kaplumbağanın eşyasını al!",
   "Görev düğmesine basıp görevlerini takip edebilirsin.",
 ];
+
+// Finaldeki mini oyun anları: oyunların oynanırken çekilmiş görüntüleri (gorseller/anlar/*.jpg;
+// oyunun kendi ekranından alındı, dene.js ile; yeni oyun eklenince görüntüsü de eklenebilir)
+const MINI_OYUN_ANLARI = ["harf-balonlari", "kazma", "ordek-vurma", "seker-patlatma", "hece-koprusu", "labirent",
+  "hafiza-kartlari", "kayak", "tombala", "yilan", "hece-muzigi", "canavari-besle"];
 
 // 5. ada (uzay) için anlatım sözleri
 const PERI_ANLATIM_5 = [
