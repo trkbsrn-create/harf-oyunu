@@ -233,5 +233,7 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - 4. ve 5. adanın yeni sözleri kaydedilmedi (kayit.html "4. ada", "5. ada").
 - Kalan harf grupları; yeni gruplarla 4-5 heceli kelimeler (Elektrik Devresi).
 - Peri rehber (öğretmenin fikri) tamam: tanışma, anlatım, görev düğmesi, omuzdaki peri, mini oyun
-  yönergeleri. Perinin adı yok (sorulabilir). Yeni mini oyuna `YONERGELER`'de yönerge yazılır.
+  yönergeleri. Öğretmenin kararı: omuzda her işi yalnızca 1. adada gösterir; sonraki adalarda başta yalnızca
+  görevi söyler (`adaGorevi`). Sözü bitince menü düğmesinin yanına yerleşir (`periyiKondur`); dokununca
+  oyunun durumuna göre sıradaki işi söyler (`simdikiGorev`). Perinin adı yok (sorulabilir). Yeni mini oyuna `YONERGELER`'de yönerge yazılır.
 - Bulut Market (taslak proje): karakterin kıyafetini değiştirme, yeni eşyalar alma. Sonra başlanacak.

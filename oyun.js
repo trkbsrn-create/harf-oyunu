@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 191;
+const SURUM = 192;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -647,6 +647,7 @@ class AdaSahnesi extends Phaser.Scene {
         return;
       }
       if (this.periyeDokunus(p)) return;
+      if (this.menuPerisiDokunus(p)) return;
       if (this.tirmaniyor) return; // sırıkta tırmanırken dokunuş beklenmez
       if (this.tanriDamlaTiklamasi(p)) return;
       if (this.menuTiklamasi(p)) return;
@@ -710,6 +711,9 @@ class AdaSahnesi extends Phaser.Scene {
     this.kazanilanDamla = {}; // harf -> kazanılan damla sayısı (hangi tür oyun çıkacağını belirler)
     this.oynananOyunlar = {}; // harf -> bu harfte çıkan oyunlar
     this.omuzPerisi = null;
+    this.menuPerisi = null; // menü düğmesinin yanına yerleşen peri
+    this.menuBalonu = null;
+    this.peri = null;
     this.rehberIpucu = null;
     this.rehberBitti = {};
     if (veri.devam) {
@@ -726,7 +730,117 @@ class AdaSahnesi extends Phaser.Scene {
     if (veri.tanriFinal) this.time.delayedCall(800, () => this.yolaCik());
     if (this.ada === 3 && !this.kisKiyafeti) this.time.delayedCall(900, () => this.kisSinaviTanisma());
     else if (veri.periTanisma) this.time.delayedCall(700, () => this.periTanisma());
-    else if (!veri.tanriModu) this.time.delayedCall(700, () => this.omuzPerisiYap());
+    // Öğretmenin isteği: yalnızca 1. adada peri her işi omuzda gösterir. Sonraki adalarda adanın başında
+    // yalnızca görevi söyler ve menü düğmesinin yanına yerleşir; takılınca ona dokunulur (periYardim).
+    else if (this.ada === 1 && !veri.tanriModu && !this.rehberBitti.genel) this.time.delayedCall(700, () => this.omuzPerisiYap());
+    else if (veri.devam || veri.tanriModu) this.time.delayedCall(700, () => this.periyiKondur());
+    else this.time.delayedCall(700, () => this.adaGorevi());
+  }
+
+  // ---- Menünün yanındaki peri (öğretmenin isteği) ----
+  // Yeni adanın başında peri uçarak gelir, adanın görevini söyler, menü düğmesinin yanına yerleşir
+  adaGorevi(onceki = []) {
+    const konus = () => this.periSoyle([...onceki, this.ayar.sozler.basla, PERI_YARDIM_SOZU], () => this.periyiKondur());
+    if (this.peri && this.peri.active && !this.menuPerisi) { konus(); return; }
+    this.peri = this.periYap(1400, 260);
+    this.peri.salinma.pause();
+    Sesler.nota(1320, 0, 0.2, 0.08, "sine");
+    this.tweens.add({ targets: this.peri, x: 300, y: 300, duration: 1300, ease: "Sine.Out", onComplete: () => {
+      this.peri.tabanY = 300;
+      this.peri.salinma.remove();
+      this.peri.salinma = this.tweens.add({ targets: this.peri, y: 290, duration: 900, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+      konus();
+    } });
+  }
+
+  // Peri menü düğmesinin sağına konar (ekranda sabit, hafifçe süzülür). Peri yoksa orada belirir.
+  periyiKondur(peri = this.peri) {
+    const X = 150;
+    const Y = 64;
+    const kamera = this.cameras.main;
+    if (this.omuzPerisi === peri) { // omuzdan (dünyadan) ekran katmanına geçer
+      this.rehberGizle();
+      this.omuzPerisi = null;
+      peri.setScrollFactor(0, 0, true).setPosition(peri.x - kamera.scrollX, peri.y - kamera.scrollY);
+    }
+    const yeni = !peri || !peri.active;
+    if (yeni) peri = this.periYap(X, Y).setScale(0);
+    if (peri.salinma) peri.salinma.remove();
+    peri.setDepth(9150);
+    this.peri = peri;
+    this.menuPerisi = peri;
+    this.tweens.add({ targets: peri, x: X, y: Y, scale: 0.5, duration: yeni ? 500 : 1000, ease: yeni ? "Back.Out" : "Sine.InOut",
+      onComplete: () => {
+        peri.tabanY = Y;
+        peri.salinma = this.tweens.add({ targets: peri, y: Y - 6, duration: 900, yoyo: true, repeat: -1, ease: "Sine.InOut" });
+      } });
+  }
+
+  // Menüdeki periye dokunuldu mu? Dokunulduysa şimdi yapılacak işi söyler
+  menuPerisiDokunus(p) {
+    const peri = this.menuPerisi;
+    if (!peri || !peri.active || Phaser.Math.Distance.Between(p.x, p.y, peri.x, peri.y) > 48) return false;
+    this.tweens.add({ targets: peri, scale: 0.6, duration: 120, yoyo: true });
+    this.menuPerisiSoyle(this.simdikiGorev());
+    return true;
+  }
+
+  // Menüdeki perinin balonu (ekran katmanında, perinin sağ altında); söz bitince kaybolur
+  menuPerisiSoyle(soz) {
+    if (this.menuBalonu) this.menuBalonu.destroy();
+    const peri = this.menuPerisi;
+    const yazi = this.add.text(0, 0, soz, {
+      fontFamily: "Andika", fontSize: "26px", color: "#2b2b2b", align: "center",
+      wordWrap: { width: 360 }, padding: { x: 4, y: 4 },
+    }).setOrigin(0.5);
+    const en = yazi.width + 40;
+    const boy = yazi.height + 30;
+    const g = this.add.graphics();
+    g.fillStyle(0xfffdf6, 1);
+    g.lineStyle(4, 0x2b2b2b, 1);
+    g.fillRoundedRect(-en / 2, -boy / 2, en, boy, 20);
+    g.strokeRoundedRect(-en / 2, -boy / 2, en, boy, 20);
+    g.fillTriangle(-en / 2 + 14, -boy / 2 + 4, -en / 2 - 10, -boy / 2 - 22, -en / 2 + 40, -boy / 2 + 4);
+    g.lineBetween(-en / 2 + 14, -boy / 2, -en / 2 - 10, -boy / 2 - 22);
+    g.lineBetween(-en / 2 - 10, -boy / 2 - 22, -en / 2 + 40, -boy / 2);
+    const balon = this.add.container(peri.x + 30 + en / 2, peri.y + 56 + boy / 2, [g, yazi])
+      .setScrollFactor(0).setDepth(9460).setScale(0);
+    this.menuBalonu = balon;
+    this.tweens.add({ targets: balon, scale: 1, duration: 220, ease: "Back.Out" });
+    let kapandi = false;
+    const kapat = () => {
+      if (kapandi) return;
+      kapandi = true;
+      this.time.delayedCall(1500, () => {
+        if (this.menuBalonu !== balon) return;
+        this.menuBalonu = null;
+        this.tweens.add({ targets: balon, scale: 0, duration: 150, onComplete: () => balon.destroy() });
+      });
+    };
+    Sesler.soyle(soz, kapat);
+    this.time.delayedCall(Math.max(5000, soz.length * 120), kapat);
+  }
+
+  // Oyunun şimdiki durumuna göre sıradaki iş (menüdeki periye dokununca söylenir)
+  simdikiGorev() {
+    const esyaVar = (tur) => Canta.esyalar.some((e) => e && e.tur === tur);
+    const damla = { 4: "kabarcık", 5: "yıldız tozu" }[this.ada] || "damla";
+    const tesiseDogru = { 4: "kabarcık istasyonuna", 5: "yıldız tozu istasyonuna" }[this.ada] || "su tesisine";
+    const yuru = this.ayar.yuzme ? "yüz" : "yürü";
+    const parcaAlindi = (h) => Canta.alinanParcalar[h] || this.yelkenliParcalari.some((p) => p.harf === h && p.takildi);
+    if (this.yelkenliParcalari.every((p) => p.takildi)) return `${this.ayar.hazirYazi} "${this.ayar.dugme}" düğmesine bas!`;
+    if (esyaVar("parca")) return `Parçan çantanda! ${this.ayar.hedefYeri} Çantanı aç, parçayı ${this.ayar.hedefYonelme} sürükle.`;
+    const buyuk = this.tarlaKareleri.find((k) => k.ekili && k.asama >= BUYUME_ASAMASI && !parcaAlindi(k.ekili.harf));
+    if (buyuk) return `${buyuk.ekili.harf} tohumu ${this.ayar.bitkiAdi} oldu! Dibine git, Çık düğmesine bas, parçanı al.`;
+    if (esyaVar("tohum")) return "Çantanda tohum var. Tarlaya git, çantanı aç, tohumu boş kareye sürükle.";
+    const kare = this.tarlaKareleri.find((k) => k.ekili && (k.asama || 0) < BUYUME_ASAMASI);
+    if (kare) {
+      const h = kare.ekili.harf;
+      if (Canta.damlaSayisi(h) > 0) return `Şişende ${h} için ${damla} var. Tarlaya git, çantanı aç, şişeyi ${h} tohumuna sürükle.`;
+      return `${h} tohumu ${damla} istiyor. Kıyıdaki ${tesiseDogru} git, ${h} variline dokun, oyun oyna.`;
+    }
+    if (this.sandiklar.some((s) => !s.acildi)) return `Işığa doğru ${yuru}, sıradaki sandığı bul!`;
+    return "Görev düğmesine dokun, görevlerine bak.";
   }
 
   // Damla resimleri: 4. adada hava kabarcığı, 5. adada yıldız tozu
@@ -1078,14 +1192,12 @@ class AdaSahnesi extends Phaser.Scene {
   }
 
   // İlk sulamadan sonra peri genel yönlendirmeyi yapar ve uçup gider; bulutlarda buluşulur
+  // (Öğretmenin isteği: uçup gitmek yerine menü düğmesinin yanına yerleşir; bulutlarda yine buluşulur)
   periAyril() {
     const peri = this.omuzPerisi;
     if (!peri) return;
-    this.rehberGizle();
-    this.omuzPerisi = null;
     PERI_DURUMU.ayrildi = true;
-    this.tweens.add({ targets: peri, y: peri.y - 500, x: peri.x + 200, alpha: 0, duration: 1400, ease: "Sine.In",
-      onComplete: () => peri.destroy() });
+    this.periyiKondur(peri);
     Sesler.nota(1760, 0, 0.2, 0.06, "sine");
     Sesler.nota(1320, 0.12, 0.25, 0.05, "sine");
   }
@@ -1688,7 +1800,10 @@ class AdaSahnesi extends Phaser.Scene {
     tirmanmaHareketi(this, c, dip.y, () => {
       c.setTexture(cocukDokusu(this, "cocuk"));
       this.tirmaniyor = false;
-      if (PERI_DURUMU.ayrildi && !this.omuzPerisi) {
+      if (PERI_DURUMU.ayrildi && this.menuPerisi) { // menüdeki peri sıradaki işi söyler
+        PERI_DURUMU.ayrildi = false;
+        this.time.delayedCall(400, () => this.menuPerisiSoyle(this.simdikiGorev()));
+      } else if (PERI_DURUMU.ayrildi && !this.omuzPerisi) {
         PERI_DURUMU.ayrildi = false;
         this.omuzPerisiYap("buluttanDonus");
       } else this.rehberOlay("buluttanDonus");
@@ -2508,7 +2623,7 @@ class AdaSahnesi extends Phaser.Scene {
     }).setDepth(this.cocuk.y + 20).explode(40);
     Sesler.dogru();
     this.durumuKaydet();
-    this.periSoyle(["Aferin! İşte kar kıyafetin. Artık üşümezsin!"], () => this.periOmzaUc());
+    this.adaGorevi(["Aferin! İşte kar kıyafetin. Artık üşümezsin!"]);
   }
 
   // Mini oyundan dönüş: üç düzey bittiyse varilden şişeye bir damla akar
@@ -4984,6 +5099,9 @@ class FinalSahnesi extends Phaser.Scene {
     });
   }
 }
+
+// Yeni adada görevden sonra perinin son sözü (sonra menü düğmesinin yanına yerleşir)
+const PERI_YARDIM_SOZU = "Takılırsan menünün yanındaki bana dokun, ne yapacağını söylerim.";
 
 // Perinin tanışma sözleri (öğretmen kaydeder: kayit.html "Peri")
 const PERI_TANISMA = [
