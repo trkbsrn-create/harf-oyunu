@@ -4257,3 +4257,92 @@ resim("zincir", "Zincir", GRI,
     <ellipse cx="106" cy="26" rx="18" ry="12" fill="none" stroke="#2b2b2b" stroke-width="11" transform="rotate(55 106 26)"/>
     <ellipse cx="106" cy="26" rx="18" ry="12" fill="none" stroke="#c6c2cc" stroke-width="6" transform="rotate(55 106 26)"/>
 """, 2), 863)
+
+# ---- 4. ve 5. adanın tesisleri (öğretmenin isteği: tesis o adada toplanan şeye göre) ----
+# Kabarcık istasyonu (4. ada) ve yıldız tozu istasyonu (5. ada): biçimleri su-tesisi.svg,
+# tesis-pencere.svg ve varil.svg ile aynı (iskele, boru ağızları, varil yerleri oyunla uyumlu);
+# yalnızca renkler, depodaki dolgu ve simgeler değişir.
+def _kabarciklar(liste):
+    return "".join(f'    <circle cx="{x}" cy="{y}" r="{r}" fill="#ffffff" fill-opacity="0.85" stroke="#2b2b2b" stroke-width="2"/>\n'
+                   f'    <path d="M{x - r * 0.5:.1f} {y - r * 0.1:.1f} q{r * 0.1:.1f} {-r * 0.4:.1f} {r * 0.45:.1f} {-r * 0.5:.1f}" fill="none" stroke="#9fd8f0" stroke-width="2"/>\n'
+                   for x, y, r in liste)
+
+
+def _yildizlar(liste, renk="#ffe680"):
+    return "".join(f'    <path d="M{x} {y - r} l{r * 0.3:.1f} {r * 0.7:.1f} l{r * 0.7:.1f} {r * 0.3:.1f} l{-r * 0.7:.1f} {r * 0.3:.1f} '
+                   f'l{-r * 0.3:.1f} {r * 0.7:.1f} l{-r * 0.3:.1f} {-r * 0.7:.1f} l{-r * 0.7:.1f} {-r * 0.3:.1f} l{r * 0.7:.1f} {-r * 0.3:.1f}z" '
+                   f'fill="{renk}" stroke="#2b2b2b" stroke-width="2"/>\n' for x, y, r in liste)
+
+
+TESIS_TEMALARI = {
+    "kabarcik": dict(
+        ad="Kabarcık İstasyonu", desen=TAHTA + tarama("duvar", "#e6fbf6", "#bfeee3", -30, 7, 2.5)
+        + tarama("kiremit", "#ffc2b0", "#ff8a6a", -35, 6, 2.5) + tarama("depo", "#e8f8ff", "#bfe8f8", 35, 6, 2.5)
+        + tarama("bant", "#bff0ea", "#6fd3c6", 35) + tarama("varilGovde", "#7fd6cc", "#4fb8ad", 80, 6, 2.5),
+        iskele="tahta", ayak="#8e6340", kapi="#ffd36e", depo_ust="#f4fcff",
+        depo_ici=_kabarciklar([(180, 200, 9), (200, 172, 7), (186, 146, 5)]),
+        ust_sus=_kabarciklar([(204, 82, 10), (224, 104, 6), (186, 56, 6)]),
+        pencere_ici=_kabarciklar([(64, 300, 12), (86, 260, 9), (68, 222, 6), (84, 380, 10)]),
+        varil_ust=_kabarciklar([(40, 10, 6), (60, 6, 5), (52, 16, 3)]),
+        dalga="#9fd8f0", boru="#8a8a8a"),
+    "yildiz-tozu": dict(
+        ad="Yıldız Tozu İstasyonu", desen=tarama("tahta", "#d9dde8", "#b7bdd0", 80, 7, 2.5)
+        + tarama("duvar", "#f1ecff", "#dcd2fb", -30, 7, 2.5) + tarama("kiremit", "#c9b4ff", "#8a6be0", -35, 6, 2.5)
+        + tarama("depo", "#5a4aa8", "#45388a", 35, 6, 2.5) + tarama("bant", "#d8ccff", "#a58cf0", 35)
+        + tarama("varilGovde", "#b9a6f2", "#8f78dc", 80, 6, 2.5),
+        iskele="tahta", ayak="#7d84a0", kapi="#9be3ff", depo_ust="#7a68c8",
+        depo_ici=_yildizlar([(182, 196, 9), (202, 168, 6), (180, 150, 5)]),
+        ust_sus=_yildizlar([(204, 80, 10), (224, 104, 6), (184, 56, 6)]),
+        pencere_ici=_yildizlar([(66, 300, 12), (84, 254, 9), (66, 220, 6), (84, 380, 10)]),
+        varil_ust=_yildizlar([(40, 12, 6), (62, 8, 5)]),
+        dalga=None, boru="#9aa0b8"),
+}
+
+for _ek, _t in TESIS_TEMALARI.items():
+    _dalga = (f'    <path d="M6 354 q20 -8 40 0 q20 8 40 0 q20 -8 40 0 q20 8 40 0 q20 -8 40 0 q20 8 30 0" fill="none" stroke="{_t["dalga"]}" stroke-width="3"/>\n'
+              if _t["dalga"] else "")
+    _iskele_ayak = iskele_ayaklari.replace("#8e6340", _t["ayak"])
+    yaz(f"su-tesisi-{_ek}.svg", 240, 364 + ISKELE_EK, f"{_t['ad']}: su tesisiyle aynı biçimde iskele, güverte, ev, depo ve varil borusu",
+        _t["desen"],
+        kalem(f'''    <rect x="95" y="0" width="50" height="{ISKELE_EK + 20}" fill="url(#{_t["iskele"]})"/>
+''' + tahtalar + _iskele_ayak) + f'  <g transform="translate(0 {ISKELE_EK})">\n' + kalem(f'''    <path d="M26 300 v54 M90 300 v54 M150 300 v54 M214 300 v54" fill="none" stroke="{_t["ayak"]}" stroke-width="7"/>
+{_dalga}    <rect x="10" y="84" width="220" height="216" rx="6" fill="url(#tahta)"/>
+''' + guverte + f'''    <path d="M226 160 q14 0 12 30 v164" fill="none" stroke="{_t["boru"]}" stroke-width="9"/>
+    <path d="M226 160 q14 0 12 30 v164" fill="none" stroke-width="2"/>
+    <rect x="24" y="130" width="122" height="96" fill="url(#duvar)"/>
+    <path d="M14 134 l30 -38 h82 l30 38z" fill="url(#kiremit)"/>
+    <rect x="72" y="172" width="30" height="54" rx="4" fill="{_t["kapi"]}"/>
+    <circle cx="96" cy="200" r="2.5" fill="#2b2b2b"/>
+    <circle cx="46" cy="166" r="12" fill="#c9ecff"/>
+    <path d="M46 154 v24 M34 166 h24" fill="none" stroke-width="2.5"/>
+    <path d="M191 222 v30 h-163" fill="none" stroke="{_t["boru"]}" stroke-width="8"/>
+''' + varil_agizlari.replace("#8a8a8a", _t["boru"]) + f'''    <path d="M191 222 v30 h-163" fill="none" stroke-width="2"/>
+    <path d="M160 120 v100 q31 14 62 0 v-100z" fill="url(#depo)"/>
+    <ellipse cx="191" cy="120" rx="31" ry="10" fill="{_t["depo_ust"]}"/>
+''' + _t["depo_ici"] + _t["ust_sus"]) + '  </g>\n', 64)
+
+    yaz(f"tesis-pencere-{_ek}.svg", 700, 480, f"{_t['ad']} paneli",
+        tarama("kagit", "#fbf4e2", "#f1e6c8", 30, 8, 3) + _t["desen"],
+        '  <rect x="30" y="44" width="620" height="420" rx="30" fill="#000" fill-opacity="0.18"/>\n' +
+        kalem(f'''    <path d="M20 66 q0 -36 36 -36 h548 q36 0 36 36 v348 q0 36 -36 36 h-548 q-36 0 -36 -36z" fill="url(#kagit)"/>
+    <path d="M20 66 q0 -36 36 -36 h548 q36 0 36 36 v44 h-620z" fill="url(#bant)"/>
+    <path d="M100 185 h500" fill="none" stroke="{_t["boru"]}" stroke-width="14"/>
+    <path d="M100 185 h500" fill="none" stroke-width="2"/>
+{agizlar.replace("#8a8a8a", _t["boru"])}    <path d="M44 165 v260 q30 14 60 0 v-260z" fill="url(#depo)"/>
+    <ellipse cx="74" cy="165" rx="30" ry="9" fill="{_t["depo_ust"]}"/>
+''' + _t["pencere_ici"] + '''    <circle cx="625" cy="45" r="31" fill="#ff8a7a"/>
+    <path d="M612 32 l26 26 M638 32 l-26 26" fill="none" stroke="#ffffff" stroke-width="7"/>
+''', 5), 68, 4)
+
+    yaz(f"varil-{_ek}.svg", 120, 150, f"Harf varili ({_t['ad']})", _t["desen"],
+        golge(54, 142, 46, 6) + kalem(f'''    <path d="M14 14 q-14 63 0 126 h76 q14 -63 0 -126z" fill="url(#varilGovde)"/>
+    <path d="M30 14 q-8 63 0 126 M74 14 q8 63 0 126" fill="none" stroke="#2b2b2b" stroke-opacity="0.25" stroke-width="2.5"/>
+    <path d="M8 38 q44 9 88 0 M8 116 q44 9 88 0" fill="none" stroke="{_t["boru"]}" stroke-width="8"/>
+    <path d="M8 38 q44 9 88 0 M8 116 q44 9 88 0" fill="none" stroke-width="2"/>
+    <ellipse cx="52" cy="14" rx="38" ry="10" fill="{_t["depo_ust"]}"/>
+    <ellipse cx="52" cy="15" rx="28" ry="6" fill="url(#depo)" stroke="none"/>
+    <rect x="25" y="50" width="54" height="56" rx="8" fill="#fbf4e2" stroke-width="3"/>
+    <path d="M92 96 h16 v10" fill="none" stroke="{_t["boru"]}" stroke-width="9"/>
+    <path d="M92 96 h16 v10" fill="none" stroke-width="2"/>
+    <path d="M100 86 h16" fill="none" stroke="#ff8a7a" stroke-width="7"/>
+''' + _t["varil_ust"]), 69, 2.5)
