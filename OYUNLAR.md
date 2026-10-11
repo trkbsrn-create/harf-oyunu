@@ -75,7 +75,9 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   sürükleyince oluktan 4 malzeme (düğme/çiçek/şeker) tepsiye düşer; tepsi boşalınca kol parlar,
   yeniden çekilir; malzeme yazılış sırasındaki sıradaki yere oturur (dokunmak da yeter); 2 harf;
   can yok. 2-3. düzey: harfin ipucu resmi yazılış yönünde yol boyunca götürülür, sarı iz kalır;
-  sapınca çizgi baştan, can gider; harf 3 kez; yollar `HARF_YOLLARI` dik temel harf yönüne göre;
+  sapınca çizgi baştan, can gider; harf 3 kez; yollar `HARF_YOLLARI` öğretmenin verdiği "Temel Harfler ve
+  Yazılış Yönleri" tablosuna göre (n m r u ü y tek çizgi, aynı çizgiden geri çıkılır; oklar iki yanda);
+  1. düzeyde harf tepsinin üstüne sığdırılır (kuyruklu harfler, `SEKIL_ALAN`);
   2. düzey kalın yol, oklar, numaralar; 3. düzey ince yol, yalnızca başlangıç noktası; öğretmenin
   isteği: büyük harf de var, `BUYUK_HARF_YOLLARI`, `harfiYazYollari`: 1. düzeyde 2. harf, 2-3. düzeyde 2. tur büyük); resimden-ses (Resimden Sesi
   Bul: düzeye göre harfin kelimedeki yeri: 1. başında, 2. sonunda, 3. ortasında olan resmi seç

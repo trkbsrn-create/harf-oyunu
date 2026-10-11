@@ -231,6 +231,8 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Resimlerde kenardan kesilen çizimler vardı (araba, dinozor, bere...) ve halka gezegenin önünden tam geçiyordu, dizgin
   kaplumbağanın gözünü kapatıyordu. Yeni resmi büyük çizip bak; taşan resmi `KUCULT`'a ekle (doodle_ciz.py);
   halkanın arka yarısını gezegenden önce, ön yarısını sonra çiz.
+- Harfi Yaz'da p'nin kuyruğu tepsinin arkasında kalıyordu, b ve p'nin göbeği ters yöndeydi. Harf yolu değişince
+  her düzeyde (1. düzey büyütülür) kuyruklu harfleri (p g ğ y j) de ekranda gör; yönler öğretmenin tablosuna uysun.
 
 ## Bekleyen işler
 - TTKB Dik Temel Abece yazı tipi: yazardan izin bekleniyor; izin gelirse dosya depoya eklenir.
