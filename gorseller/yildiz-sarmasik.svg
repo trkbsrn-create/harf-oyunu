@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="380" viewBox="0 0 240 380">
+  <!-- Yıldız sarmaşığı: tarlada son aşama, gökyüzüne doğru solar (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="716" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="yildizYaprak" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#fff6c4"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffe680" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <linearGradient id="solma" x1="0" y1="0" x2="0" y2="380" gradientUnits="userSpaceOnUse">
+      <stop offset="0.04" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="0.5" stop-color="#ffffff" stop-opacity="1"/>
+    </linearGradient>
+    <mask id="sol"><rect width="240" height="380" fill="url(#solma)"/></mask>
+  </defs>
+  <g mask="url(#sol)">
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M150.5 374 L151.0 368 L151.0 362 L150.4 356 L149.4 350 L147.8 344 L145.9 338 L143.5 332 L140.8 326 L137.8 320 L134.6 314 L131.2 308 L127.6 302 L124.1 296 L120.6 290 L117.1 284 L113.8 278 L110.7 272 L107.8 266" fill="none" stroke="#2b2b2b" stroke-width="19"/>
+    <path d="M150.5 374 L151.0 368 L151.0 362 L150.4 356 L149.4 350 L147.8 344 L145.9 338 L143.5 332 L140.8 326 L137.8 320 L134.6 314 L131.2 308 L127.6 302 L124.1 296 L120.6 290 L117.1 284 L113.8 278 L110.7 272 L107.8 266" fill="none" stroke="#b58cf0" stroke-width="14"/>
+    <path d="M107.8 266 L105.2 260 L103.0 254 L101.0 248 L99.5 242 L98.4 236 L97.6 230 L97.3 224 L97.4 218 L97.8 212 L98.7 206 L99.8 200 L101.3 194 L103.1 188 L105.1 182 L107.2 176 L109.6 170 L112.0 164 L114.5 158 L117.0 152" fill="none" stroke="#2b2b2b" stroke-width="16"/>
+    <path d="M107.8 266 L105.2 260 L103.0 254 L101.0 248 L99.5 242 L98.4 236 L97.6 230 L97.3 224 L97.4 218 L97.8 212 L98.7 206 L99.8 200 L101.3 194 L103.1 188 L105.1 182 L107.2 176 L109.6 170 L112.0 164 L114.5 158 L117.0 152" fill="none" stroke="#b58cf0" stroke-width="11"/>
+    <path d="M117.0 152 L119.4 146 L121.8 140 L124.0 134 L126.1 128 L128.0 122 L129.7 116 L131.2 110 L132.4 104 L133.3 98 L133.9 92 L134.3 86 L134.4 80 L134.3 74 L133.9 68 L133.3 62 L132.4 56 L131.4 50 L130.3 44 L129.0 38 L127.6 32 L126.2 26 L124.7 20 L123.2 14" fill="none" stroke="#2b2b2b" stroke-width="13"/>
+    <path d="M117.0 152 L119.4 146 L121.8 140 L124.0 134 L126.1 128 L128.0 122 L129.7 116 L131.2 110 L132.4 104 L133.3 98 L133.9 92 L134.3 86 L134.4 80 L134.3 74 L133.9 68 L133.3 62 L132.4 56 L131.4 50 L130.3 44 L129.0 38 L127.6 32 L126.2 26 L124.7 20 L123.2 14" fill="none" stroke="#b58cf0" stroke-width="8"/>
+    <path d="M89.5 374 L89.0 368 L89.0 362 L89.6 356 L90.6 350 L92.2 344 L94.1 338 L96.5 332 L99.2 326 L102.2 320 L105.4 314 L108.8 308 L112.4 302 L115.9 296 L119.4 290 L122.9 284 L126.2 278 L129.3 272 L132.2 266" fill="none" stroke="#2b2b2b" stroke-width="19"/>
+    <path d="M89.5 374 L89.0 368 L89.0 362 L89.6 356 L90.6 350 L92.2 344 L94.1 338 L96.5 332 L99.2 326 L102.2 320 L105.4 314 L108.8 308 L112.4 302 L115.9 296 L119.4 290 L122.9 284 L126.2 278 L129.3 272 L132.2 266" fill="none" stroke="#7fd6f0" stroke-width="14"/>
+    <path d="M132.2 266 L134.8 260 L137.0 254 L139.0 248 L140.5 242 L141.6 236 L142.4 230 L142.7 224 L142.6 218 L142.2 212 L141.3 206 L140.2 200 L138.7 194 L136.9 188 L134.9 182 L132.8 176 L130.4 170 L128.0 164 L125.5 158 L123.0 152" fill="none" stroke="#2b2b2b" stroke-width="16"/>
+    <path d="M132.2 266 L134.8 260 L137.0 254 L139.0 248 L140.5 242 L141.6 236 L142.4 230 L142.7 224 L142.6 218 L142.2 212 L141.3 206 L140.2 200 L138.7 194 L136.9 188 L134.9 182 L132.8 176 L130.4 170 L128.0 164 L125.5 158 L123.0 152" fill="none" stroke="#7fd6f0" stroke-width="11"/>
+    <path d="M123.0 152 L120.6 146 L118.2 140 L116.0 134 L113.9 128 L112.0 122 L110.3 116 L108.8 110 L107.6 104 L106.7 98 L106.1 92 L105.7 86 L105.6 80 L105.7 74 L106.1 68 L106.7 62 L107.6 56 L108.6 50 L109.7 44 L111.0 38 L112.4 32 L113.8 26 L115.3 20 L116.8 14" fill="none" stroke="#2b2b2b" stroke-width="13"/>
+    <path d="M123.0 152 L120.6 146 L118.2 140 L116.0 134 L113.9 128 L112.0 122 L110.3 116 L108.8 110 L107.6 104 L106.7 98 L106.1 92 L105.7 86 L105.6 80 L105.7 74 L106.1 68 L106.7 62 L107.6 56 L108.6 50 L109.7 44 L111.0 38 L112.4 32 L113.8 26 L115.3 20 L116.8 14" fill="none" stroke="#7fd6f0" stroke-width="8"/>
+    <path d="M154.0 313.1 L158.5 323.8 L170.1 324.8 L161.3 332.4 L164.0 343.7 L154.0 337.6 L144.0 343.7 L146.7 332.4 L137.9 324.8 L149.5 323.8z" fill="url(#yildizYaprak)" stroke-width="2.5"/>
+    <path d="M86.0 264.1 L90.2 274.2 L101.1 275.1 L92.8 282.2 L95.3 292.9 L86.0 287.2 L76.7 292.9 L79.2 282.2 L70.9 275.1 L81.8 274.2z" fill="url(#yildizYaprak)" stroke-width="2.5"/>
+    <path d="M154.0 215.2 L157.9 224.6 L168.1 225.4 L160.4 232.1 L162.7 242.0 L154.0 236.7 L145.3 242.0 L147.6 232.1 L139.9 225.4 L150.1 224.6z" fill="url(#yildizYaprak)" stroke-width="2.5"/>
+    <path d="M86.0 166.2 L89.6 175.0 L99.1 175.7 L91.9 181.9 L94.1 191.2 L86.0 186.2 L77.9 191.2 L80.1 181.9 L72.9 175.7 L82.4 175.0z" fill="url(#yildizYaprak)" stroke-width="2.5"/>
+    <path d="M154.0 117.3 L157.4 125.4 L166.1 126.1 L159.5 131.8 L161.5 140.3 L154.0 135.7 L146.5 140.3 L148.5 131.8 L141.9 126.1 L150.6 125.4z" fill="url(#yildizYaprak)" stroke-width="2.5"/>
+    <path d="M86.0 68.3 L89.1 75.7 L97.1 76.4 L91.0 81.6 L92.9 89.5 L86.0 85.3 L79.1 89.5 L81.0 81.6 L74.9 76.4 L82.9 75.7z" fill="url(#yildizYaprak)" stroke-width="2.5"/>
+    <path d="M65.0 374 q55.0 -22 110 0z" fill="#b098d8" stroke-width="3.5"/>
+  </g>
+  </g>
+</svg>

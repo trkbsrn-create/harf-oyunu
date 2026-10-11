@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="150" height="230" viewBox="0 0 150 230">
+  <!-- Kristal ağaç (ağaç yerine; alt ortası tabanı) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="701" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kristal" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9f1ff"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#7fd6f0" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="kristalMor" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="6" height="6" fill="#e6d4ff"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#b58cf0" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="75" cy="224" rx="44" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M66 226 l4 -90 h10 l4 90z" fill="#8e7bb8"/>
+    <path d="M75 10 l26 50 l-26 80 l-26 -80z" fill="url(#kristal)"/>
+    <path d="M40 60 l18 30 l-14 52 l-24 -40z M110 60 l-18 30 l14 52 l24 -40z" fill="url(#kristalMor)"/>
+    <path d="M75 10 v130 M58 60 h34" fill="none" stroke="#ffffff" stroke-width="3"/>
+    <path d="M24 30 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3z M126 100 l2 5 l5 2 l-5 2 l-2 5 l-2 -5 l-5 -2 l5 -2z" fill="#ffe680" stroke-width="1.5"/>
+  </g>
+</svg>
