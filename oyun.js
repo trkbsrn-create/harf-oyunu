@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 194;
+const SURUM = 195;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -831,13 +831,13 @@ class AdaSahnesi extends Phaser.Scene {
     if (this.yelkenliParcalari.every((p) => p.takildi)) return `${this.ayar.hazirYazi} "${this.ayar.dugme}" düğmesine bas!`;
     if (esyaVar("parca")) return `Parçan çantanda! ${this.ayar.hedefYeri} Çantanı aç, parçayı ${this.ayar.hedefYonelme} sürükle.`;
     const buyuk = this.tarlaKareleri.find((k) => k.ekili && k.asama >= BUYUME_ASAMASI && !parcaAlindi(k.ekili.harf));
-    if (buyuk) return `${buyuk.ekili.harf} tohumu ${this.ayar.bitkiAdi} oldu! Dibine git, Çık düğmesine bas, parçanı al.`;
+    if (buyuk) return `Tohumun ${this.ayar.bitkiAdi} oldu! Dibine git, Çık düğmesine bas, parçanı al.`;
     if (esyaVar("tohum")) return "Çantanda tohum var. Tarlaya git, çantanı aç, tohumu boş kareye sürükle.";
     const kare = this.tarlaKareleri.find((k) => k.ekili && (k.asama || 0) < BUYUME_ASAMASI);
     if (kare) {
-      const h = kare.ekili.harf;
-      if (Canta.damlaSayisi(h) > 0) return `Şişende ${h} için ${damla} var. Tarlaya git, çantanı aç, şişeyi ${h} tohumuna sürükle.`;
-      return `${h} tohumu ${damla} istiyor. Kıyıdaki ${tesiseDogru} git, ${h} variline dokun, oyun oyna.`;
+      // Harf adı geçmez (öğretmenin isteği: her harf için ayrı kayıt gerekmesin)
+      if (Canta.damlaSayisi(kare.ekili.harf) > 0) return `Şişende ${damla} var. Tarlaya git, çantanı aç, şişeyi tohuma sürükle.`;
+      return `Tohum ${damla} istiyor. Kıyıdaki ${tesiseDogru} git, harfinin variline dokun, oyun oyna.`;
     }
     if (this.sandiklar.some((s) => !s.acildi)) return `Işığa doğru ${yuru}, sıradaki sandığı bul!`;
     return "Görev düğmesine dokun, görevlerine bak.";
