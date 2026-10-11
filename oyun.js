@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 196;
+const SURUM = 197;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -641,6 +641,9 @@ class AdaSahnesi extends Phaser.Scene {
 
     this.input.on("pointerdown", (p) => {
       Sesler.ac();
+      // Parmak kaydırınca yürüme yalnızca boş yere dokunarak başlayan dokunuşta olur (düğmeye basıp
+      // kaydırınca ya da God mode'dan basılı gelen fareyle karakter yürümez)
+      this.yuruyusDokunusu = false;
       if (this.periKonusuyor) { this.periDokunusu(p); return; } // peri konuşurken yalnızca balon ve düğme
       if (this.rehberBalonAlani && this.rehberBalonAlani.contains(p.x, p.y)) { // ipucu yeniden okunur
         Sesler.soyle(this.rehberIpucu.soz);
@@ -679,6 +682,7 @@ class AdaSahnesi extends Phaser.Scene {
         this.sandigiAc();
         return;
       }
+      this.yuruyusDokunusu = true;
       this.hedefBelirle(p.worldX, p.worldY, true);
     });
     this.input.on("pointermove", (p) => {
@@ -698,7 +702,7 @@ class AdaSahnesi extends Phaser.Scene {
         this.parcayiTasi(p);
         return;
       }
-      if (p.isDown && !this.cantaAcik && !this.menuAcik && !this.tesisAcik && !this.periKonusuyor) this.hedefBelirle(p.worldX, p.worldY, false);
+      if (p.isDown && this.yuruyusDokunusu && !this.cantaAcik && !this.menuAcik && !this.tesisAcik && !this.periKonusuyor) this.hedefBelirle(p.worldX, p.worldY, false);
     });
     this.input.on("pointerup", (p) => this.birak(p));
     this.input.on("pointerupoutside", (p) => this.birak(p));
@@ -708,6 +712,7 @@ class AdaSahnesi extends Phaser.Scene {
       if (!this.menuAcik && !this.tesisAcik) this.cantayiAcKapat();
     });
     this.periKonusuyor = false;
+    this.yuruyusDokunusu = false; // dokunuş boş yerde başladıysa parmak kaydırınca yürünür
     this.kazanilanDamla = {}; // harf -> kazanılan damla sayısı (hangi tür oyun çıkacağını belirler)
     this.oynananOyunlar = {}; // harf -> bu harfte çıkan oyunlar
     this.omuzPerisi = null;
@@ -1562,6 +1567,7 @@ class AdaSahnesi extends Phaser.Scene {
   // Parmak kalkınca: şişeye dokunulmuşsa "İncele" düğmesi çıkar; şişe ya da tohum
   // taşınıyorsa bırakılır
   birak(p) {
+    this.yuruyusDokunusu = false;
     if (this.siseTasinan) {
       this.siseyiBirak(p);
       return;
@@ -2285,7 +2291,7 @@ class AdaSahnesi extends Phaser.Scene {
     const x = (p.x - this.gorevListesi.x) / this.gorevOlcek;
     const y = (p.y - this.gorevListesi.y) / this.gorevOlcek;
     const satir = this.gorevSatirlari.find((r) => r.alan.contains(x, y));
-    if (!satir) return false;
+    if (!satir) return this.gorevListesi.getBounds().contains(p.x, p.y); // listenin boş yerine dokununca yürümez
     // Satıra dokununca görev sesli okunur; parça takılacaksa karakter yelkenliye yürür
     Sesler.soyle(this.gorevYazisi(satir.d));
     if (satir.d.yelkenli) this.hedefBelirle(YELKENLI_DURAK.x, YELKENLI_DURAK.y, true);
