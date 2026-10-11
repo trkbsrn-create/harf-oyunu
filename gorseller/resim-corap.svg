@@ -10,9 +10,11 @@
       <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#7cc3e6" stroke-width="3" stroke-linecap="round"/>
     </pattern>
   </defs>
+  <g transform="translate(7.8 7.2) scale(0.88)">
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
     <path d="M44 8 h40 v60 q0 10 8 16 q22 14 12 30 q-8 10 -30 2 l-30 -16 q-8 -6 -8 -16z" fill="url(#mavi)"/>
     <path d="M44 22 h40 M44 36 h40 M44 50 h40" fill="none" stroke="#e0533d" stroke-width="6"/>
     <path d="M44 8 h40" fill="none" stroke-width="4"/>
+  </g>
   </g>
 </svg>

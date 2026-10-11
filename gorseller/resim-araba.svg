@@ -12,6 +12,7 @@
   </defs>
   <ellipse cx="65" cy="112" rx="54" ry="5" fill="#000" fill-opacity="0.13"/>
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="translate(7 8) scale(0.88)">  <!-- sağ ucu kesilmesin -->
     <path d="M10 86 q-2 -22 14 -24 l18 -2 l14 -22 q4 -6 12 -6 h24 q8 0 12 8 l10 20 q16 2 18 12 q2 10 -2 14z" fill="url(#mavi)"/>
     <path d="M48 58 l10 -16 h14 v16z M80 58 v-16 h10 q4 0 6 4 l6 12z" fill="#ffffff" stroke-width="3"/>
     <circle cx="36" cy="92" r="13" fill="#5a5a5a"/>
@@ -19,5 +20,6 @@
     <circle cx="96" cy="92" r="13" fill="#5a5a5a"/>
     <circle cx="96" cy="92" r="5" fill="#d6d3cc" stroke-width="2.5"/>
     <circle cx="116" cy="72" r="4" fill="#ffe680" stroke-width="2.5"/>
+    </g>
   </g>
 </svg>

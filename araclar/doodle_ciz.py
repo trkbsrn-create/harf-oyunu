@@ -24,7 +24,25 @@ def tarama(ad, zemin, cizgi, aci, aralik=7, kalinlik=3):
 '''
 
 
+# Kenardan taşıp kesilen çizimler (görsel taraması): ortasına doğru bu oranda küçültülür
+KUCULT = {
+    "cocuk-yuz.svg": 0.84, "kutup-ayisi.svg": 0.9, "ahtapot.svg": 0.86, "denizati.svg": 0.88, "uzayli.svg": 0.9,
+    "kabak-kucuk.svg": 0.9, "mercan-kucuk.svg": 0.92, "su-yengec.svg": 0.94, "damla.svg": 0.92, "yildiz-tozu.svg": 0.9,
+    "resim-bulut.svg": 0.88, "resim-dinozor.svg": 0.86, "resim-kirpi.svg": 0.86, "resim-simsek.svg": 0.86,
+    "resim-yagmur.svg": 0.86, "resim-zurafa.svg": 0.88, "resim-elbise.svg": 0.88, "resim-gomlek.svg": 0.86,
+    "resim-corap.svg": 0.88, "resim-valiz.svg": 0.9, "resim-davul.svg": 0.92, "resim-el.svg": 0.88, "resim-dort.svg": 0.9,
+    "resim-kalem.svg": 0.9, "resim-dondurma.svg": 0.94, "resim-cigdem.svg": 0.94, "resim-nine.svg": 0.94,
+    "resim-tavsan.svg": 0.94, "resim-saray.svg": 0.94, "resim-terazi.svg": 0.94, "resim-para.svg": 0.94,
+    "resim-roket.svg": 0.94, "resim-sogan.svg": 0.94, "resim-supurge.svg": 0.92, "resim-ucurtma.svg": 0.94,
+    "resim-balon.svg": 0.94, "simge-harfi-yaz.svg": 0.9, "simge-harfle-boya.svg": 0.92, "simge-yilan.svg": 0.9,
+    "damla-bos.svg": 0.92, "yildiz-tozu-bos.svg": 0.9,  # dolu hâlleriyle aynı boyda
+}
+
+
 def yaz(ad, en, boy, aciklama, desenler, govde, tohum=7, siddet=3.5):
+    if ad in KUCULT:
+        o = KUCULT[ad]
+        govde = f'  <g transform="translate({en * (1 - o) / 2:.1f} {boy * (1 - o) / 2:.1f}) scale({o})">\n{govde}  </g>\n'
     svg = f'''<svg xmlns="http://www.w3.org/2000/svg" width="{en}" height="{boy}" viewBox="0 0 {en} {boy}">
   <!-- {aciklama} (doodle tarzı, kendi çizimimiz) -->
   <defs>
@@ -448,8 +466,8 @@ yaz("sise-pencere.svg", 500, 520, "Sihirli su şişesinin içi: her harf için b
     <path d="M202 44 h96 v52 h-96z" fill="url(#cam)"/>
     <rect x="14" y="90" width="472" height="420" rx="70" fill="url(#cam)"/>
     <path d="M44 150 q4 -30 30 -40" fill="none" stroke="#ffffff" stroke-width="8"/>
-{bolmeler}    <circle cx="470" cy="92" r="28" fill="#ff8a7a"/>
-    <path d="M458 80 l24 24 M482 80 l-24 24" fill="none" stroke="#ffffff" stroke-width="7"/>
+{bolmeler}    <circle cx="470" cy="92" r="23" fill="#ff8a7a"/>
+    <path d="M460 82 l20 20 M480 82 l-20 20" fill="none" stroke="#ffffff" stroke-width="7"/>
 ''', 5) + '''  <path d="M30 40 l5 12 l12 5 l-12 5 l-5 12 l-5 -12 l-12 -5 l12 -5z M440 20 l4 9 l9 4 l-9 4 l-4 9 l-4 -9 l-9 -4 l9 -4z M150 30 l3 7 l7 3 l-7 3 l-3 7 l-3 -7 l-7 -3 l7 -3z" fill="#ffe680" stroke="#2b2b2b" stroke-width="2"/>
 ''', 70, 4)
 
@@ -865,13 +883,15 @@ resim("ayakkabi", "Ayakkabı", KIRMIZI,
     <path d="M48 58 l10 -6 M54 66 l10 -6 M60 72 l10 -6" fill="none" stroke="#ffffff" stroke-width="4"/>
 """), 117)
 resim("araba", "Araba", MAVI,
-    golge(65, 112, 54) + kalem("""    <path d="M10 86 q-2 -22 14 -24 l18 -2 l14 -22 q4 -6 12 -6 h24 q8 0 12 8 l10 20 q16 2 18 12 q2 10 -2 14z" fill="url(#mavi)"/>
+    golge(65, 112, 54) + kalem("""    <g transform="translate(7 8) scale(0.88)">  <!-- sağ ucu kesilmesin -->
+    <path d="M10 86 q-2 -22 14 -24 l18 -2 l14 -22 q4 -6 12 -6 h24 q8 0 12 8 l10 20 q16 2 18 12 q2 10 -2 14z" fill="url(#mavi)"/>
     <path d="M48 58 l10 -16 h14 v16z M80 58 v-16 h10 q4 0 6 4 l6 12z" fill="#ffffff" stroke-width="3"/>
     <circle cx="36" cy="92" r="13" fill="#5a5a5a"/>
     <circle cx="36" cy="92" r="5" fill="#d6d3cc" stroke-width="2.5"/>
     <circle cx="96" cy="92" r="13" fill="#5a5a5a"/>
     <circle cx="96" cy="92" r="5" fill="#d6d3cc" stroke-width="2.5"/>
     <circle cx="116" cy="72" r="4" fill="#ffe680" stroke-width="2.5"/>
+    </g>
 """), 118)
 resim("altin", "Altın (külçe ve paralar)", SARI2,
     golge(65, 112, 50) + kalem("""    <path d="M22 100 l12 -30 h46 l12 30z" fill="url(#sari)"/>
@@ -2756,9 +2776,9 @@ yaz("dalgic-aski.svg", 680, 440, "Dalgıç kıyafeti askısı (küçük, solda)"
 # tişört kırmızı mont olur (uzar), şort mavi pantolon, bacaklar ve kollar kalınlaşır (pantolon,
 # kollu mont), ayakkabı kahverengi bot, başa ponponlu bere, boyna sarı atkı, ellere eldiven.
 import re as _re
-_BERE = ('    <path d="M21 31 q0 -27 24 -27 q24 0 24 27z" fill="url(#bere)"/>\n'
+_BERE = ('    <path d="M21 31 q0 -23 24 -23 q24 0 24 23z" fill="url(#bere)"/>\n'
          '    <path d="M19 31 h52" fill="none" stroke-width="9"/><path d="M19 31 h52" fill="none" stroke="#ff9c8a" stroke-width="5"/>\n'
-         '    <circle cx="45" cy="4" r="6" fill="#ffffff"/>\n'
+         '    <circle cx="45" cy="9" r="5" fill="#ffffff"/>\n'
          '    <path d="M27 59 q18 9 36 0 l1 7 q-19 9 -38 0z" fill="#ffe680"/>\n'
          '    <path d="M54 64 l3 16 h7 l-4 -17z" fill="#ffe680"/>\n')
 _BERE_DESEN = ('    <pattern id="bere" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">\n'
@@ -3517,12 +3537,12 @@ yaz("kaplumbaga.svg", 680, 440, "Dev kaplumbağa (yandan, sağa bakar; deniz tab
 '''), 620)
 KAPLUMBAGA_PARCALARI = [
     ("eyer", "M282 112 q58 -26 116 0 l8 40 q-66 22 -132 0z M300 150 v40 h14 v-40 M366 150 v40 h14 v-40", "eyer"),
-    ("dizgin", "M650 282 q-120 -190 -268 -156 l-2 -12 q156 -36 280 160z M644 270 a8 8 0 1 0 0.1 0", "ip"),
+    ("dizgin", "M404 146 q156 150 236 132 l2 -10 q-80 16 -232 -134z M648 274 a8 8 0 1 0 0.1 0", "ip"),  # gözün altından ağza
     ("fener", "M400 140 l66 -50 l6 6 l-66 50z M470 70 h36 v14 h-36z M466 84 h44 v50 q0 10 -10 10 h-24 q-10 0 -10 -10z M478 70 q10 -20 20 0", "fener"),
     ("harita", "M150 170 h80 v50 h-80z M142 166 h12 v58 h-12z M226 166 h12 v58 h-12z", "harita"),
     ("anahtar", "M420 170 a16 16 0 1 0 0.1 0 M420 202 v52 h16 v-8 h-8 v-10 h8 v-8 h-8 v-26z", "anahtar"),
 ]
-KAPLUMBAGA_KUTU = {"eyer": (274, 102, 132, 88), "dizgin": (380, 112, 280, 178), "fener": (400, 56, 110, 100),
+KAPLUMBAGA_KUTU = {"eyer": (274, 102, 132, 88), "dizgin": (400, 130, 260, 156), "fener": (400, 56, 110, 100),
                    "harita": (142, 166, 96, 58), "anahtar": (404, 170, 32, 84)}
 for ad, yol, desen in KAPLUMBAGA_PARCALARI:
     ekler = ""
@@ -3615,8 +3635,9 @@ _h = _h.replace('<circle cx="1040" cy="300" r="90" fill="#bfe3f5" stroke="#8a8a8
 _h = _h.replace('<path d="M1000 300 q10 -12 20 0 q10 12 20 0 M1030 330 q10 -12 20 0 q10 12 20 0" fill="none" stroke="#7cc3e6" stroke-width="3"/>',
                 '<path d="M960 400 q10 -12 20 0 q10 12 20 0 M990 450 q10 -12 20 0 q10 12 20 0" fill="none" stroke="#ffffff" stroke-width="3"/>'
                 '\n    <path d="M1010 470 l-10 -20 l-10 20 M1000 450 v24" fill="none" stroke="#ff7f6a" stroke-width="5"/>'
+                '\n    <path d="M1006 170 a104 22 0 0 1 208 0" fill="none" stroke="#c4a3ec" stroke-width="5"/>'
                 '\n    <circle cx="1110" cy="170" r="70" fill="#2f3a66" stroke="#8a8a8a" stroke-dasharray="14 10"/>'
-                '\n    <ellipse cx="1110" cy="170" rx="104" ry="22" fill="none" stroke="#c4a3ec" stroke-width="5"/>'
+                '\n    <path d="M1006 170 a104 22 0 0 0 208 0" fill="none" stroke="#c4a3ec" stroke-width="5"/>'
                 '\n    <path d="M1080 150 l4 8 l8 2 l-8 2 l-4 8 l-4 -8 l-8 -2 l8 -2z M1140 190 l3 6 l6 2 l-6 2 l-3 6 l-3 -6 l-6 -2 l6 -2z" fill="#ffe680" stroke-width="2"/>')
 _h = _h.replace('<path d="M860 420 q90 -10 110 -80" fill="none" stroke="#e0533d" stroke-dasharray="16 12"/>',
                 '<path d="M860 420 q40 0 50 0" fill="none" stroke="#e0533d" stroke-dasharray="16 12"/>'
@@ -3882,8 +3903,9 @@ _yildizlar = "".join(f'  <circle cx="{(i * 397) % 1280}" cy="{(i * 211) % 720}" 
 yaz("hikaye-uzay.svg", 1280, 720, "Final 5: yıldızlı uzay, halkalı gezegen",
     tarama("uUzay", "#2f3a66", "#29335c", 30, 9, 4) + tarama("uGezegen", "#c6b0f0", "#9a7fe0", 35, 9, 4),
     '  <rect width="1280" height="720" fill="url(#uUzay)"/>\n' + _yildizlar
-    + kalem('''    <circle cx="1080" cy="150" r="90" fill="url(#uGezegen)"/>
-    <ellipse cx="1080" cy="150" rx="150" ry="30" fill="none" stroke="#ffe680" stroke-width="8"/>
+    + kalem('''    <path d="M930 150 a150 30 0 0 1 300 0" fill="none" stroke="#ffe680" stroke-width="8"/>
+    <circle cx="1080" cy="150" r="90" fill="url(#uGezegen)"/>
+    <path d="M930 150 a150 30 0 0 0 300 0" fill="none" stroke="#ffe680" stroke-width="8"/>
     <path d="M0 720 v-120 q320 -60 640 -20 q320 40 640 -10 v150z" fill="#d9c8f0"/>
     <circle cx="200" cy="120" r="30" fill="#9ff0c8"/>
 ''', 4), 723)

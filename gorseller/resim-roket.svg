@@ -18,11 +18,13 @@
       <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#f08a3c" stroke-width="3" stroke-linecap="round"/>
     </pattern>
   </defs>
+  <g transform="translate(3.9 3.6) scale(0.94)">
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
     <path d="M52 92 q-6 14 13 28 q19 -14 13 -28z" fill="url(#turuncu)"/>
     <path d="M65 4 q24 20 22 64 v24 h-44 v-24 q-2 -44 22 -64z" fill="url(#gri)"/>
     <path d="M65 4 q14 10 19 28 h-38 q5 -18 19 -28z" fill="url(#kirmizi)"/>
     <circle cx="65" cy="54" r="10" fill="#bfe3f5" stroke-width="3.5"/>
     <path d="M43 70 l-18 22 v8 l18 -8z M87 70 l18 22 v8 l-18 -8z" fill="url(#kirmizi)"/>
+  </g>
   </g>
 </svg>

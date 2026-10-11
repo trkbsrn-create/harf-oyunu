@@ -35,6 +35,6 @@
     </pattern>
   </defs>
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
-    <path d="M650 282 q-120 -190 -268 -156 l-2 -12 q156 -36 280 160z M644 270 a8 8 0 1 0 0.1 0" fill="url(#ip)"/>
+    <path d="M404 146 q156 150 236 132 l2 -10 q-80 16 -232 -134z M648 274 a8 8 0 1 0 0.1 0" fill="url(#ip)"/>
   </g>
 </svg>

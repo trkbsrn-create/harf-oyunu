@@ -105,8 +105,9 @@
   <circle cx="376" cy="568" r="2" fill="#ffffff" opacity="0.8"/>
   <circle cx="773" cy="59" r="3" fill="#ffffff" opacity="0.8"/>
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M930 150 a150 30 0 0 1 300 0" fill="none" stroke="#ffe680" stroke-width="8"/>
     <circle cx="1080" cy="150" r="90" fill="url(#uGezegen)"/>
-    <ellipse cx="1080" cy="150" rx="150" ry="30" fill="none" stroke="#ffe680" stroke-width="8"/>
+    <path d="M930 150 a150 30 0 0 0 300 0" fill="none" stroke="#ffe680" stroke-width="8"/>
     <path d="M0 720 v-120 q320 -60 640 -20 q320 40 640 -10 v150z" fill="#d9c8f0"/>
     <circle cx="200" cy="120" r="30" fill="#9ff0c8"/>
   </g>

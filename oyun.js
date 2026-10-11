@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 197;
+const SURUM = 198;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -233,7 +233,7 @@ const ADALAR = {
     bulutZemin: "halka-zemin", bulutBaslik: "Gezegen Halkası", bulutArka: 0x2f3a66, bulutUzak: "ufo",
     bitkiAdi: "yıldız sarmaşığı", sirikAdi: "Yıldız sarmaşığına", hedefAdi: "iksir", hedefYonelme: "formüle",
     temel: "iksir-masa", tuvalBoy: 440, derinlik: 420, parcalar: IKSIR_PARCALARI, harfYuvarlagi: false, iksir: true,
-    dugme: "İksiri iç!", dugmeYeri: { x: 550, y: 470 }, hazirSozu: "İksir hazır! Aferin!",
+    dugme: "İksiri iç!", dugmeYeri: { x: 340, y: -25 }, hazirSozu: "İksir hazır! Aferin!",
     hedefYeri: "Formül tahtası kıyıda, yıldız tozu istasyonunun yanında.", hazirYazi: "İksir hazır!", harita: "harita-karti5",
     temelSimgede: true, tesisAdi: "Yıldız Tozu İstasyonu",
     sozler: {

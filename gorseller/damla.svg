@@ -10,8 +10,10 @@
       <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#7cc4ef" stroke-width="2.5" stroke-linecap="round"/>
     </pattern>
   </defs>
+  <g transform="translate(1.6 2.1) scale(0.92)">
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
     <path d="M20 4 q-16 22 -16 32 q0 14 16 14 q16 0 16 -14 q0 -10 -16 -32z" fill="url(#su)" stroke-width="3.5"/>
     <path d="M12 34 q0 -6 5 -10" fill="none" stroke="#ffffff" stroke-width="3.5"/>
+  </g>
   </g>
 </svg>

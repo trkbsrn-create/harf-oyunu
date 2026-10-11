@@ -14,11 +14,13 @@
       <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#8fd16a" stroke-width="3" stroke-linecap="round"/>
     </pattern>
   </defs>
+  <g transform="translate(3.9 3.6) scale(0.94)">
   <ellipse cx="65" cy="116" rx="34" ry="5" fill="#000" fill-opacity="0.13"/>
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
     <path d="M64 112 v-50" fill="none" stroke="#6fbf4a" stroke-width="5"/>
     <path d="M60 112 q-26 -24 -22 -64 q10 26 22 42z M70 112 q26 -24 22 -64 q-10 26 -22 42z" fill="url(#yesil)" stroke-width="3"/>
     <path d="M64 64 q-26 -10 -24 -40 q2 -18 14 -22 q-4 20 10 30 q14 -10 10 -30 q12 4 14 22 q2 30 -24 40z" fill="url(#mor)"/>
     <path d="M58 28 v-12 M64 30 v-16 M70 28 v-12" fill="none" stroke="#ffc928" stroke-width="4"/>
+  </g>
   </g>
 </svg>

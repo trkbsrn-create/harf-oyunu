@@ -10,11 +10,13 @@
       <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#e0533d" stroke-width="3.5" stroke-linecap="round"/>
     </pattern>
   </defs>
+  <g transform="translate(6.5 6.0) scale(0.9)">
   <ellipse cx="65" cy="116" rx="40" ry="5" fill="#000" fill-opacity="0.13"/>
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
     <path d="M54 30 v-18 h22 v18" fill="none" stroke-width="5"/>
     <path d="M30 30 h70 q6 0 6 6 v68 q0 6 -6 6 h-70 q-6 0 -6 -6 v-68 q0 -6 6 -6z" fill="url(#kirmizi)"/>
     <path d="M46 34 v72 M84 34 v72" fill="none" stroke-width="3"/>
     <circle cx="40" cy="114" r="5" fill="#2b2b2b"/><circle cx="90" cy="114" r="5" fill="#2b2b2b"/>
+  </g>
   </g>
 </svg>

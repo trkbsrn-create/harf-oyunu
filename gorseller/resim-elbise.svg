@@ -14,9 +14,11 @@
       <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ff9c8a" stroke-width="2.5" stroke-linecap="round"/>
     </pattern>
   </defs>
+  <g transform="translate(7.8 7.2) scale(0.88)">
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
     <path d="M48 8 q4 12 17 12 q13 0 17 -12 l14 10 l-8 20 l-6 -4 v18 l32 60 q-49 12 -98 0 l32 -60 v-18 l-6 4 l-8 -20z" fill="url(#elbise)"/>
     <path d="M42 58 h46" fill="none" stroke-width="5"/>
     <circle cx="65" cy="58" r="6" fill="url(#pembe)" stroke-width="3"/>
+  </g>
   </g>
 </svg>

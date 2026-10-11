@@ -228,6 +228,9 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Düğmeye (görev, menü, harita) basıp parmak/fare biraz kayınca karakter oraya yürüyordu; God mode'dan basılı
   gelen fareyle de kendiliğinden yürüyordu. Kaydırarak yürüme yalnızca boş yerde başlayan dokunuşta olur
   (`yuruyusDokunusu`). Yeni düğme eklerken dokunup kaydırmayı da dene.
+- Resimlerde kenardan kesilen çizimler vardı (araba, dinozor, bere...) ve halka gezegenin önünden tam geçiyordu, dizgin
+  kaplumbağanın gözünü kapatıyordu. Yeni resmi büyük çizip bak; taşan resmi `KUCULT`'a ekle (doodle_ciz.py);
+  halkanın arka yarısını gezegenden önce, ön yarısını sonra çiz.
 
 ## Bekleyen işler
 - TTKB Dik Temel Abece yazı tipi: yazardan izin bekleniyor; izin gelirse dosya depoya eklenir.
