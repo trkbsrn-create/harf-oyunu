@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Toka (fiyonklu saç tokası) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="847" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="pembe" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="6" height="6" fill="#ffd2c8"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ff9c8a" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M65 60 q-40 -46 -54 -14 q-6 30 54 14z M65 60 q40 -46 54 -14 q6 30 -54 14z" fill="url(#pembe)"/>
+    <circle cx="65" cy="60" r="11" fill="#ff7f6a"/>
+    <path d="M30 96 h70" fill="none" stroke="#c98f4f" stroke-width="7"/>
+  </g>
+</svg>

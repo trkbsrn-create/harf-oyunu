@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Pencere (perdeli) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="836" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="mavi" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#bfe3f5"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#7cc3e6" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="kirmizi" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#ff9c8a"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#e0533d" stroke-width="3.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M16 10 h98 v100 h-98z" fill="url(#mavi)"/>
+    <path d="M65 10 v100 M16 60 h98" fill="none" stroke-width="5"/>
+    <path d="M16 10 h26 q-6 50 6 100 h-32z M114 10 h-26 q6 50 -6 100 h32z" fill="url(#kirmizi)" stroke-width="3"/>
+    <path d="M10 112 h110" fill="none" stroke="#8e6340" stroke-width="8"/>
+  </g>
+</svg>

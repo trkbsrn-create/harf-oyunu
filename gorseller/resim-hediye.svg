@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Hediye paketi (fiyonklu) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="820" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kirmizi" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#ff9c8a"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#e0533d" stroke-width="3.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="sari" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+      <rect width="6" height="6" fill="#ffe680"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffc928" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="116" rx="46" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 50 h86 v62 h-86z" fill="url(#kirmizi)"/>
+    <path d="M16 36 h98 v16 h-98z" fill="url(#kirmizi)"/>
+    <path d="M58 36 h14 v76 h-14z" fill="url(#sari)" stroke-width="3"/>
+    <path d="M65 36 q-30 -30 -34 -6 q4 10 34 6z M65 36 q30 -30 34 -6 q-4 10 -34 6z" fill="url(#sari)" stroke-width="3"/>
+  </g>
+</svg>

@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Saksı (içinde çiçek) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="840" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kiremit" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="6" height="6" fill="#ffb3a8"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#e0533d" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="yesil" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9eba7"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#8fd16a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="116" rx="34" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M40 72 h50 l-8 42 h-34z" fill="url(#kiremit)"/>
+    <path d="M34 64 h62 v10 h-62z" fill="url(#kiremit)"/>
+    <path d="M65 64 v-30" fill="none" stroke="#6fbf4a" stroke-width="5"/>
+    <path d="M65 50 q-20 -6 -24 -20 q18 0 24 20z M65 46 q20 -6 24 -20 q-18 0 -24 20z" fill="url(#yesil)" stroke-width="2.5"/>
+    <circle cx="65" cy="22" r="12" fill="#ff9c8a"/><circle cx="65" cy="22" r="5" fill="#ffe680" stroke-width="2"/>
+  </g>
+</svg>
