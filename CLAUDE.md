@@ -230,6 +230,9 @@ Her hatadan sonra buraya yeni bir kural ekle.
   (`yuruyusDokunusu`). Yeni düğme eklerken dokunup kaydırmayı da dene.
 - Bulutta alınan civciv adaya inince kayboluyordu: ada sahnesi uyanırken evcil hayvanı yeniden kurmuyordu. Başka sahnede
   değişen ortak durumu (Dolap, Canta) uyanan sahnede yeniden çiz (`events.on("wake")`).
+- Ada ekranında dolap açılınca düğmeleri dokunmayı almıyordu, pencere kapanmadı ("oyun dondu"): kamera kaydığı için
+  kap (container) içindeki düğmelerin dokunma yeri kaydı. Ekrana sabit pencerede her dokunulan nesneye ayrıca
+  `setScrollFactor(0)` ver; kayan ekranda (ada) gerçek tıklamayla dene (canvas'a mousedown).
 - Resimlerde kenardan kesilen çizimler vardı (araba, dinozor, bere...) ve halka gezegenin önünden tam geçiyordu, dizgin
   kaplumbağanın gözünü kapatıyordu. Yeni resmi büyük çizip bak; taşan resmi `KUCULT`'a ekle (doodle_ciz.py);
   halkanın arka yarısını gezegenden önce, ön yarısını sonra çiz.
