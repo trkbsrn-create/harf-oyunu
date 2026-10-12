@@ -221,7 +221,7 @@ class MarketPaneli {
     const s = this.sahne;
     Sesler.canta(true);
     const kap = s.add.container(0, 0).setDepth(9700).setScrollFactor(0);
-    const perde = s.add.rectangle(640, 360, 1280, 720, 0x000000, 0.35).setInteractive();
+    const perde = s.add.rectangle(640, 360, 1280, 720, 0x000000, 0.35).setInteractive().setScrollFactor(0);
     const g = s.add.graphics();
     g.fillStyle(0x000000, 0.18);
     g.fillRoundedRect(90, 30, 1100, 670, 34);
@@ -230,7 +230,7 @@ class MarketPaneli {
     g.lineStyle(5, 0x2b2b2b, 1);
     g.strokeRoundedRect(80, 20, 1100, 670, 34);
     const baslik = doodleYazi(s, 640, 58, this.dolap ? "Dolabım" : "Bulut Market", 42, "mavi").setOrigin(0.5);
-    const kapat = s.add.circle(1150, 48, 28, 0xff8a7a).setStrokeStyle(4, 0x2b2b2b).setInteractive({ useHandCursor: true });
+    const kapat = s.add.circle(1150, 48, 28, 0xff8a7a).setStrokeStyle(4, 0x2b2b2b).setInteractive({ useHandCursor: true }).setScrollFactor(0); // kayan ada ekranında da dokunma yeri doğru olsun
     const carpi = s.add.text(1150, 46, "✕", { fontFamily: "Andika", fontSize: "32px", color: "#ffffff" }).setOrigin(0.5);
     kapat.on("pointerdown", () => this.kapat());
     kap.add([perde, g, baslik, kapat, carpi]);
@@ -274,7 +274,7 @@ class MarketPaneli {
       d.lineStyle(secili ? 5 : 3, 0x2b2b2b, 1);
       d.strokeRoundedRect(x - 118, 145, 236, 50, 24);
       const yazi = s.add.text(x, 168, t.ad, { fontFamily: "Andika", fontSize: "28px", color: "#2b2b2b" }).setOrigin(0.5);
-      const alan = s.add.zone(x, 170, 236, 50).setInteractive({ useHandCursor: true });
+      const alan = s.add.zone(x, 170, 236, 50).setInteractive({ useHandCursor: true }).setScrollFactor(0); // kayan ada ekranında da dokunma yeri doğru olsun
       alan.on("pointerdown", () => {
         if (this.sekme === t.tur) return;
         this.sekme = t.tur;
@@ -322,7 +322,7 @@ class MarketPaneli {
       });
       if (!yeter) resim.setAlpha(0.45);
     }
-    const alan = s.add.zone(82, 112, 165, 224).setInteractive({ useHandCursor: true });
+    const alan = s.add.zone(82, 112, 165, 224).setInteractive({ useHandCursor: true }).setScrollFactor(0); // kayan ada ekranında da dokunma yeri doğru olsun
     alan.on("pointerdown", () => this.dokun(e, kart));
     kart.add(alan);
     this.icerik.add(kart);
