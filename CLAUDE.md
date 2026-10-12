@@ -252,7 +252,7 @@ Her hatadan sonra buraya yeni bir kural ekle.
   varilidir: oyunlar kumbaraya damla verir (`Canta.kumbara`, her yeni adada sıfırlanır). Sırığın tepesindeki
   tezgâhta (BulutSahnesi) eşyalar o adanın harf damlalarıyla alınır (market.js: `MARKET_ESYALARI`, `Dolap`
   profilde kalır, `giyimDokusu` şapka/gözlüğü karakterin üstüne çizer, kıyafet cocuk*-<ek>.svg, `petKur`).
-  Damla yetmezse kart sallanır, peri bir şey söylemez (öğretmenin kararı). Şimdilik 1. adanın 4 eşyası;
+  Damla yetmezse kart sallanır, peri bir şey söylemez (öğretmenin kararı). God mode damla düğmesi kumbarayı 999 yapar. Şimdilik 1. adanın 4 eşyası;
   sıradaki: 2.-5. adanın eşyaları (öğretmenle onaylı; gözlük, şapka, kıyafet, evcil hayvan, ucuzdan pahalıya):
   2. güneş gözlüğü, kovboy şapkası, yeşil tişört, kedi; 3. kalp gözlük, korsan şapkası, mor tişört, köpek;
   4. yıldız gözlük, kaptan şapkası, denizci tişörtü, yavru kaplumbağa; 5. uzay gözlüğü, taç, altın kıyafet, küçük ejderha.
