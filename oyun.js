@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 200;
+const SURUM = 201;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -1514,12 +1514,13 @@ class AdaSahnesi extends Phaser.Scene {
     const d = this.tanriDamla;
     if (!d || this.cantaAcik || this.tesisAcik || this.menuAcik) return false;
     if (Math.hypot(p.x - d.x, p.y - d.y) > 40) return false;
-    let eklenen = 0;
-    for (const h of this.varilHarfleri) while (Canta.damlaEkle(h, this.siseSiniri(h))) eklenen++;
+    for (const h of this.varilHarfleri) while (Canta.damlaEkle(h, this.siseSiniri(h)));
+    // Öğretmenin isteği: God mode'da markette harcamak için sınırsız kumbara damlası
+    for (const h of this.varilHarfleri) Canta.kumbara[h] = 999;
+    this.kumbaraGoster();
     this.damlaNoktalariniCiz();
     Sesler.ac();
-    if (eklenen) Sesler.damla();
-    else Sesler.nota(440, 0, 0.08, 0.1);
+    Sesler.damla(); // kumbara her zaman dolar
     this.tweens.add({ targets: d, scale: 1.2, duration: 110, yoyo: true });
     this.tweens.add({ targets: this.cantaDugmesi, scale: 1.2, duration: 110, yoyo: true, delay: 150 });
     return true;
