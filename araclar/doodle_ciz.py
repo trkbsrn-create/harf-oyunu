@@ -36,6 +36,7 @@ KUCULT = {
     "resim-roket.svg": 0.94, "resim-sogan.svg": 0.94, "resim-supurge.svg": 0.92, "resim-ucurtma.svg": 0.94,
     "resim-balon.svg": 0.94, "simge-harfi-yaz.svg": 0.9, "simge-harfle-boya.svg": 0.92, "simge-yilan.svg": 0.9,
     "damla-bos.svg": 0.92, "yildiz-tozu-bos.svg": 0.9,  # dolu hâlleriyle aynı boyda
+    "pet-kedi.svg": 0.86, "pet-kaplumbaga.svg": 0.88, "pet-tavsan.svg": 0.9, "pet-ejderha.svg": 0.9, "pet-robot.svg": 0.92,
 }
 
 
@@ -4371,16 +4372,23 @@ for _ek, _t in TESIS_TEMALARI.items():
 
 # ---- Bulut Market (öğretmenin fikri): kumbara, tezgâh, giyilen eşyalar ----
 # Kumbara (ada ekranında çantanın altında; bitkisi büyüyen harfin varilinden kazanılan damlalar): 80x70
-yaz("kumbara.svg", 80, 70, "Pembe domuz kumbara", PEMBE,
-    golge(40, 66, 30, 4) + kalem('''    <path d="M22 60 v6 M54 60 v6" fill="none" stroke-width="6"/>
-    <ellipse cx="40" cy="38" rx="32" ry="24" fill="url(#pembe)"/>
-    <path d="M18 20 l4 -12 l10 10z" fill="#ff9c8a" stroke-width="3"/>
-    <ellipse cx="68" cy="40" rx="8" ry="9" fill="#ffb3a8" stroke-width="3"/>
-    <circle cx="66" cy="38" r="1.6" fill="#2b2b2b" stroke="none"/><circle cx="70" cy="42" r="1.6" fill="#2b2b2b" stroke="none"/>
-    <circle cx="54" cy="30" r="2.6" fill="#2b2b2b" stroke="none"/>
-    <path d="M32 16 h16" fill="none" stroke-width="5"/>
-    <path d="M8 36 q-8 -2 -4 -8" fill="none" stroke-width="3"/>
+# Öğretmenin isteği: domuz değil, kutu kumbara (üstünde para yarığı, içine damla düşer)
+yaz("kumbara.svg", 80, 70, "Kutu kumbara (üstte yarık, düşen damla)", TAHTA + tarama("altin", "#ffe680", "#e0a82e", 35, 5, 2.5),
+    golge(40, 66, 32, 4) + kalem('''    <path d="M8 30 l8 -10 h48 l8 10z" fill="#c98f4f"/>
+    <rect x="8" y="30" width="64" height="34" rx="4" fill="url(#tahta)"/>
+    <path d="M30 25 h20" fill="none" stroke-width="5"/>
+    <path d="M8 40 h64" fill="none" stroke-width="2.5"/>
+    <circle cx="40" cy="52" r="6" fill="url(#altin)" stroke-width="2.5"/>
+    <path d="M40 2 q-7 9 -7 13 q0 6 7 6 q7 0 7 -6 q0 -4 -7 -13z" fill="#bfe3f5" stroke-width="2.5"/>
 ''', 3.5), 901)
+# Dolap (ada ekranında; alınan kostümleri giyip çıkarmak için): 70x80
+yaz("dolap.svg", 70, 80, "Elbise dolabı (iki kapaklı)", TAHTA,
+    golge(35, 77, 28, 3) + kalem('''    <rect x="8" y="6" width="54" height="66" rx="5" fill="url(#tahta)"/>
+    <path d="M35 8 v62" fill="none" stroke-width="3"/>
+    <circle cx="30" cy="40" r="3" fill="#ffe680" stroke-width="2"/><circle cx="40" cy="40" r="3" fill="#ffe680" stroke-width="2"/>
+    <path d="M14 72 v4 M56 72 v4" fill="none" stroke-width="5"/>
+    <path d="M44 16 q5 -6 10 0 l-2 10 h-6z" fill="#ff9c8a" stroke-width="2"/>
+''', 3.5), 906)
 # Market tezgâhı (bulutun üstünde): 260x250, alt ortası tezgâhın ayakları
 yaz("market-tezgah.svg", 260, 250, "Bulut Market tezgâhı (çizgili tente, tabela)",
     TAHTA + tarama("tente", "#ff9c8a", "#ffffff", 0, 26, 13),
@@ -4392,33 +4400,156 @@ yaz("market-tezgah.svg", 260, 250, "Bulut Market tezgâhı (çizgili tente, tabe
     <circle cx="70" cy="150" r="10" fill="#ffe680" stroke-width="3"/><circle cx="196" cy="148" r="9" fill="#9be3dc" stroke-width="3"/>
     <path d="M120 156 l10 -20 l10 20z" fill="#c8a2ff" stroke-width="3"/>
 '''), 902)
-# Giyilenler: karakterin kendi ölçüsünde (cocuk.svg 90x130; baş (45,36) r23, gözler (37,38) ve (53,38)).
-# Markette büyük gösterilir (yüklerken büyütülür).
-yaz("giyim-gozluk-yuvarlak.svg", 44, 18, "Yuvarlak gözlük (karakter ölçüsünde)", "",
-    kalem('''    <circle cx="13" cy="9" r="7" fill="#d8f0ff" fill-opacity="0.6"/>
+
+# ---- Bulut Market kostümleri (karakter ölçüsünde; cocuk.svg 90x130, baş (45,36) r23, gözler (37,38) ve (53,38)).
+# Gözlük 44x18 (gözlerin ortası (13,9) ve (31,9)); şapka 64x48 (kenarı altta, y 40-46, başın tepesine oturur);
+# evcil hayvan 44x44 (alt ortası ayak). Markette büyük gösterilir (yüklerken büyütülür).
+def gozluk(ad, aciklama, govde, desen=""):
+    yaz(f"giyim-gozluk-{ad}.svg", 44, 18, aciklama, desen, kalem(govde, 2.5), 903, 1.2)
+
+KOPRU = '    <path d="M20 8 q2 -3 4 0 M6 8 l-4 -2 M38 8 l4 -2" fill="none"/>\n'
+gozluk("yuvarlak", "Yuvarlak gözlük", '''    <circle cx="13" cy="9" r="7" fill="#d8f0ff" fill-opacity="0.6"/>
     <circle cx="31" cy="9" r="7" fill="#d8f0ff" fill-opacity="0.6"/>
-    <path d="M20 8 q2 -3 4 0 M6 8 l-4 -2 M38 8 l4 -2" fill="none"/>
-''', 2.5), 903, 1.5)
-yaz("giyim-sapka-kagit.svg", 64, 34, "Gazeteden kâğıt şapka (karakter ölçüsünde)", "",
-    kalem('''    <path d="M4 30 l28 -26 l28 26z" fill="#f4f1e6"/>
-    <path d="M14 22 h10 M12 26 h18 M36 22 h12 M34 26 h16 M26 14 h12" fill="none" stroke="#9a9a9a" stroke-width="2"/>
-    <path d="M2 30 h60" fill="none" stroke-width="3"/>
-''', 2.5), 904, 1.5)
-yaz("pet-civciv.svg", 44, 44, "Evcil civciv (karakterin arkasından gelir)", SARI2,
-    golge(22, 41, 14, 3) + kalem('''    <path d="M16 36 v5 M26 36 v5" fill="none" stroke="#ff9a3c" stroke-width="3"/>
+''' + KOPRU)
+gozluk("gunes", "Güneş gözlüğü", '''    <path d="M4 4 h16 q0 11 -8 11 q-8 0 -8 -11z" fill="#3b3f55"/>
+    <path d="M24 4 h16 q0 11 -8 11 q-8 0 -8 -11z" fill="#3b3f55"/>
+    <path d="M7 7 l4 -1" fill="none" stroke="#ffffff" stroke-width="1.6"/>
+''' + KOPRU)
+gozluk("kalp", "Kalp gözlük", '''    <path d="M13 16 l-8 -7 q-3 -5 2 -7 q4 -1 6 3 q2 -4 6 -3 q5 2 2 7z" fill="#ff8a9a"/>
+    <path d="M31 16 l-8 -7 q-3 -5 2 -7 q4 -1 6 3 q2 -4 6 -3 q5 2 2 7z" fill="#ff8a9a"/>
+''' + KOPRU)
+gozluk("yildiz", "Yıldız gözlük", '''    <path d="M13 1 l2.4 5 l5.4 .6 l-4 3.7 l1 5.3 l-4.8 -2.6 l-4.8 2.6 l1 -5.3 l-4 -3.7 l5.4 -.6z" fill="#ffe680"/>
+    <path d="M31 1 l2.4 5 l5.4 .6 l-4 3.7 l1 5.3 l-4.8 -2.6 l-4.8 2.6 l1 -5.3 l-4 -3.7 l5.4 -.6z" fill="#ffe680"/>
+''' + KOPRU)
+gozluk("korsan", "Korsan göz bandı", '''    <path d="M2 4 q20 -4 40 0" fill="none" stroke-width="2"/>
+    <ellipse cx="31" cy="9" rx="8" ry="7" fill="#2b2b2b"/>
+''')
+gozluk("uzay", "Uzay gözlüğü (tek parça parlak cam)", '''    <path d="M3 4 q19 -4 38 0 q1 10 -8 11 q-6 0 -8 -4 q-2 4 -8 4 q-9 -1 -14 -11z" fill="#7fe0f0" fill-opacity="0.85"/>
+    <path d="M8 7 l6 -1" fill="none" stroke="#ffffff" stroke-width="1.6"/>
+''')
+
+def sapka(ad, aciklama, govde, desen=""):
+    yaz(f"giyim-sapka-{ad}.svg", 64, 48, aciklama, desen, kalem(govde, 2.5), 904, 1.2)
+
+sapka("kagit", "Gazeteden kâğıt şapka", '''    <path d="M4 44 l28 -26 l28 26z" fill="#f4f1e6"/>
+    <path d="M14 36 h10 M12 40 h18 M36 36 h12 M34 40 h16 M26 28 h12" fill="none" stroke="#9a9a9a" stroke-width="2"/>
+    <path d="M2 44 h60" fill="none" stroke-width="3"/>
+''')
+sapka("kep", "Kırmızı kep", '''    <path d="M12 42 q0 -22 20 -22 q20 0 20 22z" fill="#ff8a7a"/>
+    <path d="M44 42 h18 q2 4 -4 5 h-14z" fill="#e0533d"/>
+    <circle cx="32" cy="20" r="2.5" fill="#e0533d"/>
+''')
+sapka("parti", "Parti şapkası (çizgili külah, ponpon)", '''    <path d="M18 44 l14 -36 l14 36z" fill="#9be3dc"/>
+    <path d="M22 34 l18 -8 M20 40 l22 -10 M26 22 l10 -5" fill="none" stroke="#ff8ac0" stroke-width="3"/>
+    <circle cx="32" cy="7" r="5" fill="#ffe680"/>
+''')
+sapka("cicek", "Çiçek tacı", '''    <path d="M10 42 q22 -10 44 0" fill="none" stroke="#6fbf4a" stroke-width="5"/>
+    <circle cx="14" cy="38" r="5" fill="#ff8ac0"/><circle cx="25" cy="34" r="5" fill="#ffe680"/>
+    <circle cx="36" cy="33" r="5" fill="#c8a2ff"/><circle cx="47" cy="36" r="5" fill="#ff9c8a"/>
+    <circle cx="25" cy="34" r="1.6" fill="#e0a82e" stroke="none"/><circle cx="36" cy="33" r="1.6" fill="#ffe680" stroke="none"/>
+''')
+sapka("tavsan", "Tavşan kulakları (taç bandı)", '''    <path d="M22 40 q-8 -22 -2 -36 q8 6 8 36z" fill="#ffffff"/>
+    <path d="M42 40 q8 -22 2 -36 q-8 6 -8 36z" fill="#ffffff"/>
+    <path d="M22 36 q-4 -16 -1 -26 M42 36 q4 -16 1 -26" fill="none" stroke="#ffb3c8" stroke-width="3"/>
+    <path d="M10 44 q22 -10 44 0" fill="none" stroke="#ff8ac0" stroke-width="5"/>
+''')
+sapka("asci", "Aşçı şapkası", '''    <path d="M16 44 v-14 q-10 -4 -6 -14 q6 -8 14 -2 q4 -10 12 -6 q6 -6 12 2 q10 -2 8 10 q-2 8 -8 10 v14z" fill="#ffffff"/>
+    <path d="M16 38 h32" fill="none" stroke-width="2"/>
+''')
+sapka("kovboy", "Kovboy şapkası", '''    <path d="M2 40 q30 12 60 0 q-2 6 -30 8 q-28 -2 -30 -8z" fill="#c98f4f"/>
+    <path d="M14 40 q-2 -26 8 -26 q6 0 10 6 q4 -6 10 -6 q10 0 8 26 q-18 6 -36 0z" fill="#d9a46b"/>
+    <path d="M15 34 q17 5 34 0" fill="none" stroke="#8e6340" stroke-width="4"/>
+''')
+sapka("korsan", "Korsan şapkası", '''    <path d="M2 42 q8 -32 30 -32 q22 0 30 32 q-30 -10 -60 0z" fill="#3b3f55"/>
+    <circle cx="32" cy="27" r="5" fill="#ffffff" stroke-width="2"/>
+    <path d="M26 34 l12 4 M38 34 l-12 4" fill="none" stroke="#ffffff" stroke-width="2"/>
+''')
+sapka("kaptan", "Kaptan şapkası", '''    <path d="M8 34 q0 -18 24 -18 q24 0 24 18z" fill="#ffffff"/>
+    <rect x="12" y="33" width="40" height="7" fill="#3b3f55"/>
+    <path d="M16 40 q16 10 32 0z" fill="#2b2b2b"/>
+    <path d="M32 20 v10 M28 28 q4 4 8 0 M29 22 h6" fill="none" stroke="#e0a82e" stroke-width="2.4"/>
+''')
+sapka("sihirbaz", "Sihirbaz şapkası (yıldızlı)", '''    <path d="M6 44 q26 -8 52 0 l-6 2 h-40z" fill="#7d5fc4"/>
+    <path d="M14 44 l22 -42 l-4 18 l12 24z" fill="#a77be0"/>
+    <path d="M26 30 l1.6 3 l3.4 .5 l-2.5 2.3 l.6 3.3 l-3.1 -1.6 l-3 1.6 l.6 -3.3 l-2.5 -2.3 l3.4 -.5z M34 18 l1 2 l2 .3 l-1.5 1.4 l.4 2 l-1.9 -1 l-1.9 1 l.4 -2 l-1.5 -1.4 l2 -.3z" fill="#ffe680" stroke-width="1.5"/>
+''')
+sapka("tac", "Altın taç (taşlı)", '''    <path d="M10 44 v-24 l11 10 l11 -18 l11 18 l11 -10 v24z" fill="url(#altin)"/>
+    <circle cx="21" cy="38" r="3" fill="#ff8a7a" stroke-width="2"/><circle cx="32" cy="36" r="3.4" fill="#9be3dc" stroke-width="2"/>
+    <circle cx="43" cy="38" r="3" fill="#c8a2ff" stroke-width="2"/>
+''', tarama("altin", "#ffe680", "#e0a82e", 35, 5, 2.5))
+
+def pet(ad, aciklama, govde, desen=""):
+    yaz(f"pet-{ad}.svg", 44, 44, aciklama, desen, golge(22, 41, 14, 3) + kalem(govde, 3), 905, 1.6)
+
+pet("civciv", "Evcil civciv", '''    <path d="M16 36 v5 M26 36 v5" fill="none" stroke="#ff9a3c" stroke-width="3"/>
     <ellipse cx="22" cy="26" rx="15" ry="13" fill="url(#sari)"/>
     <circle cx="22" cy="13" r="10" fill="url(#sari)"/>
     <path d="M30 13 l8 2 l-8 3z" fill="#ff9a3c" stroke-width="2"/>
     <circle cx="25" cy="11" r="1.8" fill="#2b2b2b" stroke="none"/>
     <path d="M12 26 q6 6 12 0" fill="none" stroke-width="2.5"/>
     <path d="M20 4 q2 -4 4 0" fill="none" stroke-width="2.5"/>
-''', 3), 905, 2)
-# Mavi tişört: karakterin dört karesi (tişört deseni koyu mavi)
+''', SARI2)
+pet("kedi", "Evcil kedi (turuncu)", '''    <path d="M6 30 q-6 -10 2 -14" fill="none" stroke="#ff9a3c" stroke-width="5"/>
+    <ellipse cx="20" cy="31" rx="13" ry="9" fill="#ffc58f"/>
+    <path d="M14 40 v2 M26 40 v2" fill="none" stroke-width="3"/>
+    <circle cx="29" cy="18" r="10" fill="#ffc58f"/>
+    <path d="M21 12 l1 -10 l7 6z M37 12 l-1 -10 l-7 6z" fill="#ffc58f" stroke-width="2.4"/>
+    <circle cx="26" cy="17" r="1.6" fill="#2b2b2b" stroke="none"/><circle cx="33" cy="17" r="1.6" fill="#2b2b2b" stroke="none"/>
+    <path d="M27 22 q2 2 4 0 M38 20 h5 M38 23 l5 1" fill="none" stroke-width="1.6"/>
+''')
+pet("kopek", "Evcil köpek (beyaz, kahve kulaklı)", '''    <path d="M6 26 q-6 -6 -2 -10" fill="none" stroke-width="3"/>
+    <ellipse cx="20" cy="30" rx="14" ry="9" fill="#ffffff"/>
+    <path d="M12 39 v3 M28 39 v3" fill="none" stroke-width="3"/>
+    <circle cx="30" cy="17" r="10" fill="#ffffff"/>
+    <path d="M21 12 q-6 4 -3 12 q4 -2 5 -8z M39 12 q6 4 3 12 q-4 -2 -5 -8z" fill="#b07a42" stroke-width="2.2"/>
+    <circle cx="27" cy="16" r="1.6" fill="#2b2b2b" stroke="none"/><circle cx="33" cy="16" r="1.6" fill="#2b2b2b" stroke="none"/>
+    <ellipse cx="30" cy="21" rx="2.6" ry="2" fill="#2b2b2b"/>
+''')
+pet("tavsan", "Evcil tavşan (beyaz)", '''    <ellipse cx="20" cy="31" rx="13" ry="10" fill="#ffffff"/>
+    <circle cx="8" cy="31" r="4" fill="#ffffff"/>
+    <circle cx="29" cy="20" r="9" fill="#ffffff"/>
+    <path d="M25 13 q-4 -12 0 -12 q4 0 3 12z M32 13 q2 -12 6 -11 q3 2 -3 12z" fill="#ffffff" stroke-width="2.2"/>
+    <circle cx="27" cy="19" r="1.6" fill="#2b2b2b" stroke="none"/><circle cx="33" cy="19" r="1.6" fill="#2b2b2b" stroke="none"/>
+    <circle cx="30" cy="23" r="1.5" fill="#ff8ac0" stroke="none"/>
+''')
+pet("kaplumbaga", "Evcil yavru kaplumbağa", '''    <path d="M10 38 v3 M30 38 v3" fill="none" stroke="#6fbf4a" stroke-width="4"/>
+    <ellipse cx="37" cy="30" rx="6" ry="5" fill="#b5e48c"/>
+    <path d="M4 36 q2 -22 18 -22 q16 0 18 22z" fill="#6fbf4a"/>
+    <path d="M14 26 l8 -6 l8 6 l-4 8 h-8z" fill="none" stroke-width="2"/>
+    <circle cx="39" cy="28" r="1.4" fill="#2b2b2b" stroke="none"/>
+''')
+pet("penguen", "Evcil penguen", '''    <ellipse cx="22" cy="26" rx="12" ry="15" fill="#3b3f55"/>
+    <ellipse cx="22" cy="29" rx="8" ry="11" fill="#ffffff" stroke-width="2"/>
+    <circle cx="19" cy="18" r="1.6" fill="#2b2b2b" stroke="none"/><circle cx="25" cy="18" r="1.6" fill="#2b2b2b" stroke="none"/>
+    <path d="M19 22 l3 3 l3 -3z" fill="#ff9a3c" stroke-width="1.6"/>
+    <path d="M15 41 h5 M24 41 h5" fill="none" stroke="#ff9a3c" stroke-width="3"/>
+''')
+pet("robot", "Evcil robot", '''    <path d="M22 4 v6" fill="none" stroke-width="2.4"/><circle cx="22" cy="4" r="2.5" fill="#ff8a7a" stroke-width="2"/>
+    <rect x="11" y="10" width="22" height="14" rx="4" fill="#c6d4e0"/>
+    <circle cx="17" cy="17" r="2.5" fill="#7fe0f0" stroke-width="1.6"/><circle cx="27" cy="17" r="2.5" fill="#7fe0f0" stroke-width="1.6"/>
+    <rect x="9" y="26" width="26" height="12" rx="4" fill="#9fb3c8"/>
+    <circle cx="15" cy="40" r="3" fill="#5a5f7a" stroke-width="2"/><circle cx="29" cy="40" r="3" fill="#5a5f7a" stroke-width="2"/>
+''')
+pet("ejderha", "Evcil küçük ejderha (yeşil, kanatlı)", '''    <path d="M4 34 q-4 -8 4 -10" fill="none" stroke="#6fbf4a" stroke-width="4"/>
+    <path d="M14 22 l-8 -12 l12 4z" fill="#ff9c8a" stroke-width="2.2"/>
+    <ellipse cx="18" cy="31" rx="12" ry="9" fill="#8fd16a"/>
+    <path d="M12 39 v3 M24 39 v3" fill="none" stroke-width="3"/>
+    <circle cx="31" cy="19" r="9" fill="#8fd16a"/>
+    <path d="M27 11 l1 -6 l3 5 M33 11 l2 -5 l2 6" fill="#ffe680" stroke-width="2"/>
+    <circle cx="33" cy="17" r="1.8" fill="#2b2b2b" stroke="none"/>
+    <path d="M38 23 q3 1 4 -1" fill="none" stroke-width="2"/>
+''')
+
+# Kıyafetler: karakterin dört karesinde tişört deseninin renkleri değişir (cocuk*-<ad>.svg)
+KIYAFETLER = {"mavi": ("#8fc2f7", "#3f86d9"), "yesil": ("#b5e48c", "#5fae4a"), "kirmizi": ("#ff9c8a", "#e0533d"),
+              "turuncu": ("#ffc58f", "#ff8a3c"), "pembe": ("#ffd2e6", "#ff8ac0"), "mor": ("#d8c2f3", "#a77be0"),
+              "denizci": ("#ffffff", "#3f86d9"), "gece": ("#7a80a8", "#3b3f55"), "altin": ("#ffd84a", "#c9961e")}
 for _ad in ["cocuk", "cocuk-adim1", "cocuk-adim2", "cocuk-tirman"]:
     with open(os.path.join(KLASOR, f"{_ad}.svg"), encoding="utf-8") as f:
-        _s = f.read()
-    _s = _s.replace('<rect width="7" height="7" fill="#ffe680"/>', '<rect width="7" height="7" fill="#8fc2f7"/>', 1)
-    _s = _s.replace('stroke="#ffc928" stroke-width="3"', 'stroke="#3f86d9" stroke-width="3"', 1)
-    _s = _s.replace("<!-- Ana karakter", "<!-- Mavi tişörtlü (Bulut Market; doodle_ciz.py üretir). Ana karakter", 1)
-    with open(os.path.join(KLASOR, f"{_ad}-mavi.svg"), "w", encoding="utf-8") as f:
-        f.write(_s)
+        _kaynak = f.read()
+    for _ek, (_zemin, _cizgi) in KIYAFETLER.items():
+        _s = _kaynak.replace('<rect width="7" height="7" fill="#ffe680"/>', f'<rect width="7" height="7" fill="{_zemin}"/>', 1)
+        _s = _s.replace('stroke="#ffc928" stroke-width="3"', f'stroke="{_cizgi}" stroke-width="3"', 1)
+        _s = _s.replace("<!-- Ana karakter", f"<!-- Kıyafet: {_ek} (Bulut Market; doodle_ciz.py üretir). Ana karakter", 1)
+        with open(os.path.join(KLASOR, f"{_ad}-{_ek}.svg"), "w", encoding="utf-8") as f:
+            f.write(_s)
