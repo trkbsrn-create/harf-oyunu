@@ -5,9 +5,9 @@ const Canta = {
   BOYUT: 8, // çantadaki kutucuk sayısı
   esyalar: [],
   // Sihirli su şişesindeki damlalar: harf -> damla sayısı. Her harf için en çok
-  // DAMLA_SINIRI damla (bir tohumu büyütmeye yetecek kadar).
+  // DAMLA_SINIRI damla (bir tohumu büyütmeye yetecek kadar; öğretmenin isteği: 6, her sulama 2).
   damlalar: {},
-  DAMLA_SINIRI: 3,
+  DAMLA_SINIRI: 6,
 
   // Aynı harfin tohumu zaten varsa tekrar eklenmez. Eklendiyse true döner.
   // tekrarEdilecek: çocuk harfi söyleyemedi, oyun kendiliğinden onayladı.
@@ -27,9 +27,9 @@ const Canta = {
   },
 
   // Harfin şişesine bir damla ekler. Şişe çantada yoksa ilk damlayla birlikte gelir.
-  // Şişe o harf için doluysa false döner.
-  damlaEkle(harf) {
-    if (this.damlaSayisi(harf) >= this.DAMLA_SINIRI) return false;
+  // Şişe o harf için doluysa (sinir: bitkinin daha istediği damla) false döner.
+  damlaEkle(harf, sinir = this.DAMLA_SINIRI) {
+    if (this.damlaSayisi(harf) >= Math.min(sinir, this.DAMLA_SINIRI)) return false;
     if (!this.siseVarMi()) this.esyalar.push({ tur: "sise" });
     this.damlalar[harf] = this.damlaSayisi(harf) + 1;
     return true;
@@ -55,8 +55,13 @@ const Canta = {
     return this.esyalar.splice(sira, 1)[0];
   },
 
+  // Kumbara (Bulut Market): harf -> damla. Bitkisi büyüyen harfin varilinden kazanılır, markette
+  // harcanır; her yeni adada sıfırlanır (öğretmenin kararı; alınan eşyalar Dolap'ta kalır).
+  kumbara: {},
+
   // Yeni oyun: çanta boş
   sifirla() {
+    this.kumbara = {};
     this.esyalar = [];
     this.damlalar = {};
     this.alinanParcalar = {};
@@ -64,12 +69,14 @@ const Canta = {
 
   // Kayıt için çantanın kopyası / kayıttan geri yükleme
   durum() {
-    return JSON.parse(JSON.stringify({ esyalar: this.esyalar, damlalar: this.damlalar, alinanParcalar: this.alinanParcalar }));
+    return JSON.parse(JSON.stringify({ esyalar: this.esyalar, damlalar: this.damlalar, alinanParcalar: this.alinanParcalar,
+      kumbara: this.kumbara }));
   },
 
   yukle(d) {
     this.esyalar = (d && d.esyalar) || [];
     this.damlalar = (d && d.damlalar) || {};
     this.alinanParcalar = (d && d.alinanParcalar) || {};
+    this.kumbara = (d && d.kumbara) || {};
   },
 };

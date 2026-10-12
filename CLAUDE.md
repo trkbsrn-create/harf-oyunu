@@ -38,7 +38,7 @@ menüsü). O konumda resimli kelime yoksa (ö, d, b, g, c, h, f ile biten; ğ il
 - `minioyunlar/<ad>/oyun.js` her mini oyun; `ortak.js` ortak sınıf `MiniOyunSahnesi`, `PLANLANAN_OYUNLAR`,
   hece/kelime yardımcıları; `menu.js` deneme menüsü; `lambalar.js` Oyun Lambaları (çarkın yerine).
 - `profil.js` profil (hayvan resmi + takma ad; ilk ekranda "Profil oluştur" → `ProfilPaneli`), istatistik, karne (`KarneSahnesi`).
-- `harfler.js` harf verisi; `canta.js` çanta; `sesler.js` efekt ve sesli okuma; `dinleyici.js` mikrofon.
+- `harfler.js` harf verisi; `canta.js` çanta (kumbara dahil); `market.js` Bulut Market; `sesler.js` efekt ve sesli okuma; `dinleyici.js` mikrofon.
 - `gorseller/` kendi SVG'lerimiz, `araclar/doodle_ciz.py` ile üretilir (görsel değişikliği betikte yapılır).
 - `araclar/dene.js` mini oyun deneme aracı (aşağıda "Test").
 - Öğretmen sayfaları: `mikrofon.html`, `kayit.html`, `dinle.html`, `resimler.html` (bütün kelime resimleri, kontrol için).
@@ -247,4 +247,12 @@ Her hatadan sonra buraya yeni bir kural ekle.
   yönergeleri. Öğretmenin kararı: omuzda her işi yalnızca 1. adada gösterir; sonraki adalarda başta yalnızca
   görevi söyler (`adaGorevi`). Sözü bitince menü düğmesinin yanına yerleşir (`periyiKondur`); dokununca
   oyunun durumuna göre sıradaki işi söyler (`simdikiGorev`). Perinin adı yok (sorulabilir). Yeni mini oyuna `YONERGELER`'de yönerge yazılır.
-- Bulut Market (taslak proje): karakterin kıyafetini değiştirme, yeni eşyalar alma. Sonra başlanacak.
+- Bulut Market (öğretmenin fikri; adalar çok hızlı bitiyordu): bitki 6 damlayla büyür (`SULAMA_DAMLASI` 2, her sulama
+  bir aşama; şişe bitkinin daha istediği kadar alır, `siseSiniri`). Bitkisi büyüyen harfin varili altın kumbara
+  varilidir: oyunlar kumbaraya damla verir (`Canta.kumbara`, her yeni adada sıfırlanır). Sırığın tepesindeki
+  tezgâhta (BulutSahnesi) eşyalar o adanın harf damlalarıyla alınır (market.js: `MARKET_ESYALARI`, `Dolap`
+  profilde kalır, `giyimDokusu` şapka/gözlüğü karakterin üstüne çizer, kıyafet cocuk*-<ek>.svg, `petKur`).
+  Damla yetmezse kart sallanır, peri bir şey söylemez (öğretmenin kararı). Şimdilik 1. adanın 4 eşyası;
+  sıradaki: 2.-5. adanın eşyaları (öğretmenle onaylı; gözlük, şapka, kıyafet, evcil hayvan, ucuzdan pahalıya):
+  2. güneş gözlüğü, kovboy şapkası, yeşil tişört, kedi; 3. kalp gözlük, korsan şapkası, mor tişört, köpek;
+  4. yıldız gözlük, kaptan şapkası, denizci tişörtü, yavru kaplumbağa; 5. uzay gözlüğü, taç, altın kıyafet, küçük ejderha.
