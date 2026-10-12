@@ -4426,17 +4426,6 @@ yaz("dolap.svg", 70, 80, "Elbise dolabı (iki kapaklı)", TAHTA,
     <path d="M14 72 v4 M56 72 v4" fill="none" stroke-width="5"/>
     <path d="M44 16 q5 -6 10 0 l-2 10 h-6z" fill="#ff9c8a" stroke-width="2"/>
 ''', 3.5), 906)
-# Market tezgâhı (bulutun üstünde): 260x250, alt ortası tezgâhın ayakları
-yaz("market-tezgah.svg", 260, 250, "Bulut Market tezgâhı (çizgili tente, tabela)",
-    TAHTA + tarama("tente", "#ff9c8a", "#ffffff", 0, 26, 13),
-    golge(130, 244, 110, 6) + kalem('''    <path d="M30 100 v140 M230 100 v140" fill="none" stroke="#8e6340" stroke-width="10"/>
-    <path d="M30 100 v140 M230 100 v140" fill="none" stroke-width="2"/>
-    <rect x="16" y="160" width="228" height="60" rx="8" fill="url(#tahta)"/>
-    <path d="M10 104 l20 -60 h200 l20 60 q-20 18 -40 0 q-20 18 -40 0 q-20 18 -40 0 q-20 18 -40 0 q-20 18 -40 0 q-20 18 -40 0z" fill="url(#tente)"/>
-    <rect x="70" y="10" width="120" height="40" rx="10" fill="#fbf4e2"/>
-    <circle cx="70" cy="150" r="10" fill="#ffe680" stroke-width="3"/><circle cx="196" cy="148" r="9" fill="#9be3dc" stroke-width="3"/>
-    <path d="M120 156 l10 -20 l10 20z" fill="#c8a2ff" stroke-width="3"/>
-'''), 902)
 
 # ---- Bulut Market kostümleri (karakter ölçüsünde; cocuk.svg 90x130, baş (45,36) r23, gözler (37,38) ve (53,38)).
 # Gözlük 44x18 (gözlerin ortası (13,9) ve (31,9)); şapka 64x48 (kenarı altta, y 40-46, başın tepesine oturur);
@@ -4646,3 +4635,16 @@ for _tur, _ayar in ADA_KIYAFETLERI.items():
                 _s = _s.replace(_e, _y)
             with open(os.path.join(KLASOR, f"{_ad}-{_ek}.svg"), "w", encoding="utf-8") as f:
                 f.write(_s)
+
+# Market zeplini (öğretmenin isteği: market havada zeplin; dokununca açılır): 260x160.
+# Gövdenin altında tabela kabini (yazı "Market" oyunda yazılır: kabinin ortası (130, 132)).
+yaz("market-zeplin.svg", 260, 160, "Market zeplini (çizgili gövde, kanatçıklar, altında tabela kabini)",
+    tarama("zeplin", "#ffd2c8", "#ff9c8a", 0, 22, 11),
+    kalem('''    <path d="M28 52 l-22 -26 l30 8z M28 78 l-22 26 l30 -8z" fill="#9be3dc"/>
+    <ellipse cx="128" cy="65" rx="102" ry="46" fill="url(#zeplin)"/>
+    <path d="M60 30 q-6 35 0 70 M196 30 q6 35 0 70" fill="none" stroke-width="2.5"/>
+    <path d="M210 52 q12 13 0 26" fill="none" stroke-width="2.5"/>
+    <path d="M92 108 l8 10 M164 108 l-8 10" fill="none" stroke-width="3"/>
+    <rect x="80" y="116" width="100" height="34" rx="10" fill="#fbf4e2"/>
+    <circle cx="96" cy="44" r="7" fill="#ffffff" stroke="none" opacity="0.8"/>
+'''), 907)

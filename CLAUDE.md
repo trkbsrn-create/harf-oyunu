@@ -258,7 +258,7 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Bulut Market (öğretmenin fikri; adalar çok hızlı bitiyordu): bitki 6 damlayla büyür (`SULAMA_DAMLASI` 2, her sulama
   bir aşama; şişe bitkinin daha istediği kadar alır, `siseSiniri`). Bitkisi büyüyen harfin varili altın kumbara
   varilidir: oyunlar kumbaraya damla verir (`Canta.kumbara`, kutu kumbara simgesi; her yeni adada sıfırlanır).
-  Sırığın tepesindeki tezgâhta (BulutSahnesi, her adada) kostümler satılır (market.js `MARKET_ESYALARI`; sekmeler
+  Sırığın tepesinde havada süzülen zeplinde (BulutSahnesi, her adada; dokununca açılır, yürümek gerekmez) kostümler satılır (market.js `MARKET_ESYALARI`; sekmeler
   şapka, gözlük, kıyafet, evcil hayvan; 12'den çoksa sayfalar). `adalar`: o adada görünecek olanlar satılır (tişört
   1-2, gözlük 1-3, şapka 1-4, evcil hayvan hepsi) ve her adaya konseptine uygun eşyalar (öğretmenin isteği): 2. ada
   sonbahar şapkaları/tişörtleri, sincap, kirpi, baykuş; 3. ada mont renkleri (cocuk*-kis-<renk>), kulaklık, kar

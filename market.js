@@ -104,7 +104,7 @@ function marketResimleriniYukle(sahne, ada) {
     for (const ad of kareler) sahne.load.svg(`${ad}${ek}`, `gorseller/${ad}${ek}.svg`);
     if (e.tur === "dalgic") for (const ad of ["cocuk-yuz", "kiz-yuz"]) sahne.load.svg(`${ad}-${e.ek}`, `gorseller/${ad}-${e.ek}.svg`);
   }
-  sahne.load.svg("market-tezgah", "gorseller/market-tezgah.svg");
+  sahne.load.svg("market-zeplin", "gorseller/market-zeplin.svg");
   sahne.load.svg("kumbara", "gorseller/kumbara.svg");
   sahne.load.svg("dolap", "gorseller/dolap.svg");
 }
