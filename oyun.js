@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 201;
+const SURUM = 202;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -644,7 +644,11 @@ class AdaSahnesi extends Phaser.Scene {
       else if (veri && veri.final) {
         this.input.enabled = true;
         this.cameras.main.fadeIn(500, 251, 247, 236);
-      } else this.siriktanIn(veri);
+      } else {
+        this.siriktanIn(veri);
+        petKur(this); // bulutta alınan evcil hayvan adada da gelsin
+        this.dolapGoster();
+      }
     });
 
     this.input.on("pointerdown", (p) => {
@@ -652,6 +656,7 @@ class AdaSahnesi extends Phaser.Scene {
       // Parmak kaydırınca yürüme yalnızca boş yere dokunarak başlayan dokunuşta olur (düğmeye basıp
       // kaydırınca ya da God mode'dan basılı gelen fareyle karakter yürümez)
       this.yuruyusDokunusu = false;
+      if (this.dolapPaneli && this.dolapPaneli.acikMi()) return; // dolap kendi düğmeleriyle çalışır
       if (this.periKonusuyor) { this.periDokunusu(p); return; } // peri konuşurken yalnızca balon ve düğme
       if (this.rehberBalonAlani && this.rehberBalonAlani.contains(p.x, p.y)) { // ipucu yeniden okunur
         Sesler.soyle(this.rehberIpucu.soz);
@@ -661,6 +666,7 @@ class AdaSahnesi extends Phaser.Scene {
       if (this.menuPerisiDokunus(p)) return;
       if (this.tirmaniyor) return; // sırıkta tırmanırken dokunuş beklenmez
       if (this.kumbaraTiklamasi(p)) return;
+      if (this.dolapTiklamasi(p)) return;
       if (this.tanriDamlaTiklamasi(p)) return;
       if (this.menuTiklamasi(p)) return;
       if (this.tesisTiklamasi(p)) return;
@@ -1415,6 +1421,7 @@ class AdaSahnesi extends Phaser.Scene {
     pencere.add([g, pencereResmi, baslik, this.cantaIcerigi]);
     this.cantaPenceresi = pencere;
     this.kumbaraKur();
+    this.dolapKur();
     this.tanriDamlaKur();
   }
 
@@ -1463,6 +1470,31 @@ class AdaSahnesi extends Phaser.Scene {
     return true;
   }
 
+  // ---- Dolap (öğretmenin isteği): alınan kostümler giyilir ya da çıkarılır; ilk eşya alınınca görünür ----
+  dolapKur() {
+    this.dolapDugmesi = this.add.image(1280 - 80, 272, "dolap").setScrollFactor(0).setDepth(9000).setVisible(false);
+    this.dolapPaneli = new MarketPaneli(this, this.ada, () => {
+      this.cocuk.setTexture(cocukDokusu(this, "cocuk"));
+      petKur(this);
+    }, true);
+    this.dolapGoster();
+  }
+
+  dolapGoster() {
+    if (!Dolap.alinanlar.length || this.dolapDugmesi.visible) return;
+    this.dolapDugmesi.setVisible(true).setScale(0);
+    this.tweens.add({ targets: this.dolapDugmesi, scale: 1, duration: 400, ease: "Back.Out" });
+  }
+
+  dolapTiklamasi(p) {
+    const d = this.dolapDugmesi;
+    if (!d || !d.visible || this.cantaAcik || this.tesisAcik || this.menuAcik) return false;
+    if (Math.abs(p.x - d.x) > 40 || Math.abs(p.y - d.y) > 44) return false;
+    this.hedef = null;
+    this.dolapPaneli.ac();
+    return true;
+  }
+
   // Harfin bitkisi büyüdüyse varili kumbara varilidir: oyunlar kumbaraya damla verir
   kumbaraModu(harf) {
     return this.tarlaKareleri.some((k) => k.ekili && k.ekili.harf === harf && k.asama >= BUYUME_ASAMASI);
@@ -1507,7 +1539,7 @@ class AdaSahnesi extends Phaser.Scene {
     const arti = this.add.text(18, 12, "+", {
       fontFamily: "Andika", fontSize: "30px", color: "#2e9e3a", stroke: "#ffffff", strokeThickness: 5,
     }).setOrigin(0.5);
-    this.tanriDamla = this.add.container(1280 - 80, 272, [g, damla, arti]).setScrollFactor(0).setDepth(9000);
+    this.tanriDamla = this.add.container(1280 - 80, 366, [g, damla, arti]).setScrollFactor(0).setDepth(9000);
   }
 
   tanriDamlaTiklamasi(p) {
@@ -4117,7 +4149,7 @@ class AdaSahnesi extends Phaser.Scene {
     let dy = 0;
 
     if (this.tirmaniyor) return; // sırıkta tırmanırken karakteri tırmanma hareketi yönetir
-    if (this.donuk || this.cantaAcik || this.menuAcik || this.tesisAcik) {
+    if (this.donuk || this.cantaAcik || this.menuAcik || this.tesisAcik || (this.dolapPaneli && this.dolapPaneli.acikMi())) {
       this.cocuk.setAngle(0).setScale(1).setTexture(cocukDokusu(this, "cocuk")).setOrigin(0.5, 1);
       return;
     }
@@ -5564,7 +5596,7 @@ class BulutSahnesi extends Phaser.Scene {
     // Bulut Market (öğretmenin fikri): sırık ile tabela arasında tezgâh; o adanın eşyaları varsa
     this.market = null;
     this.markete = false;
-    if (MARKET_ESYALARI.some((e) => e.ada === this.ada)) {
+    { // öğretmenin isteği: bütün eşyalar her adada satılır (fiyat o adanın harfleriyle)
       this.tezgah = this.add.image(640, 575, "market-tezgah").setOrigin(0.5, 1).setDepth(2.5);
       this.add.text(640, 355, "Market", { fontFamily: "Andika", fontSize: "26px", color: "#e0533d" }).setOrigin(0.5).setDepth(2.6);
       this.market = new MarketPaneli(this, this.ada, () => {

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="90" height="130" viewBox="0 0 90 130">
-  <!-- Mavi tişörtlü (Bulut Market; doodle_ciz.py üretir). Ana karakter: doodle tarzı çocuk (kendi çizimimiz) -->
+  <!-- Kıyafet: mavi (Bulut Market; doodle_ciz.py üretir). Ana karakter: doodle tarzı çocuk (kendi çizimimiz) -->
   <defs>
     <!-- Kalem titremesi: çizgileri hafifçe büker, elle çizilmiş gibi gösterir -->
     <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">

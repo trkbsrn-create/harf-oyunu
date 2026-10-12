@@ -228,6 +228,8 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Düğmeye (görev, menü, harita) basıp parmak/fare biraz kayınca karakter oraya yürüyordu; God mode'dan basılı
   gelen fareyle de kendiliğinden yürüyordu. Kaydırarak yürüme yalnızca boş yerde başlayan dokunuşta olur
   (`yuruyusDokunusu`). Yeni düğme eklerken dokunup kaydırmayı da dene.
+- Bulutta alınan civciv adaya inince kayboluyordu: ada sahnesi uyanırken evcil hayvanı yeniden kurmuyordu. Başka sahnede
+  değişen ortak durumu (Dolap, Canta) uyanan sahnede yeniden çiz (`events.on("wake")`).
 - Resimlerde kenardan kesilen çizimler vardı (araba, dinozor, bere...) ve halka gezegenin önünden tam geçiyordu, dizgin
   kaplumbağanın gözünü kapatıyordu. Yeni resmi büyük çizip bak; taşan resmi `KUCULT`'a ekle (doodle_ciz.py);
   halkanın arka yarısını gezegenden önce, ön yarısını sonra çiz.
@@ -249,10 +251,9 @@ Her hatadan sonra buraya yeni bir kural ekle.
   oyunun durumuna göre sıradaki işi söyler (`simdikiGorev`). Perinin adı yok (sorulabilir). Yeni mini oyuna `YONERGELER`'de yönerge yazılır.
 - Bulut Market (öğretmenin fikri; adalar çok hızlı bitiyordu): bitki 6 damlayla büyür (`SULAMA_DAMLASI` 2, her sulama
   bir aşama; şişe bitkinin daha istediği kadar alır, `siseSiniri`). Bitkisi büyüyen harfin varili altın kumbara
-  varilidir: oyunlar kumbaraya damla verir (`Canta.kumbara`, her yeni adada sıfırlanır). Sırığın tepesindeki
-  tezgâhta (BulutSahnesi) eşyalar o adanın harf damlalarıyla alınır (market.js: `MARKET_ESYALARI`, `Dolap`
-  profilde kalır, `giyimDokusu` şapka/gözlüğü karakterin üstüne çizer, kıyafet cocuk*-<ek>.svg, `petKur`).
-  Damla yetmezse kart sallanır, peri bir şey söylemez (öğretmenin kararı). God mode damla düğmesi kumbarayı 999 yapar. Şimdilik 1. adanın 4 eşyası;
-  sıradaki: 2.-5. adanın eşyaları (öğretmenle onaylı; gözlük, şapka, kıyafet, evcil hayvan, ucuzdan pahalıya):
-  2. güneş gözlüğü, kovboy şapkası, yeşil tişört, kedi; 3. kalp gözlük, korsan şapkası, mor tişört, köpek;
-  4. yıldız gözlük, kaptan şapkası, denizci tişörtü, yavru kaplumbağa; 5. uzay gözlüğü, taç, altın kıyafet, küçük ejderha.
+  varilidir: oyunlar kumbaraya damla verir (`Canta.kumbara`, kutu kumbara simgesi; her yeni adada sıfırlanır).
+  Sırığın tepesindeki tezgâhta (BulutSahnesi, her adada) 34 kostüm satılır (market.js `MARKET_ESYALARI`: şapka,
+  gözlük, kıyafet, evcil hayvan; öğretmenin isteği: istediğini alsın). Fiyat eşyanın değerinin o adanın
+  harflerine bölünmesidir (`fiyatHesapla`). `Dolap` profilde kalır; ada ekranındaki dolap simgesinden giyilir/çıkarılır.
+  `giyimDokusu` şapka (64x48) ve gözlüğü (44x18) karakterin üstüne çizer, kıyafet cocuk*-<renk>.svg, `petKur`
+  (buluttan inince de). Damla yetmezse kart sallanır, peri bir şey söylemez. God mode damla düğmesi kumbarayı 999 yapar.

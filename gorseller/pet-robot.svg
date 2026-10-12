@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="44" height="44" viewBox="0 0 44 44">
+  <!-- Evcil robot (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="905" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="1.6" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <g transform="translate(1.8 1.8) scale(0.92)">
+  <ellipse cx="22" cy="41" rx="14" ry="3" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 4 v6" fill="none" stroke-width="2.4"/><circle cx="22" cy="4" r="2.5" fill="#ff8a7a" stroke-width="2"/>
+    <rect x="11" y="10" width="22" height="14" rx="4" fill="#c6d4e0"/>
+    <circle cx="17" cy="17" r="2.5" fill="#7fe0f0" stroke-width="1.6"/><circle cx="27" cy="17" r="2.5" fill="#7fe0f0" stroke-width="1.6"/>
+    <rect x="9" y="26" width="26" height="12" rx="4" fill="#9fb3c8"/>
+    <circle cx="15" cy="40" r="3" fill="#5a5f7a" stroke-width="2"/><circle cx="29" cy="40" r="3" fill="#5a5f7a" stroke-width="2"/>
+  </g>
+  </g>
+</svg>
