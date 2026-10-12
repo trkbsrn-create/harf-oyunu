@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 205;
+const SURUM = 206;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -5619,12 +5619,17 @@ class BulutSahnesi extends Phaser.Scene {
     this.harfYazi = yazi;
     this.tabelaX = tabelaX;
 
-    // Bulut Market (öğretmenin fikri): sırık ile tabela arasında tezgâh; o adanın eşyaları varsa
+    // Bulut Market (öğretmenin fikri): sırık ile tabela arasında havada süzülen zeplin; dokununca market
+    // açılır (öğretmenin isteği: karakterin oraya yürümesine gerek yok)
     this.market = null;
-    this.markete = false;
-    { // öğretmenin isteği: bütün eşyalar her adada satılır (fiyat o adanın harfleriyle)
-      this.tezgah = this.add.image(640, 575, "market-tezgah").setOrigin(0.5, 1).setDepth(2.5);
-      this.add.text(640, 355, "Market", { fontFamily: "Andika", fontSize: "26px", color: "#e0533d" }).setOrigin(0.5).setDepth(2.6);
+    {
+      this.zeplin = this.add.container(620, 250, [
+        this.add.image(0, 0, "market-zeplin"),
+        this.add.text(0, 52, "Market", { fontFamily: "Andika", fontSize: "26px", color: "#e0533d" }).setOrigin(0.5),
+      ]).setDepth(2.6);
+      this.tweens.add({ targets: this.zeplin, y: 236, angle: { from: -2, to: 2 }, duration: 1800, yoyo: true,
+        repeat: -1, ease: "Sine.InOut" });
+      this.zeplinAlani = new Phaser.Geom.Rectangle(620 - 130, 250 - 95, 260, 190);
       this.market = new MarketPaneli(this, this.ada, () => {
         this.cocuk.setTexture(cocukDokusu(this, "cocuk"));
         petKur(this);
@@ -5655,12 +5660,11 @@ class BulutSahnesi extends Phaser.Scene {
     this.input.on("pointerdown", (p) => {
       Sesler.ac();
       if (!this.hazir || (this.market && this.market.acikMi())) return;
-      // Tezgâha dokununca önüne yürür, varınca market açılır
-      this.markete = false;
-      if (this.tezgah && this.tezgah.getBounds().contains(p.x, p.y)) {
-        this.markete = true;
-        this.inecek = false;
-        this.hedef = { x: 640, y: BULUT_YURUME.y + 90 };
+      // Zeplene dokununca market açılır
+      if (this.zeplin && this.zeplinAlani.contains(p.x, p.y)) {
+        this.hedef = null;
+        this.tweens.add({ targets: this.zeplin, scale: 1.08, duration: 100, yoyo: true });
+        this.market.ac();
         return;
       }
       // Sırığa dokununca: dibine yürür ve aşağı iner
@@ -5726,10 +5730,6 @@ class BulutSahnesi extends Phaser.Scene {
     if (this.hedef && uzunluk < 4) {
       this.hedef = null;
       if (this.inecek) this.asagiIn();
-      if (this.markete) {
-        this.markete = false;
-        this.market.ac();
-      }
       this.cocuk.setTexture(cocukDokusu(this, "cocuk")).setScale(1);
       return;
     }
