@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="64" height="48" viewBox="0 0 64 48">
+  <!-- Kulaklık (tüylü, kışlık) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="904" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="1.2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 36 q0 -32 22 -32 q22 0 22 32" fill="none" stroke-width="6"/>
+    <path d="M10 36 q0 -32 22 -32 q22 0 22 32" fill="none" stroke="#9be3dc" stroke-width="3"/>
+    <circle cx="9" cy="38" r="9" fill="#ffd2e6"/><circle cx="55" cy="38" r="9" fill="#ffd2e6"/>
+  </g>
+</svg>

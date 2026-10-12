@@ -258,8 +258,12 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Bulut Market (öğretmenin fikri; adalar çok hızlı bitiyordu): bitki 6 damlayla büyür (`SULAMA_DAMLASI` 2, her sulama
   bir aşama; şişe bitkinin daha istediği kadar alır, `siseSiniri`). Bitkisi büyüyen harfin varili altın kumbara
   varilidir: oyunlar kumbaraya damla verir (`Canta.kumbara`, kutu kumbara simgesi; her yeni adada sıfırlanır).
-  Sırığın tepesindeki tezgâhta (BulutSahnesi, her adada) 34 kostüm satılır (market.js `MARKET_ESYALARI`: şapka,
-  gözlük, kıyafet, evcil hayvan; öğretmenin isteği: istediğini alsın). Fiyat eşyanın değerinin o adanın
-  harflerine bölünmesidir (`fiyatHesapla`). `Dolap` profilde kalır; ada ekranındaki dolap simgesinden giyilir/çıkarılır.
+  Sırığın tepesindeki tezgâhta (BulutSahnesi, her adada) kostümler satılır (market.js `MARKET_ESYALARI`; sekmeler
+  şapka, gözlük, kıyafet, evcil hayvan; 12'den çoksa sayfalar). `adalar`: o adada görünecek olanlar satılır (tişört
+  1-2, gözlük 1-3, şapka 1-4, evcil hayvan hepsi) ve her adaya konseptine uygun eşyalar (öğretmenin isteği): 2. ada
+  sonbahar şapkaları/tişörtleri, sincap, kirpi, baykuş; 3. ada mont renkleri (cocuk*-kis-<renk>), kulaklık, kar
+  gözlüğü, fok, kutup ayısı, kardan adam; 4. ada dalgıç elbisesi renkleri (cocuk*-dalgic-<renk>, `yuzmeDokusu`),
+  inci tacı, denizyıldızı, balık, denizatı, ahtapot; 5. ada uzay giysisi renkleri, uzaylı, uzay robotu, uzay balinası
+  (adadaki hayvan resimleri, `dunya`). Fiyat eşyanın değerinin o adanın harflerine bölünmesidir (`fiyatHesapla`). `Dolap` profilde kalır; ada ekranındaki dolap simgesinden giyilir/çıkarılır.
   `giyimDokusu` şapka (64x48) ve gözlüğü (44x18) karakterin üstüne çizer, kıyafet cocuk*-<renk>.svg, `petKur`
   (buluttan inince de). Damla yetmezse kart sallanır, peri bir şey söylemez. God mode damla düğmesi kumbarayı 999 yapar.

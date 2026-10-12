@@ -6,33 +6,69 @@
 // Adalardaki özel kıyafetlerde (kışlık, dalgıç, astronot) kıyafet; dalgıç ve astronotta gözlük,
 // astronotta şapka görünmez.
 
-// Öğretmenin isteği: çok sayıda kostüm, çocuk istediğini alsın. Bütün eşyalar her adanın marketinde
-// satılır; fiyat o adanın harflerinin damlalarıyla (deger: toplam damla; fiyatHesapla harflere böler).
-// tur: sapka, gozluk, kiyafet, pet. resim: giyilen resim (karakter ölçüsünde); kiyafet için ek
-// (karakter resimleri cocuk*-<ek>.svg).
+// Öğretmenin isteği: çok sayıda kostüm, çocuk istediğini alsın; her adanın marketinde o adanın konseptine
+// uygun eşyalar da var. ada: hangi adaların marketinde satılır (o adada görünecek eşyalar: kıyafet 1-2. adada,
+// 3. adada mont, 4. adada dalgıç elbisesi, 5. adada uzay giysisi renkleri; gözlük 1-3, şapka 1-4. adada).
+// Fiyat o adanın harflerinin damlalarıyla (deger: toplam damla; fiyatHesapla harflere böler).
+// tur: sapka, gozluk, kiyafet (tişört), mont (kışlık), dalgic (dalgıç elbisesi), uzay (uzay giysisi), pet.
+// Kıyafet türlerinde ek: karakter resimlerinin eki (cocuk*-<ek>, cocuk*-kis-<ek>...). Evcil hayvanların bir
+// kısmı adalardaki hayvanların resmidir (dunya: resim oyunda zaten yüklü; olcek: karakter boyuna göre).
 const MARKET_TURLERI = [
   { tur: "sapka", ad: "Şapka" }, { tur: "gozluk", ad: "Gözlük" },
   { tur: "kiyafet", ad: "Kıyafet" }, { tur: "pet", ad: "Evcil hayvan" },
 ];
+const MARKET_SEKMESI = { sapka: "sapka", gozluk: "gozluk", kiyafet: "kiyafet", mont: "kiyafet", dalgic: "kiyafet", uzay: "kiyafet", pet: "pet" };
+const KIYAFET_KALIBI = { kiyafet: "", mont: "-kis", dalgic: "-dalgic", uzay: "-astronot" };
+const HEPSI = [1, 2, 3, 4, 5];
 const MARKET_ESYALARI = [
-  ["gozluk", "yuvarlak", "Yuvarlak gözlük", 3], ["gozluk", "gunes", "Güneş gözlüğü", 4],
-  ["gozluk", "kalp", "Kalp gözlük", 4], ["gozluk", "yildiz", "Yıldız gözlük", 5],
-  ["gozluk", "korsan", "Korsan bandı", 5], ["gozluk", "uzay", "Uzay gözlüğü", 6],
-  ["sapka", "kagit", "Kâğıt şapka", 4], ["sapka", "kep", "Kep", 5], ["sapka", "parti", "Parti şapkası", 5],
-  ["sapka", "cicek", "Çiçek tacı", 6], ["sapka", "tavsan", "Tavşan kulağı", 6], ["sapka", "asci", "Aşçı şapkası", 6],
-  ["sapka", "kovboy", "Kovboy şapkası", 7], ["sapka", "korsan", "Korsan şapkası", 7],
-  ["sapka", "kaptan", "Kaptan şapkası", 7], ["sapka", "sihirbaz", "Sihirbaz şapkası", 9], ["sapka", "tac", "Taç", 10],
-  ["kiyafet", "mavi", "Mavi tişört", 6], ["kiyafet", "yesil", "Yeşil tişört", 6], ["kiyafet", "kirmizi", "Kırmızı tişört", 6],
-  ["kiyafet", "turuncu", "Turuncu tişört", 6], ["kiyafet", "pembe", "Pembe tişört", 6], ["kiyafet", "mor", "Mor tişört", 7],
-  ["kiyafet", "denizci", "Denizci tişörtü", 8], ["kiyafet", "gece", "Gece mavisi", 8], ["kiyafet", "altin", "Altın kıyafet", 12],
-  ["pet", "civciv", "Civciv", 8], ["pet", "kedi", "Kedi", 10], ["pet", "kopek", "Köpek", 10], ["pet", "tavsan", "Tavşan", 10],
-  ["pet", "kaplumbaga", "Kaplumbağa", 11], ["pet", "penguen", "Penguen", 11], ["pet", "robot", "Robot", 13],
-  ["pet", "ejderha", "Ejderha", 15],
-].map(([tur, ad, isim, deger]) => ({
-  id: `${tur}-${ad}`, tur, ad: isim, deger, ek: ad,
-  resim: tur === "pet" ? `pet-${ad}` : tur === "kiyafet" ? `cocuk-${ad}` : `giyim-${tur}-${ad}`,
+  // Genel kostümler (1. ada ve sonrası)
+  ["gozluk", "yuvarlak", "Yuvarlak gözlük", 3, [1, 2, 3]], ["gozluk", "gunes", "Güneş gözlüğü", 4, [1, 2, 3]],
+  ["gozluk", "kalp", "Kalp gözlük", 4, [1, 2, 3]], ["gozluk", "yildiz", "Yıldız gözlük", 5, [1, 2, 3]],
+  ["gozluk", "korsan", "Korsan bandı", 5, [1, 2, 3]], ["gozluk", "uzay", "Uzay gözlüğü", 6, [1, 2, 3]],
+  ["sapka", "kagit", "Kâğıt şapka", 4, [1, 2, 3, 4]], ["sapka", "kep", "Kep", 5, [1, 2, 3, 4]],
+  ["sapka", "parti", "Parti şapkası", 5, [1, 2, 3, 4]], ["sapka", "cicek", "Çiçek tacı", 6, [1, 2, 3, 4]],
+  ["sapka", "tavsan", "Tavşan kulağı", 6, [1, 2, 3, 4]], ["sapka", "asci", "Aşçı şapkası", 6, [1, 2, 3, 4]],
+  ["sapka", "kovboy", "Kovboy şapkası", 7, [1, 2, 3, 4]], ["sapka", "korsan", "Korsan şapkası", 7, [1, 2, 3, 4]],
+  ["sapka", "kaptan", "Kaptan şapkası", 7, [1, 2, 3, 4]], ["sapka", "sihirbaz", "Sihirbaz şapkası", 9, [1, 2, 3, 4]],
+  ["sapka", "tac", "Taç", 10, [1, 2, 3, 4]],
+  ["kiyafet", "mavi", "Mavi tişört", 6, [1, 2]], ["kiyafet", "yesil", "Yeşil tişört", 6, [1, 2]],
+  ["kiyafet", "kirmizi", "Kırmızı tişört", 6, [1, 2]], ["kiyafet", "turuncu", "Turuncu tişört", 6, [1, 2]],
+  ["kiyafet", "pembe", "Pembe tişört", 6, [1, 2]], ["kiyafet", "mor", "Mor tişört", 7, [1, 2]],
+  ["kiyafet", "denizci", "Denizci tişörtü", 8, [1, 2]], ["kiyafet", "gece", "Gece mavisi", 8, [1, 2]],
+  ["kiyafet", "altin", "Altın kıyafet", 12, [1, 2]],
+  ["pet", "civciv", "Civciv", 8, HEPSI], ["pet", "kedi", "Kedi", 10, HEPSI], ["pet", "kopek", "Köpek", 10, HEPSI],
+  ["pet", "tavsan", "Tavşan", 10, HEPSI], ["pet", "kaplumbaga", "Kaplumbağa", 11, HEPSI],
+  ["pet", "penguen", "Penguen", 11, HEPSI], ["pet", "robot", "Robot", 13, HEPSI], ["pet", "ejderha", "Ejderha", 15, HEPSI],
+  // 2. ada: sonbahar
+  ["sapka", "yaprak", "Yaprak tacı", 6, [2]], ["sapka", "mantar", "Mantar şapka", 7, [2]],
+  ["sapka", "balkabagi", "Balkabağı şapka", 9, [2]],
+  ["kiyafet", "bordo", "Bordo tişört", 6, [2]], ["kiyafet", "hardal", "Hardal tişört", 6, [2]],
+  ["kiyafet", "kahve", "Kahverengi tişört", 7, [2]],
+  ["pet", "sincap", "Sincap", 10, [2], "sincap", 0.66], ["pet", "kirpi", "Kirpi", 10, [2], "kirpi", 0.8],
+  ["pet", "baykus", "Baykuş", 12, [2], "baykus", 0.66],
+  // 3. ada: kış
+  ["sapka", "kulaklik", "Kulaklık", 6, [3]], ["gozluk", "kar", "Kar gözlüğü", 6, [3]],
+  ["mont", "mavi", "Mavi mont", 7, [3]], ["mont", "yesil", "Yeşil mont", 7, [3]], ["mont", "mor", "Mor mont", 8, [3]],
+  ["mont", "pembe", "Pembe mont", 8, [3]], ["mont", "sari", "Sarı mont", 8, [3]],
+  ["pet", "fok", "Fok", 11, [3], "fok", 0.8], ["pet", "kutup-ayisi", "Kutup ayısı", 12, [3], "kutup-ayisi", 0.55],
+  ["pet", "kardan-adam", "Kardan adam", 13, [3], "kardan-adam", 0.55],
+  // 4. ada: su altı
+  ["sapka", "denizyildizi", "Denizyıldızı tokası", 6, [4]], ["sapka", "inci", "İnci tacı", 9, [4]],
+  ["dalgic", "pembe", "Pembe dalgıç", 7, [4]], ["dalgic", "yesil", "Yeşil dalgıç", 7, [4]],
+  ["dalgic", "sari", "Sarı dalgıç", 8, [4]], ["dalgic", "mor", "Mor dalgıç", 8, [4]], ["dalgic", "turuncu", "Turuncu dalgıç", 8, [4]],
+  ["pet", "su-balik", "Balık", 9, [4], "su-balik", 1], ["pet", "denizati", "Denizatı", 11, [4], "denizati", 0.6],
+  ["pet", "ahtapot", "Ahtapot", 12, [4], "ahtapot", 0.55],
+  // 5. ada: uzay
+  ["uzay", "pembe", "Pembe uzay giysisi", 8, [5]], ["uzay", "mavi", "Mavi uzay giysisi", 8, [5]],
+  ["uzay", "yesil", "Yeşil uzay giysisi", 8, [5]], ["uzay", "mor", "Mor uzay giysisi", 9, [5]],
+  ["uzay", "altin", "Altın uzay giysisi", 13, [5]],
+  ["pet", "uzayli", "Uzaylı", 13, [5], "uzayli", 0.66], ["pet", "robot-kucuk", "Uzay robotu", 12, [5], "robot-kucuk", 0.66],
+  ["pet", "uzay-balinasi", "Uzay balinası", 15, [5], "uzay-balinasi", 0.6],
+].map(([tur, ad, isim, deger, adalar, dunya, olcek]) => ({
+  id: `${tur}-${ad}`, tur, ad: isim, deger, ek: ad, adalar, dunya: !!dunya, olcek: olcek || 1,
+  resim: dunya || (tur === "pet" ? `pet-${ad}` : KIYAFET_KALIBI[tur] !== undefined ? `cocuk${KIYAFET_KALIBI[tur]}-${ad}` : `giyim-${tur}-${ad}`),
 }));
-const MARKET_KIYAFET_EKLERI = MARKET_ESYALARI.filter((e) => e.tur === "kiyafet").map((e) => e.ek);
+const KIYAFET_TURU = (e) => KIYAFET_KALIBI[e.tur] !== undefined;
 
 function marketEsyasi(id) {
   return MARKET_ESYALARI.find((e) => e.id === id) || null;
@@ -52,18 +88,21 @@ function fiyatHesapla(e, ada) {
   return fiyat;
 }
 
-// Sahnenin preload'unda: giyilen resimler (karakter ölçüsünde), markette gösterilen büyük hâlleri
-// ve kıyafetli karakter resimleri
-function marketResimleriniYukle(sahne) {
+// Sahnenin preload'unda: giyilen resimler (karakter ölçüsünde), markette gösterilen büyük hâlleri ve kıyafetli
+// karakter resimleri. Tişörtler her zaman; mont, dalgıç ve uzay giysisi renkleri yalnızca o adada yüklenir.
+function marketResimleriniYukle(sahne, ada) {
   for (const e of MARKET_ESYALARI) {
-    if (e.tur === "kiyafet") continue;
-    sahne.load.svg(e.resim, `gorseller/${e.resim}.svg`);
-    sahne.load.svg(`${e.resim}-buyuk`, `gorseller/${e.resim}.svg`, { scale: e.tur === "pet" ? 2.4 : 2.6 });
+    if (KIYAFET_TURU(e)) continue;
+    if (!e.dunya) sahne.load.svg(e.resim, `gorseller/${e.resim}.svg`);
+    sahne.load.svg(`${e.resim}-buyuk`, `gorseller/${e.resim}.svg`, { scale: e.dunya ? 1.6 : e.tur === "pet" ? 2.4 : 2.6 });
   }
-  for (const ek of MARKET_KIYAFET_EKLERI) {
-    for (const ad of ["cocuk", "cocuk-adim1", "cocuk-adim2", "cocuk-tirman", "kiz", "kiz-adim1", "kiz-adim2", "kiz-tirman"]) {
-      sahne.load.svg(`${ad}-${ek}`, `gorseller/${ad}-${ek}.svg`);
-    }
+  const kareler = ["cocuk", "cocuk-adim1", "cocuk-adim2", "cocuk-tirman", "kiz", "kiz-adim1", "kiz-adim2", "kiz-tirman"];
+  const turAdasi = { kiyafet: 0, mont: 3, dalgic: 4, uzay: 5 };
+  for (const e of MARKET_ESYALARI.filter(KIYAFET_TURU)) {
+    if (turAdasi[e.tur] && turAdasi[e.tur] !== ada) continue;
+    const ek = `${KIYAFET_KALIBI[e.tur]}-${e.ek}`;
+    for (const ad of kareler) sahne.load.svg(`${ad}${ek}`, `gorseller/${ad}${ek}.svg`);
+    if (e.tur === "dalgic") for (const ad of ["cocuk-yuz", "kiz-yuz"]) sahne.load.svg(`${ad}-${e.ek}`, `gorseller/${ad}-${e.ek}.svg`);
   }
   sahne.load.svg("market-tezgah", "gorseller/market-tezgah.svg");
   sahne.load.svg("kumbara", "gorseller/kumbara.svg");
@@ -119,8 +158,9 @@ const Dolap = {
 const GIYIM_UST = 30;
 function giyimDokusu(sahne, ad) {
   const g = Dolap.giyilen;
-  const ozel = /-(kis|dalgic|astronot)$/.test(ad);
-  const kiyafet = g.kiyafet && !ozel && marketEsyasi(g.kiyafet);
+  // Adanın özel kıyafetinde (kışlık, dalgıç, astronot) o kıyafetin rengi, değilse tişört
+  const tur = /-kis$/.test(ad) ? "mont" : /-dalgic$/.test(ad) ? "dalgic" : /-astronot$/.test(ad) ? "uzay" : "kiyafet";
+  const kiyafet = g[tur] && marketEsyasi(g[tur]);
   let govde = ad;
   if (kiyafet && sahne.textures.exists(`${ad}-${kiyafet.ek}`)) govde = `${ad}-${kiyafet.ek}`;
   const sapka = g.sapka && !/-astronot$/.test(ad) ? marketEsyasi(g.sapka) : null;
@@ -143,10 +183,18 @@ function giyimDokusu(sahne, ad) {
   }
   if (sapka) {
     const r = sahne.textures.get(sapka.resim).getSourceImage();
-    ctx.drawImage(r, (45 - 32) * o, (GIYIM_UST + 20 - 44) * o, 64 * o, 48 * o);
+    const asagi = sapka.ek === "kulaklik" ? 18 : 0; // kulaklık kulakların hizasına iner
+    ctx.drawImage(r, (45 - 32) * o, (GIYIM_UST + 20 - 44 + asagi) * o, 64 * o, 48 * o);
   }
   tuval.refresh();
   return anahtar;
+}
+
+// 4. adada yüzen karakter (cocuk-yuz): dalgıç elbisesinin rengi
+function yuzmeDokusu(sahne) {
+  const ad = karakterDokusu("cocuk-yuz");
+  const e = Dolap.giyilen.dalgic && marketEsyasi(Dolap.giyilen.dalgic);
+  return e && sahne.textures.exists(`${ad}-${e.ek}`) ? `${ad}-${e.ek}` : ad;
 }
 
 // Evcil hayvan: karakterin arkasından gelir, adım attıkça hafifçe zıplar
@@ -156,7 +204,7 @@ function petKur(sahne) {
   const e = Dolap.giyilen.pet && marketEsyasi(Dolap.giyilen.pet);
   if (!e || !sahne.cocuk || !sahne.textures.exists(e.resim)) return;
   const c = sahne.cocuk;
-  sahne.pet = sahne.add.image(c.x - 50, c.y, e.resim).setOrigin(0.5, 1).setDepth(c.depth);
+  sahne.pet = sahne.add.image(c.x - 50, c.y, e.resim).setOrigin(0.5, 1).setDepth(c.depth).setScale(e.olcek);
   sahne.pet.adim = 0;
 }
 
@@ -278,20 +326,54 @@ class MarketPaneli {
       alan.on("pointerdown", () => {
         if (this.sekme === t.tur) return;
         this.sekme = t.tur;
+        this.sayfa = 0;
         Sesler.nota(660, 0, 0.08, 0.1);
         this.ciz();
       });
       this.icerik.add([d, yazi, alan]);
     });
-    let esyalar = MARKET_ESYALARI.filter((e) => e.tur === this.sekme);
+    // Market: bu adada satılanlar (önce adaya özel olanlar); dolap: alınanlar
+    let esyalar = MARKET_ESYALARI.filter((e) => MARKET_SEKMESI[e.tur] === this.sekme);
     if (this.dolap) esyalar = esyalar.filter((e) => Dolap.varMi(e.id));
+    else {
+      esyalar = esyalar.filter((e) => e.adalar.includes(this.ada));
+      esyalar = [...esyalar.filter((e) => e.adalar.length === 1), ...esyalar.filter((e) => e.adalar.length > 1)];
+    }
     if (!esyalar.length) {
       this.icerik.add(s.add.text(640, 420, "Henüz yok.\nBulut Market'ten alabilirsin!", {
         fontFamily: "Andika", fontSize: "34px", color: "#9a8f78", align: "center",
       }).setOrigin(0.5));
       return;
     }
-    esyalar.slice(0, 12).forEach((e, i) => this.kartCiz(e, 106 + (i % 6) * 177, 212 + Math.floor(i / 6) * 236));
+    // 12'den çoksa sayfalar: son kart "Diğerleri ›", sonraki sayfanın ilk kartı "‹ Geri"
+    const yer = (i) => [106 + (i % 6) * 177, 212 + Math.floor(i / 6) * 236];
+    const SAYFA = 10;
+    const sayfaSayisi = esyalar.length > 12 ? Math.ceil(esyalar.length / SAYFA) : 1;
+    this.sayfa = Math.min(this.sayfa || 0, sayfaSayisi - 1);
+    const gosterilen = sayfaSayisi > 1 ? esyalar.slice(this.sayfa * SAYFA, (this.sayfa + 1) * SAYFA) : esyalar;
+    let sira = 0;
+    if (sayfaSayisi > 1 && this.sayfa > 0) this.okKarti(...yer(sira++), "‹ Geri", -1);
+    gosterilen.forEach((e) => this.kartCiz(e, ...yer(sira++)));
+    if (sayfaSayisi > 1 && this.sayfa < sayfaSayisi - 1) this.okKarti(...yer(sira), "Diğerleri ›", 1);
+  }
+
+  okKarti(x, y, yazi, yon) {
+    const s = this.sahne;
+    const kart = s.add.container(x, y);
+    const g = s.add.graphics();
+    g.fillStyle(0xffe680, 1);
+    g.fillRoundedRect(0, 0, 165, 224, 20);
+    g.lineStyle(4, 0x2b2b2b, 1);
+    g.strokeRoundedRect(0, 0, 165, 224, 20);
+    kart.add([g, s.add.text(82, 112, yazi, { fontFamily: "Andika", fontSize: "28px", color: "#2b2b2b" }).setOrigin(0.5)]);
+    const alan = s.add.zone(82, 112, 165, 224).setInteractive({ useHandCursor: true }).setScrollFactor(0);
+    alan.on("pointerdown", () => {
+      this.sayfa += yon;
+      Sesler.nota(660, 0, 0.08, 0.1);
+      this.ciz();
+    });
+    kart.add(alan);
+    this.icerik.add(kart);
   }
 
   kartCiz(e, x, y) {
@@ -306,7 +388,9 @@ class MarketPaneli {
     g.lineStyle(giyili ? 6 : 4, giyili ? 0x2e9e3a : 0x2b2b2b, 1);
     g.strokeRoundedRect(0, 0, 165, 224, 20);
     kart.add(g);
-    const resim = s.add.image(82, 72, e.tur === "kiyafet" ? karakterDokusu(e.resim) : `${e.resim}-buyuk`);
+    let doku = KIYAFET_TURU(e) ? karakterDokusu(e.resim) : `${e.resim}-buyuk`;
+    if (!s.textures.exists(doku)) doku = karakterDokusu(`cocuk${KIYAFET_KALIBI[e.tur] || ""}`); // başka adanın giysisi (dolapta)
+    const resim = s.add.image(82, 72, doku);
     resim.setScale(Math.min(1, 140 / resim.width, 110 / resim.height));
     const ad = s.add.text(82, 140, e.ad, { fontFamily: "Andika", fontSize: "21px", color: "#2b2b2b" }).setOrigin(0.5);
     kart.add([resim, ad]);
