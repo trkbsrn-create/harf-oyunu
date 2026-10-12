@@ -252,6 +252,9 @@ Her hatadan sonra buraya yeni bir kural ekle.
   yönergeleri. Öğretmenin kararı: omuzda her işi yalnızca 1. adada gösterir; sonraki adalarda başta yalnızca
   görevi söyler (`adaGorevi`). Sözü bitince menü düğmesinin yanına yerleşir (`periyiKondur`); dokununca
   oyunun durumuna göre sıradaki işi söyler (`simdikiGorev`). Perinin adı yok (sorulabilir). Yeni mini oyuna `YONERGELER`'de yönerge yazılır.
+- Kız karakter (öğretmenin isteği): ilk başlarken "Kiminle oynamak istersin?" (`karakterSor`), seçim profilde
+  (`Karakter`, profil.js); karşılamada "Karakteri değiştir". Doku adı `karakterDokusu`: cocuk* → kiz* (kiz*.svg ve bütün
+  türevleri doodle_ciz.py'de `KARAKTER_KARELERI` ile üretilir). Yeni karakter resmi eklerken kız hâlini de üret.
 - Bulut Market (öğretmenin fikri; adalar çok hızlı bitiyordu): bitki 6 damlayla büyür (`SULAMA_DAMLASI` 2, her sulama
   bir aşama; şişe bitkinin daha istediği kadar alır, `siseSiniri`). Bitkisi büyüyen harfin varili altın kumbara
   varilidir: oyunlar kumbaraya damla verir (`Canta.kumbara`, kutu kumbara simgesi; her yeni adada sıfırlanır).

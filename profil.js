@@ -183,6 +183,51 @@ function onaySor(soru, { evet = "Evet", hayir = "Hayır" } = {}) {
   });
 }
 
+// Karakter (öğretmenin isteği: kız öğrenciler kız karakterle oynamak istedi). Seçim profilde saklanır;
+// karşılama ekranındaki "Karakteri değiştir" ile sonradan değişir. Doku adları: cocuk* → kiz*.
+const Karakter = {
+  secili: "erkek",
+  // Profilde seçim varsa onu alır; seçim yapılmış mı döner
+  yukle() {
+    const p = Profil.aktifId && Profil.oku().profiller[Profil.aktifId];
+    if (p && p.karakter) this.secili = p.karakter;
+    return !!(p && p.karakter);
+  },
+  sec(k) {
+    this.secili = k;
+    Profil.degistir((p) => { p.karakter = k; });
+  },
+};
+
+function karakterDokusu(ad) {
+  return Karakter.secili === "kiz" && ad.startsWith("cocuk") ? `kiz${ad.slice(5)}` : ad;
+}
+
+// "Kiminle oynamak istersin?": iki büyük resim (erkek, kız). "erkek" ya da "kiz" döner.
+function karakterSor() {
+  return new Promise((sonuc) => {
+    const zemin = document.createElement("div");
+    zemin.style.cssText = "position:fixed;inset:0;background:rgba(0,0,0,.45);display:flex;"
+      + "align-items:center;justify-content:center;z-index:50";
+    const kart = "background:#fff;border:4px solid #2b2b2b;border-radius:22px;padding:10px 18px;cursor:pointer;";
+    zemin.innerHTML = `<div style="background:#fffdf6;border:4px solid #2b2b2b;border-radius:22px;
+      padding:20px 28px;font-family:Andika,sans-serif;text-align:center;max-width:94vw">
+      <div style="font-size:28px;margin-bottom:14px">Kiminle oynamak istersin?</div>
+      <div style="display:flex;gap:28px;justify-content:center">
+        <button data-k="erkek" style="${kart}"><img src="gorseller/cocuk.svg" style="height:min(34vh,190px);display:block"></button>
+        <button data-k="kiz" style="${kart}"><img src="gorseller/kiz.svg" style="height:min(34vh,190px);display:block"></button>
+      </div></div>`;
+    for (const olay of ["pointerdown", "pointerup", "mousedown", "mouseup", "touchstart", "touchend", "click"]) {
+      zemin.addEventListener(olay, (e) => e.stopPropagation());
+    }
+    zemin.querySelectorAll("button").forEach((b) => {
+      b.onclick = () => { zemin.remove(); sonuc(b.dataset.k); };
+    });
+    document.body.appendChild(zemin);
+    if (typeof Sesler !== "undefined") Sesler.soyle("Kiminle oynamak istersin?");
+  });
+}
+
 // Profil kartı: hayvan resmi, takma ad; ayrintili ise altında öğrendiği harfler ve yıldızları
 function profilKartiYap(sahne, x, y, p, en = 230, boy = 250, ayrintili = true) {
   const kap = sahne.add.container(x, y);

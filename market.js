@@ -61,7 +61,7 @@ function marketResimleriniYukle(sahne) {
     sahne.load.svg(`${e.resim}-buyuk`, `gorseller/${e.resim}.svg`, { scale: e.tur === "pet" ? 2.4 : 2.6 });
   }
   for (const ek of MARKET_KIYAFET_EKLERI) {
-    for (const ad of ["cocuk", "cocuk-adim1", "cocuk-adim2", "cocuk-tirman"]) {
+    for (const ad of ["cocuk", "cocuk-adim1", "cocuk-adim2", "cocuk-tirman", "kiz", "kiz-adim1", "kiz-adim2", "kiz-tirman"]) {
       sahne.load.svg(`${ad}-${ek}`, `gorseller/${ad}-${ek}.svg`);
     }
   }
@@ -306,7 +306,7 @@ class MarketPaneli {
     g.lineStyle(giyili ? 6 : 4, giyili ? 0x2e9e3a : 0x2b2b2b, 1);
     g.strokeRoundedRect(0, 0, 165, 224, 20);
     kart.add(g);
-    const resim = s.add.image(82, 72, e.tur === "kiyafet" ? e.resim : `${e.resim}-buyuk`);
+    const resim = s.add.image(82, 72, e.tur === "kiyafet" ? karakterDokusu(e.resim) : `${e.resim}-buyuk`);
     resim.setScale(Math.min(1, 140 / resim.width, 110 / resim.height));
     const ad = s.add.text(82, 140, e.ad, { fontFamily: "Andika", fontSize: "21px", color: "#2b2b2b" }).setOrigin(0.5);
     kart.add([resim, ad]);
