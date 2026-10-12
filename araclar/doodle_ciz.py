@@ -2786,11 +2786,37 @@ _BERE_DESEN = ('    <pattern id="bere" width="7" height="7" patternUnits="userSp
                '      <rect width="7" height="7" fill="#9be3dc"/>\n'
                '      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#4fc3b8" stroke-width="3" stroke-linecap="round"/>\n'
                '    </pattern>\n')
+# ---- Kız karakter (öğretmenin isteği: kız öğrenciler kız karakterle oynamak istedi). kiz*.svg elle çizilmiş
+# cocuk*.svg'lerden üretilir: iki örgü (kurdeleli), perçem, başta pembe kurdele, şort yerine pembe etek.
+# Sonraki bütün türevler (kışlık, dalgıç, astronot, kıyafet renkleri) kiz*.svg'den de üretilir.
+_KIZ_SAC = ('<path d="M22 36 q-1 -26 23 -26 q24 0 23 26 q-5 -8 -11 -9 q-6 7 -12 2 q-6 5 -12 -2 q-6 1 -11 9z" fill="#8a5a33"/>\n'
+            '    <path d="M22 34 q-12 6 -10 22 q4 4 8 -2 q-2 -10 4 -16z M68 34 q12 6 10 22 q-4 4 -8 -2 q2 -10 -4 -16z" fill="#8a5a33"/>\n'
+            '    <circle cx="21" cy="38" r="3.5" fill="#ff7fa8" stroke-width="2"/><circle cx="69" cy="38" r="3.5" fill="#ff7fa8" stroke-width="2"/>\n'
+            '    <path d="M52 12 l-8 -6 v12z M52 12 l8 -6 v12z" fill="#ff7fa8" stroke-width="2.5"/>')
+_KIZ_ARKA = ('<path d="M22 40 q-2 -30 23 -30 q25 0 23 30 q-4 8 -10 10 q-13 3 -26 0 q-6 -2 -10 -10z" fill="#8a5a33"/>\n'
+             '    <path d="M22 38 q-12 6 -10 22 q4 4 8 -2 q-2 -10 4 -16z M68 38 q12 6 10 22 q-4 4 -8 -2 q2 -10 -4 -16z" fill="#8a5a33"/>\n'
+             '    <circle cx="21" cy="42" r="3.5" fill="#ff7fa8" stroke-width="2"/><circle cx="69" cy="42" r="3.5" fill="#ff7fa8" stroke-width="2"/>\n'
+             '    <path d="M45 14 l-8 -6 v12z M45 14 l8 -6 v12z" fill="#ff7fa8" stroke-width="2.5"/>')
+_KIZ_ETEK = 'd="M30 85 h30 l8 15 h-46 z" fill="url(#sort)"'
 for _ad in ["cocuk", "cocuk-adim1", "cocuk-adim2", "cocuk-tirman"]:
+    with open(os.path.join(KLASOR, f"{_ad}.svg"), encoding="utf-8") as f:
+        _s = f.read()
+    _s = _s.replace('<path d="M23 34 q2 -24 22 -24 q20 0 22 22 q-6 -8 -12 -9 q-4 6 -10 0 q-6 6 -12 0 q-6 4 -10 11z" fill="#8a5a33"/>', _KIZ_SAC)
+    _s = _s.replace('<path d="M22 40 q-2 -30 23 -30 q25 0 23 30 q-4 8 -10 10 q-13 3 -26 0 q-6 -2 -10 -10z" fill="#8a5a33"/>', _KIZ_ARKA)
+    _s = _s.replace('d="M30 86 h30 l2 12 h-12 l-5 -5 l-5 5 h-12 z" fill="url(#sort)"', _KIZ_ETEK)
+    _s = _s.replace('fill="#a9c8f0"/>', 'fill="#ffc2d6"/>', 1).replace('stroke="#6b9be0"', 'stroke="#ff8ab0"', 1)  # pembe etek
+    _s = _s.replace("<!-- Ana karakter", "<!-- Kız karakter (doodle_ciz.py üretir). Ana karakter", 1)
+    _kiz = _ad.replace("cocuk", "kiz", 1)
+    with open(os.path.join(KLASOR, f"{_kiz}.svg"), "w", encoding="utf-8") as f:
+        f.write(_s)
+KARAKTER_KARELERI = ["cocuk", "cocuk-adim1", "cocuk-adim2", "cocuk-tirman", "kiz", "kiz-adim1", "kiz-adim2", "kiz-tirman"]
+
+for _ad in KARAKTER_KARELERI:
     with open(os.path.join(KLASOR, f"{_ad}.svg"), encoding="utf-8") as f:
         _s = f.read()
     _s = _s.replace("#ffe680", "#ff9c8a").replace("#ffc928", "#e0533d")       # tişört → kırmızı mont
     _s = _s.replace("#a9c8f0", "#5d8fb3").replace("#6b9be0", "#3f6f94")       # şort → mavi pantolon
+    _s = _s.replace("#ffc2d6", "#5d8fb3").replace("#ff8ab0", "#3f6f94")       # etek → mavi
     _s = _s.replace('l2 26 h-42 z" fill="url(#tisort)"', 'l3 32 h-44 z" fill="url(#tisort)"')  # mont uzun
     # Bacaklar ve kollar: kalın kalem kenarı üstüne pantolon/mont rengi
     def _kalin(m, renk):
@@ -3571,11 +3597,12 @@ _MASKE = ('    <path d="M27 31 q0 -6 7 -6 h22 q7 0 7 6 v8 q0 6 -7 6 h-6 l-5 -4 l
           '    <path d="M23 33 h4 M63 33 h4" fill="none" stroke="#ffc928" stroke-width="5"/>\n'
           '    <path d="M66 46 v-26 q0 -6 6 -6 h3" fill="none" stroke-width="8"/>\n'
           '    <path d="M66 46 v-26 q0 -6 6 -6 h3" fill="none" stroke="#e0533d" stroke-width="4"/>\n')
-for _ad in ["cocuk", "cocuk-adim1", "cocuk-adim2", "cocuk-tirman"]:
+for _ad in KARAKTER_KARELERI:
     with open(os.path.join(KLASOR, f"{_ad}.svg"), encoding="utf-8") as f:
         _s = f.read()
     _s = _s.replace("#ffe680", "#5d8fb3").replace("#ffc928", "#3f6f94")       # tişört → dalgıç elbisesi
     _s = _s.replace("#a9c8f0", "#3f6f94").replace("#6b9be0", "#2f5677")       # şort → koyu elbise
+    _s = _s.replace("#ffc2d6", "#3f6f94").replace("#ff8ab0", "#2f5677")       # etek → koyu elbise
     _s = _s.replace("#9be3dc", "#ff9c8a").replace("#4fc3b8", "#e0533d")       # çanta → oksijen tüpü
     _s = _s.replace('stroke="#2c7c76"', 'stroke="#2b2b2b"')                    # askılar
     def _kalin(m, renk):
@@ -3611,6 +3638,15 @@ yaz("cocuk-yuz.svg", 130, 90, "Dalgıç çocuk yüzerken (yatay, sağa)",
     <path d="M100 26 v-14 h6" fill="none" stroke-width="7"/>
     <path d="M100 26 v-14 h6" fill="none" stroke="#e0533d" stroke-width="3"/>
 '''), 623)
+# Kız karakter yüzerken: arkasında kurdeleli at kuyruğu
+with open(os.path.join(KLASOR, "cocuk-yuz.svg"), encoding="utf-8") as f:
+    _s = f.read()
+_s = _s.replace('<circle cx="112" cy="40" r="17" fill="#ffe7cf"/>',
+                '<path d="M98 32 q-18 -10 -26 4 q4 8 10 2 q8 -6 16 0z" fill="#8a5a33"/>\n'
+                '    <circle cx="97" cy="33" r="3.5" fill="#ff7fa8" stroke-width="2"/>\n'
+                '    <circle cx="112" cy="40" r="17" fill="#ffe7cf"/>', 1)
+with open(os.path.join(KLASOR, "kiz-yuz.svg"), "w", encoding="utf-8") as f:
+    f.write(_s.replace("Dalgıç çocuk yüzerken", "Dalgıç kız yüzerken", 1))
 
 # ---- 4. ada: su yüzeyi (bulutların üstü yerine), haritalar, final (mağara ve roket) ----
 # Su yüzeyi zemini (bulut-zemin.svg ile aynı 1430x300): arkada deniz, önde yüzeye çıkan kum adacığı;
@@ -3873,11 +3909,12 @@ for (ad, desen, cizim), (x, y) in zip(_P, IKSIR_CERCEVE):
 _KASK = ('    <circle cx="45" cy="36" r="31" fill="#e8f6ff" fill-opacity="0.35" stroke-width="3.5"/>\n'
          '    <path d="M24 22 q8 -12 22 -14" fill="none" stroke="#ffffff" stroke-width="5"/>\n'
          '    <path d="M22 60 q23 12 46 0" fill="none" stroke="#9a8fb0" stroke-width="7"/>\n')
-for _ad in ["cocuk", "cocuk-adim1", "cocuk-adim2", "cocuk-tirman"]:
+for _ad in KARAKTER_KARELERI:
     with open(os.path.join(KLASOR, f"{_ad}.svg"), encoding="utf-8") as f:
         _s = f.read()
     _s = _s.replace("#ffe680", "#f4f2fa").replace("#ffc928", "#d4d0e2")       # tişört → uzay giysisi
     _s = _s.replace("#a9c8f0", "#f4f2fa").replace("#6b9be0", "#d4d0e2")       # şort → giysi
+    _s = _s.replace("#ffc2d6", "#f4f2fa").replace("#ff8ab0", "#d4d0e2")       # etek → giysi
     _s = _s.replace("#9be3dc", "#c6c2d6").replace("#4fc3b8", "#9a96ac")       # çanta → oksijen
     _s = _s.replace('stroke="#2c7c76"', 'stroke="#ff7f6a"')                    # askılar turuncu
     def _kalin(m, renk):
@@ -4544,7 +4581,7 @@ pet("ejderha", "Evcil küçük ejderha (yeşil, kanatlı)", '''    <path d="M4 3
 KIYAFETLER = {"mavi": ("#8fc2f7", "#3f86d9"), "yesil": ("#b5e48c", "#5fae4a"), "kirmizi": ("#ff9c8a", "#e0533d"),
               "turuncu": ("#ffc58f", "#ff8a3c"), "pembe": ("#ffd2e6", "#ff8ac0"), "mor": ("#d8c2f3", "#a77be0"),
               "denizci": ("#ffffff", "#3f86d9"), "gece": ("#7a80a8", "#3b3f55"), "altin": ("#ffd84a", "#c9961e")}
-for _ad in ["cocuk", "cocuk-adim1", "cocuk-adim2", "cocuk-tirman"]:
+for _ad in KARAKTER_KARELERI:
     with open(os.path.join(KLASOR, f"{_ad}.svg"), encoding="utf-8") as f:
         _kaynak = f.read()
     for _ek, (_zemin, _cizgi) in KIYAFETLER.items():
