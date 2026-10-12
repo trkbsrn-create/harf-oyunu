@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="260" height="250" viewBox="0 0 260 250">
+  <!-- Bulut Market tezgâhı (çizgili tente, tabela) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="902" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="tahta" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(80)">
+      <rect width="7" height="7" fill="#e3b77e"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#c98f4f" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="tente" width="26" height="26" patternUnits="userSpaceOnUse" patternTransform="rotate(0)">
+      <rect width="26" height="26" fill="#ff9c8a"/>
+      <line x1="0" y1="13.0" x2="26" y2="13.0" stroke="#ffffff" stroke-width="13" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="130" cy="244" rx="110" ry="6" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 100 v140 M230 100 v140" fill="none" stroke="#8e6340" stroke-width="10"/>
+    <path d="M30 100 v140 M230 100 v140" fill="none" stroke-width="2"/>
+    <rect x="16" y="160" width="228" height="60" rx="8" fill="url(#tahta)"/>
+    <path d="M10 104 l20 -60 h200 l20 60 q-20 18 -40 0 q-20 18 -40 0 q-20 18 -40 0 q-20 18 -40 0 q-20 18 -40 0 q-20 18 -40 0z" fill="url(#tente)"/>
+    <rect x="70" y="10" width="120" height="40" rx="10" fill="#fbf4e2"/>
+    <circle cx="70" cy="150" r="10" fill="#ffe680" stroke-width="3"/><circle cx="196" cy="148" r="9" fill="#9be3dc" stroke-width="3"/>
+    <path d="M120 156 l10 -20 l10 20z" fill="#c8a2ff" stroke-width="3"/>
+  </g>
+</svg>

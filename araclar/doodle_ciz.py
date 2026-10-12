@@ -4368,3 +4368,57 @@ for _ek, _t in TESIS_TEMALARI.items():
     <path d="M92 96 h16 v10" fill="none" stroke-width="2"/>
     <path d="M100 86 h16" fill="none" stroke="#ff8a7a" stroke-width="7"/>
 ''' + _t["varil_ust"]), 69, 2.5)
+
+# ---- Bulut Market (öğretmenin fikri): kumbara, tezgâh, giyilen eşyalar ----
+# Kumbara (ada ekranında çantanın altında; bitkisi büyüyen harfin varilinden kazanılan damlalar): 80x70
+yaz("kumbara.svg", 80, 70, "Pembe domuz kumbara", PEMBE,
+    golge(40, 66, 30, 4) + kalem('''    <path d="M22 60 v6 M54 60 v6" fill="none" stroke-width="6"/>
+    <ellipse cx="40" cy="38" rx="32" ry="24" fill="url(#pembe)"/>
+    <path d="M18 20 l4 -12 l10 10z" fill="#ff9c8a" stroke-width="3"/>
+    <ellipse cx="68" cy="40" rx="8" ry="9" fill="#ffb3a8" stroke-width="3"/>
+    <circle cx="66" cy="38" r="1.6" fill="#2b2b2b" stroke="none"/><circle cx="70" cy="42" r="1.6" fill="#2b2b2b" stroke="none"/>
+    <circle cx="54" cy="30" r="2.6" fill="#2b2b2b" stroke="none"/>
+    <path d="M32 16 h16" fill="none" stroke-width="5"/>
+    <path d="M8 36 q-8 -2 -4 -8" fill="none" stroke-width="3"/>
+''', 3.5), 901)
+# Market tezgâhı (bulutun üstünde): 260x250, alt ortası tezgâhın ayakları
+yaz("market-tezgah.svg", 260, 250, "Bulut Market tezgâhı (çizgili tente, tabela)",
+    TAHTA + tarama("tente", "#ff9c8a", "#ffffff", 0, 26, 13),
+    golge(130, 244, 110, 6) + kalem('''    <path d="M30 100 v140 M230 100 v140" fill="none" stroke="#8e6340" stroke-width="10"/>
+    <path d="M30 100 v140 M230 100 v140" fill="none" stroke-width="2"/>
+    <rect x="16" y="160" width="228" height="60" rx="8" fill="url(#tahta)"/>
+    <path d="M10 104 l20 -60 h200 l20 60 q-20 18 -40 0 q-20 18 -40 0 q-20 18 -40 0 q-20 18 -40 0 q-20 18 -40 0 q-20 18 -40 0z" fill="url(#tente)"/>
+    <rect x="70" y="10" width="120" height="40" rx="10" fill="#fbf4e2"/>
+    <circle cx="70" cy="150" r="10" fill="#ffe680" stroke-width="3"/><circle cx="196" cy="148" r="9" fill="#9be3dc" stroke-width="3"/>
+    <path d="M120 156 l10 -20 l10 20z" fill="#c8a2ff" stroke-width="3"/>
+'''), 902)
+# Giyilenler: karakterin kendi ölçüsünde (cocuk.svg 90x130; baş (45,36) r23, gözler (37,38) ve (53,38)).
+# Markette büyük gösterilir (yüklerken büyütülür).
+yaz("giyim-gozluk-yuvarlak.svg", 44, 18, "Yuvarlak gözlük (karakter ölçüsünde)", "",
+    kalem('''    <circle cx="13" cy="9" r="7" fill="#d8f0ff" fill-opacity="0.6"/>
+    <circle cx="31" cy="9" r="7" fill="#d8f0ff" fill-opacity="0.6"/>
+    <path d="M20 8 q2 -3 4 0 M6 8 l-4 -2 M38 8 l4 -2" fill="none"/>
+''', 2.5), 903, 1.5)
+yaz("giyim-sapka-kagit.svg", 64, 34, "Gazeteden kâğıt şapka (karakter ölçüsünde)", "",
+    kalem('''    <path d="M4 30 l28 -26 l28 26z" fill="#f4f1e6"/>
+    <path d="M14 22 h10 M12 26 h18 M36 22 h12 M34 26 h16 M26 14 h12" fill="none" stroke="#9a9a9a" stroke-width="2"/>
+    <path d="M2 30 h60" fill="none" stroke-width="3"/>
+''', 2.5), 904, 1.5)
+yaz("pet-civciv.svg", 44, 44, "Evcil civciv (karakterin arkasından gelir)", SARI2,
+    golge(22, 41, 14, 3) + kalem('''    <path d="M16 36 v5 M26 36 v5" fill="none" stroke="#ff9a3c" stroke-width="3"/>
+    <ellipse cx="22" cy="26" rx="15" ry="13" fill="url(#sari)"/>
+    <circle cx="22" cy="13" r="10" fill="url(#sari)"/>
+    <path d="M30 13 l8 2 l-8 3z" fill="#ff9a3c" stroke-width="2"/>
+    <circle cx="25" cy="11" r="1.8" fill="#2b2b2b" stroke="none"/>
+    <path d="M12 26 q6 6 12 0" fill="none" stroke-width="2.5"/>
+    <path d="M20 4 q2 -4 4 0" fill="none" stroke-width="2.5"/>
+''', 3), 905, 2)
+# Mavi tişört: karakterin dört karesi (tişört deseni koyu mavi)
+for _ad in ["cocuk", "cocuk-adim1", "cocuk-adim2", "cocuk-tirman"]:
+    with open(os.path.join(KLASOR, f"{_ad}.svg"), encoding="utf-8") as f:
+        _s = f.read()
+    _s = _s.replace('<rect width="7" height="7" fill="#ffe680"/>', '<rect width="7" height="7" fill="#8fc2f7"/>', 1)
+    _s = _s.replace('stroke="#ffc928" stroke-width="3"', 'stroke="#3f86d9" stroke-width="3"', 1)
+    _s = _s.replace("<!-- Ana karakter", "<!-- Mavi tişörtlü (Bulut Market; doodle_ciz.py üretir). Ana karakter", 1)
+    with open(os.path.join(KLASOR, f"{_ad}-mavi.svg"), "w", encoding="utf-8") as f:
+        f.write(_s)

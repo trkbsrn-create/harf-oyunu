@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="44" height="18" viewBox="0 0 44 18">
+  <!-- Yuvarlak gözlük (karakter ölçüsünde) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="903" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="13" cy="9" r="7" fill="#d8f0ff" fill-opacity="0.6"/>
+    <circle cx="31" cy="9" r="7" fill="#d8f0ff" fill-opacity="0.6"/>
+    <path d="M20 8 q2 -3 4 0 M6 8 l-4 -2 M38 8 l4 -2" fill="none"/>
+  </g>
+</svg>
