@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 204;
+const SURUM = 205;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -479,7 +479,8 @@ class AdaSahnesi extends Phaser.Scene {
       this.load.svg(`${ad}-dalgic`, `gorseller/${ad}-dalgic.svg`);
       this.load.svg(`${ad}-astronot`, `gorseller/${ad}-astronot.svg`);
     }
-    marketResimleriniYukle(this);
+    const baslangic = this.scene.settings.data || {};
+    marketResimleriniYukle(this, (baslangic.devam && baslangic.devam.ada) || baslangic.ada || 1);
     this.load.svg("peri", "gorseller/peri.svg");
     this.load.svg("peri-kanat", "gorseller/peri-kanat.svg");
     this.load.svg("agac-govde", "gorseller/agac-govde.svg");
@@ -4236,7 +4237,7 @@ class AdaSahnesi extends Phaser.Scene {
           this.adimSayaci = 0;
           this.tozCikar();
         }
-        this.cocuk.setTexture(karakterDokusu("cocuk-yuz")).setOrigin(0.5, 1.15).setScale(1)
+        this.cocuk.setTexture(yuzmeDokusu(this)).setOrigin(0.5, 1.15).setScale(1)
           .setAngle(Math.sin(zaman * 0.008) * 4);
       } else {
         this.adimSayaci = 0;

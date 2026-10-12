@@ -36,7 +36,7 @@ KUCULT = {
     "resim-roket.svg": 0.94, "resim-sogan.svg": 0.94, "resim-supurge.svg": 0.92, "resim-ucurtma.svg": 0.94,
     "resim-balon.svg": 0.94, "simge-harfi-yaz.svg": 0.9, "simge-harfle-boya.svg": 0.92, "simge-yilan.svg": 0.9,
     "damla-bos.svg": 0.92, "yildiz-tozu-bos.svg": 0.9,  # dolu hâlleriyle aynı boyda
-    "pet-kedi.svg": 0.86, "pet-kaplumbaga.svg": 0.88, "pet-tavsan.svg": 0.9, "pet-ejderha.svg": 0.9, "pet-robot.svg": 0.92,
+    "giyim-gozluk-kar.svg": 0.86, "pet-kedi.svg": 0.86, "pet-kaplumbaga.svg": 0.88, "pet-tavsan.svg": 0.9, "pet-ejderha.svg": 0.9, "pet-robot.svg": 0.92,
 }
 
 
@@ -4578,7 +4578,8 @@ pet("ejderha", "Evcil küçük ejderha (yeşil, kanatlı)", '''    <path d="M4 3
 ''')
 
 # Kıyafetler: karakterin dört karesinde tişört deseninin renkleri değişir (cocuk*-<ad>.svg)
-KIYAFETLER = {"mavi": ("#8fc2f7", "#3f86d9"), "yesil": ("#b5e48c", "#5fae4a"), "kirmizi": ("#ff9c8a", "#e0533d"),
+KIYAFETLER = {"bordo": ("#d98a9a", "#9e3a52"), "hardal": ("#ecd070", "#b8962e"), "kahve": ("#d9a46b", "#a8743e"),
+              "mavi": ("#8fc2f7", "#3f86d9"), "yesil": ("#b5e48c", "#5fae4a"), "kirmizi": ("#ff9c8a", "#e0533d"),
               "turuncu": ("#ffc58f", "#ff8a3c"), "pembe": ("#ffd2e6", "#ff8ac0"), "mor": ("#d8c2f3", "#a77be0"),
               "denizci": ("#ffffff", "#3f86d9"), "gece": ("#7a80a8", "#3b3f55"), "altin": ("#ffd84a", "#c9961e")}
 for _ad in KARAKTER_KARELERI:
@@ -4590,3 +4591,58 @@ for _ad in KARAKTER_KARELERI:
         _s = _s.replace("<!-- Ana karakter", f"<!-- Kıyafet: {_ek} (Bulut Market; doodle_ciz.py üretir). Ana karakter", 1)
         with open(os.path.join(KLASOR, f"{_ad}-{_ek}.svg"), "w", encoding="utf-8") as f:
             f.write(_s)
+
+# ---- Adalara özel market eşyaları (öğretmenin isteği: adanın konseptine uygun) ----
+# 2. ada sonbahar şapkaları; 3. ada kulaklık ve kar gözlüğü; 4. ada deniz tacı ve denizyıldızı tokası
+sapka("yaprak", "Sonbahar yaprağı tacı", '''    <path d="M10 44 q22 -10 44 0" fill="none" stroke="#a8743e" stroke-width="4"/>
+    <path d="M14 40 q-8 -12 2 -18 q8 6 -2 18z" fill="#ff8a3c"/><path d="M26 34 q-4 -14 6 -18 q6 8 -6 18z" fill="#e0533d"/>
+    <path d="M38 34 q-2 -14 8 -16 q4 10 -8 16z" fill="#ffc928"/><path d="M50 40 q2 -14 10 -14 q0 10 -10 14z" fill="#c46a3a"/>
+''')
+sapka("mantar", "Mantar şapka (kırmızı benekli)", '''    <path d="M4 42 q2 -32 28 -32 q26 0 28 32z" fill="#ff8a7a"/>
+    <circle cx="20" cy="26" r="4" fill="#ffffff" stroke-width="2"/><circle cx="36" cy="20" r="4.5" fill="#ffffff" stroke-width="2"/>
+    <circle cx="46" cy="32" r="3.5" fill="#ffffff" stroke-width="2"/><circle cx="28" cy="36" r="3" fill="#ffffff" stroke-width="2"/>
+''')
+sapka("balkabagi", "Balkabağı şapka", '''    <path d="M8 44 q-4 -26 24 -28 q28 2 24 28z" fill="#ffa45c"/>
+    <path d="M22 44 q-4 -16 4 -27 M42 44 q4 -16 -4 -27 M32 44 v-28" fill="none" stroke="#d97a2e" stroke-width="2.5"/>
+    <path d="M32 16 q-2 -8 4 -12" fill="none" stroke="#6fbf4a" stroke-width="5"/>
+    <path d="M36 8 q10 -4 12 4 q-8 2 -12 -4z" fill="#8fd16a" stroke-width="2"/>
+''')
+sapka("kulaklik", "Kulaklık (tüylü, kışlık)", '''    <path d="M10 36 q0 -32 22 -32 q22 0 22 32" fill="none" stroke-width="6"/>
+    <path d="M10 36 q0 -32 22 -32 q22 0 22 32" fill="none" stroke="#9be3dc" stroke-width="3"/>
+    <circle cx="9" cy="38" r="9" fill="#ffd2e6"/><circle cx="55" cy="38" r="9" fill="#ffd2e6"/>
+''')
+sapka("inci", "Deniz kabuğu ve inci tacı", '''    <path d="M10 44 q22 -8 44 0" fill="none" stroke="#9be3dc" stroke-width="5"/>
+    <path d="M32 40 l-12 -22 q12 -10 24 0z" fill="#ffd2c8"/>
+    <path d="M32 40 l-6 -20 M32 40 v-24 M32 40 l6 -20" fill="none" stroke="#e0a090" stroke-width="2"/>
+    <circle cx="16" cy="40" r="4" fill="#ffffff" stroke-width="2"/><circle cx="48" cy="40" r="4" fill="#ffffff" stroke-width="2"/>
+''')
+sapka("denizyildizi", "Denizyıldızı tokası", '''    <path d="M44 22 l3 8 l9 1 l-7 6 l2 9 l-7 -5 l-7 5 l2 -9 l-7 -6 l9 -1z" fill="#ff9a3c"/>
+    <circle cx="44" cy="33" r="1.5" fill="#ffffff" stroke="none"/>
+''')
+gozluk("kar", "Kar gözlüğü (turuncu cam)", '''    <path d="M2 6 h40" fill="none" stroke-width="3"/>
+    <path d="M5 2 h34 q4 0 4 5 v4 q0 5 -6 5 h-8 l-3 -4 l-3 4 h-8 q-6 0 -6 -5 v-4 q0 -5 4 -5z" fill="#ffb347"/>
+    <path d="M9 6 l8 -1" fill="none" stroke="#ffffff" stroke-width="1.6"/>
+''')
+
+# Ada kıyafetlerinin renkli hâlleri: 3. adada mont (cocuk*-kis-<renk>), 4. adada dalgıç elbisesi
+# (cocuk*-dalgic-<renk>, yüzen hâli cocuk-yuz-<renk>), 5. adada uzay giysisi (cocuk*-astronot-<renk>)
+ADA_KIYAFETLERI = {
+    "kis": {"eski": ["#ff9c8a", "#e0533d"], "renkler": {"mavi": ["#8fc2f7", "#3f86d9"], "yesil": ["#b5e48c", "#5fae4a"],
+            "mor": ["#d8c2f3", "#a77be0"], "pembe": ["#ffd2e6", "#ff8ac0"], "sari": ["#ffe680", "#e0a82e"]}},
+    "dalgic": {"eski": ["#5d8fb3", "#3f6f94", "#2f5677"], "renkler": {"pembe": ["#ff9cc0", "#e05a8c", "#b8436c"],
+               "yesil": ["#7fcf7a", "#4f9e4a", "#3a7a36"], "sari": ["#ffd84a", "#d9a51e", "#a87c10"],
+               "mor": ["#a98be0", "#7d5fc4", "#5d43a0"], "turuncu": ["#ffa45c", "#e07a2e", "#b05c1e"]}},
+    "astronot": {"eski": ["#f4f2fa", "#d4d0e2"], "renkler": {"pembe": ["#ffd2e6", "#ffaacb"], "mavi": ["#cfe6ff", "#9cc6f0"],
+                 "yesil": ["#d8f5c8", "#a8dc90"], "mor": ["#e6d8ff", "#c2a8f0"], "altin": ["#ffe9a0", "#e0c060"]}},
+}
+for _tur, _ayar in ADA_KIYAFETLERI.items():
+    _kaynaklar = [f"{_ad}-{_tur}" for _ad in KARAKTER_KARELERI] + (["cocuk-yuz", "kiz-yuz"] if _tur == "dalgic" else [])
+    for _ad in _kaynaklar:
+        with open(os.path.join(KLASOR, f"{_ad}.svg"), encoding="utf-8") as f:
+            _kaynak = f.read()
+        for _ek, _yeni in _ayar["renkler"].items():
+            _s = _kaynak
+            for _e, _y in zip(_ayar["eski"], _yeni):
+                _s = _s.replace(_e, _y)
+            with open(os.path.join(KLASOR, f"{_ad}-{_ek}.svg"), "w", encoding="utf-8") as f:
+                f.write(_s)
