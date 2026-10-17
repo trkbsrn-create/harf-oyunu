@@ -27,3 +27,6 @@ Oyun ses kaydetmez, kişisel veri toplamaz, sunucu kullanmaz.
 ## Lisanslar
 - [Phaser](https://phaser.io) – MIT lisansı
 - [Andika](https://software.sil.org/andika/) yazı tipi – SIL Open Font License 1.1 (`yazitipi/OFL.txt`)
+
+## Sesler
+Sözler öğretmenin kendi sesidir. Hecelerin sesi yapay zekâyla üretildi: [ElevenLabs](https://elevenlabs.io).
