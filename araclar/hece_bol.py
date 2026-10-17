@@ -28,7 +28,7 @@ def bol(dosya, cikis, heceler, esik=-38, sure=0.28, onek="hece"):
         if e - b > 0.12:
             parcalar.append((b, e))
     if len(parcalar) != len(heceler):
-        return len(parcalar)
+        return len(parcalar) or -1  # 0 "başarılı" demek; hiç parça yoksa -1
     os.makedirs(cikis, exist_ok=True)
     for (b, e), h in zip(parcalar, heceler):
         subprocess.run(["ffmpeg", "-v", "error", "-y", "-i", dosya, "-ss", f"{max(0, b - 0.06):.3f}", "-to", f"{e + 0.08:.3f}",
