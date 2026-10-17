@@ -252,6 +252,12 @@ Her hatadan sonra buraya yeni bir kural ekle.
   yönergeleri. Öğretmenin kararı: omuzda her işi yalnızca 1. adada gösterir; sonraki adalarda başta yalnızca
   görevi söyler (`adaGorevi`). Sözü bitince menü düğmesinin yanına yerleşir (`periyiKondur`); dokununca
   oyunun durumuna göre sıradaki işi söyler (`simdikiGorev`). Perinin adı yok (sorulabilir). Yeni mini oyuna `YONERGELER`'de yönerge yazılır.
+- Heceler yapay zekâ sesiyle (öğretmenin kararı; cümleleri öğretmen kendisi kaydeder): ElevenLabs, ses "Nino",
+  eleven_v4; 20-50 hece bir dosyada ("an. na. ..."), `araclar/hece_bol.py` sessizlikten böler (sayı tutmazsa yazmaz),
+  `araclar/peri_efekti.sh` ile sesler/hece-<ad>.mp3, `sesler/liste.js`'e eklenir. Hesap ücretsiz planda; ElevenLabs ara
+  ara "olağan dışı etkinlik" deyip durduruyor (aynı anda birden çok istek): istekleri tek tek gönder, durursa sonra dene.
+  Yapılan: 2. harf grubu (o k u r ı m) heceleri, şu 20'si hariç: lum kum rum mun mut mul muk mur mum nım tım lım kım rım
+  mın mıt mıl mık mır mım. Sıradaki: 3. grup ve sonrası.
 - Kız karakter (öğretmenin isteği): ilk başlarken "Kiminle oynamak istersin?" (`karakterSor`), seçim profilde
   (`Karakter`, profil.js); karşılamada "Karakteri değiştir". Doku adı `karakterDokusu`: cocuk* → kiz* (kiz*.svg ve bütün
   türevleri doodle_ciz.py'de `KARAKTER_KARELERI` ile üretilir). Yeni karakter resmi eklerken kız hâlini de üret.
