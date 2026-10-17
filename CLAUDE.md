@@ -256,8 +256,9 @@ Her hatadan sonra buraya yeni bir kural ekle.
   eleven_v4; 20-50 hece bir dosyada ("an. na. ..."), `araclar/hece_bol.py` sessizlikten böler (sayı tutmazsa yazmaz),
   `araclar/peri_efekti.sh` ile sesler/hece-<ad>.mp3, `sesler/liste.js`'e eklenir. Hesap ücretsiz planda; ElevenLabs ara
   ara "olağan dışı etkinlik" deyip durduruyor (aynı anda birden çok istek): istekleri tek tek gönder, durursa sonra dene.
-  Yapılan: 2. harf grubu (o k u r ı m) heceleri, şu 20'si hariç: lum kum rum mun mut mul muk mur mum nım tım lım kım rım
-  mın mıt mıl mık mır mım. Sıradaki: 3. grup ve sonrası.
+  Hesabın aylık 10.000 kredisi var (30 hece ≈ 240 kredi); kredi bitince ay başını bekle. Yapılan: 2. ve 3. grubun bütün
+  heceleri, 4. grubun ç hecelerinin çoğu ve b'nin başı. Sıradaki: b'den sonrası (4.-5. grup) ve 512 kelime (kelime-<ad>.mp3);
+  kalan liste `heceHavuzu`/kelime listelerinden `SES_DOSYALARI`'nda olmayanlar. Bölme sayısı tutmayan partiyi ikiye böl.
 - Kız karakter (öğretmenin isteği): ilk başlarken "Kiminle oynamak istersin?" (`karakterSor`), seçim profilde
   (`Karakter`, profil.js); karşılamada "Karakteri değiştir". Doku adı `karakterDokusu`: cocuk* → kiz* (kiz*.svg ve bütün
   türevleri doodle_ciz.py'de `KARAKTER_KARELERI` ile üretilir). Yeni karakter resmi eklerken kız hâlini de üret.
