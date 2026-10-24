@@ -114,8 +114,8 @@ menüsü). O konumda resimli kelime yoksa (ö, d, b, g, c, h, f ile biten; ğ il
 
 ## Yazı ve harfler
 - Oyundaki bütün yazılar Türkçe.
-- Harfler tırnaksız dik temel harf stiliyle gösterilir. Kullanılan yazı tipi: cihazda kuruluysa
-  **TTKB Dik Temel Abece Bold**, değilse **Andika** (`yazitipi/Andika-Regular.ttf`).
+- Harfler tırnaksız dik temel harf stiliyle gösterilir. Yazı tipi **TTKB Dik Temel Abece Bold** (Namık Kemal Sarıkavak;
+  yazarın izniyle oyunla gelir: `yazitipi/TTKBDikTemelAbece-Bold.ttf`, karşılamada kaynak yazısı); yüklenemezse **Andika**.
 - Küçük harf önce gelir. Büyük harf yalnızca cümle başında ve özel isimlerde kullanılır.
 - Türkçe büyük/küçük harf dönüşümüne dikkat: i ↔ İ, ı ↔ I
   (JavaScript'te `toLocaleUpperCase('tr-TR')` kullan).
@@ -241,7 +241,6 @@ Her hatadan sonra buraya yeni bir kural ekle.
   her düzeyde (1. düzey büyütülür) kuyruklu harfleri (p g ğ y j) de ekranda gör; yönler öğretmenin tablosuna uysun.
 
 ## Bekleyen işler
-- TTKB Dik Temel Abece yazı tipi: yazardan izin bekleniyor; izin gelirse dosya depoya eklenir.
 - Ekrandaki 10 uyarı ("Telefonu yan çevir" vb.) henüz kaydedilmedi (kayit.html'de duruyor).
 - iPhone'da efekt sesi düzeltmesinin (`iosSesiniAc`) öğretmenden onayı bekleniyor.
 - Bulut bölgelerinin içeriği; bilmeceler ("Hızlı koşar, yeleleri var." → at; "Türk bayrağında
