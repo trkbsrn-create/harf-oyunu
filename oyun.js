@@ -4335,6 +4335,9 @@ class KarsilamaSahnesi extends Phaser.Scene {
       doodleYazi(this, 0, 4, "Harf Avcısı", 92, "mavi").setOrigin(0.5),
     ]);
     doodleYazi(this, 1266, 712, `Sürüm ${SURUM}`, 26).setOrigin(1, 1); // sağ alt (öğretmenin isteği)
+    // Yazı tipi kaynağı (yazarın izniyle kullanılır)
+    doodleYazi(this, 640, 712, "Yazı tipi: TTKB Dik Temel Abece – Namık Kemal Sarıkavak (izinle)", 18)
+      .setOrigin(0.5, 1).setAlpha(0.7);
     this.tweens.add({ targets: tabela, angle: { from: -1.2, to: 1.2 }, duration: 1800,
       yoyo: true, repeat: -1, ease: "Sine.InOut" });
 

@@ -14,11 +14,12 @@
   <meta name="apple-mobile-web-app-title" content="Harf Avcısı">
   <title>Harf Avcısı</title>
   <script>
-    // Yazı tipi (oyunda adı hep "Andika"). Öğretmenin isteği: cihazda TTKB Dik Temel Abece (Bold)
-    // kuruluysa o kullanılır; küçük harfleri Andika'dan küçük olduğu için %120 büyütülür. Kurulu
-    // değilse Andika. TTKB'nin telifi yazarına ait; dosyası herkese açık depoya konmaz (izin istendi).
+    // Yazı tipi (oyunda adı hep "Andika"): TTKB Dik Temel Abece Bold (Namık Kemal Sarıkavak; yazarın
+    // izniyle oyunla birlikte gelir). Küçük harfleri Andika'dan küçük olduğu için %120 büyütülür.
+    // Yüklenemezse Andika.
     window.yaziTipiHazir = new FontFace("Andika",
-      'local("TTKB Dik Temel Abece Bold"), local("TTKBDikTemelAbece-Bold")', { sizeAdjust: "120%" })
+      'local("TTKB Dik Temel Abece Bold"), local("TTKBDikTemelAbece-Bold"), url("yazitipi/TTKBDikTemelAbece-Bold.ttf")',
+      { sizeAdjust: "120%" })
       .load()
       .catch(() => new FontFace("Andika", 'url("yazitipi/Andika-Regular.ttf")').load())
       .then((yuz) => { document.fonts.add(yuz); })
