@@ -18,7 +18,7 @@ GitHub Pages ile yayınlayın:
 - `index.html` – Ana sayfa
 - `oyun.js` – Oyun kodu
 - `harfler.js` – Harf grupları ve kelimeler
-- `yazitipi/` – Andika yazı tipi (SIL Open Font License)
+- `yazitipi/` – TTKB Dik Temel Abece Bold (yazarının izniyle) ve Andika yazı tipi (SIL Open Font License)
 
 ## Gizlilik
 Oyun ses kaydetmez, kişisel veri toplamaz, sunucu kullanmaz.
@@ -26,6 +26,7 @@ Oyun ses kaydetmez, kişisel veri toplamaz, sunucu kullanmaz.
 
 ## Lisanslar
 - [Phaser](https://phaser.io) – MIT lisansı
+- TTKB Dik Temel Abece Bold yazı tipi – © Namık Kemal Sarıkavak; yazarının izniyle kullanılır (başka projelerde kullanmak için yazardan izin alın)
 - [Andika](https://software.sil.org/andika/) yazı tipi – SIL Open Font License 1.1 (`yazitipi/OFL.txt`)
 
 ## Sesler

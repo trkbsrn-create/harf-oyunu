@@ -2,7 +2,7 @@
 
 // Oyunun sürümü: her güncellemede (çekme isteği numarasıyla) artırılır. Karşılama
 // ekranının sağ üstünde görünür; öğretmen son güncellemenin gelip gelmediğini anlar.
-const SURUM = 209;
+const SURUM = 211;
 const TANRI_SIFRESI = "trkbsrn35"; // God mode şifresi (öğretmenin isteği; kodda açık, yalnızca çocukları durdurur)
 
 const DUNYA_GENISLIK = 6400;
@@ -4335,6 +4335,9 @@ class KarsilamaSahnesi extends Phaser.Scene {
       doodleYazi(this, 0, 4, "Harf Avcısı", 92, "mavi").setOrigin(0.5),
     ]);
     doodleYazi(this, 1266, 712, `Sürüm ${SURUM}`, 26).setOrigin(1, 1); // sağ alt (öğretmenin isteği)
+    // Yazı tipi kaynağı (yazarın izniyle kullanılır)
+    doodleYazi(this, 640, 712, "Yazı tipi: TTKB Dik Temel Abece – Namık Kemal Sarıkavak (izinle)", 18)
+      .setOrigin(0.5, 1).setAlpha(0.7);
     this.tweens.add({ targets: tabela, angle: { from: -1.2, to: 1.2 }, duration: 1800,
       yoyo: true, repeat: -1, ease: "Sine.InOut" });
 
