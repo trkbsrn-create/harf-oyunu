@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="26" height="26" viewBox="0 0 26 26">
+  <!-- Yağan kar tanesi (oyunda hafifçe renklenir) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="408" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="1.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M13 2 v22 M3 7 l20 12 M3 19 l20 -12" fill="none" stroke="#ffffff" stroke-width="3.5"/>
+    <path d="M13 2 v22 M3 7 l20 12 M3 19 l20 -12" fill="none" stroke="#a9cbe0" stroke-width="1.2"/>
+  </g>
+</svg>

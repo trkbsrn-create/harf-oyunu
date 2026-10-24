@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Un çuvalı (ağzı açık, buğday başağı) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="275" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="cuval" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)">
+      <rect width="7" height="7" fill="#fff6e0"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#e8d8b8" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="sari" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+      <rect width="6" height="6" fill="#ffe680"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffc928" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="114" rx="44" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M28 40 q-10 30 -6 66 q2 8 12 8 h62 q10 0 12 -8 q4 -36 -6 -66z" fill="url(#cuval)"/>
+    <path d="M28 40 q37 -16 74 0 q-37 14 -74 0z" fill="#ffffff"/>
+    <path d="M46 36 q8 -14 20 -12 q10 -2 18 12" fill="#ffffff" stroke-width="3"/>
+    <path d="M65 106 v-40" fill="none" stroke-width="3"/>
+    <path d="M65 70 q-10 -4 -10 -12 q8 2 10 10z M65 70 q10 -4 10 -12 q-8 2 -10 10z M65 82 q-10 -4 -10 -12 q8 2 10 10z M65 82 q10 -4 10 -12 q-8 2 -10 10z M65 62 q-4 -8 0 -14 q4 6 0 14z" fill="url(#sari)" stroke-width="2.5"/>
+  </g>
+</svg>

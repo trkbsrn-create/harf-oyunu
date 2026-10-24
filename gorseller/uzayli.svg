@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="60" height="70" viewBox="0 0 60 70">
+  <!-- Yeşil uzaylı (tek gözlü, antenli; zıplar) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="710" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="uzayli" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#b5f0a0"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#7fd66a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g transform="translate(3.0 3.5) scale(0.9)">
+  <ellipse cx="30" cy="67" rx="18" ry="3" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M22 18 l-6 -14 M38 18 l6 -14" fill="none" stroke-width="2.5"/>
+    <circle cx="16" cy="4" r="3.5" fill="#ffe680" stroke-width="2"/><circle cx="44" cy="4" r="3.5" fill="#ffe680" stroke-width="2"/>
+    <path d="M18 64 v-8 M42 64 v-8" fill="none" stroke-width="4"/>
+    <path d="M10 46 q-2 -32 20 -32 q22 0 20 32 q0 14 -20 14 q-20 0 -20 -14z" fill="url(#uzayli)"/>
+    <circle cx="30" cy="32" r="9" fill="#ffffff" stroke-width="2.5"/><circle cx="31" cy="33" r="4" fill="#2b2b2b" stroke="none"/>
+    <path d="M24 48 q6 5 12 0" fill="none" stroke-width="2.5"/>
+  </g>
+  </g>
+</svg>

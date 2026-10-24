@@ -109,7 +109,8 @@ class ElektrikDevresiSahnesi extends MiniOyunSahnesi {
     const dogru = this.soru.parcalar.join("");
     let yollar = [""];
     for (const sutun of sutunlar) yollar = yollar.flatMap((y) => sutun.map((p) => y + p));
-    return yollar.some((y) => y !== dogru && (anlamli.has(y) || y === this.soru.metin));
+    // Küfür/argo bir hece ya da kelime oluşturan yanlış yol da olmasın (öğretmenin kuralı)
+    return yollar.some((y) => y !== dogru && (anlamli.has(y) || y === this.soru.metin || uygunsuzMu(y)));
   }
 
   ampulCiz(yanik) {

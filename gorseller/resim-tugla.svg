@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Tuğla (dizilmiş kırmızı tuğlalar) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="513" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kiremit" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="6" height="6" fill="#ffb3a8"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#e0533d" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="116" rx="56" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M10 112 h52 v-22 h-52z M66 112 h52 v-22 h-52z M38 90 h52 v-22 h-52z M10 68 h24 v-22 h-24z M94 90 h24 v-22 h-24z M38 68 h52 v-22 h-52z M66 46 h40 v-22 h-40z M22 46 h40 v-22 h-40z" fill="url(#kiremit)"/>
+  </g>
+</svg>

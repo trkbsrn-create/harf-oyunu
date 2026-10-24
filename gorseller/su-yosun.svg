@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="160" height="240" viewBox="0 0 160 240">
+  <!-- Uzun deniz yosunu (ağaç yerine; alt ortası tabanı, oyunda sallanır) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="601" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="yosun" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#9fd6a0"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#5fae6a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="80" cy="234" rx="40" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M80 236 q-24 -60 -4 -120 q16 -50 -6 -110" fill="none" stroke="#5fae6a" stroke-width="10"/>
+    <path d="M80 236 q-24 -60 -4 -120 q16 -50 -6 -110" fill="none" stroke-width="2"/>
+    <path d="M74 200 q-40 -10 -50 -46 q34 4 50 46z M70 150 q36 -16 54 -50 q-34 0 -54 50z M74 104 q-36 -10 -46 -44 q30 2 46 44z M76 60 q30 -14 40 -44 q-28 0 -40 44z" fill="url(#yosun)" stroke-width="3"/>
+    <path d="M96 236 q16 -40 2 -84 q-8 -26 6 -52" fill="none" stroke="#8fcf8a" stroke-width="7"/>
+    <path d="M98 170 q26 -6 34 -30 q-24 2 -34 30z M100 120 q-20 -8 -24 -28 q18 2 24 28z" fill="url(#yosun)" stroke-width="2.5"/>
+  </g>
+</svg>

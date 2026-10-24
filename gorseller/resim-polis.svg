@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Polis (şapkalı, rozetli) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="488" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="mavi" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#bfe3f5"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#7cc3e6" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="sari" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+      <rect width="6" height="6" fill="#ffe680"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffc928" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="116" rx="36" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M30 116 v-28 q0 -24 35 -24 q35 0 35 24 v28z" fill="url(#mavi)"/>
+    <path d="M78 82 l4 8 l8 1 l-6 6 l2 8 l-8 -4 l-8 4 l2 -8 l-6 -6 l8 -1z" fill="url(#sari)" stroke-width="2"/>
+    <circle cx="65" cy="42" r="20" fill="#ffe2c6"/>
+    <path d="M38 26 q27 -26 54 0 l-4 6 h-46z" fill="#2f5d8a"/>
+    <path d="M40 30 h50 q-4 8 -50 0z" fill="#2b2b2b" stroke-width="2.5"/>
+    <circle cx="65" cy="20" r="4" fill="url(#sari)" stroke-width="2"/>
+    <circle cx="58" cy="44" r="2.5" fill="#2b2b2b"/><circle cx="72" cy="44" r="2.5" fill="#2b2b2b"/>
+    <path d="M59 52 q6 5 12 0" fill="none" stroke-width="2.5"/>
+  </g>
+</svg>

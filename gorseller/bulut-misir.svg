@@ -1,0 +1,51 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="780" viewBox="0 0 240 780">
+  <!-- Mısır sapı: bulutların üstünde, tepesi bulutta (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="315" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="koyuToprak" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#8e6340"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#6f4a2c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="misirYaprak" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9eba7"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#8fd16a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="sari" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+      <rect width="6" height="6" fill="#ffe680"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffc928" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M120 774 V585" fill="none" stroke="#2b2b2b" stroke-width="23"/>
+    <path d="M120 585 V390" fill="none" stroke="#2b2b2b" stroke-width="20"/>
+    <path d="M120 390 V195" fill="none" stroke="#2b2b2b" stroke-width="17"/>
+    <path d="M120 195 V90" fill="none" stroke="#2b2b2b" stroke-width="14"/>
+    <path d="M120 774 V585" fill="none" stroke="#6fbf4a" stroke-width="18"/>
+    <path d="M120 585 V390" fill="none" stroke="#6fbf4a" stroke-width="15"/>
+    <path d="M120 390 V195" fill="none" stroke="#6fbf4a" stroke-width="12"/>
+    <path d="M120 195 V90" fill="none" stroke="#6fbf4a" stroke-width="9"/>
+    <path d="M0 0 q40 -6 62 -40 q-30 10 -62 30z" fill="url(#misirYaprak)" stroke-width="3" transform="translate(120 730) scale(1.45)"/>
+    <path d="M0 0 q-40 -6 -62 -40 q30 10 62 30z" fill="url(#misirYaprak)" stroke-width="3" transform="translate(120 660) scale(1.38)"/>
+    <path d="M0 0 q-16 -6 -16 -34 q-2 -14 12 -8 q6 16 4 42z" fill="url(#sari)" stroke-width="2.5" transform="translate(126 654) scale(1.38)"/>
+    <path d="M0 0 q40 -6 62 -40 q-30 10 -62 30z" fill="url(#misirYaprak)" stroke-width="3" transform="translate(120 590) scale(1.31)"/>
+    <path d="M0 0 q-40 -6 -62 -40 q30 10 62 30z" fill="url(#misirYaprak)" stroke-width="3" transform="translate(120 520) scale(1.23)"/>
+    <path d="M0 0 q40 -6 62 -40 q-30 10 -62 30z" fill="url(#misirYaprak)" stroke-width="3" transform="translate(120 450) scale(1.16)"/>
+    <path d="M0 0 q16 -6 16 -34 q-2 -14 -12 -8 q-6 16 -4 42z" fill="url(#sari)" stroke-width="2.5" transform="translate(114 444) scale(1.16)"/>
+    <path d="M0 0 q-40 -6 -62 -40 q30 10 62 30z" fill="url(#misirYaprak)" stroke-width="3" transform="translate(120 380) scale(1.09)"/>
+    <path d="M0 0 q40 -6 62 -40 q-30 10 -62 30z" fill="url(#misirYaprak)" stroke-width="3" transform="translate(120 310) scale(1.02)"/>
+    <path d="M0 0 q-40 -6 -62 -40 q30 10 62 30z" fill="url(#misirYaprak)" stroke-width="3" transform="translate(120 240) scale(0.95)"/>
+    <path d="M0 0 q-16 -6 -16 -34 q-2 -14 12 -8 q6 16 4 42z" fill="url(#sari)" stroke-width="2.5" transform="translate(126 234) scale(0.95)"/>
+    <path d="M0 0 q40 -6 62 -40 q-30 10 -62 30z" fill="url(#misirYaprak)" stroke-width="3" transform="translate(120 170) scale(0.87)"/>
+    <circle cx="70" cy="70" r="34" fill="#ffffff" stroke-width="3.5"/>
+    <circle cx="120" cy="48" r="42" fill="#ffffff" stroke-width="3.5"/>
+    <circle cx="172" cy="72" r="34" fill="#ffffff" stroke-width="3.5"/>
+    <circle cx="98" cy="96" r="30" fill="#ffffff" stroke-width="3.5"/>
+    <circle cx="148" cy="98" r="30" fill="#ffffff" stroke-width="3.5"/>
+    <path d="M64 104 q56 14 112 0" fill="none" stroke="#ffffff" stroke-width="16"/>
+    <path d="M65.0 774 q55.0 -22 110 0z" fill="url(#koyuToprak)" stroke-width="3.5"/>
+  </g>
+  <path d="M40 20 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4z M206 30 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3z" fill="#ffe680" stroke="#2b2b2b" stroke-width="2"/>
+</svg>

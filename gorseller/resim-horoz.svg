@@ -1,0 +1,32 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Horoz (yandan, kırmızı ibikli) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="441" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kirmizi" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#ff9c8a"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#e0533d" stroke-width="3.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="turuncu" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#ffc58f"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#f08a3c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="yesil" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9eba7"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#8fd16a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="62" cy="114" rx="36" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 98 v14 M70 98 v14" fill="none" stroke="#ffc928" stroke-width="5"/>
+    <path d="M90 60 q30 -30 30 10 q-4 20 -20 24 M92 64 q18 -10 16 18" fill="url(#yesil)" stroke-width="3"/>
+    <path d="M30 60 q0 -24 22 -26 l10 22 q30 -4 34 18 q-2 28 -36 26 q-30 0 -30 -40z" fill="url(#turuncu)"/>
+    <circle cx="42" cy="34" r="14" fill="url(#turuncu)"/>
+    <path d="M32 22 q2 -14 8 -4 q4 -12 8 0 q6 -10 8 6z" fill="url(#kirmizi)" stroke-width="2.5"/>
+    <path d="M30 40 q-4 10 4 12 q4 -4 2 -10z" fill="url(#kirmizi)" stroke-width="2"/>
+    <circle cx="44" cy="32" r="2.5" fill="#2b2b2b"/>
+    <path d="M28 32 l-10 4 l10 4z" fill="#ffc928" stroke-width="2"/>
+  </g>
+</svg>

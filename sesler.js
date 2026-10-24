@@ -399,6 +399,167 @@ const Sesler = {
     this.nota(1760, 0.08, 0.35, 0.1, "sine");
   },
 
+  // ---- Büyük final müziği (öğretmenin isteği: başarı ve uzun yolculuk hissi) ----
+  // Dosya yok, kendi bestemiz: tarayıcıda notalarla çalınır (telif sorunu yok). Do–Sol–La minör–Fa
+  // akorları döner. Bölümler: "anlatim" (sakin, peri konuşurken alçak), "anilar" (davul ve bas girer,
+  // yolculuk), "zafer" (kahramanca ezgi, tam ses). muzikBaslat bölümü değiştirir, muzikDurdur yavaşça susar.
+  MUZIK_AKORLAR: [[130.81, 164.81, 196.0], [98.0, 123.47, 146.83], [110.0, 130.81, 164.81], [87.31, 110.0, 130.81]],
+  MUZIK_EZGI: [392, 523, 659, 784, 587, 784, 698, 587, 659, 880, 784, 659, 698, 659, 587, 523],
+  MUZIK_BOLUM: {
+    anlatim: { tempo: 76, ses: 0.4 },
+    anilar: { tempo: 104, ses: 0.5 },
+    zafer: { tempo: 104, ses: 0.7 },
+  },
+
+  muzikBaslat(bolum) {
+    if (!this.calabilir(() => this.muzikBaslat(bolum))) return;
+    const b = this.baglam;
+    if (!this.muzik) {
+      const ana = b.createGain();
+      ana.gain.setValueAtTime(0.0001, b.currentTime);
+      ana.connect(b.destination);
+      this.muzik = { ana, adim: 0, zaman: b.currentTime + 0.15 };
+      this.muzik.saat = setInterval(() => this.muzikPlanla(), 60);
+    }
+    this.muzik.bolum = bolum;
+    const g = this.muzik.ana.gain;
+    g.cancelScheduledValues(b.currentTime);
+    g.setValueAtTime(Math.max(0.0001, g.value), b.currentTime);
+    g.linearRampToValueAtTime(this.MUZIK_BOLUM[bolum].ses, b.currentTime + 2);
+    if (bolum !== "anlatim") this.muzikYukselis(0);
+  },
+
+  muzikDurdur(sure = 1.5) {
+    const m = this.muzik;
+    if (!m) return;
+    this.muzik = null;
+    const b = this.baglam;
+    m.ana.gain.cancelScheduledValues(b.currentTime);
+    m.ana.gain.setValueAtTime(Math.max(0.0001, m.ana.gain.value), b.currentTime);
+    m.ana.gain.linearRampToValueAtTime(0.0001, b.currentTime + sure);
+    clearInterval(m.saat);
+    setTimeout(() => m.ana.disconnect(), sure * 1000 + 300);
+  },
+
+  // Biraz ileriye kadar notaları zamanlar (sekizlik vuruşlarla)
+  muzikPlanla() {
+    const m = this.muzik;
+    if (!m || !this.baglam) return;
+    const b = this.baglam;
+    if (m.zaman < b.currentTime) m.zaman = b.currentTime + 0.05; // sekme arkadayken geride kaldıysa
+    while (m.zaman < b.currentTime + 0.3) {
+      this.muzikVurus(m.adim, m.zaman, 60 / this.MUZIK_BOLUM[m.bolum].tempo / 2);
+      m.zaman += 60 / this.MUZIK_BOLUM[m.bolum].tempo / 2;
+      m.adim++;
+    }
+  },
+
+  // Tek nota: ana ses düğmesine bağlı, yumuşak giriş ve çıkış
+  muzikNota(frekans, t, sure, ses, tur, kesim) {
+    const b = this.baglam;
+    const osc = b.createOscillator();
+    const kazanc = b.createGain();
+    osc.type = tur;
+    osc.frequency.setValueAtTime(frekans, t);
+    kazanc.gain.setValueAtTime(0.0001, t);
+    kazanc.gain.linearRampToValueAtTime(ses, t + Math.min(0.4, sure * 0.3));
+    kazanc.gain.exponentialRampToValueAtTime(0.0001, t + sure);
+    let son = osc.connect(kazanc);
+    if (kesim) {
+      const filtre = b.createBiquadFilter();
+      filtre.type = "lowpass";
+      filtre.frequency.value = kesim;
+      son = son.connect(filtre);
+    }
+    son.connect(this.muzik.ana);
+    osc.start(t);
+    osc.stop(t + sure + 0.05);
+  },
+
+  // Gürültü (davul, zil ve yükselişler için)
+  gurultu(t, sure, ses, tur, frekans) {
+    const b = this.baglam;
+    if (!this.gurultuTamponu) {
+      this.gurultuTamponu = b.createBuffer(1, b.sampleRate, b.sampleRate);
+      const veri = this.gurultuTamponu.getChannelData(0);
+      for (let i = 0; i < veri.length; i++) veri[i] = Math.random() * 2 - 1;
+    }
+    const kaynak = b.createBufferSource();
+    kaynak.buffer = this.gurultuTamponu;
+    const filtre = b.createBiquadFilter();
+    filtre.type = tur;
+    filtre.frequency.value = frekans;
+    const kazanc = b.createGain();
+    kazanc.gain.setValueAtTime(ses, t);
+    kazanc.gain.exponentialRampToValueAtTime(0.0001, t + sure);
+    kaynak.connect(filtre).connect(kazanc).connect(this.muzik.ana);
+    kaynak.start(t);
+    kaynak.stop(t + sure + 0.05);
+    return filtre;
+  },
+
+  // Bölüm geçişinde yükselen "vuuş" (zil kabarması)
+  muzikYukselis(gecikme) {
+    if (!this.muzik) return;
+    const b = this.baglam;
+    const t = b.currentTime + gecikme;
+    const kaynak = b.createBufferSource();
+    if (!this.gurultuTamponu) this.gurultu(t, 0.01, 0.0001, "highpass", 8000);
+    kaynak.buffer = this.gurultuTamponu;
+    kaynak.loop = true;
+    const filtre = b.createBiquadFilter();
+    filtre.type = "bandpass";
+    filtre.frequency.setValueAtTime(400, t);
+    filtre.frequency.exponentialRampToValueAtTime(6000, t + 1.8);
+    const kazanc = b.createGain();
+    kazanc.gain.setValueAtTime(0.0001, t);
+    kazanc.gain.exponentialRampToValueAtTime(0.25, t + 1.7);
+    kazanc.gain.exponentialRampToValueAtTime(0.0001, t + 2.2);
+    kaynak.connect(filtre).connect(kazanc).connect(this.muzik.ana);
+    kaynak.start(t);
+    kaynak.stop(t + 2.3);
+  },
+
+  muzikVurus(adim, t, sekizlik) {
+    const bolum = this.muzik.bolum;
+    const sira = adim % 8; // ölçü içindeki sekizlik
+    const akor = this.MUZIK_AKORLAR[Math.floor(adim / 8) % 4];
+    const olcu = sekizlik * 8;
+    // Ölçü başında geniş akor (yumuşak, filtreli testere) ve derin bas
+    if (sira === 0) {
+      akor.forEach((f) => {
+        this.muzikNota(f * 2, t, olcu * 1.05, 0.05, "sawtooth", bolum === "anlatim" ? 900 : 1800);
+        this.muzikNota(f * 2 * 1.003, t, olcu * 1.05, 0.04, "sawtooth", bolum === "anlatim" ? 900 : 1800);
+      });
+      this.muzikNota(akor[0] / 2, t, olcu * 0.95, bolum === "anlatim" ? 0.12 : 0.2, "triangle");
+    }
+    // Arpej: akorun notaları sırayla, bir oktav yukarıda
+    const arpej = [0, 1, 2, 1, 0, 1, 2, 1][sira];
+    this.muzikNota(akor[arpej] * 4, t, sekizlik * 1.6, bolum === "anlatim" ? 0.04 : 0.05, "triangle");
+    if (bolum === "anlatim") return;
+    // Davul: 1. ve 3. vuruşta derin vuruş (timpani gibi), arada zil
+    if (sira === 0 || sira === 4) {
+      const b = this.baglam;
+      const osc = b.createOscillator();
+      const kazanc = b.createGain();
+      osc.frequency.setValueAtTime(140, t);
+      osc.frequency.exponentialRampToValueAtTime(45, t + 0.3);
+      kazanc.gain.setValueAtTime(0.5, t);
+      kazanc.gain.exponentialRampToValueAtTime(0.0001, t + 0.4);
+      osc.connect(kazanc).connect(this.muzik.ana);
+      osc.start(t);
+      osc.stop(t + 0.45);
+    }
+    if (sira % 2 === 1) this.gurultu(t, 0.06, 0.05, "highpass", 7000);
+    if (bolum === "zafer" && (sira === 2 || sira === 6)) this.gurultu(t, 0.18, 0.18, "bandpass", 1800);
+    // Ezgi (zafer): dörtlüklerle kahramanca ezgi, iki ses (oktav)
+    if (bolum === "zafer" && sira % 2 === 0) {
+      const f = this.MUZIK_EZGI[(Math.floor(adim / 2)) % this.MUZIK_EZGI.length];
+      this.muzikNota(f, t, sekizlik * 2.2, 0.09, "square", 2600);
+      this.muzikNota(f / 2, t, sekizlik * 2.2, 0.06, "triangle");
+    }
+  },
+
   // Sandık açılırken: neşeli "ta-daa" ve parıltılar.
   hazine() {
     const melodi = [523, 659, 784, 1047];

@@ -2,8 +2,9 @@
 // Harfin yazılış yolu ekranda durur. Harfin ipucu resmi (a için arı, n için nar...) yolun
 // başındadır; çocuk onu parmağıyla yazılış yönünde yol boyunca götürür, arkasında sarı iz
 // kalır. Yoldan çok saparsa o çizgi baştan başlar ve bir can gider. Harf 3 kez yazılır.
-// Yazılış yönleri dik temel harfe göre (MEB): örneğin "a" önce sağ üstten başlayan, saat
-// yönünün tersine yuvarlak, sonra sağda yukarıdan aşağı çizgi.
+// Yazılış yönleri dik temel harfe göre (öğretmenin verdiği "Temel Harfler ve Yazılış Yönleri" tablosu):
+// örneğin "a" önce sağ üstten başlayan, saat yönünün tersine yuvarlak, sonra sağda yukarıdan aşağı
+// çizgi. n m r u ü y tek çizgidir: kalem aynı çizgiden geri çıkıp devam eder.
 // Düzeye göre yardım (öğretmenin seçimi): 2) kalın yol, oklar, numaralar 3) ince yol, yalnızca
 // başlangıç noktası. (Yalnızca silik iz bırakan en zor hâl kaldırıldı.)
 
@@ -29,18 +30,60 @@ function birlestir(...parcalar) {
 
 const HARF_YOLLARI = {
   a: [yayNoktalari(640, 400, 68, 70, -40, -340), cizgiNoktalari(708, 330, 708, 470)],
-  n: [cizgiNoktalari(585, 330, 585, 470),
-    birlestir(yayNoktalari(640, 385, 55, 50, 180, 360), cizgiNoktalari(695, 385, 695, 470))],
+  n: [birlestir(cizgiNoktalari(585, 330, 585, 470), cizgiNoktalari(585, 470, 585, 385),
+    yayNoktalari(640, 385, 55, 50, 180, 360), cizgiNoktalari(695, 385, 695, 470))],
   e: [birlestir(cizgiNoktalari(575, 400, 705, 400), yayNoktalari(640, 400, 65, 70, 0, -300))],
   t: [birlestir(cizgiNoktalari(625, 260, 625, 440), yayNoktalari(655, 440, 30, 30, 180, 90)),
     cizgiNoktalari(590, 330, 680, 330)],
   i: [cizgiNoktalari(640, 330, 640, 470), cizgiNoktalari(640, 278, 640, 292)],
   l: [birlestir(cizgiNoktalari(630, 250, 630, 440), yayNoktalari(660, 440, 30, 30, 180, 90))],
+  // 2. grup: o sağ üstten saat yönünün tersine; k dikey, sonra kırık çizgi; u aşağı, kıvrılıp
+  // yukarı, sonra sağ dikey; r dikey, sonra omuz; ı dikey; m dikey ve iki kemer
+  o: [yayNoktalari(640, 400, 65, 70, -60, -420)],
+  k: [cizgiNoktalari(600, 250, 600, 470),
+    birlestir(cizgiNoktalari(690, 330, 600, 410), cizgiNoktalari(600, 410, 695, 470))],
+  u: [birlestir(cizgiNoktalari(585, 330, 585, 415), yayNoktalari(640, 415, 55, 55, 180, 0),
+    cizgiNoktalari(695, 415, 695, 330), cizgiNoktalari(695, 330, 695, 470))],
+  r: [birlestir(cizgiNoktalari(605, 330, 605, 470), cizgiNoktalari(605, 470, 605, 380),
+    yayNoktalari(650, 380, 45, 45, 180, 320))],
+  ı: [cizgiNoktalari(640, 330, 640, 470)],
+  m: [birlestir(cizgiNoktalari(570, 330, 570, 470), cizgiNoktalari(570, 470, 570, 380),
+    yayNoktalari(610, 380, 40, 45, 180, 360), cizgiNoktalari(650, 380, 650, 470), cizgiNoktalari(650, 470, 650, 380),
+    yayNoktalari(690, 380, 40, 45, 180, 360), cizgiNoktalari(730, 380, 730, 470))],
+  // 3. grup: ü u gibi, sonra iki nokta; s üst kıvrım saat yönünün tersine, alt kıvrım saat yönünde;
+  // ö o gibi, sonra iki nokta; y u gibi, sağ çizgi aşağı iner ve sola kıvrılır; d a gibi, çizgi
+  // yukarıdan; z üst, çapraz, alt (tek çizgi)
+  ü: [birlestir(cizgiNoktalari(585, 330, 585, 415), yayNoktalari(640, 415, 55, 55, 180, 0),
+    cizgiNoktalari(695, 415, 695, 330), cizgiNoktalari(695, 330, 695, 470)),
+  cizgiNoktalari(605, 286, 605, 300), cizgiNoktalari(675, 286, 675, 300)],
+  s: [birlestir(yayNoktalari(640, 365, 50, 35, -20, -270), yayNoktalari(640, 435, 50, 35, -90, 160))],
+  ö: [yayNoktalari(640, 400, 65, 70, -60, -420), cizgiNoktalari(612, 286, 612, 300), cizgiNoktalari(668, 286, 668, 300)],
+  y: [birlestir(cizgiNoktalari(585, 330, 585, 415), yayNoktalari(640, 415, 55, 55, 180, 0),
+    cizgiNoktalari(695, 415, 695, 330), cizgiNoktalari(695, 330, 695, 520), yayNoktalari(655, 520, 40, 40, 0, 150))],
+  d: [yayNoktalari(640, 400, 68, 70, -40, -340), cizgiNoktalari(708, 250, 708, 470)],
+  z: [birlestir(cizgiNoktalari(585, 330, 695, 330), cizgiNoktalari(695, 330, 585, 470), cizgiNoktalari(585, 470, 695, 470))],
+  // 4. grup: c sağ üstten saat yönünün tersine açık yay; ç c ve çengel; b dikey, sonra göbek;
+  // g a gibi, sağ çizgi aşağı iner ve sola kıvrılır; ş s ve çengel
+  c: [yayNoktalari(645, 400, 62, 70, -40, -320)],
+  ç: [yayNoktalari(645, 400, 62, 70, -40, -320), cizgiNoktalari(642, 474, 632, 500)],
+  b: [cizgiNoktalari(590, 250, 590, 470), yayNoktalari(645, 400, 55, 70, 200, 520)], // göbek üstten, saat yönünde
+  g: [yayNoktalari(640, 400, 68, 70, -40, -340), birlestir(cizgiNoktalari(708, 330, 708, 520), yayNoktalari(668, 520, 40, 40, 0, 150))],
+  ş: [birlestir(yayNoktalari(640, 365, 50, 35, -20, -270), yayNoktalari(640, 435, 50, 35, -90, 160)), cizgiNoktalari(640, 474, 632, 500)],
+  // 5. grup: p aşağı uzun dikey, sonra göbek; h uzun dikey, sonra kemer; v tek çizgi; ğ g ve üstünde
+  // kavis; f üstte kıvrık, aşağı, sonra yatay çizgi; j aşağı iner, sola kıvrılır, sonra nokta
+  p: [cizgiNoktalari(590, 330, 590, 540), yayNoktalari(645, 400, 55, 70, 200, 520)], // göbek üstten, saat yönünde
+  h: [cizgiNoktalari(585, 250, 585, 470), birlestir(yayNoktalari(640, 385, 55, 50, 180, 360), cizgiNoktalari(695, 385, 695, 470))],
+  v: [birlestir(cizgiNoktalari(585, 330, 640, 470), cizgiNoktalari(640, 470, 695, 330))],
+  ğ: [yayNoktalari(640, 400, 68, 70, -40, -340), birlestir(cizgiNoktalari(708, 330, 708, 520), yayNoktalari(668, 520, 40, 40, 0, 150)),
+    yayNoktalari(640, 282, 24, 14, 180, 0)],
+  f: [birlestir(yayNoktalari(655, 285, 30, 30, -30, -180), cizgiNoktalari(625, 285, 625, 470)), cizgiNoktalari(595, 340, 670, 340)],
+  j: [birlestir(cizgiNoktalari(650, 330, 650, 520), yayNoktalari(615, 520, 35, 35, 0, 150)), cizgiNoktalari(650, 278, 650, 292)],
 };
 
 // Büyük harfler (öğretmenin isteği; dik temel harf yazılış sırası, öğretmen kontrol edecek):
 // tavan 250, taban 470. A: sol eğik, sağ eğik, orta çizgi; N: sol dikey, çapraz, sağ dikey;
-// E: dikey, üst, orta, alt; T: üst çizgi, dikey; İ: dikey, nokta; L: dikey ve alt (tek çizgi).
+// E: dikey, üst, orta, alt; T: üst çizgi, dikey; İ: dikey, nokta; L: dikey, alt; M: sol dikey, iki çapraz,
+// sağ dikey; B: dikey, iki göbek tek çizgide.
 const BUYUK_HARF_YOLLARI = {
   a: [cizgiNoktalari(640, 250, 570, 470), cizgiNoktalari(640, 250, 710, 470), cizgiNoktalari(593, 398, 687, 398)],
   n: [cizgiNoktalari(580, 250, 580, 470), cizgiNoktalari(580, 250, 700, 470), cizgiNoktalari(700, 250, 700, 470)],
@@ -48,7 +91,46 @@ const BUYUK_HARF_YOLLARI = {
     cizgiNoktalari(590, 360, 675, 360), cizgiNoktalari(590, 470, 690, 470)],
   t: [cizgiNoktalari(570, 250, 710, 250), cizgiNoktalari(640, 250, 640, 470)],
   i: [cizgiNoktalari(640, 250, 640, 470), cizgiNoktalari(640, 204, 640, 218)],
-  l: [birlestir(cizgiNoktalari(595, 250, 595, 470), cizgiNoktalari(595, 470, 690, 470))],
+  l: [cizgiNoktalari(595, 250, 595, 470), cizgiNoktalari(595, 470, 690, 470)],
+  // O: tepeden saat yönünün tersine; K: dikey, üst çapraz, alt çapraz; U: tek çizgi;
+  // R: dikey, göbek, bacak; I: dikey; M: yukarıda
+  o: [yayNoktalari(640, 360, 85, 110, -60, -420)],
+  k: [cizgiNoktalari(590, 250, 590, 470), cizgiNoktalari(700, 250, 590, 370), cizgiNoktalari(628, 330, 705, 470)],
+  u: [birlestir(cizgiNoktalari(580, 250, 580, 400), yayNoktalari(640, 400, 60, 70, 180, 0),
+    cizgiNoktalari(700, 400, 700, 250))],
+  r: [cizgiNoktalari(590, 250, 590, 470),
+    birlestir(cizgiNoktalari(590, 250, 645, 250), yayNoktalari(645, 305, 55, 55, -90, 90), cizgiNoktalari(645, 360, 590, 360)),
+    cizgiNoktalari(630, 360, 705, 470)],
+  ı: [cizgiNoktalari(640, 250, 640, 470)],
+  m: [cizgiNoktalari(570, 250, 570, 470), cizgiNoktalari(570, 250, 640, 400),
+    cizgiNoktalari(710, 250, 640, 400), cizgiNoktalari(710, 250, 710, 470)],
+  // Ü: U ve iki nokta; S: üst ve alt kıvrım; Ö: O ve iki nokta; Y: sol çapraz, sağ çapraz, dikey;
+  // D: dikey, göbek; Z: üst, çapraz, alt
+  ü: [birlestir(cizgiNoktalari(580, 250, 580, 400), yayNoktalari(640, 400, 60, 70, 180, 0),
+    cizgiNoktalari(700, 400, 700, 250)), cizgiNoktalari(605, 204, 605, 218), cizgiNoktalari(675, 204, 675, 218)],
+  s: [birlestir(yayNoktalari(640, 305, 60, 55, -20, -270), yayNoktalari(640, 415, 60, 55, -90, 160))],
+  ö: [yayNoktalari(640, 360, 85, 110, -60, -420), cizgiNoktalari(610, 204, 610, 218), cizgiNoktalari(670, 204, 670, 218)],
+  y: [cizgiNoktalari(570, 250, 640, 360), cizgiNoktalari(710, 250, 640, 360), cizgiNoktalari(640, 360, 640, 470)],
+  d: [cizgiNoktalari(590, 250, 590, 470),
+    birlestir(cizgiNoktalari(590, 250, 630, 250), yayNoktalari(630, 360, 80, 110, -90, 90), cizgiNoktalari(630, 470, 590, 470))],
+  z: [birlestir(cizgiNoktalari(575, 250, 705, 250), cizgiNoktalari(705, 250, 575, 470), cizgiNoktalari(575, 470, 705, 470))],
+  // C açık yay; Ç C ve çengel; B dikey, üst ve alt göbek; G yay ve içe çizgi; Ş S ve çengel
+  c: [yayNoktalari(650, 360, 85, 110, -40, -320)],
+  ç: [yayNoktalari(650, 360, 85, 110, -40, -320), cizgiNoktalari(648, 474, 638, 500)],
+  b: [cizgiNoktalari(590, 250, 590, 470),
+    birlestir(cizgiNoktalari(590, 250, 640, 250), yayNoktalari(640, 302, 48, 52, -90, 90), cizgiNoktalari(640, 354, 590, 354),
+      cizgiNoktalari(590, 354, 645, 354), yayNoktalari(645, 412, 55, 58, -90, 90), cizgiNoktalari(645, 470, 590, 470))],
+  g: [birlestir(yayNoktalari(650, 360, 85, 110, -40, -340), cizgiNoktalari(730, 398, 730, 360), cizgiNoktalari(730, 360, 672, 360))],
+  ş: [birlestir(yayNoktalari(640, 305, 60, 55, -20, -270), yayNoktalari(640, 415, 60, 55, -90, 160)), cizgiNoktalari(640, 474, 632, 500)],
+  // P dikey ve göbek; H iki dikey, orta çizgi; V tek çizgi; Ğ G ve kavis; F dikey, üst, orta; J aşağı, kıvrık
+  p: [cizgiNoktalari(590, 250, 590, 470),
+    birlestir(cizgiNoktalari(590, 250, 640, 250), yayNoktalari(640, 305, 55, 55, -90, 90), cizgiNoktalari(640, 360, 590, 360))],
+  h: [cizgiNoktalari(585, 250, 585, 470), cizgiNoktalari(695, 250, 695, 470), cizgiNoktalari(585, 360, 695, 360)],
+  v: [birlestir(cizgiNoktalari(570, 250, 640, 470), cizgiNoktalari(640, 470, 710, 250))],
+  ğ: [birlestir(yayNoktalari(650, 360, 85, 110, -40, -340), cizgiNoktalari(730, 398, 730, 360), cizgiNoktalari(730, 360, 672, 360)),
+    yayNoktalari(650, 212, 24, 14, 180, 0)],
+  f: [cizgiNoktalari(590, 250, 590, 470), cizgiNoktalari(590, 250, 700, 250), cizgiNoktalari(590, 355, 680, 355)],
+  j: [birlestir(cizgiNoktalari(680, 250, 680, 420), yayNoktalari(630, 420, 50, 50, 0, 160))],
 };
 
 // Her turda küçük mü büyük mü yazılacak: 2. tur büyük harf (küçük, BÜYÜK, küçük)
@@ -144,12 +226,16 @@ class HarfiCizSahnesi extends MiniOyunSahnesi {
       g.lineStyle(ayar.yol, 0xddd6c6, ayar.silik ? 0.6 : 1);
       g.strokePoints(yol, false);
       g.fillStyle(0xddd6c6, ayar.silik ? 0.6 : 1);
-      for (const n of [yol[0], yol[yol.length - 1]]) g.fillCircle(n.x, n.y, ayar.yol / 2);
+      for (const n of yol) g.fillCircle(n.x, n.y, ayar.yol / 2); // uçlar ve dönüşler yuvarlak
       if (ayar.oklar) {
         // Yol boyunca yön okları
         for (let j = 6; j < yol.length - 3; j += 8) {
           const a = Phaser.Math.Angle.Between(yol[j - 1].x, yol[j - 1].y, yol[j + 1].x, yol[j + 1].y);
-          const ok = this.add.triangle(yol[j].x, yol[j].y, 0, -7, 14, 0, 0, 7, 0xe0533d).setRotation(a);
+          // Geri dönülen çizgide (n, m, r...) iniş okları solda, çıkış okları sağda (üst üste binmesin)
+          const geri = yol.some((q, k) => Math.abs(k - j) > 6 && Phaser.Math.Distance.Between(q.x, q.y, yol[j].x, yol[j].y) < 6);
+          const kay = geri ? 12 : 0;
+          const ok = this.add.triangle(yol[j].x - Math.sin(a) * kay, yol[j].y + Math.cos(a) * kay,
+            0, -7, 14, 0, 0, 7, 0xe0533d).setRotation(a);
           this.isaretler.add(ok);
         }
       }

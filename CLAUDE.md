@@ -8,18 +8,41 @@ Oyunların ayrıntılı tarifi `OYUNLAR.md`'de: yalnızca üzerinde çalışıla
 tarayıcı oyunu ("Harf Avcısı"). Çocuk adaya düşmüştür: sandıkta harf tohumu bulur, tarlaya eker,
 mini oyunlarla damla kazanıp sular, fasulye sırığından bulutlara çıkar, yelkenli parçasını alır;
 altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik yalnızca 1. ada.
+2. ada sonbahar adasıdır (o k u r ı m; kelimeleri otobüs, kedi, uçak, robot, ıspanak, maymun): aynı akış,
+fasulye sırığı yerine mısır sapı, yelkenli yerine köprü (o, k ayak; u, r halat; ı, m tahta; parçalarda harf
+yok); köprü bitince "3. adaya git". 3. ada karlı adadır (ü s ö y d z): buz sarmaşığı; dalgıç kıyafeti ve çekiç
+(ü maske, s şnorkel, ö elbise, y paletler, d tüp, z çekiç; harf yok); "Buzu kır" → çocuk deliğe dalar, "4. adaya git".
+4. ada su altıdır (ç b g c ş): çocuk dalgıç kıyafetiyle her yere yüzer (`yuzme`, cocuk-yuz.svg, cocuk*-dalgic.svg);
+ağaç yerine deniz yosunu, tohum mercan olur, damla yerine hava kabarcığı (`kabarcik`, `dk()`, sözler `suAltiSozu`),
+su tesisi "Kabarcık İstasyonu" (tesis, panel ve variller adanın resmiyle: `dk()`, su-tesisi-kabarcik.svg), bulutlar yerine su yüzeyi; görev dev kaplumbağa (ç eyer, b dizgin, g fener, c harita,
+ş anahtar; 5 parça); "Haydi, bin!" → kaplumbağa gizli mağaradaki rokete götürür, "5. adaya git".
+5. ada uzaydır ve final adasıdır (p h v ğ f j): çocuk astronot, ay gibi zıplayarak yürür (`zipla`, cocuk*-astronot.svg);
+kristal ağaç, yıldız sarmaşığı, damla yerine yıldız tozu, bulutlar yerine gezegen halkası; görev uzaylı iksirinin
+formülü (`IKSIR_PARCALARI`: p merak, h cesaret, v sabır, ğ keşif, f öğrenme, j başarı). "İksiri iç!" → büyük final
+(`iksirFinali`): peri her parçanın çocuğun yaptıklarından yapıldığını anlatır, iksir içilir, anılar kartlarla geçer
+(adalar ve profilde en çok oynanan mini oyunlar), harfler kelime olur: "Artık okumayı ve yazmayı biliyorsun..."
+3. adanın başında peri kar kıyafeti için sınav yapar: m harfiyle (öğretmenin seçimi,
+`KIS_SINAVI_HARFI`) rastgele bir hece/kelime oyunu, 3. seviye (`kisSinaviBaslat`, mini oyunda `veri.sinav`); geçene kadar yeni sınav; geçince
+çocuk kışlık giyer (cocuk*-kis.svg, `cocukDokusu`, kayıtta `kisKiyafeti`). Adalar `AdaSahnesi`nde `ADALAR` ayarıyla (`veri.ada`, kayıtta `ada`; sözler `sozler`).
+Mini oyunlar 3., 4. ve 5. harf grubuyla da (ü s ö y d z; üzüm, sincap, ördek, yunus, deve, zürafa / ç b g c ş;
+çekirge, balık, güvercin, civciv, şeker / p h v ğ f j; penguen, horoz, vapur, dağ, fil, jelibon) oynanır (deneme
+menüsü). O konumda resimli kelime yoksa (ö, d, b, g, c, h, f ile biten; ğ ile başlayan) başka konum sorulur
+(`konumSec`). ğ kelime ve hece başında gelmez (hece havuzunda "ğa" gibi hece yok), tek başına söylenemez
+(`tekBasinaDenenir` yok, ipucu hecesi "ağ").
 
 ## Dosya rehberi (ayrıntı: OYUNLAR.md)
 - `index.html` ana sayfa (derleme yok; telefon ayarları, yazı tipi yükleme `yaziTipiHazir`, dönünce
   yeniden yerleştirme). Uygulama olarak ekleme: `manifest.webmanifest`, `sw.js` (önbellek yok), `simge/`.
-- `oyun.js` ana oyun sahneleri (karşılama, hikâye, ada, bulut, final), `SURUM`.
+- `oyun.js` ana oyun sahneleri (karşılama, hikâye, ada, bulut, final), `SURUM`. God mode (şifreli) bir
+  seçim paneli açar: hikâye, Mini Games ya da 1.-5. adanın bir aşaması (`tanriSecenekleri`, `tanriAsamasi`).
 - `minioyunlar/<ad>/oyun.js` her mini oyun; `ortak.js` ortak sınıf `MiniOyunSahnesi`, `PLANLANAN_OYUNLAR`,
   hece/kelime yardımcıları; `menu.js` deneme menüsü; `lambalar.js` Oyun Lambaları (çarkın yerine).
 - `profil.js` profil (hayvan resmi + takma ad; ilk ekranda "Profil oluştur" → `ProfilPaneli`), istatistik, karne (`KarneSahnesi`).
-- `harfler.js` harf verisi; `canta.js` çanta; `sesler.js` efekt ve sesli okuma; `dinleyici.js` mikrofon.
+- `harfler.js` harf verisi; `canta.js` çanta (kumbara dahil); `market.js` Bulut Market; `sesler.js` efekt ve sesli okuma; `dinleyici.js` mikrofon.
 - `gorseller/` kendi SVG'lerimiz, `araclar/doodle_ciz.py` ile üretilir (görsel değişikliği betikte yapılır).
 - `araclar/dene.js` mini oyun deneme aracı (aşağıda "Test").
-- Öğretmen sayfaları: `mikrofon.html`, `kayit.html`, `dinle.html`.
+- Öğretmen sayfaları: `mikrofon.html`, `kayit.html` (oyunda sesi olan sözleri gizler; başlıkta kalan sayısı), `dinle.html`,
+  `resimler.html` (bütün kelime resimleri, kontrol için).
 - Phaser 3.90.0 jsDelivr'den (sürüm değiştirilmez). Yayın: Cloudflare Workers (harfavcisi.net; `main`e eklenince
   kendiliğinden yüklenir, ayar `wrangler.jsonc` + `.assetsignore`). Deneme sitesi: GitHub Pages
   (trkbsrn-create.github.io/harf-oyunu, `gelistirme` dalından).
@@ -79,6 +102,15 @@ altı parça (a n e t i l) tamamlanınca yelkenliyle 2. adaya geçer. Şimdilik 
   "ı" de olmasın (`KARISAN_SESLER`). Büyük ünlü uyumu şart değil (öğretmen: "çok önemli değil").
 - Kelime resimden kolay tanınmalı; birbirine benzeyen resimler (kurt/kedi gibi) aynı soruda
   karışmasın.
+- Kelime listesinin büyük kısmı öğretmenin verdiği Mehmet Öğretmen kelime tablolarından seçildi
+  (çocuğa uygun, somut sözcükler; ad, yer adı ve fiil çekimleri alınmadı). ilkokuldokumanlari.com hece
+  tablolarındaki resmi çizilebilen kelimeler de resimleriyle konum listelerine eklendi (benzer resmi olanlar,
+  ör. kuş/güvercin, keman/gitar, alınmadı). Öğretmenin verdiği "A'dan Z'ye resim çizilebilir kelimeler" listesinden
+  de 59 kelime resimleriyle eklendi (karışan ya da zor tanınanlar, ör. turp/domates, çaydanlık, alınmadı).
+- Öğretmenin kuralı: Türkçede küfür ya da argo olan heceler ve kelimeler (am, sik, sok, mal...) oyunda
+  hiç çıkmaz: ne sorulur, ne seçenek olur, ne birleşir, ne ipucu hecesi olur (m'nin hecesi "em").
+  Liste `UYGUNSUZ_HECELER` (ortak.js); hece havuzu, kelime listeleri, Birleştir Büyüt ve Elektrik
+  Devresi yolları buna bakar. Yeni harf grubunda yeni çıkan uygunsuz heceleri listeye ekle.
 
 ## Yazı ve harfler
 - Oyundaki bütün yazılar Türkçe.
@@ -189,13 +221,57 @@ Her hatadan sonra buraya yeni bir kural ekle.
 - Chrome'un internet sesi (Google Türkçe) bazen hiç başlamıyor, bütün sözler susuyordu (Brave'de
   sorun yoktu). Söz 1,5 saniyede başlamazsa cihazın kendi sesine geçilir (`uzakSesBozuk`).
 
+- Sürüm 168 onaysız canlıya (main) gitti: oturum eski CLAUDE.md ile başlamıştı. Her işten önce
+  `origin/gelistirme`'deki CLAUDE.md'yi oku; çekme isteğinin hedefi `gelistirme` mi, kontrol et.
+
+- Sürüm 192'de 2.-5. adalar ve God mode donuyordu: menüdeki peri (`periyiKondur`) peri yokken boş nesneyi
+  taşımaya çalıştı. Yeni akışı her giriş yolundan dene (yeni oyun, sonraki ada, Devam et, God mode).
+- Düğmeye (görev, menü, harita) basıp parmak/fare biraz kayınca karakter oraya yürüyordu; God mode'dan basılı
+  gelen fareyle de kendiliğinden yürüyordu. Kaydırarak yürüme yalnızca boş yerde başlayan dokunuşta olur
+  (`yuruyusDokunusu`). Yeni düğme eklerken dokunup kaydırmayı da dene.
+- Bulutta alınan civciv adaya inince kayboluyordu: ada sahnesi uyanırken evcil hayvanı yeniden kurmuyordu. Başka sahnede
+  değişen ortak durumu (Dolap, Canta) uyanan sahnede yeniden çiz (`events.on("wake")`).
+- Ada ekranında dolap açılınca düğmeleri dokunmayı almıyordu, pencere kapanmadı ("oyun dondu"): kamera kaydığı için
+  kap (container) içindeki düğmelerin dokunma yeri kaydı. Ekrana sabit pencerede her dokunulan nesneye ayrıca
+  `setScrollFactor(0)` ver; kayan ekranda (ada) gerçek tıklamayla dene (canvas'a mousedown).
+- Resimlerde kenardan kesilen çizimler vardı (araba, dinozor, bere...) ve halka gezegenin önünden tam geçiyordu, dizgin
+  kaplumbağanın gözünü kapatıyordu. Yeni resmi büyük çizip bak; taşan resmi `KUCULT`'a ekle (doodle_ciz.py);
+  halkanın arka yarısını gezegenden önce, ön yarısını sonra çiz.
+- Harfi Yaz'da p'nin kuyruğu tepsinin arkasında kalıyordu, b ve p'nin göbeği ters yöndeydi. Harf yolu değişince
+  her düzeyde (1. düzey büyütülür) kuyruklu harfleri (p g ğ y j) de ekranda gör; yönler öğretmenin tablosuna uysun.
+
 ## Bekleyen işler
 - TTKB Dik Temel Abece yazı tipi: yazardan izin bekleniyor; izin gelirse dosya depoya eklenir.
 - Ekrandaki 10 uyarı ("Telefonu yan çevir" vb.) henüz kaydedilmedi (kayit.html'de duruyor).
 - iPhone'da efekt sesi düzeltmesinin (`iosSesiniAc`) öğretmenden onayı bekleniyor.
 - Bulut bölgelerinin içeriği; bilmeceler ("Hızlı koşar, yeleleri var." → at; "Türk bayrağında
   beni görürler, kırmızıyla eş derler." → al) nerede kullanılacak, sonra konuşulacak.
-- Kalan harf grupları ve 2. ada; yeni gruplarla 4-5 heceli kelimeler (Elektrik Devresi).
+- 2. harf grubu: 3. seviyede dört harfli heceler, yeni seslerin kaydı (kayit.html "2. ada"); bulut bölgeleri.
+- 4. ve 5. adanın yeni sözleri kaydedilmedi (kayit.html "4. ada", "5. ada").
+- Kalan harf grupları; yeni gruplarla 4-5 heceli kelimeler (Elektrik Devresi).
 - Peri rehber (öğretmenin fikri) tamam: tanışma, anlatım, görev düğmesi, omuzdaki peri, mini oyun
-  yönergeleri. Perinin adı yok (sorulabilir). Yeni mini oyuna `YONERGELER`'de yönerge yazılır.
-- Bulut Market (taslak proje): karakterin kıyafetini değiştirme, yeni eşyalar alma. Sonra başlanacak.
+  yönergeleri. Öğretmenin kararı: omuzda her işi yalnızca 1. adada gösterir; sonraki adalarda başta yalnızca
+  görevi söyler (`adaGorevi`). Sözü bitince menü düğmesinin yanına yerleşir (`periyiKondur`); dokununca
+  oyunun durumuna göre sıradaki işi söyler (`simdikiGorev`). Perinin adı yok (sorulabilir). Yeni mini oyuna `YONERGELER`'de yönerge yazılır.
+- Heceler yapay zekâ sesiyle (öğretmenin kararı; cümleleri öğretmen kendisi kaydeder): ElevenLabs, ses "Nino",
+  eleven_v4; 20-50 hece bir dosyada ("an. na. ..."), `araclar/hece_bol.py` sessizlikten böler (sayı tutmazsa yazmaz),
+  `araclar/peri_efekti.sh` ile sesler/hece-<ad>.mp3, `sesler/liste.js`'e eklenir. Hesap ücretsiz planda; ElevenLabs ara
+  ara "olağan dışı etkinlik" deyip durduruyor (aynı anda birden çok istek): istekleri tek tek gönder, durursa sonra dene.
+  Hesabın aylık 10.000 kredisi var (30 hece ≈ 240 kredi); kredi bitince ay başını bekle. Yapılan: 2. ve 3. grubun bütün
+  heceleri (2. grubun heceleri sonra öğretmenin kendi kaydıyla değişti), 4. grubun ç hecelerinin çoğu ve b'nin başı. Sıradaki: b'den sonrası (4.-5. grup) ve 512 kelime (kelime-<ad>.mp3);
+  kalan liste `heceHavuzu`/kelime listelerinden `SES_DOSYALARI`'nda olmayanlar. Bölme sayısı tutmayan partiyi ikiye böl.
+- Kız karakter (öğretmenin isteği): ilk başlarken "Kiminle oynamak istersin?" (`karakterSor`), seçim profilde
+  (`Karakter`, profil.js); karşılamada "Karakteri değiştir". Doku adı `karakterDokusu`: cocuk* → kiz* (kiz*.svg ve bütün
+  türevleri doodle_ciz.py'de `KARAKTER_KARELERI` ile üretilir). Yeni karakter resmi eklerken kız hâlini de üret.
+- Bulut Market (öğretmenin fikri; adalar çok hızlı bitiyordu): bitki 6 damlayla büyür (`SULAMA_DAMLASI` 2, her sulama
+  bir aşama; şişe bitkinin daha istediği kadar alır, `siseSiniri`). Bitkisi büyüyen harfin varili altın kumbara
+  varilidir: oyunlar kumbaraya damla verir (`Canta.kumbara`, kutu kumbara simgesi; her yeni adada sıfırlanır).
+  Sırığın tepesinde havada süzülen zeplinde (BulutSahnesi, her adada; dokununca açılır, yürümek gerekmez) kostümler satılır (market.js `MARKET_ESYALARI`; sekmeler
+  şapka, gözlük, kıyafet, evcil hayvan; 12'den çoksa sayfalar). `adalar`: o adada görünecek olanlar satılır (tişört
+  1-2, gözlük 1-3, şapka 1-4, evcil hayvan hepsi) ve her adaya konseptine uygun eşyalar (öğretmenin isteği): 2. ada
+  sonbahar şapkaları/tişörtleri, sincap, kirpi, baykuş; 3. ada mont renkleri (cocuk*-kis-<renk>), kulaklık, kar
+  gözlüğü, fok, kutup ayısı, kardan adam; 4. ada dalgıç elbisesi renkleri (cocuk*-dalgic-<renk>, `yuzmeDokusu`),
+  inci tacı, denizyıldızı, balık, denizatı, ahtapot; 5. ada uzay giysisi renkleri, uzaylı, uzay robotu, uzay balinası
+  (adadaki hayvan resimleri, `dunya`). Fiyat eşyanın değerinin o adanın harflerine bölünmesidir (`fiyatHesapla`). `Dolap` profilde kalır; ada ekranındaki dolap simgesinden giyilir/çıkarılır.
+  `giyimDokusu` şapka (64x48) ve gözlüğü (44x18) karakterin üstüne çizer, kıyafet cocuk*-<renk>.svg, `petKur`
+  (buluttan inince de). Damla yetmezse kart sallanır, peri bir şey söylemez. God mode damla düğmesi kumbarayı 999 yapar.

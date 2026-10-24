@@ -1,0 +1,41 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="120" viewBox="0 0 120 120">
+  <!-- Kaplumbağa parçasının çanta simgesi: eyer (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="622" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="2.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kabuk" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="8" height="8" fill="#9fd6a0"/>
+      <line x1="0" y1="4.0" x2="8" y2="4.0" stroke="#5fae6a" stroke-width="3.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="deri" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#c9e6b0"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#9fcf86" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="eyer" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#ff9c8a"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#e0533d" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="ip" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(80)">
+      <rect width="5" height="5" fill="#e3b77e"/>
+      <line x1="0" y1="2.5" x2="5" y2="2.5" stroke="#c98f4f" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="fener" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-40)">
+      <rect width="6" height="6" fill="#ffe680"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffc928" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="harita" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="6" height="6" fill="#fbf0d0"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#e8d39a" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="anahtar" width="5" height="5" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="5" height="5" fill="#ffd76a"/>
+      <line x1="0" y1="2.5" x2="5" y2="2.5" stroke="#e0a82e" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <g transform="translate(-187.3 -46.2) scale(0.727)"><path d="M282 112 q58 -26 116 0 l8 40 q-66 22 -132 0z M300 150 v40 h14 v-40 M366 150 v40 h14 v-40" fill="url(#eyer)" vector-effect="non-scaling-stroke"/>
+    </g>
+  </g>
+</svg>

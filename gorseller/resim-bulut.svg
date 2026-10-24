@@ -14,7 +14,9 @@
       <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#7cc3e6" stroke-width="3" stroke-linecap="round"/>
     </pattern>
   </defs>
+  <g transform="translate(7.8 7.2) scale(0.88)">
   <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
     <g transform="translate(6 8) scale(0.9)"><path d="M24 82 q-20 0 -18 -18 q2 -16 20 -14 q0 -22 22 -24 q14 -14 32 -4 q18 -10 30 6 q18 0 16 22 q14 6 10 20 q-4 12 -18 12z" fill="url(#bulut)"/></g>
+  </g>
   </g>
 </svg>

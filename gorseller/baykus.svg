@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="60" height="70" viewBox="0 0 60 70">
+  <!-- Baykuş (önden, dalda) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="312" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kahve" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#d9a46b"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#b07a42" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="gogus" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(-30)">
+      <rect width="6" height="6" fill="#f2d7b0"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#d9b07a" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M4 66 h52" fill="none" stroke="#8e6340" stroke-width="7"/>
+    <ellipse cx="30" cy="38" rx="20" ry="26" fill="url(#kahve)" stroke-width="3"/>
+    <path d="M12 18 l-4 -12 l12 8 M48 18 l4 -12 l-12 8" fill="url(#kahve)" stroke-width="2.5"/>
+    <ellipse cx="30" cy="48" rx="11" ry="13" fill="url(#gogus)" stroke-width="2"/>
+    <circle cx="22" cy="28" r="7" fill="#fff6e0" stroke-width="2.5"/><circle cx="38" cy="28" r="7" fill="#fff6e0" stroke-width="2.5"/>
+    <circle cx="22" cy="28" r="3" fill="#2b2b2b" stroke="none"/><circle cx="38" cy="28" r="3" fill="#2b2b2b" stroke="none"/>
+    <path d="M27 34 l3 6 l3 -6z" fill="#ffc928" stroke-width="2"/>
+  </g>
+</svg>

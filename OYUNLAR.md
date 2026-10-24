@@ -21,8 +21,24 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   `oyunKaydi`): çanta, tarla (harf, büyüme aşaması), takılan yelkenli parçaları, kazanılan damlalar,
   oynanan oyunlar, rehber, çocuğun yeri; açılan sandıklar ve variller bunlardan çıkarılır (`durumuYukle`).
   Karşılama ekranının sol altında öğretmenin deneme düğmesi "God mode" var (yazısız küçük daire, şifreli; öğretmen
-  bu adla istedi): oyun bütün sandıklar açılmış, altı harf tarlada fasulye sırığına
-  dönüşmüş ve altı yelkenli parçası çantada olarak başlar (`hepsiniAc`).
+  bu adla istedi): şifreden sonra seçim paneli (`tanriSecenekleri`): Hikâye, Mini Games; 1. ve 2. ada için
+  Baştan / Tohumlar çantada / Sırıklar (mısır sapları) büyümüş (`hepsiniAc`) / Yelkenli (köprü) tamam /
+  Yolculuk (köprüden geçiş) (`tanriAsamasi`, `tanriFinal`).
+  God mode'da çantanın altında "Damla ver" düğmesi (damla ve artı): adanın bütün harflerinin damlaları dolar (`tanriDamlaKur`).
+- 2. ada (sonbahar, `ADALAR[2]`): sonbahar zemini (doku-sonbahar), turuncu/kırmızı/sarı ağaçlar, kızıl çalı,
+  yaprak yığını, mantar, kabak, sarı ot; uçan yapraklar; sincap (zıplar), kirpi (gidip gelir), ağaçta baykuş.
+  Tarlada mısır sapı (misir-filiz/fidan/sap, bulutta bulut-misir). Yelkenlinin yerinde köprü (680x900 tuval,
+  kopru-temel + kopru-<parça>; o, k ayak; u, r halat; ı, m tahta; harf yuvarlağı yok); "Köprüden geç" →
+  `FinalSahnesi` (`kopruFinali`: harita, "3. adaya git"). 1. adanın finalinde "2. adaya git" düğmesi (`sonrakiAdaDugmesi`).
+- 3. ada (karlı, `ADALAR[3]`): kar zemini, karlı çamlar (cam-tepe), karlı çalı ve kaya, kar yığını, karlı ot, buz
+  kristali, seyrek kardan adam; yağan kar; penguen, kutup ayısı (gidip gelir), beyaz tavşan (zıplar), fok (sallanır).
+  Tarlada buz sarmaşığı (buz-filiz/fidan/sarmasik, bulutta bulut-buz). Yelkenlinin yerinde askı ve donmuş göl
+  (dalgic-gol yere yatık, karakterin altında; küçük dalgic-aski + dalgic-<parça>; ü maske, s şnorkel, ö elbise, y palet, d tüp, z çekiç). "Buzu kır" →
+  `buzFinali` (çekiç buzu kırar, çocuk maskeyle dalar; harita3, "4. ada (su altı) yakında").
+  Başta kar kıyafeti sınavı (öğretmenin fikri): peri gelir (`KIS_SINAVI_SOZLERI`), "hece" etiketli bir oyun
+  m harfiyle (`KIS_SINAVI_HARFI`) 3. seviyede tek oyun olarak açılır (sağ üstte "Sınav"; kazanınca "Sınavı
+  geçtin!" → Tamam). Kaybedince peri "Üzülme, bir daha deneyelim!" der, yeni sınav gelir. Geçince çocuk
+  kışlık olur (kırmızı mont, mavi pantolon, bot, bere, atkı, eldiven; bulutta ve finalde de).
   Yazılar da doodle: `doodleYazi` (başlık, düğme, pencere yazıları: boya kalemi taraması,
   kalem çerçevesi, titrek kenar) ve `titret` (öğretilen harfler: biçim aynı, yalnızca
   kenar titrer). Harf biçimi her zaman aynı yazı tipidir (kodda adı hep "Andika"; aşağıya bkz.).
@@ -30,7 +46,8 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   Phaser sahnesi; `ortak.js`'deki `miniOyunKaydet(ad, sınıf)` ile kaydolur, `index.html`'e
   betiği eklenir. Sahne `{ harf, seviye, donus }` bilgisiyle açılır. `PLANLANAN_OYUNLAR`
   menüdeki sırayı tutar. `menu.js`: karşılama ekranındaki "Mini Games" düğmesiyle açılan
-  deneme menüsü (harf seçici + oyun kartları; hazır olmayanlarda "Yakında").
+  deneme menüsü (harf grupları → grubun harfleri → oyun kartı → seviye sorusu; hazır olmayan grup, harf ve
+  oyunlar silik, "Yakında").
   Öğretmenin kararları: mini oyunlarda kaybetmek mümkün (canlar biterse parça yok, "Bir
   daha dene"); her damla 3 parça, her kazanılan mini oyun 1 parça verir; harfler ve
   heceler sesli okunur (`Sesler.soyle`: seslendirilmiş dosya, yoksa tarayıcının Türkçe sesi); mikrofonlu mini
@@ -58,7 +75,9 @@ Bir oyunu değiştirince buradaki satırlarını da kısaca güncelle. Kurallar 
   sürükleyince oluktan 4 malzeme (düğme/çiçek/şeker) tepsiye düşer; tepsi boşalınca kol parlar,
   yeniden çekilir; malzeme yazılış sırasındaki sıradaki yere oturur (dokunmak da yeter); 2 harf;
   can yok. 2-3. düzey: harfin ipucu resmi yazılış yönünde yol boyunca götürülür, sarı iz kalır;
-  sapınca çizgi baştan, can gider; harf 3 kez; yollar `HARF_YOLLARI` dik temel harf yönüne göre;
+  sapınca çizgi baştan, can gider; harf 3 kez; yollar `HARF_YOLLARI` öğretmenin verdiği "Temel Harfler ve
+  Yazılış Yönleri" tablosuna göre (n m r u ü y tek çizgi, aynı çizgiden geri çıkılır; oklar iki yanda);
+  1. düzeyde harf tepsinin üstüne sığdırılır (kuyruklu harfler, `SEKIL_ALAN`);
   2. düzey kalın yol, oklar, numaralar; 3. düzey ince yol, yalnızca başlangıç noktası; öğretmenin
   isteği: büyük harf de var, `BUYUK_HARF_YOLLARI`, `harfiYazYollari`: 1. düzeyde 2. harf, 2-3. düzeyde 2. tur büyük); resimden-ses (Resimden Sesi
   Bul: düzeye göre harfin kelimedeki yeri: 1. başında, 2. sonunda, 3. ortasında olan resmi seç

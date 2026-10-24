@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="680" height="900" viewBox="0 0 680 900">
+  <!-- Köprünün iki ucu: kumsaldaki taş baş, karşıda 3. adanın kıyısı (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="322" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="tas" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(25)">
+      <rect width="7" height="7" fill="#d6d3cc"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#a9a59c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="karsiKum" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="8" height="8" fill="#fbe8b0"/>
+      <line x1="0" y1="4.0" x2="8" y2="4.0" stroke="#f3cf6a" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="karsiCimen" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="8" height="8" fill="#d8f0c0"/>
+      <line x1="0" y1="4.0" x2="8" y2="4.0" stroke="#bfe39f" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M220 170 h200 l14 70 h-228z" fill="url(#tas)"/>
+    <path d="M240 190 h40 M300 205 h50 M360 190 h40 M250 222 h60" fill="none" stroke-width="2.5"/>
+    <path d="M0 880 q120 -40 240 -24 q80 10 160 -6 q140 -26 280 10 v40 h-680z" fill="url(#karsiKum)"/>
+    <path d="M0 900 q140 -20 260 -12 q120 6 220 -8 q110 -12 200 4 v16z" fill="url(#karsiCimen)" stroke-width="3"/>
+    <path d="M226 852 h188 l-10 30 h-168z" fill="url(#tas)"/>
+  </g>
+</svg>

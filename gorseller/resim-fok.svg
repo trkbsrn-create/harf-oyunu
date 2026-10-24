@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Fok (burnunda top) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="493" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="gri" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#d6d3cc"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#a9a59c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="kirmizi" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#ff9c8a"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#e0533d" stroke-width="3.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="60" cy="116" rx="46" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="96" cy="18" r="14" fill="url(#kirmizi)"/>
+    <path d="M14 112 q-6 -20 20 -30 q30 -10 40 -34 q4 -14 18 -14 q14 2 12 18 q-2 30 -24 50 q-14 10 -66 10z" fill="url(#gri)"/>
+    <path d="M14 112 q-14 -8 -10 -18 q10 2 14 12 M60 106 l10 8 l12 -6" fill="url(#gri)" stroke-width="3"/>
+    <circle cx="98" cy="44" r="3" fill="#2b2b2b"/><ellipse cx="108" cy="42" rx="4" ry="3" fill="#2b2b2b"/>
+    <path d="M104 48 l12 2 M104 50 l10 6" fill="none" stroke-width="1.5"/>
+  </g>
+</svg>

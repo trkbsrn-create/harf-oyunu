@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="90" height="50" viewBox="0 0 90 50">
+  <!-- Fok (buzda yatan) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="412" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="gri" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#d6d3cc"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#a9a59c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="44" cy="46" rx="36" ry="4" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M6 40 q-2 -10 10 -14 q20 -14 46 -14 q20 0 24 14 q2 12 -12 16 q-30 6 -68 -2z" fill="url(#gri)"/>
+    <path d="M6 40 l-4 -12 l10 6 M34 42 l8 6 l4 -8" fill="url(#gri)" stroke-width="2.5"/>
+    <circle cx="74" cy="20" r="2.5" fill="#2b2b2b" stroke="none"/><circle cx="84" cy="25" r="2" fill="#2b2b2b" stroke="none"/>
+    <path d="M80 30 l8 -2 M80 31 l8 2" fill="none" stroke-width="1.5"/>
+  </g>
+</svg>

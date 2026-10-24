@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="100" height="110" viewBox="0 0 100 110">
+  <!-- Yıldız sarmaşığı filizi (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="714" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="yildizYaprak" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#fff6c4"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#ffe680" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M50 100 q-6 -30 4 -60" fill="none" stroke="#b58cf0" stroke-width="6"/>
+    <path d="M50 100 q-6 -30 4 -60" fill="none" stroke-width="2"/>
+    <path d="M30.0 50.0 L33.2 57.6 L41.4 58.3 L35.1 63.7 L37.1 71.7 L30.0 67.4 L22.9 71.7 L24.9 63.7 L18.6 58.3 L26.8 57.6z" fill="url(#yildizYaprak)" stroke-width="2.5"/>
+    <path d="M72.0 38.0 L75.2 45.6 L83.4 46.3 L77.1 51.7 L79.1 59.7 L72.0 55.4 L64.9 59.7 L66.9 51.7 L60.6 46.3 L68.8 45.6z" fill="url(#yildizYaprak)" stroke-width="2.5"/>
+    <path d="M54.0 16.0 L57.7 24.9 L67.3 25.7 L60.0 31.9 L62.2 41.3 L54.0 36.3 L45.8 41.3 L48.0 31.9 L40.7 25.7 L50.3 24.9z" fill="url(#yildizYaprak)" stroke-width="2.5"/>
+    <path d="M15.0 106 q35.0 -22 70 0z" fill="#b098d8" stroke-width="3.5"/>
+  </g>
+</svg>

@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Uçak (yandan) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="259" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="mavi" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#bfe3f5"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#7cc3e6" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="kirmizi" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(-35)">
+      <rect width="7" height="7" fill="#ff9c8a"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#e0533d" stroke-width="3.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="65" cy="114" rx="40" ry="5" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M56 58 l-22 -40 h14 l34 40z" fill="url(#kirmizi)"/>
+    <path d="M10 42 l10 -2 l14 18 h-14z" fill="url(#kirmizi)"/>
+    <path d="M14 58 q0 -8 14 -8 h80 q16 0 16 12 q0 12 -16 12 h-80 q-14 0 -14 -16z" fill="url(#mavi)"/>
+    <path d="M106 52 q10 2 12 10 h-14z" fill="#e3f2fc" stroke-width="3"/>
+    <circle cx="48" cy="60" r="4" fill="#ffffff" stroke-width="2.5"/><circle cx="64" cy="60" r="4" fill="#ffffff" stroke-width="2.5"/><circle cx="80" cy="60" r="4" fill="#ffffff" stroke-width="2.5"/>
+    <path d="M58 66 l-18 32 h14 l30 -32z" fill="url(#kirmizi)"/>
+  </g>
+</svg>

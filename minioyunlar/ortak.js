@@ -76,12 +76,18 @@ function miniOyunKaydet(ad, sahneSinifi) {
 const BENZER_HARFLER = {
   a: ["e", "o"], e: ["a", "o"], i: ["l", "ı", "t"], l: ["i", "t", "ı"], t: ["l", "i"],
   n: ["m", "u", "r"], o: ["a", "e", "ö"], k: ["t", "l"], u: ["n", "ü"], r: ["n"],
+  ı: ["l", "t"], m: ["n", "u"], // ı ile i okumada karışır: birbirine seçenek olmaz
+  ü: ["u", "ö"], s: ["z"], ö: ["o", "ü"], y: ["u", "k"], d: ["a", "l"], z: ["s"],
+  ç: ["c", "ş"], b: ["d"], g: ["y", "k"], c: ["ç", "e"], ş: ["s", "ç"],
+  p: ["b", "d"], h: ["n"], v: ["y", "u"], ğ: ["g"], f: ["t"], j: ["i"],
 };
 
-// Bu harfin grubuna kadar öğrenilmiş harfler (o harfin kendisi dahil)
+// Bu harfin grubuna kadar öğrenilmiş harfler (o harfin kendisi dahil). Okumada bu harfle
+// karışan ses (ı sorulurken i) yanlış seçenek olmasın diye çıkarılır (KARISAN_SESLER).
 function ogrenilmisHarfler(harf) {
   const grup = HARFLER.find((h) => h.kucuk === harf).grup;
-  return HARFLER.filter((h) => h.grup <= grup).map((h) => h.kucuk);
+  const karisan = KARISAN_SESLER[harf] || [];
+  return HARFLER.filter((h) => h.grup <= grup && !karisan.includes(h.kucuk)).map((h) => h.kucuk);
 }
 
 // Öğretmenin kuralı: harfler sırayla öğrenilir (a, n, e, t, i, l, ...). Hece ve kelime oyunlarında
@@ -111,14 +117,132 @@ function miniOyunOlur(ad, harf) {
   return oyun.gereken === "hece" ? heceOyunuOlur(harf) : kelimeOyunuOlur(harf);
 }
 
-// Hecelerine ayrılmış kelimeler (yalnızca ilk harf grubunun harfleriyle yazılabilenler; yeni
-// harf grupları gelince liste büyüyecek). Elektrik Devresi, Scrabble gibi oyunlar kullanır.
+// Öğretmenin kuralı: Türkçede küfür ya da argo olan heceler ve kelimeler oyunda hiç çıkmaz (ne sorulur,
+// ne seçenek olur, ne birleştirilir). Sonraki harf gruplarının harfleri de baştan yazıldı.
+const UYGUNSUZ_HECELER = ["am", "amı", "amk", "sik", "sok", "mal", "göt", "piç", "bok", "çük", "kıç", "sıç",
+  "oç", "döl", "taşak", "yarak", "kaltak", "pezo", "ibne", "gay", "çiş", "bok", "boka", "pipi",
+  "popo", "piç", "osur", "zıbar"];
+function uygunsuzMu(metin) {
+  return UYGUNSUZ_HECELER.includes(metin);
+}
+
+// Hecelerine ayrılmış kelimeler (bütün harf gruplarının harfleriyle yazılabilenler; yeni harf
+// grupları gelince liste büyüyecek). Oyunlar yalnızca bilinen harflerle yazılanları seçer
+// (ogrenilmisKelimeler). Elektrik Devresi, Scrabble gibi oyunlar kullanır.
 const KELIMELER = [
   ["anne", "an", "ne"], ["nane", "na", "ne"], ["lale", "la", "le"], ["nine", "ni", "ne"],
   ["tane", "ta", "ne"], ["elle", "el", "le"], ["elli", "el", "li"], ["ana", "a", "na"],
   ["ata", "a", "ta"], ["ilan", "i", "lan"], ["inat", "i", "nat"], ["anten", "an", "ten"],
   ["atlet", "at", "let"], ["telli", "tel", "li"], ["anla", "an", "la"], ["ilet", "i", "let"],
-].map(([kelime, ...heceler]) => ({ kelime, heceler }));
+  // 2. grup (o k u r ı m)
+  ["okul", "o", "kul"], ["otel", "o", "tel"], ["olta", "ol", "ta"], ["nota", "no", "ta"], ["omlet", "om", "let"],
+  ["nokta", "nok", "ta"], ["toka", "to", "ka"], ["korna", "kor", "na"], ["orman", "or", "man"],
+  ["motor", "mo", "tor"], ["limon", "li", "mon"], ["koltuk", "kol", "tuk"], ["tokmak", "tok", "mak"],
+  ["kalem", "ka", "lem"], ["kale", "ka", "le"], ["kanat", "ka", "nat"], ["kemik", "ke", "mik"],
+  ["kilim", "ki", "lim"], ["minik", "mi", "nik"], ["inek", "i", "nek"], ["ekmek", "ek", "mek"],
+  ["kemer", "ke", "mer"], ["melek", "me", "lek"], ["kulak", "ku", "lak"], ["kutu", "ku", "tu"],
+  ["kuru", "ku", "ru"], ["umut", "u", "mut"], ["mutlu", "mut", "lu"], ["tulum", "tu", "lum"],
+  ["kumru", "kum", "ru"], ["marul", "ma", "rul"], ["armut", "ar", "mut"], ["erik", "e", "rik"],
+  ["tarak", "ta", "rak"], ["tarla", "tar", "la"], ["kartal", "kar", "tal"], ["kirli", "kir", "li"],
+  ["rakam", "ra", "kam"], ["elma", "el", "ma"], ["mama", "ma", "ma"], ["ırmak", "ır", "mak"],
+  ["ılık", "ı", "lık"], ["kırık", "kı", "rık"], ["kına", "kı", "na"], ["kalın", "ka", "lın"],
+  ["tırnak", "tır", "nak"], ["tırtıl", "tır", "tıl"], ["atkı", "at", "kı"],
+  // 3. grup (ü s ö y d z)
+  ["üzüm", "ü", "züm"], ["ütü", "ü", "tü"], ["sütlü", "süt", "lü"], ["kümes", "kü", "mes"],
+  ["yüzük", "yü", "zük"], ["yünlü", "yün", "lü"], ["türkü", "tür", "kü"], ["örtü", "ör", "tü"],
+  ["ördek", "ör", "dek"], ["sözlük", "söz", "lük"], ["masa", "ma", "sa"], ["simit", "si", "mit"],
+  ["susam", "su", "sam"], ["kase", "ka", "se"], ["sarı", "sa", "rı"], ["masal", "ma", "sal"],
+  ["musluk", "mus", "luk"], ["yastık", "yas", "tık"], ["sakız", "sa", "kız"], ["dede", "de", "de"],
+  ["dere", "de", "re"], ["kedi", "ke", "di"], ["kadın", "ka", "dın"], ["deniz", "de", "niz"],
+  ["yıldız", "yıl", "dız"], ["dolu", "do", "lu"], ["duman", "du", "man"], ["minder", "min", "der"],
+  ["yaka", "ya", "ka"], ["yatak", "ya", "tak"], ["yemek", "ye", "mek"], ["kayık", "ka", "yık"],
+  ["oyun", "o", "yun"], ["koyun", "ko", "yun"], ["ayna", "ay", "na"], ["ayı", "a", "yı"],
+  ["kuyu", "ku", "yu"], ["uyku", "uy", "ku"], ["zeytin", "zey", "tin"], ["kiraz", "ki", "raz"],
+  ["kuzu", "ku", "zu"], ["yazı", "ya", "zı"], ["tuzlu", "tuz", "lu"],
+  ["kürek", "kü", "rek"], ["ürün", "ü", "rün"], ["ünlü", "ün", "lü"], ["örnek", "ör", "nek"],
+  ["kömür", "kö", "mür"], ["önlük", "ön", "lük"], ["körük", "kö", "rük"],
+  // 4. grup (ç b g c ş)
+  ["çanta", "çan", "ta"], ["çocuk", "ço", "cuk"], ["çiçek", "çi", "çek"], ["çorba", "çor", "ba"],
+  ["keçi", "ke", "çi"], ["bıçak", "bı", "çak"], ["çakıl", "ça", "kıl"], ["aşçı", "aş", "çı"],
+  ["baba", "ba", "ba"], ["balık", "ba", "lık"], ["bebek", "be", "bek"], ["bulut", "bu", "lut"],
+  ["kabak", "ka", "bak"], ["bilet", "bi", "let"], ["tabak", "ta", "bak"], ["sabun", "sa", "bun"],
+  ["gemi", "ge", "mi"], ["güzel", "gü", "zel"], ["gece", "ge", "ce"], ["silgi", "sil", "gi"],
+  ["gözlük", "göz", "lük"], ["boncuk", "bon", "cuk"], ["cami", "ca", "mi"], ["ceket", "ce", "ket"],
+  ["incir", "in", "cir"], ["camcı", "cam", "cı"], ["şeker", "şe", "ker"], ["şarkı", "şar", "kı"],
+  ["şişe", "şi", "şe"], ["güneş", "gü", "neş"], ["beşik", "be", "şik"], ["kuşlar", "kuş", "lar"],
+  ["kaşık", "ka", "şık"], ["başak", "ba", "şak"], ["kibar", "ki", "bar"], ["cüce", "cü", "ce"],
+  // 5. grup (p h v ğ f j)
+  ["hamak", "ha", "mak"], ["hasta", "has", "ta"], ["hesap", "he", "sap"],
+  ["pasta", "pas", "ta"], ["kitap", "ki", "tap"], ["sepet", "se", "pet"], ["kapı", "ka", "pı"],
+  ["pilav", "pi", "lav"], ["pamuk", "pa", "muk"], ["tepsi", "tep", "si"], ["hava", "ha", "va"],
+  ["horoz", "ho", "roz"], ["halı", "ha", "lı"], ["kahve", "kah", "ve"], ["havuç", "ha", "vuç"],
+  ["havlu", "hav", "lu"], ["vapur", "va", "pur"], ["vazo", "va", "zo"], ["ceviz", "ce", "viz"],
+  ["tavuk", "ta", "vuk"], ["kova", "ko", "va"], ["deve", "de", "ve"], ["ağaç", "a", "ğaç"],
+  ["yağmur", "yağ", "mur"], ["doğa", "do", "ğa"], ["soğan", "so", "ğan"], ["ağız", "a", "ğız"],
+  ["yoğurt", "yo", "ğurt"], ["fare", "fa", "re"], ["fener", "fe", "ner"], ["fincan", "fin", "can"],
+  ["kafes", "ka", "fes"], ["sofra", "sof", "ra"], ["fındık", "fın", "dık"], ["jöle", "jö", "le"],
+  ["jeton", "je", "ton"], ["garaj", "ga", "raj"], ["bagaj", "ba", "gaj"],
+  // Mehmet Öğretmen kelime tablolarından (öğretmenin isteği; çocuklara uygun, somut sözcükler seçildi)
+  ["abla", "ab", "la"], ["adam", "a", "dam"], ["akşam", "ak", "şam"], ["alkış", "al", "kış"],
+  ["altın", "al", "tın"], ["amca", "am", "ca"], ["aslan", "as", "lan"], ["ateş", "a", "teş"],
+  ["ayak", "a", "yak"], ["badem", "ba", "dem"], ["bakkal", "bak", "kal"], ["bale", "ba", "le"],
+  ["balkon", "bal", "kon"], ["balon", "ba", "lon"], ["balta", "bal", "ta"], ["bamya", "bam", "ya"],
+  ["banyo", "ban", "yo"], ["bardak", "bar", "dak"], ["baston", "bas", "ton"], ["bayrak", "bay", "rak"],
+  ["bayram", "bay", "ram"], ["beden", "be", "den"], ["berber", "ber", "ber"], ["bere", "be", "re"],
+  ["beton", "be", "ton"], ["biber", "bi", "ber"], ["bilek", "bi", "lek"], ["bilgi", "bil", "gi"],
+  ["bilye", "bil", "ye"], ["bina", "bi", "na"], ["bitki", "bit", "ki"], ["boru", "bo", "ru"],
+  ["boya", "bo", "ya"], ["boyun", "bo", "yun"], ["bülbül", "bül", "bül"], ["börek", "bö", "rek"],
+  ["böcek", "bö", "cek"], ["cacık", "ca", "cık"], ["cadde", "cad", "de"], ["ceylan", "cey", "lan"],
+  ["ciklet", "cik", "let"], ["cuma", "cu", "ma"], ["cüzdan", "cüz", "dan"], ["cümle", "cüm", "le"],
+  ["dalga", "dal", "ga"], ["dalgıç", "dal", "gıç"], ["dana", "da", "na"], ["demir", "de", "mir"],
+  ["derin", "de", "rin"], ["dergi", "der", "gi"], ["diken", "di", "ken"], ["dikiş", "di", "kiş"],
+  ["doktor", "dok", "tor"], ["dokuz", "do", "kuz"], ["dolma", "dol", "ma"], ["dudak", "du", "dak"],
+  ["durak", "du", "rak"], ["düdük", "dü", "dük"], ["dükkan", "dük", "kan"], ["dürbün", "dür", "bün"],
+  ["ekim", "e", "kim"], ["eski", "es", "ki"], ["eşek", "e", "şek"], ["eşya", "eş", "ya"],
+  ["gaga", "ga", "ga"], ["garson", "gar", "son"], ["gazoz", "ga", "zoz"], ["gelin", "ge", "lin"],
+  ["geyik", "ge", "yik"], ["gezi", "ge", "zi"], ["giysi", "giy", "si"], ["gitar", "gi", "tar"],
+  ["goril", "go", "ril"], ["gölge", "göl", "ge"], ["gömlek", "göm", "lek"], ["gümüş", "gü", "müş"],
+  ["güreş", "gü", "reş"], ["ibrik", "ib", "rik"], ["ilaç", "i", "laç"], ["inci", "in", "ci"],
+  ["insan", "in", "san"], ["izci", "iz", "ci"], ["işçi", "iş", "çi"], ["kaban", "ka", "ban"],
+  ["kablo", "kab", "lo"], ["kabuk", "ka", "buk"], ["kamyon", "kam", "yon"], ["kandil", "kan", "dil"],
+  ["kantin", "kan", "tin"], ["kara", "ka", "ra"], ["karga", "kar", "ga"], ["karne", "kar", "ne"],
+  ["kasa", "ka", "sa"], ["kayak", "ka", "yak"], ["kaykay", "kay", "kay"], ["kazak", "ka", "zak"],
+  ["kazan", "ka", "zan"], ["kazma", "kaz", "ma"], ["keklik", "kek", "lik"], ["keman", "ke", "man"],
+  ["kilit", "ki", "lit"], ["kirpi", "kir", "pi"], ["kobra", "kob", "ra"], ["koku", "ko", "ku"],
+  ["kolye", "kol", "ye"], ["komşu", "kom", "şu"], ["konuk", "ko", "nuk"], ["koşu", "ko", "şu"],
+  ["kukla", "kuk", "la"], ["kule", "ku", "le"], ["kumaş", "ku", "maş"], ["kuzey", "ku", "zey"],
+  ["köşe", "kö", "şe"], ["küre", "kü", "re"], ["kütük", "kü", "tük"], ["küçük", "kü", "çük"],
+  ["kışlık", "kış", "lık"], ["lamba", "lam", "ba"], ["leylek", "ley", "lek"], ["lokum", "lo", "kum"],
+  ["lira", "li", "ra"], ["macun", "ma", "cun"], ["makas", "ma", "kas"], ["mandal", "man", "dal"],
+  ["mangal", "man", "gal"], ["mango", "man", "go"], ["mantı", "man", "tı"], ["market", "mar", "ket"],
+  ["martı", "mar", "tı"], ["maymun", "may", "mun"], ["mendil", "men", "dil"], ["mercan", "mer", "can"],
+  ["mermer", "mer", "mer"], ["mide", "mi", "de"], ["midye", "mid", "ye"], ["misket", "mis", "ket"],
+  ["müze", "mü", "ze"], ["müzik", "mü", "zik"], ["nazik", "na", "zik"], ["ocak", "o", "cak"],
+  ["oda", "o", "da"], ["odun", "o", "dun"], ["omuz", "o", "muz"], ["radyo", "rad", "yo"],
+  ["raket", "ra", "ket"], ["rende", "ren", "de"], ["reçel", "re", "çel"], ["robot", "ro", "bot"],
+  ["roket", "ro", "ket"], ["saat", "sa", "at"], ["salça", "sal", "ça"], ["saman", "sa", "man"],
+  ["sebze", "seb", "ze"], ["sekiz", "se", "kiz"], ["sera", "se", "ra"], ["serçe", "ser", "çe"],
+  ["sinek", "si", "nek"], ["soba", "so", "ba"], ["soda", "so", "da"], ["sokak", "so", "kak"],
+  ["soru", "so", "ru"], ["sucuk", "su", "cuk"], ["sünger", "sün", "ger"], ["sürü", "sü", "rü"],
+  ["süslü", "süs", "lü"], ["sütlaç", "süt", "laç"], ["sıcak", "sı", "cak"], ["sıra", "sı", "ra"],
+  ["taban", "ta", "ban"], ["tablet", "tab", "let"], ["tablo", "tab", "lo"], ["takı", "ta", "kı"],
+  ["tarçın", "tar", "çın"], ["tatil", "ta", "til"], ["tatlı", "tat", "lı"], ["taze", "ta", "ze"],
+  ["teker", "te", "ker"], ["temiz", "te", "miz"], ["terlik", "ter", "lik"], ["terzi", "ter", "zi"],
+  ["teyze", "tey", "ze"], ["tilki", "til", "ki"], ["tombul", "tom", "bul"], ["torba", "tor", "ba"],
+  ["torun", "to", "run"], ["turşu", "tur", "şu"], ["tünel", "tü", "nel"], ["ucuz", "u", "cuz"],
+  ["usta", "us", "ta"], ["uydu", "uy", "du"], ["uzay", "u", "zay"], ["uzun", "u", "zun"],
+  ["yaprak", "yap", "rak"], ["yarış", "ya", "rış"], ["yelek", "ye", "lek"], ["yeşil", "ye", "şil"],
+  ["yılan", "yı", "lan"], ["yonca", "yon", "ca"], ["yorgan", "yor", "gan"], ["yunus", "yu", "nus"],
+  ["yüzgeç", "yüz", "geç"], ["zebra", "zeb", "ra"], ["zurna", "zur", "na"], ["çadır", "ça", "dır"],
+  ["çamur", "ça", "mur"], ["çatal", "ça", "tal"], ["çatı", "ça", "tı"], ["çekiç", "çe", "kiç"],
+  ["çene", "çe", "ne"], ["çengel", "çen", "gel"], ["çerez", "çe", "rez"], ["çeşme", "çeş", "me"],
+  ["çilek", "çi", "lek"], ["çimen", "çi", "men"], ["çizme", "çiz", "me"], ["çoban", "ço", "ban"],
+  ["çukur", "çu", "kur"], ["çömlek", "çöm", "lek"], ["çörek", "çö", "rek"], ["çınar", "çı", "nar"],
+  ["ödül", "ö", "dül"], ["öküz", "ö", "küz"], ["örgü", "ör", "gü"], ["üçgen", "üç", "gen"],
+  ["ıslak", "ıs", "lak"], ["ışık", "ı", "şık"], ["şaka", "şa", "ka"], ["şalgam", "şal", "gam"],
+  ["şato", "şa", "to"], ["şerbet", "şer", "bet"], ["şimşek", "şim", "şek"], ["şiir", "şi", "ir"],
+].map(([kelime, ...heceler]) => ({ kelime, heceler }))
+  .filter((k) => !uygunsuzMu(k.kelime) && !k.heceler.some(uygunsuzMu));
 
 // Üç heceli anlamlı kelimeler (Elektrik Devresi 3. seviye; öğretmenin isteği: anlamsız üçlü
 // olmasın). Yeni harf gruplarıyla dört ve beş heceli kelimeler de eklenecek.
@@ -126,7 +250,42 @@ const COK_HECELI_KELIMELER = [
   ["taneli", "ta", "ne", "li"], ["naneli", "na", "ne", "li"], ["laleli", "la", "le", "li"],
   ["antenli", "an", "ten", "li"], ["inatla", "i", "nat", "la"], ["anlatan", "an", "la", "tan"],
   ["anteni", "an", "te", "ni"], ["atletli", "at", "let", "li"],
-].map(([kelime, ...heceler]) => ({ kelime, heceler }));
+  // 2. grup (o k u r ı m)
+  ["ilkokul", "il", "ko", "kul"], ["makarna", "ma", "kar", "na"], ["kelime", "ke", "li", "me"],
+  ["tekerlek", "te", "ker", "lek"], ["kamera", "ka", "me", "ra"], ["kalemlik", "ka", "lem", "lik"],
+  ["limonlu", "li", "mon", "lu"], ["elmalı", "el", "ma", "lı"], ["motorlu", "mo", "tor", "lu"],
+  ["kulaklık", "ku", "lak", "lık"], ["armutlu", "ar", "mut", "lu"], ["kartallar", "kar", "tal", "lar"],
+  // 3. grup (ü s ö y d z)
+  ["domates", "do", "ma", "tes"], ["salata", "sa", "la", "ta"], ["dinozor", "di", "no", "zor"],
+  ["yumurta", "yu", "mur", "ta"], ["zeytinli", "zey", "tin", "li"], ["dondurma", "don", "dur", "ma"],
+  ["ördekler", "ör", "dek", "ler"], ["yıldızlı", "yıl", "dız", "lı"], ["sütlüler", "süt", "lü", "ler"],
+  // 4. grup
+  ["kelebek", "ke", "le", "bek"], ["çekirge", "çe", "kir", "ge"], ["şemsiye", "şem", "si", "ye"],
+  ["çocuklar", "ço", "cuk", "lar"], ["çiçekçi", "çi", "çek", "çi"], ["bebekler", "be", "bek", "ler"],
+  ["balıkçı", "ba", "lık", "çı"], ["bulutlu", "bu", "lut", "lu"],
+  // 5. grup
+  ["patates", "pa", "ta", "tes"], ["papatya", "pa", "pat", "ya"], ["telefon", "te", "le", "fon"],
+  ["hediye", "he", "di", "ye"], ["fotoğraf", "fo", "toğ", "raf"], ["havuçlu", "ha", "vuç", "lu"],
+  ["penguen", "pen", "gu", "en"], ["pijama", "pi", "ja", "ma"], ["jelibon", "je", "li", "bon"],
+  // Mehmet Öğretmen kelime tablolarından
+  ["acele", "a", "ce", "le"], ["aile", "a", "i", "le"], ["akraba", "ak", "ra", "ba"],
+  ["araba", "a", "ra", "ba"], ["arkadaş", "ar", "ka", "daş"], ["bilmece", "bil", "me", "ce"],
+  ["bisiklet", "bi", "sik", "let"], ["eczane", "ec", "za", "ne"], ["elbise", "el", "bi", "se"],
+  ["erişte", "e", "riş", "te"], ["etiket", "e", "ti", "ket"], ["gazete", "ga", "ze", "te"],
+  ["gözleme", "göz", "le", "me"], ["iskele", "is", "ke", "le"], ["karınca", "ka", "rın", "ca"],
+  ["kestane", "kes", "ta", "ne"], ["koala", "ko", "a", "la"], ["kulübe", "ku", "lü", "be"],
+  ["kurabiye", "ku", "ra", "bi", "ye"], ["kurdele", "kur", "de", "le"], ["kırmızı", "kır", "mı", "zı"],
+  ["leblebi", "leb", "le", "bi"], ["makine", "ma", "ki", "ne"], ["mandalina", "man", "da", "li", "na"],
+  ["maydanoz", "may", "da", "noz"], ["menekşe", "me", "nek", "şe"], ["mercimek", "mer", "ci", "mek"],
+  ["oyuncak", "o", "yun", "cak"], ["salıncak", "sa", "lın", "cak"], ["sarmaşık", "sar", "ma", "şık"],
+  ["sinema", "si", "ne", "ma"], ["solucan", "so", "lu", "can"], ["tabure", "ta", "bu", "re"],
+  ["tebeşir", "te", "be", "şir"], ["tencere", "ten", "ce", "re"], ["terazi", "te", "ra", "zi"],
+  ["testere", "tes", "te", "re"], ["turuncu", "tu", "run", "cu"], ["uçurtma", "u", "çurt", "ma"],
+  ["yarasa", "ya", "ra", "sa"], ["çekirdek", "çe", "kir", "dek"], ["çikolata", "çi", "ko", "la", "ta"],
+  ["örümcek", "ö", "rüm", "cek"], ["ütülü", "ü", "tü", "lü"], ["ıstakoz", "ıs", "ta", "koz"],
+  ["ızgara", "ız", "ga", "ra"], ["şelale", "şe", "la", "le"],
+].map(([kelime, ...heceler]) => ({ kelime, heceler }))
+  .filter((k) => !uygunsuzMu(k.kelime) && !k.heceler.some(uygunsuzMu));
 
 // Bilinen harflerle (bkz. bilinenHarfler) yazılabilen kelimeler; oyunun harfini içerenler önce
 function ogrenilmisKelimeler(harf) {
@@ -163,15 +322,16 @@ function heceHavuzu(harf) {
   for (const u of unluler) {
     for (const s of unsuzler) {
       heceler.push({ hece: u + s, u, s, acik: false });
-      heceler.push({ hece: s + u, u, s, acik: true });
+      // ğ hece başında gelmez (Türkçede "ğa" gibi hece yok)
+      if (s !== "ğ") heceler.push({ hece: s + u, u, s, acik: true });
     }
   }
   for (const u of unluler) {
     for (const s of unsuzler) {
-      for (const s2 of unsuzler) heceler.push({ hece: s + u + s2, u, s, acik: false });
+      if (s !== "ğ") for (const s2 of unsuzler) heceler.push({ hece: s + u + s2, u, s, acik: false });
     }
   }
-  return heceler;
+  return heceler.filter((h) => !uygunsuzMu(h.hece));
 }
 
 // Hece sorusu: oyunun harfini içeren, seviyenin uzunluğunda bir hece ve aynı uzunlukta yanlış
@@ -344,6 +504,8 @@ class MiniOyunSahnesi extends Phaser.Scene {
     // Zincir: tesisteki varilden damla almak için oyun 1, 2, 3. düzeyde art arda oynanır;
     // 3. düzey bitince ana oyuna dönülür ve damla kazanılır (veri.zincir).
     this.zincir = !!veri.zincir;
+    // Sınav (3. adada kar kıyafeti için): tek oyun; kazanınca ana oyuna dönülür (veri.sinav)
+    this.sinav = !!veri.sinav;
     this.bitti = false;
   }
 
@@ -372,6 +534,8 @@ class MiniOyunSahnesi extends Phaser.Scene {
     geri.on("pointerdown", () => this.geriDon());
     if (this.zincir) {
       doodleYazi(this, 1176, 112, `Düzey ${this.seviye} / 3`, 24).setOrigin(0.5).setDepth(900);
+    } else if (this.sinav) {
+      doodleYazi(this, 1176, 112, "Sınav", 26).setOrigin(0.5).setDepth(900);
     }
     // Uçan yıldız ve parıltı için küçük parçacık
     if (!this.textures.exists("parilti")) {
@@ -594,8 +758,8 @@ class MiniOyunSahnesi extends Phaser.Scene {
     const kart = this.add.image(370, 200, "onay-pencere").setOrigin(0);
     // Zincirde kazanınca: "Devam" sıradaki düzeyi açar; 3. düzeyden sonra damla kazanılır
     const zincirDevam = this.zincir && basarili && this.seviye < 3;
-    const zincirSon = this.zincir && basarili && this.seviye >= 3;
-    const baslikYazi = zincirSon ? "Damla kazandın!" : basarili ? "Aferin!" : "Bir daha dene";
+    const zincirSon = (this.zincir && basarili && this.seviye >= 3) || (this.sinav && basarili);
+    const baslikYazi = this.sinav && basarili ? "Sınavı geçtin!" : zincirSon ? "Damla kazandın!" : basarili ? "Aferin!" : "Bir daha dene";
     const baslik = doodleYazi(this, 640, 300, baslikYazi, zincirSon ? 46 : 52,
       basarili ? "mavi" : "beyaz").setOrigin(0.5);
     const solYazi = zincirDevam ? "Devam" : zincirSon ? "Tamam" : "Tekrar";
@@ -813,8 +977,8 @@ class MiniOyunSahnesi extends Phaser.Scene {
   // Zincirde ana oyun uyutulmuştur: o uyandırılır, sonuç (damla kazanıldı mı) ona iletilir
   geriDon(kazandi = false) {
     Sesler.sustur();
-    if (this.zincir) {
-      this.scene.wake(this.donus, { miniOyun: true, harf: this.harf, kazandi });
+    if (this.zincir || this.sinav) {
+      this.scene.wake(this.donus, { miniOyun: true, sinav: this.sinav, harf: this.harf, kazandi });
       this.scene.stop();
       return;
     }

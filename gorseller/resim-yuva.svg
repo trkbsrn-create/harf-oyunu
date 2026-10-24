@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Yuva (yumurtalı kuş yuvası) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="490" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kahve" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#d9a46b"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#b07a42" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="mavi" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#bfe3f5"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#7cc3e6" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <ellipse cx="50" cy="58" rx="14" ry="18" fill="url(#mavi)" stroke-width="3"/>
+    <ellipse cx="80" cy="58" rx="14" ry="18" fill="url(#mavi)" stroke-width="3"/>
+    <ellipse cx="65" cy="62" rx="13" ry="17" fill="url(#mavi)" stroke-width="3"/>
+    <path d="M10 66 q4 44 55 44 q51 0 55 -44 q-55 12 -110 0z" fill="url(#kahve)"/>
+    <path d="M14 74 q50 14 102 0 M20 88 q45 12 90 0 M8 66 l-4 -6 M122 66 l4 -6 M30 72 l-8 -10 M100 72 l8 -10" fill="none" stroke-width="2.5"/>
+  </g>
+</svg>

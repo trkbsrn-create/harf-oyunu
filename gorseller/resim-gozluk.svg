@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="120" viewBox="0 0 130 120">
+  <!-- Gözlük (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="351" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="mavi" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#bfe3f5"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#7cc3e6" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <circle cx="36" cy="60" r="24" fill="url(#mavi)" stroke-width="5"/>
+    <circle cx="94" cy="60" r="24" fill="url(#mavi)" stroke-width="5"/>
+    <path d="M60 58 q5 -8 10 0 M12 56 l-8 -16 M118 56 l8 -16" fill="none" stroke-width="5"/>
+    <path d="M26 50 q6 -6 12 -4 M84 50 q6 -6 12 -4" fill="none" stroke="#ffffff" stroke-width="4"/>
+  </g>
+</svg>

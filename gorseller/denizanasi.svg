@@ -1,0 +1,15 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="60" height="80" viewBox="0 0 60 80">
+  <!-- Denizanası (pembe, yarı saydam; yukarı aşağı süzülür) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="615" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="2" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M14 34 q2 18 -6 34 M24 36 q6 20 0 40 M36 36 q-6 20 0 40 M46 34 q-2 18 6 34" fill="none" stroke="#f07aa0" stroke-width="3"/>
+    <path d="M6 34 q0 -30 24 -30 q24 0 24 30 q-6 -4 -12 0 q-6 -4 -12 0 q-6 -4 -12 0 q-6 -4 -12 0z" fill="#ffc2d6" fill-opacity="0.85"/>
+    <circle cx="23" cy="20" r="2" fill="#2b2b2b" stroke="none"/><circle cx="37" cy="20" r="2" fill="#2b2b2b" stroke="none"/>
+    <path d="M14 14 q4 -6 10 -6" fill="none" stroke="#ffffff" stroke-width="3"/>
+  </g>
+</svg>

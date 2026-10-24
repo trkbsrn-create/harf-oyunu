@@ -13,6 +13,7 @@ const KOL_ACI = { dur: -70, cekili: 50 };
 
 const SEKIL_OLCEK = 1.7;
 const SEKIL_MERKEZ = { x: 640, y: 420 };
+const SEKIL_ALAN = { ust: 160, alt: 560 }; // harfin dikeyde sığacağı yer (tepsinin üstü)
 const SEKIL_ARALIK = 46;
 const SEKIL_TEPSI_Y = 650;
 const SEKIL_MALZEMELER = ["dugme", "cicek", "seker"];
@@ -163,13 +164,21 @@ class SekillerleYazmaSahnesi extends MiniOyunSahnesi {
 
   // Harf yolları büyütülüp eşit aralıklı yerlere bölünür (yazılış sırasında)
   yerleriHesapla() {
-    const yollar = harfiYazYollari(this.harf, this.buyuk).map((yol) => yol.map((n) => ({
-      x: SEKIL_MERKEZ.x + (n.x - 640) * SEKIL_OLCEK,
-      y: SEKIL_MERKEZ.y + (n.y - 400) * SEKIL_OLCEK,
+    // Harf tepsinin üstüne sığar: kuyruklu harfler (p, y, g, j...) daha yukarı ve biraz küçük
+    const ham = harfiYazYollari(this.harf, this.buyuk);
+    const ys = ham.flat().map((n) => n.y);
+    const ust = Math.min(...ys);
+    const alt = Math.max(...ys);
+    const olcek = Math.min(SEKIL_OLCEK, (SEKIL_ALAN.alt - SEKIL_ALAN.ust) / (alt - ust));
+    const ortaY = (SEKIL_ALAN.ust + SEKIL_ALAN.alt) / 2;
+    const yollar = ham.map((yol) => yol.map((n) => ({
+      x: SEKIL_MERKEZ.x + (n.x - 640) * olcek,
+      y: ortaY + (n.y - (ust + alt) / 2) * olcek,
     })));
     const yerler = [];
+    const bos = (n) => !yerler.some((y) => Math.hypot(y.x - n.x, y.y - n.y) < SEKIL_ARALIK * 0.6);
     for (const yol of yollar) {
-      yerler.push({ ...yol[0] });
+      if (bos(yol[0])) yerler.push({ ...yol[0] });
       let kalan = SEKIL_ARALIK;
       for (let i = 1; i < yol.length; i++) {
         let a = yol[i - 1];
@@ -178,7 +187,8 @@ class SekillerleYazmaSahnesi extends MiniOyunSahnesi {
         while (d >= kalan) {
           const t = kalan / d;
           a = { x: a.x + (b.x - a.x) * t, y: a.y + (b.y - a.y) * t };
-          yerler.push({ ...a });
+          // Geri dönülen çizgide (n, m, r, u, y) aynı yere ikinci malzeme konmaz
+          if (bos(a)) yerler.push({ ...a });
           d -= kalan;
           kalan = SEKIL_ARALIK;
         }
@@ -186,7 +196,7 @@ class SekillerleYazmaSahnesi extends MiniOyunSahnesi {
       }
       const son = yol[yol.length - 1];
       const enSon = yerler[yerler.length - 1];
-      if (Math.hypot(son.x - enSon.x, son.y - enSon.y) > SEKIL_ARALIK * 0.5) yerler.push({ ...son });
+      if (Math.hypot(son.x - enSon.x, son.y - enSon.y) > SEKIL_ARALIK * 0.5 && bos(son)) yerler.push({ ...son });
     }
     return { yollar, yerler };
   }

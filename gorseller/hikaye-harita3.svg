@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="720" viewBox="0 0 1280 720">
+  <!-- Final 3: adalar haritası (1 yeşil, 2 sonbahar, 3 karlı, 4 su altı kesik çizgili) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="424" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kagit" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="8" height="8" fill="#fbf4e2"/>
+      <line x1="0" y1="4.0" x2="8" y2="4.0" stroke="#f1e6c8" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="cimen" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="8" height="8" fill="#d8f0c0"/>
+      <line x1="0" y1="4.0" x2="8" y2="4.0" stroke="#bfe39f" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="sonbahar" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="8" height="8" fill="#f2d29a"/>
+      <line x1="0" y1="4.0" x2="8" y2="4.0" stroke="#e0b66b" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="kar" width="8" height="8" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="8" height="8" fill="#ffffff"/>
+      <line x1="0" y1="4.0" x2="8" y2="4.0" stroke="#e3eef6" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="su" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#c9ecff"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#7cc4ef" stroke-width="2.5" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <rect width="1280" height="720" fill="url(#kagit)"/>
+  <rect x="60" y="60" width="1160" height="600" rx="30" fill="url(#su)" opacity="0.6"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M100 460 q70 -90 180 -12 q-70 72 -180 12z" fill="url(#cimen)"/>
+    <path d="M360 340 q80 -100 200 -10 q-80 76 -200 10z" fill="url(#sonbahar)"/>
+    <path d="M640 430 q90 -110 220 -10 q-90 80 -220 10z" fill="url(#kar)"/>
+    <circle cx="1040" cy="300" r="90" fill="#bfe3f5" stroke="#8a8a8a" stroke-dasharray="14 10"/>
+    <path d="M1000 300 q10 -12 20 0 q10 12 20 0 M1030 330 q10 -12 20 0 q10 12 20 0" fill="none" stroke="#7cc3e6" stroke-width="3"/>
+    <path d="M860 420 q90 -10 110 -80" fill="none" stroke="#e0533d" stroke-dasharray="16 12"/>
+  </g>
+</svg>

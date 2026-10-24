@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="240" height="780" viewBox="0 0 240 780">
+  <!-- Buz sarmaşığı: bulutların üstünde, tepesi bulutta (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="415" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="koyuToprak" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#8e6340"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#6f4a2c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="buzYaprak" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#eef8ff"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#a9dcf5" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M91.4 774 L93.6 768 L96.2 762 L99.2 756 L102.5 750 L106.1 744 L109.9 738 L113.8 732 L117.7 726 L121.7 720 L125.6 714 L129.3 708 L132.9 702 L136.2 696 L139.2 690 L141.8 684 L144.0 678 L145.8 672 L147.1 666 L148.0 660 L148.4 654 L148.2 648 L147.7 642 L146.6 636 L145.1 630 L143.2 624 L140.9 618 L138.3 612 L135.5 606 L132.4 600 L129.1 594 L125.7 588 L122.3 582 L118.8 576 L115.5 570 L112.2 564 L109.1 558 L106.3 552 L103.7 546" fill="none" stroke="#2b2b2b" stroke-width="19"/>
+    <path d="M91.4 774 L93.6 768 L96.2 762 L99.2 756 L102.5 750 L106.1 744 L109.9 738 L113.8 732 L117.7 726 L121.7 720 L125.6 714 L129.3 708 L132.9 702 L136.2 696 L139.2 690 L141.8 684 L144.0 678 L145.8 672 L147.1 666 L148.0 660 L148.4 654 L148.2 648 L147.7 642 L146.6 636 L145.1 630 L143.2 624 L140.9 618 L138.3 612 L135.5 606 L132.4 600 L129.1 594 L125.7 588 L122.3 582 L118.8 576 L115.5 570 L112.2 564 L109.1 558 L106.3 552 L103.7 546" fill="none" stroke="#7cc3e6" stroke-width="14"/>
+    <path d="M103.7 546 L101.4 540 L99.5 534 L98.0 528 L96.8 522 L96.0 516 L95.7 510 L95.8 504 L96.3 498 L97.2 492 L98.5 486 L100.1 480 L102.0 474 L104.2 468 L106.6 462 L109.3 456 L112.1 450 L114.9 444 L117.8 438 L120.7 432 L123.6 426 L126.3 420 L128.9 414 L131.3 408 L133.5 402 L135.4 396 L137.0 390 L138.3 384 L139.3 378 L139.9 372 L140.2 366 L140.1 360 L139.7 354 L139.0 348 L137.9 342 L136.6 336 L135.0 330 L133.2 324 L131.2 318 L129.0 312" fill="none" stroke="#2b2b2b" stroke-width="16"/>
+    <path d="M103.7 546 L101.4 540 L99.5 534 L98.0 528 L96.8 522 L96.0 516 L95.7 510 L95.8 504 L96.3 498 L97.2 492 L98.5 486 L100.1 480 L102.0 474 L104.2 468 L106.6 462 L109.3 456 L112.1 450 L114.9 444 L117.8 438 L120.7 432 L123.6 426 L126.3 420 L128.9 414 L131.3 408 L133.5 402 L135.4 396 L137.0 390 L138.3 384 L139.3 378 L139.9 372 L140.2 366 L140.1 360 L139.7 354 L139.0 348 L137.9 342 L136.6 336 L135.0 330 L133.2 324 L131.2 318 L129.0 312" fill="none" stroke="#7cc3e6" stroke-width="11"/>
+    <path d="M129.0 312 L126.7 306 L124.4 300 L122.0 294 L119.6 288 L117.3 282 L115.0 276 L112.9 270 L111.0 264 L109.2 258 L107.7 252 L106.4 246 L105.3 240 L104.6 234 L104.1 228 L103.8 222 L103.9 216 L104.2 210 L104.8 204 L105.7 198 L106.8 192 L108.0 186 L109.5 180 L111.1 174 L112.8 168 L114.6 162 L116.4 156 L118.3 150 L120.2 144 L122.0 138 L123.7 132 L125.3 126 L126.8 120 L128.1 114 L129.3 108 L130.3 102 L131.1 96 L131.6 90" fill="none" stroke="#2b2b2b" stroke-width="13"/>
+    <path d="M129.0 312 L126.7 306 L124.4 300 L122.0 294 L119.6 288 L117.3 282 L115.0 276 L112.9 270 L111.0 264 L109.2 258 L107.7 252 L106.4 246 L105.3 240 L104.6 234 L104.1 228 L103.8 222 L103.9 216 L104.2 210 L104.8 204 L105.7 198 L106.8 192 L108.0 186 L109.5 180 L111.1 174 L112.8 168 L114.6 162 L116.4 156 L118.3 150 L120.2 144 L122.0 138 L123.7 132 L125.3 126 L126.8 120 L128.1 114 L129.3 108 L130.3 102 L131.1 96 L131.6 90" fill="none" stroke="#7cc3e6" stroke-width="8"/>
+    <path d="M148.6 774 L146.4 768 L143.8 762 L140.8 756 L137.5 750 L133.9 744 L130.1 738 L126.2 732 L122.3 726 L118.3 720 L114.4 714 L110.7 708 L107.1 702 L103.8 696 L100.8 690 L98.2 684 L96.0 678 L94.2 672 L92.9 666 L92.0 660 L91.6 654 L91.8 648 L92.3 642 L93.4 636 L94.9 630 L96.8 624 L99.1 618 L101.7 612 L104.5 606 L107.6 600 L110.9 594 L114.3 588 L117.7 582 L121.2 576 L124.5 570 L127.8 564 L130.9 558 L133.7 552 L136.3 546" fill="none" stroke="#2b2b2b" stroke-width="19"/>
+    <path d="M148.6 774 L146.4 768 L143.8 762 L140.8 756 L137.5 750 L133.9 744 L130.1 738 L126.2 732 L122.3 726 L118.3 720 L114.4 714 L110.7 708 L107.1 702 L103.8 696 L100.8 690 L98.2 684 L96.0 678 L94.2 672 L92.9 666 L92.0 660 L91.6 654 L91.8 648 L92.3 642 L93.4 636 L94.9 630 L96.8 624 L99.1 618 L101.7 612 L104.5 606 L107.6 600 L110.9 594 L114.3 588 L117.7 582 L121.2 576 L124.5 570 L127.8 564 L130.9 558 L133.7 552 L136.3 546" fill="none" stroke="#a9dcf5" stroke-width="14"/>
+    <path d="M136.3 546 L138.6 540 L140.5 534 L142.0 528 L143.2 522 L144.0 516 L144.3 510 L144.2 504 L143.7 498 L142.8 492 L141.5 486 L139.9 480 L138.0 474 L135.8 468 L133.4 462 L130.7 456 L127.9 450 L125.1 444 L122.2 438 L119.3 432 L116.4 426 L113.7 420 L111.1 414 L108.7 408 L106.5 402 L104.6 396 L103.0 390 L101.7 384 L100.7 378 L100.1 372 L99.8 366 L99.9 360 L100.3 354 L101.0 348 L102.1 342 L103.4 336 L105.0 330 L106.8 324 L108.8 318 L111.0 312" fill="none" stroke="#2b2b2b" stroke-width="16"/>
+    <path d="M136.3 546 L138.6 540 L140.5 534 L142.0 528 L143.2 522 L144.0 516 L144.3 510 L144.2 504 L143.7 498 L142.8 492 L141.5 486 L139.9 480 L138.0 474 L135.8 468 L133.4 462 L130.7 456 L127.9 450 L125.1 444 L122.2 438 L119.3 432 L116.4 426 L113.7 420 L111.1 414 L108.7 408 L106.5 402 L104.6 396 L103.0 390 L101.7 384 L100.7 378 L100.1 372 L99.8 366 L99.9 360 L100.3 354 L101.0 348 L102.1 342 L103.4 336 L105.0 330 L106.8 324 L108.8 318 L111.0 312" fill="none" stroke="#a9dcf5" stroke-width="11"/>
+    <path d="M111.0 312 L113.3 306 L115.6 300 L118.0 294 L120.4 288 L122.7 282 L125.0 276 L127.1 270 L129.0 264 L130.8 258 L132.3 252 L133.6 246 L134.7 240 L135.4 234 L135.9 228 L136.2 222 L136.1 216 L135.8 210 L135.2 204 L134.3 198 L133.2 192 L132.0 186 L130.5 180 L128.9 174 L127.2 168 L125.4 162 L123.6 156 L121.7 150 L119.8 144 L118.0 138 L116.3 132 L114.7 126 L113.2 120 L111.9 114 L110.7 108 L109.7 102 L108.9 96 L108.4 90" fill="none" stroke="#2b2b2b" stroke-width="13"/>
+    <path d="M111.0 312 L113.3 306 L115.6 300 L118.0 294 L120.4 288 L122.7 282 L125.0 276 L127.1 270 L129.0 264 L130.8 258 L132.3 252 L133.6 246 L134.7 240 L135.4 234 L135.9 228 L136.2 222 L136.1 216 L135.8 210 L135.2 204 L134.3 198 L133.2 192 L132.0 186 L130.5 180 L128.9 174 L127.2 168 L125.4 162 L123.6 156 L121.7 150 L119.8 144 L118.0 138 L116.3 132 L114.7 126 L113.2 120 L111.9 114 L110.7 108 L109.7 102 L108.9 96 L108.4 90" fill="none" stroke="#a9dcf5" stroke-width="8"/>
+    <path d="M0 0 l40 -16 l-12 22z" fill="url(#buzYaprak)" stroke-width="3" transform="translate(130 730) scale(1.36)"/>
+    <path d="M0 0 l-40 -16 l12 22z" fill="url(#buzYaprak)" stroke-width="3" transform="translate(110 666) scale(1.30)"/>
+    <path d="M150 646 l5 -10 l5 10 l-5 10z" fill="#ffffff" stroke-width="2"/>
+    <path d="M0 0 l40 -16 l-12 22z" fill="url(#buzYaprak)" stroke-width="3" transform="translate(130 602) scale(1.24)"/>
+    <path d="M0 0 l-40 -16 l12 22z" fill="url(#buzYaprak)" stroke-width="3" transform="translate(110 538) scale(1.18)"/>
+    <path d="M150 518 l5 -10 l5 10 l-5 10z" fill="#ffffff" stroke-width="2"/>
+    <path d="M0 0 l40 -16 l-12 22z" fill="url(#buzYaprak)" stroke-width="3" transform="translate(130 474) scale(1.13)"/>
+    <path d="M0 0 l-40 -16 l12 22z" fill="url(#buzYaprak)" stroke-width="3" transform="translate(110 410) scale(1.07)"/>
+    <path d="M150 390 l5 -10 l5 10 l-5 10z" fill="#ffffff" stroke-width="2"/>
+    <path d="M0 0 l40 -16 l-12 22z" fill="url(#buzYaprak)" stroke-width="3" transform="translate(130 346) scale(1.01)"/>
+    <path d="M0 0 l-40 -16 l12 22z" fill="url(#buzYaprak)" stroke-width="3" transform="translate(110 282) scale(0.95)"/>
+    <path d="M150 262 l5 -10 l5 10 l-5 10z" fill="#ffffff" stroke-width="2"/>
+    <path d="M0 0 l40 -16 l-12 22z" fill="url(#buzYaprak)" stroke-width="3" transform="translate(130 218) scale(0.90)"/>
+    <path d="M0 0 l-40 -16 l12 22z" fill="url(#buzYaprak)" stroke-width="3" transform="translate(110 154) scale(0.84)"/>
+    <path d="M150 134 l5 -10 l5 10 l-5 10z" fill="#ffffff" stroke-width="2"/>
+    <circle cx="70" cy="70" r="34" fill="#ffffff" stroke-width="3.5"/>
+    <circle cx="120" cy="48" r="42" fill="#ffffff" stroke-width="3.5"/>
+    <circle cx="172" cy="72" r="34" fill="#ffffff" stroke-width="3.5"/>
+    <circle cx="98" cy="96" r="30" fill="#ffffff" stroke-width="3.5"/>
+    <circle cx="148" cy="98" r="30" fill="#ffffff" stroke-width="3.5"/>
+    <path d="M64 104 q56 14 112 0" fill="none" stroke="#ffffff" stroke-width="16"/>
+    <path d="M65.0 774 q55.0 -22 110 0z" fill="url(#koyuToprak)" stroke-width="3.5"/>
+  </g>
+  <path d="M40 20 l4 10 l10 4 l-10 4 l-4 10 l-4 -10 l-10 -4 l10 -4z M206 30 l3 8 l8 3 l-8 3 l-3 8 l-3 -8 l-8 -3 l8 -3z" fill="#ffe680" stroke="#2b2b2b" stroke-width="2"/>
+</svg>

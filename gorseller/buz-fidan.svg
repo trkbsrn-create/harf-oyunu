@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="130" height="150" viewBox="0 0 130 150">
+  <!-- Genç buz sarmaşığı: tohum iki kez sulanınca (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="414" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="koyuToprak" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#8e6340"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#6f4a2c" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+    <pattern id="buzYaprak" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(35)">
+      <rect width="6" height="6" fill="#eef8ff"/>
+      <line x1="0" y1="3.0" x2="6" y2="3.0" stroke="#a9dcf5" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M65 140 q-20 -30 0 -60 q20 -30 0 -60" fill="none" stroke="#7cc3e6" stroke-width="8"/>
+    <path d="M65 140 q-20 -30 0 -60 q20 -30 0 -60" fill="none" stroke-width="2"/>
+    <path d="M56 116 l-34 -14 l12 -14z M68 92 l36 -16 l-8 18z M60 64 l-32 -18 l14 -10z M70 40 l28 -18 l-4 16z" fill="url(#buzYaprak)" stroke-width="3"/>
+    <path d="M40 98 l4 -8 l4 8 l-4 8z M92 72 l4 -8 l4 8 l-4 8z" fill="#ffffff" stroke-width="2"/>
+    <path d="M25.0 146 q40.0 -22 80 0z" fill="url(#koyuToprak)" stroke-width="3.5"/>
+  </g>
+</svg>

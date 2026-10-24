@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <!-- Öğretmen sayfası: oyundaki bütün kelime resimlerini kontrol etmek için. Harflerin resimleri ve
+       her harfin "başında / ortasında / sonunda" resimli kelimeleri (Resimden Sesi Bul, Hafıza Kartları,
+       Kazı Kazan, Tombala...). Veriler oyunla aynı dosyalardan gelir; yeni resim eklenince burada da görünür. -->
+  <title>Resimler</title>
+  <style>
+    @font-face { font-family: "Andika"; src: url("yazitipi/Andika-Regular.ttf") format("truetype"); }
+    body { margin: 0; background: #f8f4ea; font-family: "Andika", sans-serif; color: #3b2a1a; }
+    main { max-width: 1100px; margin: 0 auto; padding: 16px; }
+    h1 { margin: 8px 0 4px; }
+    .not { color: #7a6a55; margin: 0 0 16px; }
+    h2 { margin: 28px 0 8px; border-bottom: 3px solid #e3d6b8; padding-bottom: 4px; }
+    .harf { font-size: 40px; margin: 22px 0 6px; }
+    .satir { display: flex; align-items: flex-start; gap: 10px; margin: 6px 0; }
+    .konum { width: 92px; flex: none; font-weight: bold; padding-top: 40px; }
+    .kartlar { display: flex; flex-wrap: wrap; gap: 8px; }
+    .kart { width: 110px; background: #fffdf6; border: 2px solid #e3d6b8; border-radius: 12px; padding: 6px;
+      text-align: center; font-size: 18px; }
+    .kart img { width: 96px; height: 88px; object-fit: contain; display: block; margin: 0 auto 4px; }
+    .yok { color: #a09080; padding-top: 40px; }
+    nav a { display: inline-block; margin: 2px 6px 2px 0; font-size: 24px; color: #3b6fa0; text-decoration: none; }
+  </style>
+</head>
+<body>
+<main>
+  <h1>Oyundaki resimler</h1>
+  <p class="not">Her resmin altında oyundaki kelimesi yazar. Yanlış ya da anlaşılmayan bir resim görürseniz kelimesini söyleyin.</p>
+  <nav id="harfler"></nav>
+  <h2>Harflerin resimleri</h2>
+  <div class="kartlar" id="harfResimleri"></div>
+  <h2>Başında / ortasında / sonunda resimli kelimeler</h2>
+  <div id="konumlar"></div>
+</main>
+<script src="harfler.js"></script>
+<script src="minioyunlar/resimden-ses/kelimeler.js"></script>
+<script>
+  const kart = (kelime, resim, yazi) => {
+    const k = document.createElement("div");
+    k.className = "kart";
+    k.innerHTML = `<img loading="lazy" src="gorseller/${resim}.svg" alt="${kelime}"><div>${yazi || kelime}</div>`;
+    return k;
+  };
+  const harfResimleri = document.getElementById("harfResimleri");
+  for (const h of HARFLER) {
+    if (h.resim) harfResimleri.append(kart(h.kelime, h.resim, `${h.kucuk} – ${h.kelime}`));
+  }
+  const nav = document.getElementById("harfler");
+  const konumlar = document.getElementById("konumlar");
+  for (const h of HARFLER) {
+    const liste = KONUMLU_KELIMELER[h.kucuk];
+    if (!liste) continue;
+    const a = document.createElement("a");
+    a.href = `#harf-${h.kucuk}`;
+    a.textContent = h.kucuk;
+    nav.append(a);
+    const baslik = document.createElement("div");
+    baslik.className = "harf";
+    baslik.id = `harf-${h.kucuk}`;
+    baslik.textContent = h.kucuk;
+    konumlar.append(baslik);
+    for (const [konum, ad] of [["bas", "Başında"], ["orta", "Ortasında"], ["son", "Sonunda"]]) {
+      const satir = document.createElement("div");
+      satir.className = "satir";
+      satir.innerHTML = `<div class="konum">${ad}</div>`;
+      const kartlar = document.createElement("div");
+      kartlar.className = "kartlar";
+      if (liste[konum].length) for (const kelime of liste[konum]) kartlar.append(kart(kelime, kelimeResmi(kelime)));
+      else kartlar.innerHTML = `<div class="yok">Resimli kelime yok (oyunda bu soru yerine başka konum sorulur)</div>`;
+      satir.append(kartlar);
+      konumlar.append(satir);
+    }
+  }
+</script>
+</body>
+</html>

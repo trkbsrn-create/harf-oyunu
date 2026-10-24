@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="80" height="50" viewBox="0 0 80 50">
+  <!-- Kirpi (yandan) (doodle tarzı, kendi çizimimiz) -->
+  <defs>
+    <filter id="titrek" filterUnits="userSpaceOnUse" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.06" numOctaves="2" seed="311" result="g"/>
+      <feDisplacementMap in="SourceGraphic" in2="g" scale="3.5" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <pattern id="kahve" width="7" height="7" patternUnits="userSpaceOnUse" patternTransform="rotate(30)">
+      <rect width="7" height="7" fill="#d9a46b"/>
+      <line x1="0" y1="3.5" x2="7" y2="3.5" stroke="#b07a42" stroke-width="3" stroke-linecap="round"/>
+    </pattern>
+  </defs>
+  <ellipse cx="38" cy="46" rx="32" ry="4" fill="#000" fill-opacity="0.13"/>
+  <g filter="url(#titrek)" stroke="#2b2b2b" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M8 42 q-4 -14 4 -20 l-2 -8 l9 4 l2 -10 l8 8 l6 -10 l5 10 l9 -6 l1 10 l9 -3 l-2 10 q8 8 0 15z" fill="url(#kahve)" stroke-width="2.5"/>
+    <path d="M56 40 q14 -2 18 4 q-8 6 -18 2z" fill="#f2d7b0" stroke-width="2.5"/>
+    <circle cx="64" cy="40" r="1.8" fill="#2b2b2b" stroke="none"/><circle cx="74" cy="43" r="2.2" fill="#2b2b2b" stroke="none"/>
+    <path d="M24 44 v4 M46 44 v4" fill="none" stroke-width="3"/>
+  </g>
+</svg>

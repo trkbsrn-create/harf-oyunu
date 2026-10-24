@@ -35,6 +35,7 @@ class HafizaKartlariSahnesi extends MiniOyunSahnesi {
   create() {
     this.ortakKur();
     this.ayar = HAFIZA_SEVIYELERI[this.seviye] || HAFIZA_SEVIYELERI[1];
+    this.konum = konumSec(this.harf, this.ayar.konum); // ö ve d ile biten resim yok
     this.kalpleriKur(3);
     this.acik = [];
     this.yanlisSayisi = 0;
@@ -65,7 +66,7 @@ class HafizaKartlariSahnesi extends MiniOyunSahnesi {
     // Ne eşleştirileceği söylenir (ünsüzde cümlede "bu harf")
     const bilgi = HARFLER.find((h) => h.kucuk === this.harf);
     const unlu = bilgi && bilgi.unlu;
-    const konum = KONUM_ADLARI[this.ayar.konum].toLocaleLowerCase("tr-TR");
+    const konum = KONUM_ADLARI[this.konum].toLocaleLowerCase("tr-TR");
     this.yonerge = this.ayar.tur === "resim" ? "Aynı resimleri eşleştir!"
       : `${unlu ? this.harf + " harfini" : "Bu harfi"}, ${konum} ${unlu ? this.harf : "bu harf"} olan resimlerle eşleştir!`;
     this.time.delayedCall(400, () => this.harfiTanit(() => Sesler.soyle(this.yonerge, () => {
@@ -77,7 +78,7 @@ class HafizaKartlariSahnesi extends MiniOyunSahnesi {
 
   // Seviyenin kelimelerinden çiftler: aynı resim iki kez ya da harf kartı + resim
   ciftleriSec() {
-    const kelimeler = (KONUMLU_KELIMELER[this.harf] || KONUMLU_KELIMELER.a)[this.ayar.konum];
+    const kelimeler = (KONUMLU_KELIMELER[this.harf] || KONUMLU_KELIMELER.a)[this.konum];
     const secilen = Phaser.Utils.Array.Shuffle(kelimeler.slice()).slice(0, this.ayar.cift);
     return secilen.map((k) => {
       const resim = { resim: kelimeResmi(k), kelime: k };
@@ -106,7 +107,7 @@ class HafizaKartlariSahnesi extends MiniOyunSahnesi {
         stroke: "#3b2a1a", strokeThickness: 12, padding: { x: 4, y: 4 },
       }), 2)));
       // Harfin kelimedeki yeri: üç küçük kutu, harfin kutusu sarı
-      const dolu = { bas: 0, orta: 1, son: 2 }[this.ayar.konum];
+      const dolu = { bas: 0, orta: 1, son: 2 }[this.konum];
       const kutu = this.add.graphics();
       for (let i = 0; i < 3; i++) {
         const x = (i - 1) * 32;
