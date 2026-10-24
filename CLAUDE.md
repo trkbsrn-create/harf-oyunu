@@ -41,7 +41,8 @@ menüsü). O konumda resimli kelime yoksa (ö, d, b, g, c, h, f ile biten; ğ il
 - `harfler.js` harf verisi; `canta.js` çanta (kumbara dahil); `market.js` Bulut Market; `sesler.js` efekt ve sesli okuma; `dinleyici.js` mikrofon.
 - `gorseller/` kendi SVG'lerimiz, `araclar/doodle_ciz.py` ile üretilir (görsel değişikliği betikte yapılır).
 - `araclar/dene.js` mini oyun deneme aracı (aşağıda "Test").
-- Öğretmen sayfaları: `mikrofon.html`, `kayit.html`, `dinle.html`, `resimler.html` (bütün kelime resimleri, kontrol için).
+- Öğretmen sayfaları: `mikrofon.html`, `kayit.html` (oyunda sesi olan sözleri gizler; başlıkta kalan sayısı), `dinle.html`,
+  `resimler.html` (bütün kelime resimleri, kontrol için).
 - Phaser 3.90.0 jsDelivr'den (sürüm değiştirilmez). Yayın: Cloudflare Workers (harfavcisi.net; `main`e eklenince
   kendiliğinden yüklenir, ayar `wrangler.jsonc` + `.assetsignore`). Deneme sitesi: GitHub Pages
   (trkbsrn-create.github.io/harf-oyunu, `gelistirme` dalından).
@@ -257,7 +258,7 @@ Her hatadan sonra buraya yeni bir kural ekle.
   `araclar/peri_efekti.sh` ile sesler/hece-<ad>.mp3, `sesler/liste.js`'e eklenir. Hesap ücretsiz planda; ElevenLabs ara
   ara "olağan dışı etkinlik" deyip durduruyor (aynı anda birden çok istek): istekleri tek tek gönder, durursa sonra dene.
   Hesabın aylık 10.000 kredisi var (30 hece ≈ 240 kredi); kredi bitince ay başını bekle. Yapılan: 2. ve 3. grubun bütün
-  heceleri, 4. grubun ç hecelerinin çoğu ve b'nin başı. Sıradaki: b'den sonrası (4.-5. grup) ve 512 kelime (kelime-<ad>.mp3);
+  heceleri (2. grubun heceleri sonra öğretmenin kendi kaydıyla değişti), 4. grubun ç hecelerinin çoğu ve b'nin başı. Sıradaki: b'den sonrası (4.-5. grup) ve 512 kelime (kelime-<ad>.mp3);
   kalan liste `heceHavuzu`/kelime listelerinden `SES_DOSYALARI`'nda olmayanlar. Bölme sayısı tutmayan partiyi ikiye böl.
 - Kız karakter (öğretmenin isteği): ilk başlarken "Kiminle oynamak istersin?" (`karakterSor`), seçim profilde
   (`Karakter`, profil.js); karşılamada "Karakteri değiştir". Doku adı `karakterDokusu`: cocuk* → kiz* (kiz*.svg ve bütün

@@ -22,6 +22,9 @@
       border-radius: 16px; padding: 8px 12px; margin-bottom: 8px; }
     .satir.kayitli { background: #e7f6d9; }
     .satir.kaydediyor { background: #ffe1dc; }
+    /* Oyunda sesi olan sözler gizlenir; "Oyunda olanları da göster" ile görünür */
+    body:not(.hepsi) .satir.oyunda-satir { display: none; }
+    #oyundakiler-kutu { font-size: 18px; }
     .metin { flex: 1; min-width: 0; }
     .metin b { font-size: 30px; font-weight: normal; }
     .metin small { display: block; font-size: 16px; color: #7a6a58; }
@@ -46,6 +49,7 @@
     <button id="yenileriSec" title="Kaydedilmiş ama oyunda henüz olmayan sesleri seçer">Yenileri seç</button>
     <button id="secimiTemizle">Seçimi temizle</button>
     <button id="indir">Seçilenleri indir</button>
+    <label id="oyundakiler-kutu"><input type="checkbox" id="oyundakiler"> Oyunda olanları da göster</label>
   </header>
   <main>
     <div class="bilgi">
@@ -385,7 +389,7 @@
         satir.querySelector("b").textContent = oge.metin;
         const notlar = [oge.not, oyundaVar(oge) ? "Oyunda var" : ""].filter(Boolean);
         satir.querySelector("small").textContent = notlar.join(" · ");
-        if (oyundaVar(oge)) satir.querySelector("small").classList.add("oyunda");
+        if (oyundaVar(oge)) { satir.querySelector("small").classList.add("oyunda"); satir.classList.add("oyunda-satir"); }
         satir.querySelector(".sec").onchange = (e) => {
           if (e.target.checked) secilenler.add(oge.anahtar);
           else secilenler.delete(oge.anahtar);
@@ -405,7 +409,10 @@
     for (const b of BOLUMLER) {
       if (!b.oge.length) continue;
       const h = document.createElement("h2");
-      h.textContent = `${b.baslik} – ${b.oge.length}`;
+      // Başlıkta oyunda sesi olmayan (kaydedilecek) söz sayısı
+      const kalan = b.oge.filter((o) => !oyundaVar(o)).length;
+      const baslikYazisi = `${b.baslik} – ${kalan ? `${kalan} kaldı` : "hepsi oyunda ✓"}`;
+      h.textContent = baslikYazisi;
       basliklar.push([h, b]);
       liste.append(h);
       const kap = document.createElement("div");
@@ -416,7 +423,7 @@
       let acik = false;
       h.onclick = () => {
         acik = !acik;
-        h.textContent = `${acik ? "▾" : "▸"} ${b.baslik} – ${b.oge.length}`;
+        h.textContent = `${acik ? "▾" : "▸"} ${baslikYazisi}`;
         if (acik && !kap.childElementCount) { bolumuCiz(b, kap); guncelle(); }
         kap.style.display = acik ? "" : "none";
       };
@@ -432,9 +439,11 @@
         satir.querySelector(".sil").disabled = !kayitli;
       }
       for (const [k, satir] of Object.entries(satirlar)) satir.querySelector(".sec").checked = secilenler.has(k);
-      const sayi = HEPSI.filter((o) => var_.has(o.anahtar) && ZORUNLU.has(o.anahtar)).length;
+      // Sayaç yalnızca oyunda sesi olmayan sözleri sayar
+      const gereken = HEPSI.filter((o) => ZORUNLU.has(o.anahtar) && !oyundaVar(o));
+      const sayi = gereken.filter((o) => var_.has(o.anahtar)).length;
       const secili = HEPSI.filter((o) => secilenler.has(o.anahtar) && var_.has(o.anahtar)).length;
-      document.getElementById("sayac").textContent = `${sayi} / ${ZORUNLU.size} kaydedildi`;
+      document.getElementById("sayac").textContent = `${sayi} / ${gereken.length} kaydedildi`;
       document.getElementById("indir").textContent = `Seçilenleri indir (${secili})`;
     }
 
@@ -469,6 +478,8 @@
       a.download = "harf-oyunu-sesler.zip";
       a.click();
     };
+
+    document.getElementById("oyundakiler").onchange = (e) => document.body.classList.toggle("hepsi", e.target.checked);
 
     guncelle();
   </script>
